@@ -18,6 +18,15 @@ class Settings(BaseSettings):
     intent_merge_threshold: float = 0.35
     spacy_model: str = "en_core_web_sm"
     cors_origins: str = "http://localhost:4200"
+    upload_dir: str = "./uploads"
+    jwt_secret_key: str = "change-me-in-production"
+    jwt_algorithm: str = "HS256"
+    jwt_expire_minutes: int = 60 * 24 * 7
+
+    systemadmin_email: str = "systemadmin@example.com"
+    systemadmin_pin: str = "123456"
+    systemadmin_pin_hash: str = ""
+    invite_expire_hours: int = 72
 
     @property
     def cors_list(self) -> list[str]:

@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from typing import Optional
 from datetime import datetime
 
@@ -171,6 +171,101 @@ class FaqMergeResult(BaseModel):
     canonical_faq_id: int
     absorbed: int
     recreated: int
+
+
+class DocumentInfo(BaseModel):
+    source: str
+    chunks: int
+    created_at: Optional[datetime] = None
+
+
+class DocumentDeleteResponse(BaseModel):
+    source: str
+    deleted_chunks: int
+    status: str
+
+
+class FeedbackCreate(BaseModel):
+    message_id: Optional[int] = None
+    question: str
+    answer: str
+    source: str
+    rating: str
+
+
+class FeedbackOut(BaseModel):
+    id: int
+    message_id: Optional[int] = None
+    question: str
+    answer: str
+    source: str
+    rating: str
+    created_at: Optional[datetime] = None
+
+    class Config:
+        from_attributes = True
+
+
+class GoogleAuthRequest(BaseModel):
+    id_token: str
+    invite_token: Optional[str] = None
+
+
+class TokenResponse(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+
+
+class UserOut(BaseModel):
+    id: int
+    google_id: Optional[str]
+    email: str
+    name: str
+    picture: Optional[str] = None
+    tenant_id: Optional[int] = None
+    role: str = "user"
+    is_systemadmin: bool = False
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class TenantOut(BaseModel):
+    id: int
+    name: str
+    slug: str
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class InviteCreate(BaseModel):
+    email: EmailStr
+    role: str = "user"
+
+
+class InviteOut(BaseModel):
+    id: int
+    tenant_id: int
+    email: str
+    role: str
+    token: str
+    expires_at: datetime
+    used_at: Optional[datetime] = None
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class SystemAdminLogin(BaseModel):
+    pin: str
+
+
+class AcceptInviteRequest(BaseModel):
+    id_token: str
 
 
 MergePreview.model_rebuild()
