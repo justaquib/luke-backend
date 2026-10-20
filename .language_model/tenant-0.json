@@ -1,0 +1,3158 @@
+{
+  "lessons": [
+    {
+      "text": "The color of the sky during the day is blue.",
+      "created_at": "2026-10-19T07:03:42.451223+00:00"
+    },
+    {
+      "text": "The color of grass is green.",
+      "created_at": "2026-10-19T07:04:53.461676+00:00"
+    },
+    {
+      "text": "We have five fingers in our each hand.",
+      "created_at": "2026-10-19T07:06:00.936071+00:00"
+    },
+    {
+      "text": "A cat makes meow sound.",
+      "created_at": "2026-10-19T07:08:10.079388+00:00"
+    },
+    {
+      "text": "The camel is known as the ‘Ship of the Desert’.",
+      "created_at": "2026-10-19T07:08:38.978496+00:00"
+    },
+    {
+      "text": "Penguin is the bird that cannot fly.",
+      "created_at": "2026-10-19T07:09:37.194221+00:00"
+    },
+    {
+      "text": "There is seven days in a week.",
+      "created_at": "2026-10-19T07:13:35.927067+00:00"
+    },
+    {
+      "text": "Earth is the name of our planet.",
+      "created_at": "2026-10-19T07:14:32.347118+00:00"
+    },
+    {
+      "text": "We call a puppy to a baby dog.",
+      "created_at": "2026-10-19T07:16:04.552435+00:00"
+    },
+    {
+      "text": "Bee's make honey.",
+      "created_at": "2026-10-19T07:16:57.084353+00:00"
+    },
+    {
+      "text": "A triangle has three sides.",
+      "created_at": "2026-10-19T07:34:44.636845+00:00"
+    },
+    {
+      "text": "A square has four side.",
+      "created_at": "2026-10-19T07:35:06.278925+00:00"
+    },
+    {
+      "text": "A circle is round in shape.",
+      "created_at": "2026-10-19T07:35:35.327642+00:00"
+    }
+  ],
+  "letters": "abcdefghijklmnopqrstuvwxyz",
+  "word_cards": [],
+  "lesson_cards": [
+    {
+      "id": "0035ee040c25405c908832da87b765ee",
+      "question": "Which animal gives us milk?",
+      "answer": "A cow!",
+      "grade_id": "nursery",
+      "subject": "Animals",
+      "subjects": [
+        "Animals"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613320+00:00"
+    },
+    {
+      "id": "026b510853ae4d878347c00ba772de5f",
+      "question": "GK: What animal says woof?",
+      "answer": "The dog says woof.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613615+00:00"
+    },
+    {
+      "id": "0347cbfa068e4e13899a376c2c074f1b",
+      "question": "Define: Science",
+      "answer": "Science is the study of the natural world through observation and experiments.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613622+00:00"
+    },
+    {
+      "id": "03e443b4675845a8951f80f3db70b491",
+      "question": "What do we drink from a coconut?",
+      "answer": "Coconut water!",
+      "grade_id": "nursery",
+      "subject": "Fruits",
+      "subjects": [
+        "Fruits"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613626+00:00"
+    },
+    {
+      "id": "058095191d8c4afeb9b92023e0714aa4",
+      "question": "Which continent is called the \"Land Down Under\"?",
+      "answer": "Australia.",
+      "grade_id": "lkg",
+      "subject": "Geography",
+      "subjects": [
+        "Geography"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613629+00:00"
+    },
+    {
+      "id": "061332ed167a4a7fa3b56619ba6f2c59",
+      "question": "Poem: Humpty Dumpty",
+      "answer": "Humpty Dumpty sat on a wall,\nHumpty Dumpty had a great fall.\nAll the king's horses and all the king's men,\nCould not put Humpty together again.",
+      "grade_id": "lkg",
+      "subject": "Language, Poems",
+      "subjects": [
+        "Language",
+        "Poems"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613635+00:00"
+    },
+    {
+      "id": "071f1c281e6f434db24836cb11ed5397",
+      "question": "Which is the smallest country in the world?",
+      "answer": "Vatican City.",
+      "grade_id": "lkg",
+      "subject": "Geography",
+      "subjects": [
+        "Geography"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613638+00:00"
+    },
+    {
+      "id": "07cee10b79554230bdeabb678816489c",
+      "question": "What do we use to taste?",
+      "answer": "Tongue!",
+      "grade_id": "nursery",
+      "subject": "Body",
+      "subjects": [
+        "Body"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613641+00:00"
+    },
+    {
+      "id": "08d42f3b5f0d4f1d8b1a0442cbdf98f3",
+      "question": "GK: What is the name of our planet?",
+      "answer": "Our planet is called Earth.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613645+00:00"
+    },
+    {
+      "id": "0965469b8ddf4cf18f28869977eaa7b2",
+      "question": "Name a yellow fruit.",
+      "answer": "Banana / Mango!",
+      "grade_id": "nursery",
+      "subject": "Fruits",
+      "subjects": [
+        "Fruits"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613648+00:00"
+    },
+    {
+      "id": "0a4d0a01d2a34356b4084f58da5fe1d7",
+      "question": "GK: How many legs does a dog have?",
+      "answer": "A dog has four legs.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613651+00:00"
+    },
+    {
+      "id": "0ac7f50ee03e4aae8ef9ec9065236e05",
+      "question": "GK: What animal says moo?",
+      "answer": "The cow says moo.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613654+00:00"
+    },
+    {
+      "id": "0bf1056ed6ee47d887f936e4f8046949",
+      "question": "What is the opposite of hot?",
+      "answer": "Cold!",
+      "grade_id": "nursery",
+      "subject": "Opposites",
+      "subjects": [
+        "Opposites"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613657+00:00"
+    },
+    {
+      "id": "0c98ab4ddca84ee284fbfdc1fb57fb77",
+      "question": "Which animal lives in water?",
+      "answer": "A fish!",
+      "grade_id": "nursery",
+      "subject": "Animals",
+      "subjects": [
+        "Animals"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613660+00:00"
+    },
+    {
+      "id": "0cf86b9141b44c80bdaead32efaec6e5",
+      "question": "Joke: Why did the math book look sad?",
+      "answer": "It had too many problems.",
+      "grade_id": "lkg",
+      "subject": "Jokes",
+      "subjects": [
+        "Jokes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613663+00:00"
+    },
+    {
+      "id": "0e6fb6655b1e46fe81b8f3394c70498b",
+      "question": "GK: Where does a lion live?",
+      "answer": "A lion lives in the jungle.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613666+00:00"
+    },
+    {
+      "id": "0f44cad89b5a4a47a07aae40c9b67d61",
+      "question": "How many ears do you have?",
+      "answer": "Two!",
+      "grade_id": "nursery",
+      "subject": "Body",
+      "subjects": [
+        "Body"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613670+00:00"
+    },
+    {
+      "id": "103a3447b8524eb0acf183eaab5e09c8",
+      "question": "GK: What color is the sky on a clear day?",
+      "answer": "The sky is blue.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613673+00:00"
+    },
+    {
+      "id": "10ca55990d2f4c2aab7481ee2c513866",
+      "question": "Define: Mathematics",
+      "answer": "Mathematics is the study of numbers, shapes, and patterns.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613675+00:00"
+    },
+    {
+      "id": "1145550f1c544eb382fe07de412c7747",
+      "question": "What sound does a lion make?",
+      "answer": "Roar!",
+      "grade_id": "nursery",
+      "subject": "Animals",
+      "subjects": [
+        "Animals"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613678+00:00"
+    },
+    {
+      "id": "12ba92d504e94a1b84b54b50fb9134f5",
+      "question": "What is a predicate?",
+      "answer": "The part of the sentence that tells what the subject does or is.",
+      "grade_id": "lkg",
+      "subject": "English Grammar",
+      "subjects": [
+        "English Grammar"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613681+00:00"
+    },
+    {
+      "id": "16c65990e4384977aaa845a2da8f28ed",
+      "question": "Define: Learning",
+      "answer": "Learning is gaining new knowledge or skills.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613685+00:00"
+    },
+    {
+      "id": "1968c61155e14e3f9f6c0d2ee081b612",
+      "question": "What color is milk?",
+      "answer": "White!",
+      "grade_id": "nursery",
+      "subject": "Colors",
+      "subjects": [
+        "Colors"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613688+00:00"
+    },
+    {
+      "id": "1aeb024c4396485da95ac382e0bf6654",
+      "question": "What do we use to brush our teeth?",
+      "answer": "A toothbrush!",
+      "grade_id": "nursery",
+      "subject": "Body",
+      "subjects": [
+        "Body"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613690+00:00"
+    },
+    {
+      "id": "1b45eedb2c204b32b51f94183e931442",
+      "question": "What color is the sun?",
+      "answer": "Yellow!",
+      "grade_id": "nursery",
+      "subject": "Colors",
+      "subjects": [
+        "Colors"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613693+00:00"
+    },
+    {
+      "id": "1b475fe9daa04723b095b9f6a870a0f7",
+      "question": "What is tense?",
+      "answer": "The form of a verb that shows when an action happens (past, present, future).",
+      "grade_id": "lkg",
+      "subject": "English Grammar",
+      "subjects": [
+        "English Grammar"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613696+00:00"
+    },
+    {
+      "id": "2030c691b3c94674ba20d87737cf97dc",
+      "question": "GK: How many seconds are in a minute?",
+      "answer": "There are sixty seconds in a minute.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613699+00:00"
+    },
+    {
+      "id": "212fa968a29a473cad1e49152f9111e2",
+      "question": "Which is the hottest planet?",
+      "answer": "Venus.",
+      "grade_id": "lkg",
+      "subject": "Geography",
+      "subjects": [
+        "Geography"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613703+00:00"
+    },
+    {
+      "id": "218a3797b4484402a31ed69e5e26cb5d",
+      "question": "GK: What is the shape of a pizza slice?",
+      "answer": "A pizza slice is triangular.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613705+00:00"
+    },
+    {
+      "id": "224b72ede7b14be9b9321aa2ba1d5034",
+      "question": "Give examples of liquids.",
+      "answer": "Water, milk, oil, juice, petrol.",
+      "grade_id": "lkg",
+      "subject": "Science",
+      "subjects": [
+        "Science"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613709+00:00"
+    },
+    {
+      "id": "23b50866c88e449392ece88c05b60301",
+      "question": "What is it called when a liquid changes to a solid?",
+      "answer": "Freezing.",
+      "grade_id": "lkg",
+      "subject": "Science",
+      "subjects": [
+        "Science"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613711+00:00"
+    },
+    {
+      "id": "247da869af944b7f823e55796dfdefb1",
+      "question": "How can we keep air clean?",
+      "answer": "By planting trees, not burning rubbish, using less smoke, and walking or cycling instead of using vehicles for short trips.",
+      "grade_id": "lkg",
+      "subject": "Science",
+      "subjects": [
+        "Science"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613714+00:00"
+    },
+    {
+      "id": "25070daadbba4c938e5fa748c5d569e7",
+      "question": "What fruit has many tiny seeds outside?",
+      "answer": "Strawberry!",
+      "grade_id": "nursery",
+      "subject": "Fruits",
+      "subjects": [
+        "Fruits"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613717+00:00"
+    },
+    {
+      "id": "250c7503d23e4f959d78830dd95c93cc",
+      "question": "What is the opposite of loud?",
+      "answer": "Quiet!",
+      "grade_id": "nursery",
+      "subject": "Opposites",
+      "subjects": [
+        "Opposites"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613720+00:00"
+    },
+    {
+      "id": "27bf00474c014fe09c3b4423d90a45d1",
+      "question": "GK: What animal says oink?",
+      "answer": "The pig says oink.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613724+00:00"
+    },
+    {
+      "id": "280d1226c894438eb3d4056f274c2b1e",
+      "question": "GK: What animal says quack?",
+      "answer": "The duck says quack.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613726+00:00"
+    },
+    {
+      "id": "28305e1c9645438fa2c9c0a9351f33e1",
+      "question": "Which continent is the coldest?",
+      "answer": "Antarctica.",
+      "grade_id": "lkg",
+      "subject": "Geography",
+      "subjects": [
+        "Geography"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613729+00:00"
+    },
+    {
+      "id": "2a13b6e9b01a4f8786bdb45e5991427c",
+      "question": "GK: Which month has the fewest days?",
+      "answer": "February has the fewest days.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613732+00:00"
+    },
+    {
+      "id": "2ab55bbef2b54d759f50b9212a7274f4",
+      "question": "Joke: What do you call a fish wearing a bowtie?",
+      "answer": "So-fish-ticated.",
+      "grade_id": "lkg",
+      "subject": "Jokes",
+      "subjects": [
+        "Jokes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613735+00:00"
+    },
+    {
+      "id": "2b47a49fb1d34fc6a5fbf3f3f6199f1c",
+      "question": "Poem: Five Little Ducks",
+      "answer": "Five little ducks went out one day,\nOver the hills and far away.\nMother duck said quack, quack, quack, quack,\nBut only four little ducks came back.",
+      "grade_id": "lkg",
+      "subject": "Language, Poems",
+      "subjects": [
+        "Language",
+        "Poems"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613739+00:00"
+    },
+    {
+      "id": "2bff5604ea2a430999c74696377d6c26",
+      "question": "Can solids be compressed?",
+      "answer": "No (or only very slightly) — solids are not easily compressible.",
+      "grade_id": "lkg",
+      "subject": "Science",
+      "subjects": [
+        "Science"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613742+00:00"
+    },
+    {
+      "id": "2cb3fd7252d245b2bb4b8a74d873a9b3",
+      "question": "Which is the largest country by area?",
+      "answer": "Russia.",
+      "grade_id": "lkg",
+      "subject": "Geography",
+      "subjects": [
+        "Geography"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613745+00:00"
+    },
+    {
+      "id": "2d3f6a339c3240f7b0ba0220f8419c38",
+      "question": "Define: General Knowledge",
+      "answer": "General knowledge is basic information about the world that most people know.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613749+00:00"
+    },
+    {
+      "id": "2f14609d71b849f8830078758c55dc0d",
+      "question": "What is the opposite of happy?",
+      "answer": "Sad!",
+      "grade_id": "nursery",
+      "subject": "Opposites",
+      "subjects": [
+        "Opposites"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613751+00:00"
+    },
+    {
+      "id": "2f8df50c36f344259e11dd9590992f83",
+      "question": "Which is the smallest continent?",
+      "answer": "Australia (Oceania).",
+      "grade_id": "lkg",
+      "subject": "Geography",
+      "subjects": [
+        "Geography"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613755+00:00"
+    },
+    {
+      "id": "2ff0de2aa8604cbda792c50b502a1239",
+      "question": "What is an antonym?",
+      "answer": "A word with the opposite meaning (e.g., hot – cold).",
+      "grade_id": "lkg",
+      "subject": "English Grammar",
+      "subjects": [
+        "English Grammar"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613757+00:00"
+    },
+    {
+      "id": "317d40605b3648b08fb8116f88f65af2",
+      "question": "What is it called when a liquid changes to a gas?",
+      "answer": "Evaporation (or boiling, when heated).",
+      "grade_id": "lkg",
+      "subject": "Science",
+      "subjects": [
+        "Science"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613760+00:00"
+    },
+    {
+      "id": "3251421a28e3416392ba2536ad0c6b43",
+      "question": "Does a solid have a fixed shape?",
+      "answer": "Yes — a solid keeps its shape unless we force it to change (e.g., break or bend it).",
+      "grade_id": "lkg",
+      "subject": "Science",
+      "subjects": [
+        "Science"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613763+00:00"
+    },
+    {
+      "id": "351be62a03734b63969a14929dac2e41",
+      "question": "How do the particles in a gas behave?",
+      "answer": "They are far apart and move freely and quickly in all directions.",
+      "grade_id": "lkg",
+      "subject": "Science",
+      "subjects": [
+        "Science"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613766+00:00"
+    },
+    {
+      "id": "380fdbc9edf44f22844a56f310119c9b",
+      "question": "What sound does a cat make?",
+      "answer": "Meow!",
+      "grade_id": "nursery",
+      "subject": "Animals",
+      "subjects": [
+        "Animals"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613769+00:00"
+    },
+    {
+      "id": "39d02c9f6f474ed680c0ac3afba33374",
+      "question": "What color is the sky?",
+      "answer": "Blue!",
+      "grade_id": "nursery",
+      "subject": "Colors",
+      "subjects": [
+        "Colors"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613772+00:00"
+    },
+    {
+      "id": "3acaa301d02d473cb4ea8c8622074089",
+      "question": "GK: How many wheels does a bicycle have?",
+      "answer": "A bicycle has two wheels.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613775+00:00"
+    },
+    {
+      "id": "3dbfd43a851c43fb96f57f1ea9dfb07d",
+      "question": "Which gas do we breathe in?",
+      "answer": "Oxygen.",
+      "grade_id": "lkg",
+      "subject": "Science",
+      "subjects": [
+        "Science"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613778+00:00"
+    },
+    {
+      "id": "3dc84f1b2b684823bb17306403cddfb8",
+      "question": "GK: What animal has a long trunk?",
+      "answer": "The elephant has a long trunk.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613781+00:00"
+    },
+    {
+      "id": "3e9b8c1e5e7e4686b912af1ab32aeb3e",
+      "question": "Which planet has the most moons?",
+      "answer": "Saturn (146 confirmed moons).",
+      "grade_id": "lkg",
+      "subject": "Geography",
+      "subjects": [
+        "Geography"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613784+00:00"
+    },
+    {
+      "id": "3e9bba95b0ba442b9b14531f6eedd5b8",
+      "question": "GK: What is ten minus two?",
+      "answer": "Ten minus two equals eight.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613787+00:00"
+    },
+    {
+      "id": "4124ec0a91684335ba3ace70f89da659",
+      "question": "Which is the largest planet?",
+      "answer": "Jupiter.",
+      "grade_id": "lkg",
+      "subject": "Geography",
+      "subjects": [
+        "Geography"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613790+00:00"
+    },
+    {
+      "id": "423bc4d5f6b944a69f72b890942e54e2",
+      "question": "What is a prefix",
+      "answer": "A letter group added to the beginning of a word to change its meaning (e.g., un- in unhappy).",
+      "grade_id": "lkg",
+      "subject": "English Grammar",
+      "subjects": [
+        "English Grammar"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613793+00:00"
+    },
+    {
+      "id": "42b152a274304795abbd441a8f8bbd74",
+      "question": "GK: What is the shape of a ball?",
+      "answer": "A ball is round.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613796+00:00"
+    },
+    {
+      "id": "42eae662401147f09d0c4bad49bc9068",
+      "question": "GK: How many sides does a rectangle have?",
+      "answer": "A rectangle has four sides.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613799+00:00"
+    },
+    {
+      "id": "44387c4d68b242f08086820940b07b80",
+      "question": "What are the rudiment?",
+      "answer": "Rudiments are the most basic facts, principles, building blocks, or earliest stages of a subject or skill.\nLike A B C D E F G H I J K L M N O P Q R S T U V W X Y Z",
+      "grade_id": "lkg",
+      "subject": "English Grammar",
+      "subjects": [
+        "English Grammar"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613802+00:00"
+    },
+    {
+      "id": "45f077f57cff4c2399925293b4258b7a",
+      "question": "GK: What season comes after winter?",
+      "answer": "Spring comes after winter.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613805+00:00"
+    },
+    {
+      "id": "46b6d441042241f5a59a02b0aaffadd3",
+      "question": "GK: How many hours are in a day?",
+      "answer": "There are twenty-four hours in a day.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613809+00:00"
+    },
+    {
+      "id": "478c1cebcaa44dc786854b1a5ae0cd75",
+      "question": "Give examples of solids.",
+      "answer": "Wood, stone, iron, ice, brick, book, table.",
+      "grade_id": "lkg",
+      "subject": "Science",
+      "subjects": [
+        "Science"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613811+00:00"
+    },
+    {
+      "id": "4817b4a7116f4e0cb1bdbd6422219475",
+      "question": "What fruit is round and orange?",
+      "answer": "Orange!",
+      "grade_id": "nursery",
+      "subject": "Fruits",
+      "subjects": [
+        "Fruits"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613814+00:00"
+    },
+    {
+      "id": "48ed2dd90e824559a78520eac3135af5",
+      "question": "What is the opposite of open?",
+      "answer": "Close!",
+      "grade_id": "nursery",
+      "subject": "Opposites",
+      "subjects": [
+        "Opposites"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613817+00:00"
+    },
+    {
+      "id": "4a361226b47948e5a2206ed46d4f014b",
+      "question": "How many letters are there in an alphabet?",
+      "answer": "There are 26 letter in the alphabet.",
+      "grade_id": "nursery",
+      "subject": "Language",
+      "subjects": [
+        "Language"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613820+00:00"
+    },
+    {
+      "id": "4b648e92d47c49989d214202508ca043",
+      "question": "Poem: The Itsy Bitsy Spider",
+      "answer": "The itsy bitsy spider climbed up the water spout.\nDown came the rain and washed the spider out.\nOut came the sun and dried up all the rain,\nAnd the itsy bitsy spider climbed up the spout again.",
+      "grade_id": "lkg",
+      "subject": "Language, Poems",
+      "subjects": [
+        "Language",
+        "Poems"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613824+00:00"
+    },
+    {
+      "id": "4bdf3544bb884c129d792f921c2d7e15",
+      "question": "GK: What do we use to read?",
+      "answer": "We use our eyes to read.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613827+00:00"
+    },
+    {
+      "id": "4c82a8473a974ad49c1193be0cafdeb7",
+      "question": "GK: What do sheep give us?",
+      "answer": "Sheep give us wool.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613830+00:00"
+    },
+    {
+      "id": "4e0b6adc5d124322b36bf7a7c50d8134",
+      "question": "What is moving air called?",
+      "answer": "Wind.",
+      "grade_id": "lkg",
+      "subject": "Science",
+      "subjects": [
+        "Science"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613834+00:00"
+    },
+    {
+      "id": "4ffcd8ede6ad49c381ebb0c02034843b",
+      "question": "What is the opposite of big?",
+      "answer": "Small!",
+      "grade_id": "nursery",
+      "subject": "Opposites",
+      "subjects": [
+        "Opposites"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613837+00:00"
+    },
+    {
+      "id": "507006ffd8374807978d9b78d03c856c",
+      "question": "What do we say when we meet someone in the morning?",
+      "answer": "Good Morning!",
+      "grade_id": "nursery",
+      "subject": "Feelings & expressions",
+      "subjects": [
+        "Feelings & expressions"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613840+00:00"
+    },
+    {
+      "id": "50d3d18fba7a4d86b4d4524d535ff354",
+      "question": "GK: What animal says baa?",
+      "answer": "The sheep says baa.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613843+00:00"
+    },
+    {
+      "id": "514f39bf37d945a2876b559ef1af142b",
+      "question": "What is the opposite of in?",
+      "answer": "Out!",
+      "grade_id": "nursery",
+      "subject": "Opposites",
+      "subjects": [
+        "Opposites"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613846+00:00"
+    },
+    {
+      "id": "524e074d6c1f4097aa8f5247c2cf17ee",
+      "question": "Which animal has wings?",
+      "answer": "A bird!",
+      "grade_id": "nursery",
+      "subject": "Animals",
+      "subjects": [
+        "Animals"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613849+00:00"
+    },
+    {
+      "id": "53c6833930a04478a65401c0ab9a4258",
+      "question": "GK: Where does a camel live?",
+      "answer": "A camel lives in the desert.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613852+00:00"
+    },
+    {
+      "id": "54544aca85cb4ed3b6e925f8bd0dce21",
+      "question": "Which planet is famous for its rings?",
+      "answer": "Saturn.",
+      "grade_id": "lkg",
+      "subject": "Geography",
+      "subjects": [
+        "Geography"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613856+00:00"
+    },
+    {
+      "id": "55ae7afdb93c4fe78660bf8a784f2a17",
+      "question": "Joke: What do you call a pig that does karate?",
+      "answer": "A pork chop.",
+      "grade_id": "lkg",
+      "subject": "Jokes",
+      "subjects": [
+        "Jokes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613859+00:00"
+    },
+    {
+      "id": "5696e1b5df4343fdbe049d99099f3871",
+      "question": "How do the particles in a liquid behave?",
+      "answer": "They are close together but can slide past one another, which is why liquids flow.",
+      "grade_id": "lkg",
+      "subject": "Science",
+      "subjects": [
+        "Science"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613862+00:00"
+    },
+    {
+      "id": "571ac3d6a0b843ed9d9221d4600ec36c",
+      "question": "Which planet is known as the \"Red Planet\"?",
+      "answer": "Mars.",
+      "grade_id": "lkg",
+      "subject": "Geography",
+      "subjects": [
+        "Geography"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613865+00:00"
+    },
+    {
+      "id": "57788a4b80654b0ab1442f0cafb81813",
+      "question": "What do we use to clap?",
+      "answer": "Hands!",
+      "grade_id": "nursery",
+      "subject": "Body",
+      "subjects": [
+        "Body"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613868+00:00"
+    },
+    {
+      "id": "578ba50788114ae0a635b49a35f0efb5",
+      "question": "Define: Answer",
+      "answer": "An answer is a reply to a question.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613871+00:00"
+    },
+    {
+      "id": "5813bb3ada274ab497a10735a73e672e",
+      "question": "Does a liquid have a fixed shape?",
+      "answer": "No — it flows and takes the shape of the container it is in.",
+      "grade_id": "lkg",
+      "subject": "Science",
+      "subjects": [
+        "Science"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613874+00:00"
+    },
+    {
+      "id": "597a204547df4fd0918b4ca7dbbf234a",
+      "question": "Which animal says \"meow\"?",
+      "answer": "The cat!",
+      "grade_id": "nursery",
+      "subject": "Animals",
+      "subjects": [
+        "Animals"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613877+00:00"
+    },
+    {
+      "id": "598ef73ebc8849dd841d13b5406b123e",
+      "question": "What fruit is long and yellow?",
+      "answer": "Banana!",
+      "grade_id": "nursery",
+      "subject": "Fruits",
+      "subjects": [
+        "Fruits"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613880+00:00"
+    },
+    {
+      "id": "5a909ee65ea74002837b0aae7883dbc6",
+      "question": "Which continent is home to the Amazon rainforest?",
+      "answer": "South America.",
+      "grade_id": "lkg",
+      "subject": "Geography",
+      "subjects": [
+        "Geography"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613883+00:00"
+    },
+    {
+      "id": "5ad70345b67f4e418717d72f3c9d1fb8",
+      "question": "GK: What is the coldest season?",
+      "answer": "Winter is the coldest season.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613886+00:00"
+    },
+    {
+      "id": "5bec848900994dbcbf2c4d01ec81cf80",
+      "question": "What color is snow?",
+      "answer": "White!",
+      "grade_id": "nursery",
+      "subject": "Colors",
+      "subjects": [
+        "Colors"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613889+00:00"
+    },
+    {
+      "id": "5bf9457a2c6e4b919aa69b9fa43c6d78",
+      "question": "Name a fruit that is sour and yellow.",
+      "answer": "Lemon!",
+      "grade_id": "nursery",
+      "subject": "Fruits",
+      "subjects": [
+        "Fruits"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613891+00:00"
+    },
+    {
+      "id": "5daf6fd405c74bf9a757acd1372f9a1d",
+      "question": "What is a synonym?",
+      "answer": "A word with the same or similar meaning (e.g., big – large).",
+      "grade_id": "lkg",
+      "subject": "English Grammar",
+      "subjects": [
+        "English Grammar"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613894+00:00"
+    },
+    {
+      "id": "614eabaf75314948b0244be3cae46326",
+      "question": "Joke: Why did the cookie go to the nurse?",
+      "answer": "It felt crummy.",
+      "grade_id": "lkg",
+      "subject": "Jokes",
+      "subjects": [
+        "Jokes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613897+00:00"
+    },
+    {
+      "id": "621b93b2f4ef471f91ee332505e2c396",
+      "question": "Which country is shaped like a boot?",
+      "answer": "Italy.",
+      "grade_id": "lkg",
+      "subject": "Geography",
+      "subjects": [
+        "Geography"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613900+00:00"
+    },
+    {
+      "id": "622fd8b9a334472c83d104c13f5c19ce",
+      "question": "Which continent has no permanent human population?",
+      "answer": "Antarctica.",
+      "grade_id": "lkg",
+      "subject": "Geography",
+      "subjects": [
+        "Geography"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613904+00:00"
+    },
+    {
+      "id": "62a7495ddefa40b69b4ea4b947fbd58f",
+      "question": "GK: How many legs does a spider have?",
+      "answer": "A spider has eight legs.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613906+00:00"
+    },
+    {
+      "id": "63bcc8bbd03d4e62a9001c4672136f37",
+      "question": "GK: What animal hops and has long ears?",
+      "answer": "The rabbit hops and has long ears.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613909+00:00"
+    },
+    {
+      "id": "641b03c2099f49f4b0526ba51ccdd5a8",
+      "question": "GK: What is the hottest season?",
+      "answer": "Summer is the hottest season.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613913+00:00"
+    },
+    {
+      "id": "64ae1d934c424e06aa61efb830eee6e6",
+      "question": "GK: What animal says meow?",
+      "answer": "The cat says meow.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613916+00:00"
+    },
+    {
+      "id": "6683c83d870e4e7093c049ef4aa3a35c",
+      "question": "GK: What planet do we live on?",
+      "answer": "We live on Earth.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613919+00:00"
+    },
+    {
+      "id": "67009b6e092f427b8fb0c42623fd603b",
+      "question": "Poem: One Two Buckle My Shoe",
+      "answer": "One, two, buckle my shoe.\nThree, four, knock at the door.\nFive, six, pick up sticks.\nSeven, eight, lay them straight.",
+      "grade_id": "lkg",
+      "subject": "Language, Poems",
+      "subjects": [
+        "Language",
+        "Poems"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613922+00:00"
+    },
+    {
+      "id": "681e49b9d4bc4337b6c89bbb185f1455",
+      "question": "GK: What is the largest animal in the sea?",
+      "answer": "The blue whale is the largest animal in the sea.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613925+00:00"
+    },
+    {
+      "id": "6868fad6124746eebac194dc05f83aa3",
+      "question": "Which continent is home to the Sahara Desert?",
+      "answer": "Africa.",
+      "grade_id": "lkg",
+      "subject": "Geography",
+      "subjects": [
+        "Geography"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613928+00:00"
+    },
+    {
+      "id": "68e4ef17c9834ce5ab593ca90a783ae8",
+      "question": "Joke: What do you call a dog that does magic?",
+      "answer": "A labracadabrador.",
+      "grade_id": "lkg",
+      "subject": "Jokes",
+      "subjects": [
+        "Jokes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613932+00:00"
+    },
+    {
+      "id": "6c329bee3d6d402eac0cb8dd8fb0c843",
+      "question": "What fruit is green or red and crunchy?",
+      "answer": "Apple!",
+      "grade_id": "nursery",
+      "subject": "Fruits",
+      "subjects": [
+        "Fruits"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613934+00:00"
+    },
+    {
+      "id": "6c577e39631f414db2ba8136a55b8adc",
+      "question": "GK: What is two plus two?",
+      "answer": "Two plus two equals four.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613937+00:00"
+    },
+    {
+      "id": "7035dbb24d144a51b41ab5e7fe261e3a",
+      "question": "GK: What is five plus five?",
+      "answer": "Five plus five equals ten.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613940+00:00"
+    },
+    {
+      "id": "71f03f02a9b142c4b3b579229b07b775",
+      "question": "GK: What is three plus three?",
+      "answer": "Three plus three equals six.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613943+00:00"
+    },
+    {
+      "id": "7202504da2884708967724e3948aa3a0",
+      "question": "Which animal is very big and grey?",
+      "answer": "An elephant!",
+      "grade_id": "nursery",
+      "subject": "Animals",
+      "subjects": [
+        "Animals"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613946+00:00"
+    },
+    {
+      "id": "726be84865f542878855fe7a20ddd634",
+      "question": "Define: Geography",
+      "answer": "Geography is the study of the earth, its land, and its people.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613949+00:00"
+    },
+    {
+      "id": "72d51fc5fa2c49dead578871e9298cb1",
+      "question": "What do you say when someone gives you a gift?",
+      "answer": "Thank you!",
+      "grade_id": "nursery",
+      "subject": "Feelings & expressions",
+      "subjects": [
+        "Feelings & expressions"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613953+00:00"
+    },
+    {
+      "id": "730dfaad2fe4442196fb587353b8e085",
+      "question": "Poem: Pat a Cake",
+      "answer": "Pat a cake, pat a cake, baker's man,\nBake me a cake as fast as you can.\nPat it and prick it and mark it with B,\nAnd put it in the oven for baby and me.",
+      "grade_id": "lkg",
+      "subject": "Language, Poems",
+      "subjects": [
+        "Language",
+        "Poems"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613956+00:00"
+    },
+    {
+      "id": "73570499b0e64a0aa780563642d8b73f",
+      "question": "Poem: London Bridge is Falling Down",
+      "answer": "London Bridge is falling down,\nFalling down, falling down.\nLondon Bridge is falling down,\nMy fair lady.",
+      "grade_id": "lkg",
+      "subject": "Language, Poems",
+      "subjects": [
+        "Language",
+        "Poems"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613960+00:00"
+    },
+    {
+      "id": "738b85815c374dd4b1345bf18e84eeee",
+      "question": "Which animal hops?",
+      "answer": "A rabbit / frog!",
+      "grade_id": "nursery",
+      "subject": "Animals",
+      "subjects": [
+        "Animals"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613963+00:00"
+    },
+    {
+      "id": "73f5621828874432b45daf8ff29f741a",
+      "question": "GK: What animal says cluck?",
+      "answer": "The hen says cluck.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613966+00:00"
+    },
+    {
+      "id": "745044eaae0847feb2e5c2732e962b52",
+      "question": "Joke: What do you call a bear with no teeth?",
+      "answer": "A gummy bear.",
+      "grade_id": "lkg",
+      "subject": "Jokes",
+      "subjects": [
+        "Jokes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613969+00:00"
+    },
+    {
+      "id": "7455643d6c37481d9c99177ca6359722",
+      "question": "What do we use to see?",
+      "answer": "Eyes!",
+      "grade_id": "nursery",
+      "subject": "Body",
+      "subjects": [
+        "Body"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613972+00:00"
+    },
+    {
+      "id": "7459be99afe3409ead90dab889ada067",
+      "question": "What is matter?",
+      "answer": "Matter is anything that has mass and takes up space (has volume). In simple terms, matter is the \"stuff\" that everything around us is made of.",
+      "grade_id": "lkg",
+      "subject": "Science",
+      "subjects": [
+        "Science"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613975+00:00"
+    },
+    {
+      "id": "74f4fa7e38e94c4585f849a0054c6e4b",
+      "question": "Joke: What do you call a sleeping bull?",
+      "answer": "A bulldozer.",
+      "grade_id": "lkg",
+      "subject": "Jokes",
+      "subjects": [
+        "Jokes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613977+00:00"
+    },
+    {
+      "id": "76fcf5ed5b744bef857e805244524c01",
+      "question": "Can liquids be compressed?",
+      "answer": "No (or only very slightly) — liquids are not easily compressible.",
+      "grade_id": "lkg",
+      "subject": "Science",
+      "subjects": [
+        "Science"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613981+00:00"
+    },
+    {
+      "id": "7867a4ce615a433fb41cec178ccebfd6",
+      "question": "What is singular vs. plural?",
+      "answer": "Singular means one (e.g., cat); plural means more than one (e.g., cats).",
+      "grade_id": "lkg",
+      "subject": "English Grammar",
+      "subjects": [
+        "English Grammar"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613984+00:00"
+    },
+    {
+      "id": "7895cc8704094cb19a3215490382d1c8",
+      "question": "What is the shape of the Earth?",
+      "answer": "The shape of the earth is round like a ball.",
+      "grade_id": "nursery",
+      "subject": "My World",
+      "subjects": [
+        "My World"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613987+00:00"
+    },
+    {
+      "id": "79e9d5f38ea54381ab839f0c6b75271e",
+      "question": "GK: How many sides does a square have?",
+      "answer": "A square has four sides.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613990+00:00"
+    },
+    {
+      "id": "7b0811b9dcf5431c8f0d09882b79b098",
+      "question": "GK: What do humans drink to stay alive?",
+      "answer": "Humans drink water to stay alive.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613993+00:00"
+    },
+    {
+      "id": "7b57571ccfb045abb20b3db92ec6c393",
+      "question": "What happens to water when it boils?",
+      "answer": "It changes from a liquid to a gas (water vapour/steam).",
+      "grade_id": "lkg",
+      "subject": "Science",
+      "subjects": [
+        "Science"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613995+00:00"
+    },
+    {
+      "id": "7b7ca453864140f0b399abc4b4747b52",
+      "question": "Can gases be compressed?",
+      "answer": "Yes — gases can be compressed easily (e.g., LPG in cylinders, air in tyres).",
+      "grade_id": "lkg",
+      "subject": "Science",
+      "subjects": [
+        "Science"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.613998+00:00"
+    },
+    {
+      "id": "7de1ab5b117a457abf240c0d9e7b4ccd",
+      "question": "How many planets are there in our solar system?",
+      "answer": "Eight.",
+      "grade_id": "lkg",
+      "subject": "Geography",
+      "subjects": [
+        "Geography"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614001+00:00"
+    },
+    {
+      "id": "7ffa2f159fe248d5b55245b1c0571ccc",
+      "question": "GK: How many planets are in our solar system?",
+      "answer": "There are eight planets in our solar system.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614004+00:00"
+    },
+    {
+      "id": "81a8afb77cb74a968f1f9aaada861251",
+      "question": "GK: What do we use to cut paper?",
+      "answer": "We use scissors to cut paper.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614006+00:00"
+    },
+    {
+      "id": "81cad9bc84ff49c297ef9c700fc87289",
+      "question": "What is it called when a gas changes to a liquid?",
+      "answer": "Condensation.",
+      "grade_id": "lkg",
+      "subject": "Science",
+      "subjects": [
+        "Science"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614009+00:00"
+    },
+    {
+      "id": "84a7114fcaf44250a0f911b0ead4b794",
+      "question": "Which country has the Great Wall?",
+      "answer": "China.",
+      "grade_id": "lkg",
+      "subject": "Geography",
+      "subjects": [
+        "Geography"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614012+00:00"
+    },
+    {
+      "id": "84dce778ed844ce7a28188d59e4b5498",
+      "question": "GK: What is the brightest object in the day sky?",
+      "answer": "The Sun is the brightest object in the day sky.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614016+00:00"
+    },
+    {
+      "id": "8581dc46c83e4c479a5e9d875c32643f",
+      "question": "GK: What is half of twenty?",
+      "answer": "Half of twenty is ten.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614019+00:00"
+    },
+    {
+      "id": "864133359fa249c8a8f9ed0d58f4de50",
+      "question": "Define: History",
+      "answer": "History is the study of past events.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614021+00:00"
+    },
+    {
+      "id": "8700ad15097b4b81bf7fa672730718f9",
+      "question": "GK: What is the largest planet?",
+      "answer": "Jupiter is the largest planet.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614024+00:00"
+    },
+    {
+      "id": "8746d9a24799442d8d13befc8c4eb991",
+      "question": "Does air have weight?",
+      "answer": "Yes, air has weight, even though it is very light.",
+      "grade_id": "lkg",
+      "subject": "Science",
+      "subjects": [
+        "Science"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614027+00:00"
+    },
+    {
+      "id": "895c66019d7a4823902ccddc18aaf4f6",
+      "question": "Give examples of gases.",
+      "answer": "Oxygen, carbon dioxide, nitrogen, water vapour, helium.",
+      "grade_id": "lkg",
+      "subject": "Science",
+      "subjects": [
+        "Science"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614030+00:00"
+    },
+    {
+      "id": "8a23d17a42c6482e8f8a37e2dbdf675f",
+      "question": "GK: How many days are in a week?",
+      "answer": "There are seven days in a week.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614033+00:00"
+    },
+    {
+      "id": "8a76316d5c7d47498f01ba11033e715e",
+      "question": "GK: What do we use to write on paper?",
+      "answer": "We use a pencil or pen to write on paper.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614036+00:00"
+    },
+    {
+      "id": "8c860cca68f94d1ea10469c9baf0b2bc",
+      "question": "Which country is known as the \"Land of the Rising Sun\"?",
+      "answer": "Japan.",
+      "grade_id": "lkg",
+      "subject": "Geography",
+      "subjects": [
+        "Geography"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614039+00:00"
+    },
+    {
+      "id": "8f5868da7a4d468ba2574b55d5a7e194",
+      "question": "What color is the night sky?",
+      "answer": "Black / Dark blue!",
+      "grade_id": "nursery",
+      "subject": "Colors",
+      "subjects": [
+        "Colors"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614042+00:00"
+    },
+    {
+      "id": "919712a0e8c94422979f3730aaee5aeb",
+      "question": "Which country is home to the Eiffel Tower?",
+      "answer": "France.",
+      "grade_id": "lkg",
+      "subject": "Geography",
+      "subjects": [
+        "Geography"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614045+00:00"
+    },
+    {
+      "id": "9340df2e9186432c90978944636b8473",
+      "question": "Poem: Baa Baa Black Sheep",
+      "answer": "Baa, baa, black sheep,\nHave you any wool?\nYes sir, yes sir,\nThree bags full.",
+      "grade_id": "lkg",
+      "subject": "Language, Poems",
+      "subjects": [
+        "Language",
+        "Poems"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614048+00:00"
+    },
+    {
+      "id": "93a5ee8219e44c999d3ebcbd08e710f6",
+      "question": "GK: What is the name of Earth's moon?",
+      "answer": "Earth's moon is called the Moon.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614051+00:00"
+    },
+    {
+      "id": "93e1af5422aa422491e8abde10b5dc69",
+      "question": "GK: What is the largest animal on land?",
+      "answer": "The elephant is the largest animal on land.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614054+00:00"
+    },
+    {
+      "id": "9477e195ef204680ab598ecde60ae728",
+      "question": "What is the opposite of up?",
+      "answer": "Down!",
+      "grade_id": "nursery",
+      "subject": "Opposites",
+      "subjects": [
+        "Opposites"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614056+00:00"
+    },
+    {
+      "id": "95cdae4299ba416089f9742e3fad147e",
+      "question": "GK: What is the first day of the week?",
+      "answer": "Sunday is the first day of the week.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614059+00:00"
+    },
+    {
+      "id": "9670226aabd94d98a3fd7986924a9656",
+      "question": "What is a liquid?",
+      "answer": "A liquid is a state of matter that has a fixed volume but no fixed shape — it takes the shape of its container.",
+      "grade_id": "lkg",
+      "subject": "Science",
+      "subjects": [
+        "Science"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614062+00:00"
+    },
+    {
+      "id": "977a3f56a6d74a689a0271e7c841ae7c",
+      "question": "GK: What animal is called the king of the jungle?",
+      "answer": "The lion is called the king of the jungle.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614065+00:00"
+    },
+    {
+      "id": "97aeb8df77824326b4afd9274b4372b4",
+      "question": "Does air take up space?",
+      "answer": "Yes — a balloon filled with air proves that air takes up space.",
+      "grade_id": "lkg",
+      "subject": "Science",
+      "subjects": [
+        "Science"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614068+00:00"
+    },
+    {
+      "id": "97ce5375738b42fcba2b3cd2e8749b83",
+      "question": "GK: What is the shape of a door?",
+      "answer": "A door is rectangular.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614072+00:00"
+    },
+    {
+      "id": "97e0173abc8143e28a0392e1b4eaf8be",
+      "question": "How do the particles in a solid behave?",
+      "answer": "They are packed tightly together and vibrate in place; they do not move freely.",
+      "grade_id": "lkg",
+      "subject": "Science",
+      "subjects": [
+        "Science"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614075+00:00"
+    },
+    {
+      "id": "98a28a2788144ac8b9ca410d1706e47c",
+      "question": "Joke: Why did the chicken cross the road?",
+      "answer": "To get to the other side.",
+      "grade_id": "lkg",
+      "subject": "Jokes",
+      "subjects": [
+        "Jokes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614077+00:00"
+    },
+    {
+      "id": "98cfda49a57547d6af029362bad1699a",
+      "question": "GK: How many legs does a bird have?",
+      "answer": "A bird has two legs.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614080+00:00"
+    },
+    {
+      "id": "9a8d7123ac4949d5956ca314eb13bf8c",
+      "question": "Poem: Hey Diddle Diddle",
+      "answer": "Hey diddle diddle, the cat and the fiddle,\nThe cow jumped over the moon.\nThe little dog laughed to see such fun,\nAnd the dish ran away with the spoon.",
+      "grade_id": "lkg",
+      "subject": "Language, Poems",
+      "subjects": [
+        "Language",
+        "Poems"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614084+00:00"
+    },
+    {
+      "id": "9b25294015a4493090b7cf3fb95ee4a8",
+      "question": "GK: What season comes after summer?",
+      "answer": "Autumn comes after summer.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614090+00:00"
+    },
+    {
+      "id": "9b81305af7bb4fda812f06c0342e14ef",
+      "question": "Joke: Why did the banana go to the doctor?",
+      "answer": "It was not peeling well.",
+      "grade_id": "lkg",
+      "subject": "Jokes",
+      "subjects": [
+        "Jokes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614093+00:00"
+    },
+    {
+      "id": "9cc63bbb6ebe498ab31c8b6d409d2e44",
+      "question": "What sound does a bird make?",
+      "answer": "Tweet tweet!",
+      "grade_id": "nursery",
+      "subject": "Animals",
+      "subjects": [
+        "Animals"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614096+00:00"
+    },
+    {
+      "id": "a0358034c341426aab4460bf27bbb71e",
+      "question": "GK: How many months are in a year?",
+      "answer": "There are twelve months in a year.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614099+00:00"
+    },
+    {
+      "id": "a1e96489c2a84825a4de87e658d1d0b8",
+      "question": "Which country is called the \"Land of the Midnight Sun\"?",
+      "answer": "Norway.",
+      "grade_id": "lkg",
+      "subject": "Geography",
+      "subjects": [
+        "Geography"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614101+00:00"
+    },
+    {
+      "id": "a22b76cea8484493a093371891a43912",
+      "question": "Joke: Why did the bicycle fall over?",
+      "answer": "It was two-tired.",
+      "grade_id": "lkg",
+      "subject": "Jokes",
+      "subjects": [
+        "Jokes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614104+00:00"
+    },
+    {
+      "id": "a22d1bb287424ecdbc826bb61b3a4d1a",
+      "question": "GK: What do plants need to grow?",
+      "answer": "Plants need sunlight and water to grow.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614107+00:00"
+    },
+    {
+      "id": "a24cdcfb5341492e8e94b420c8a558d1",
+      "question": "GK: What is ten minus five?",
+      "answer": "Ten minus five equals five.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614110+00:00"
+    },
+    {
+      "id": "a26ae3b199b24703b6818af67991f197",
+      "question": "Poem: Rain Rain Go Away",
+      "answer": "Rain, rain, go away,\nCome again another day.\nLittle children want to play,\nRain, rain, go away.",
+      "grade_id": "lkg",
+      "subject": "Language, Poems",
+      "subjects": [
+        "Language",
+        "Poems"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614114+00:00"
+    },
+    {
+      "id": "a2dd687f216d4e4fbae2963f6e916058",
+      "question": "What is a gas?",
+      "answer": "A gas is a state of matter that has no fixed shape and no fixed volume — it fills whatever container it is in.",
+      "grade_id": "lkg",
+      "subject": "Science",
+      "subjects": [
+        "Science"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614117+00:00"
+    },
+    {
+      "id": "a478746645ee440da8d2925ee621100d",
+      "question": "How many continents are there on Earth?",
+      "answer": "Seven.",
+      "grade_id": "lkg",
+      "subject": "Geography",
+      "subjects": [
+        "Geography"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614120+00:00"
+    },
+    {
+      "id": "a5baf1147c2748919564df685eb8f867",
+      "question": "GK: How many minutes are in an hour?",
+      "answer": "There are sixty minutes in an hour.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614122+00:00"
+    },
+    {
+      "id": "a5da444f0d93401fac206aed17e1f06b",
+      "question": "Define: Fact",
+      "answer": "A fact is something that is true and can be proven.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614125+00:00"
+    },
+    {
+      "id": "a9018d59b47a41e49f97249291391afb",
+      "question": "GK: What is the last day of the week?",
+      "answer": "Saturday is the last day of the week.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614128+00:00"
+    },
+    {
+      "id": "ac50e3f427004a5ba6dddd0f551ad1f3",
+      "question": "Poem: Little Miss Muffet",
+      "answer": "Little Miss Muffet sat on a tuffet,\nEating her curds and whey.\nAlong came a spider and sat down beside her,\nAnd frightened Miss Muffet away.",
+      "grade_id": "lkg",
+      "subject": "Language, Poems",
+      "subjects": [
+        "Language",
+        "Poems"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614132+00:00"
+    },
+    {
+      "id": "adc7af07229d49928be907be6e7d8b0e",
+      "question": "GK: What do hens give us?",
+      "answer": "Hens give us eggs.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614135+00:00"
+    },
+    {
+      "id": "aece730f98e44ce5b62e730865083ee3",
+      "question": "What is the opposite of fast?",
+      "answer": "Slow!",
+      "grade_id": "nursery",
+      "subject": "Opposites",
+      "subjects": [
+        "Opposites"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614138+00:00"
+    },
+    {
+      "id": "af27c442df094732b2d85b84821d6aca",
+      "question": "GK: What is the closest planet to the Sun?",
+      "answer": "Mercury is the closest planet to the Sun.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614141+00:00"
+    },
+    {
+      "id": "b0dc0fec557442bfadaafca6e6cc9d5a",
+      "question": "GK: Where does a bird live?",
+      "answer": "A bird lives in a nest.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614143+00:00"
+    },
+    {
+      "id": "b31a4545c2464d588669aea5bbc67c8d",
+      "question": "What do we use to smell?",
+      "answer": "Nose!",
+      "grade_id": "nursery",
+      "subject": "Body",
+      "subjects": [
+        "Body"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614147+00:00"
+    },
+    {
+      "id": "b3e9e1000a9b43508f08a29418bf6c92",
+      "question": "GK: What is one plus one?",
+      "answer": "One plus one equals two.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614150+00:00"
+    },
+    {
+      "id": "b401a4597e2d4747a46ff266e1bebf60",
+      "question": "GK: How many sides does a circle have?",
+      "answer": "A circle has no straight sides.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614153+00:00"
+    },
+    {
+      "id": "b4c57f10bc8f48c1b59ff6f5fd3556af",
+      "question": "What is the opposite of day?",
+      "answer": "Night!",
+      "grade_id": "nursery",
+      "subject": "Opposites",
+      "subjects": [
+        "Opposites"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614157+00:00"
+    },
+    {
+      "id": "b4cdfa2fb96a460882f570290cc6fdfd",
+      "question": "GK: Where does a bee live?",
+      "answer": "A bee lives in a hive.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614160+00:00"
+    },
+    {
+      "id": "b65e7d0275114c55b2ecb6916ab9f3db",
+      "question": "Which continent has the most countries?",
+      "answer": "Africa (54 countries).",
+      "grade_id": "lkg",
+      "subject": "Geography",
+      "subjects": [
+        "Geography"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614163+00:00"
+    },
+    {
+      "id": "b76561d12c9b49cfac1ffd042e3a556c",
+      "question": "GK: What is the first month of the year?",
+      "answer": "January is the first month of the year.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614165+00:00"
+    },
+    {
+      "id": "b860f322ba1f44f8ae597a8e81224f3e",
+      "question": "Poem: Jack and Jill",
+      "answer": "Jack and Jill went up the hill,\nTo fetch a pail of water.\nJack fell down and broke his crown,\nAnd Jill came tumbling after.",
+      "grade_id": "lkg",
+      "subject": "Language, Poems",
+      "subjects": [
+        "Language",
+        "Poems"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614169+00:00"
+    },
+    {
+      "id": "bacbc58ed92f48b2a99198234e69aec8",
+      "question": "Which planet rotates on its side?",
+      "answer": "Uranus.",
+      "grade_id": "lkg",
+      "subject": "Geography",
+      "subjects": [
+        "Geography"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614172+00:00"
+    },
+    {
+      "id": "bc6fc55f73374048a17bb71d778554dd",
+      "question": "Joke: What do you call a cow with no legs?",
+      "answer": "Ground beef.",
+      "grade_id": "lkg",
+      "subject": "Jokes",
+      "subjects": [
+        "Jokes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614174+00:00"
+    },
+    {
+      "id": "bfae7debd9d4412c858defde88db38c4",
+      "question": "GK: What is double of five?",
+      "answer": "Double of five is ten.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614177+00:00"
+    },
+    {
+      "id": "c1a5c054741747ec87a750a7aa8894cb",
+      "question": "What color is a carrot?",
+      "answer": "Orange!",
+      "grade_id": "nursery",
+      "subject": "Colors",
+      "subjects": [
+        "Colors"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614180+00:00"
+    },
+    {
+      "id": "c309135e69bc460499cd8d39c84e6d80",
+      "question": "Which animal has a long trunk?",
+      "answer": "An elephant!",
+      "grade_id": "nursery",
+      "subject": "Animals",
+      "subjects": [
+        "Animals"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614183+00:00"
+    },
+    {
+      "id": "c57bb46e37884dd2ac971da0e0969f6a",
+      "question": "Does a gas have a fixed shape?",
+      "answer": "No — gases spread out to fill the whole space available.",
+      "grade_id": "lkg",
+      "subject": "Science",
+      "subjects": [
+        "Science"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614186+00:00"
+    },
+    {
+      "id": "c6f032f5d08041db90c9e830f6a05c0e",
+      "question": "GK: What do humans need to breathe?",
+      "answer": "Humans need air to breathe.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614188+00:00"
+    },
+    {
+      "id": "c82dac050c2a4689a080b7880dc53020",
+      "question": "GK: What is double of ten?",
+      "answer": "Double of ten is twenty.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614191+00:00"
+    },
+    {
+      "id": "c85a51b026d544d6ab265005e652dd3e",
+      "question": "GK: What is the shape of a wheel?",
+      "answer": "A wheel is round.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614194+00:00"
+    },
+    {
+      "id": "c9667a6a41d541f1ae4e2546597fe0a9",
+      "question": "What vegetable is orange and long?",
+      "answer": "Carrot!",
+      "grade_id": "nursery",
+      "subject": "Fruits",
+      "subjects": [
+        "Fruits"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614197+00:00"
+    },
+    {
+      "id": "c9ca7704a242416a8ddfb34186d21eaf",
+      "question": "What is it called when a solid changes directly to a gas?",
+      "answer": "Sublimation (e.g., camphor, dry ice).",
+      "grade_id": "lkg",
+      "subject": "Science",
+      "subjects": [
+        "Science"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614214+00:00"
+    },
+    {
+      "id": "cb166dc084f34d379e8c2ee9a84a6d80",
+      "question": "Poem: Hickory Dickory Dock",
+      "answer": "Hickory dickory dock,\nThe mouse ran up the clock.\nThe clock struck one,\nThe mouse ran down,\nHickory dickory dock.",
+      "grade_id": "lkg",
+      "subject": "Language, Poems",
+      "subjects": [
+        "Language",
+        "Poems"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614231+00:00"
+    },
+    {
+      "id": "cc2362074cc44cb6b85b3509ee660780",
+      "question": "What is air?",
+      "answer": "Air is a mixture of gases that surrounds the Earth. We cannot see it, but we can feel it.",
+      "grade_id": "lkg",
+      "subject": "Science",
+      "subjects": [
+        "Science"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614235+00:00"
+    },
+    {
+      "id": "cc60c3f578544163a1e6d15ec543612f",
+      "question": "GK: How many sides does a triangle have?",
+      "answer": "A triangle has three sides.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614239+00:00"
+    },
+    {
+      "id": "ccc33f9011cf4af3b7d12e773498a079",
+      "question": "What do we use to walk?",
+      "answer": "Legs / Feet!",
+      "grade_id": "nursery",
+      "subject": "Body",
+      "subjects": [
+        "Body"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614243+00:00"
+    },
+    {
+      "id": "ccc860e4fc204236859b430eb482fff3",
+      "question": "Which gas do we breathe out?",
+      "answer": "Carbon dioxide.",
+      "grade_id": "lkg",
+      "subject": "Science",
+      "subjects": [
+        "Science"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614246+00:00"
+    },
+    {
+      "id": "ce339e7f21b245d5a1d408903a810d1c",
+      "question": "Joke: Why did the orange stop rolling?",
+      "answer": "It ran out of juice.",
+      "grade_id": "lkg",
+      "subject": "Jokes",
+      "subjects": [
+        "Jokes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614249+00:00"
+    },
+    {
+      "id": "cef7a3d39f084777b06f027ee04e48f4",
+      "question": "Which animal says \"moo\"?",
+      "answer": "The cow!",
+      "grade_id": "nursery",
+      "subject": "Animals",
+      "subjects": [
+        "Animals"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614252+00:00"
+    },
+    {
+      "id": "d15c7f3bb9f7400f8678082fa6e460bc",
+      "question": "Joke: Why did the scarecrow win an award?",
+      "answer": "He was outstanding in his field.",
+      "grade_id": "lkg",
+      "subject": "Jokes",
+      "subjects": [
+        "Jokes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614255+00:00"
+    },
+    {
+      "id": "d24ba359a3dc450fb52be1f386cc079f",
+      "question": "How many countries are there in the world?",
+      "answer": "195 (193 UN members + 2 observer states).",
+      "grade_id": "lkg",
+      "subject": "Geography",
+      "subjects": [
+        "Geography"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614259+00:00"
+    },
+    {
+      "id": "d2d31c448e144877ae38ee17c741c094",
+      "question": "GK: What is the brightest object in the night sky?",
+      "answer": "The Moon is the brightest object in the night sky.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614264+00:00"
+    },
+    {
+      "id": "d3246228df1d4f1dafe8a44b7cd245d5",
+      "question": "GK: What is the name of the star closest to Earth?",
+      "answer": "The Sun is the star closest to Earth.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614266+00:00"
+    },
+    {
+      "id": "d389f7642a5946d99822b14b1c245c47",
+      "question": "Joke: What do you call a snowman in summer?",
+      "answer": "A puddle.",
+      "grade_id": "lkg",
+      "subject": "Jokes",
+      "subjects": [
+        "Jokes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614270+00:00"
+    },
+    {
+      "id": "d44b79f4e4c543789b2756345c92901e",
+      "question": "What are the three states of matter?",
+      "answer": "Solid, liquid, and gas.",
+      "grade_id": "lkg",
+      "subject": "Science",
+      "subjects": [
+        "Science"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614273+00:00"
+    },
+    {
+      "id": "d4e17cf1ced6460db786b21a861a3905",
+      "question": "What color is grass?",
+      "answer": "Green!",
+      "grade_id": "nursery",
+      "subject": "Colors",
+      "subjects": [
+        "Colors"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614276+00:00"
+    },
+    {
+      "id": "d592a0b0275a449fb3217acdc8b7eff4",
+      "question": "Poem: Row Row Row Your Boat",
+      "answer": "Row, row, row your boat,\nGently down the stream.\nMerrily, merrily, merrily, merrily,\nLife is but a dream.",
+      "grade_id": "lkg",
+      "subject": "Language, Poems",
+      "subjects": [
+        "Language",
+        "Poems"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614279+00:00"
+    },
+    {
+      "id": "d6bbea74f43646c9b63f3c70744caebe",
+      "question": "What sound does a dog make?",
+      "answer": "Woof woof!",
+      "grade_id": "nursery",
+      "subject": "Animals",
+      "subjects": [
+        "Animals"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614282+00:00"
+    },
+    {
+      "id": "d7b3aff6a93f4b4bbb4a0c365bfcebf7",
+      "question": "GK: What is the fastest land animal?",
+      "answer": "The cheetah is the fastest land animal.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614286+00:00"
+    },
+    {
+      "id": "d9e8e022fd0c43879a37488f5203b827",
+      "question": "What happens to water when it freezes?",
+      "answer": "It changes from a liquid to a solid (ice).",
+      "grade_id": "lkg",
+      "subject": "Science",
+      "subjects": [
+        "Science"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614289+00:00"
+    },
+    {
+      "id": "dc76d64d39f34986bfb122aa9cf623ee",
+      "question": "What happens to ice when it melts?",
+      "answer": "It changes from a solid to a liquid (water).",
+      "grade_id": "lkg",
+      "subject": "Science",
+      "subjects": [
+        "Science"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614292+00:00"
+    },
+    {
+      "id": "dd2ccf0438214faeb53f647d2a978f6a",
+      "question": "What do we use to comb our hair?",
+      "answer": "A comb!",
+      "grade_id": "nursery",
+      "subject": "Body",
+      "subjects": [
+        "Body"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614295+00:00"
+    },
+    {
+      "id": "dd8f95ac12f04e59b663a5b8d806c3c5",
+      "question": "What is the opposite of wet?",
+      "answer": "Dry!",
+      "grade_id": "nursery",
+      "subject": "Opposites",
+      "subjects": [
+        "Opposites"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614298+00:00"
+    },
+    {
+      "id": "de14f2754a3f4e509a176d299bd0c170",
+      "question": "Poem: Twinkle Twinkle Little Star",
+      "answer": "Twinkle, twinkle, little star,\nHow I wonder what you are.\nUp above the world so high,\nLike a diamond in the sky.",
+      "grade_id": "lkg",
+      "subject": "Language, Poems",
+      "subjects": [
+        "Language",
+        "Poems"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614302+00:00"
+    },
+    {
+      "id": "e01953c6d1254fb3bef87d0a7a28650b",
+      "question": "Joke: What do you call a rabbit with fleas?",
+      "answer": "Bugs Bunny.",
+      "grade_id": "lkg",
+      "subject": "Jokes",
+      "subjects": [
+        "Jokes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614305+00:00"
+    },
+    {
+      "id": "e0e0f0a8ccb64c8a88a4fd5ea65aef1e",
+      "question": "Define: Question",
+      "answer": "A question is a sentence that asks for information.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614308+00:00"
+    },
+    {
+      "id": "e12dbfad6480449e930d3c39531eda4c",
+      "question": "GK: What is the shape of a clock?",
+      "answer": "A clock is round.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614311+00:00"
+    },
+    {
+      "id": "e1cb571d2e9c4e0c99448fae0ebce4c1",
+      "question": "What color is a banana?",
+      "answer": "Yellow!",
+      "grade_id": "nursery",
+      "subject": "Colors",
+      "subjects": [
+        "Colors"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614314+00:00"
+    },
+    {
+      "id": "e2228ceb42f44364bc448a83bfd2695d",
+      "question": "What sound does a sheep make?",
+      "answer": "Baa!",
+      "grade_id": "nursery",
+      "subject": "Animals",
+      "subjects": [
+        "Animals"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614316+00:00"
+    },
+    {
+      "id": "e2425814746a4d8983c62c427158ad47",
+      "question": "Which is the closest planet to the Sun?",
+      "answer": "Mercury.",
+      "grade_id": "lkg",
+      "subject": "Geography",
+      "subjects": [
+        "Geography"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614319+00:00"
+    },
+    {
+      "id": "e2456ddcab054df0a14f3601c7d88ec0",
+      "question": "Which is the farthest planet from the Sun?",
+      "answer": "Neptune.",
+      "grade_id": "lkg",
+      "subject": "Geography",
+      "subjects": [
+        "Geography"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614322+00:00"
+    },
+    {
+      "id": "e2798601bac94c5796050ffed7ac1cef",
+      "question": "GK: What is the shape of a book?",
+      "answer": "A book is rectangular.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614325+00:00"
+    },
+    {
+      "id": "e3696f49ccb54af6a4f9b113b368d7c3",
+      "question": "Define: Knowledge",
+      "answer": "Knowledge is the information and understanding a person has.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614329+00:00"
+    },
+    {
+      "id": "e421d58d45654a42ba280a44792fc8dd",
+      "question": "GK: What do we see in the sky at night?",
+      "answer": "We see stars and the moon at night.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614332+00:00"
+    },
+    {
+      "id": "e4cc73ce09cc4bc6931ffda8b0cef789",
+      "question": "What is a suffix?",
+      "answer": "A letter group added to the end of a word (e.g., -ful in helpful).",
+      "grade_id": "lkg",
+      "subject": "English Grammar",
+      "subjects": [
+        "English Grammar"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614335+00:00"
+    },
+    {
+      "id": "e53939542dd7453f8dc5170cb75e3b09",
+      "question": "Why is air important?",
+      "answer": "All living things need air (oxygen) to breathe and stay alive. Plants need carbon dioxide to make food.",
+      "grade_id": "lkg",
+      "subject": "Science",
+      "subjects": [
+        "Science"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614338+00:00"
+    },
+    {
+      "id": "e5a0c09a3ede4b67be96f73e20863d15",
+      "question": "What do we use to hear?",
+      "answer": "Ears!",
+      "grade_id": "nursery",
+      "subject": "Body",
+      "subjects": [
+        "Body"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614341+00:00"
+    },
+    {
+      "id": "e84e3c3d349f4539907a894378971c36",
+      "question": "Name a red fruit.",
+      "answer": "Apple / Strawberry!",
+      "grade_id": "nursery",
+      "subject": "Fruits",
+      "subjects": [
+        "Fruits"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614343+00:00"
+    },
+    {
+      "id": "e87ec5a3b1874390bb94bf98edc056a0",
+      "question": "What is a sentence?",
+      "answer": "A group of words that expresses a complete thought, containing a subject and a predicate.",
+      "grade_id": "lkg",
+      "subject": "English Grammar",
+      "subjects": [
+        "English Grammar"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614347+00:00"
+    },
+    {
+      "id": "e9191a5e61a54ef8b03e05d6c4a65637",
+      "question": "GK: What animal says neigh?",
+      "answer": "The horse says neigh.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614349+00:00"
+    },
+    {
+      "id": "e992dd47d3244cf38e5bb87b597cc296",
+      "question": "GK: Where does a polar bear live?",
+      "answer": "A polar bear lives in the cold.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614352+00:00"
+    },
+    {
+      "id": "ea22db65563c4fec8f1c2e931448a89b",
+      "question": "Poem: Mary Had a Little Lamb",
+      "answer": "Mary had a little lamb,\nIts fleece was white as snow.\nAnd everywhere that Mary went,\nThe lamb was sure to go.",
+      "grade_id": "lkg",
+      "subject": "Language, Poems",
+      "subjects": [
+        "Language",
+        "Poems"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614356+00:00"
+    },
+    {
+      "id": "eab2c2ea22714fd8bef4eb17eaf338ab",
+      "question": "Which country has the most time zones?",
+      "answer": "France (12 time zones including overseas territories).",
+      "grade_id": "lkg",
+      "subject": "Geography",
+      "subjects": [
+        "Geography"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614358+00:00"
+    },
+    {
+      "id": "eafb3f59aec04decbbfa937740d00aa6",
+      "question": "GK: What is half of ten?",
+      "answer": "Half of ten is five.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614362+00:00"
+    },
+    {
+      "id": "eb101bc6f55643c4a89ddcf6737a5144",
+      "question": "Which planet is called the \"Blue Planet\"?",
+      "answer": "Earth.",
+      "grade_id": "lkg",
+      "subject": "Geography",
+      "subjects": [
+        "Geography"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614365+00:00"
+    },
+    {
+      "id": "ebc86d9d01154950bb89d59addc1e386",
+      "question": "What sound does a duck make?",
+      "answer": "Quack Quack!",
+      "grade_id": "nursery",
+      "subject": "Animals",
+      "subjects": [
+        "Animals"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614368+00:00"
+    },
+    {
+      "id": "ee777d2029b0435394f600fb320ca17f",
+      "question": "What is a solid?",
+      "answer": "A solid is a state of matter that has a fixed shape and a fixed volume.",
+      "grade_id": "lkg",
+      "subject": "Science",
+      "subjects": [
+        "Science"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614371+00:00"
+    },
+    {
+      "id": "ee97ccd526184dbc86ab6dbcd3a3fbd3",
+      "question": "Which country has the largest population?",
+      "answer": "India (as of 2023).",
+      "grade_id": "lkg",
+      "subject": "Geography",
+      "subjects": [
+        "Geography"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614373+00:00"
+    },
+    {
+      "id": "f1754e5fc8f445e4bea9bd465517ecc1",
+      "question": "GK: What do cows give us?",
+      "answer": "Cows give us milk.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614376+00:00"
+    },
+    {
+      "id": "f1c3694b1b9b40198f9a19a3b380b857",
+      "question": "Joke: Why did the teddy bear say no to dessert?",
+      "answer": "She was stuffed.",
+      "grade_id": "lkg",
+      "subject": "Jokes",
+      "subjects": [
+        "Jokes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614379+00:00"
+    },
+    {
+      "id": "f1ce710dfbb64fd69e0de283d6311d9a",
+      "question": "What is a homophone?",
+      "answer": "Words that sound the same but have different meanings/spellings (e.g., sea – see).",
+      "grade_id": "lkg",
+      "subject": "English Grammar",
+      "subjects": [
+        "English Grammar"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614382+00:00"
+    },
+    {
+      "id": "f22f608b3cf74b1eac897d8c607bfd92",
+      "question": "What are the alphabet?",
+      "answer": "A B C D E F G H I K L M N O P Q R S T U V W X Y Z",
+      "grade_id": "nursery",
+      "subject": "Language",
+      "subjects": [
+        "Language"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614385+00:00"
+    },
+    {
+      "id": "f3d85f97d554482d92154efa67d39556",
+      "question": "GK: What is the last month of the year?",
+      "answer": "December is the last month of the year.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614388+00:00"
+    },
+    {
+      "id": "f49800a274864b13ac41ae752168f6e7",
+      "question": "What sound does a cow make?",
+      "answer": "Moo!",
+      "grade_id": "nursery",
+      "subject": "Animals",
+      "subjects": [
+        "Animals"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614390+00:00"
+    },
+    {
+      "id": "f52dce54641a4e8aab8f8f6a083a6ba2",
+      "question": "What are the main gases in air?",
+      "answer": "Nitrogen (about 78%), oxygen (about 21%), and small amounts of carbon dioxide, water vapour, and other gases.",
+      "grade_id": "lkg",
+      "subject": "Science",
+      "subjects": [
+        "Science"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614393+00:00"
+    },
+    {
+      "id": "f6cdde42c2af44118047292dd7cad90a",
+      "question": "Joke: Why did the teacher wear sunglasses?",
+      "answer": "Her class was so bright.",
+      "grade_id": "lkg",
+      "subject": "Jokes",
+      "subjects": [
+        "Jokes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614396+00:00"
+    },
+    {
+      "id": "f7c69547c59a4860a227e17c15b226eb",
+      "question": "GK: What animal has a long neck?",
+      "answer": "The giraffe has a long neck.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614399+00:00"
+    },
+    {
+      "id": "f7f28ee27e1142ff89317f1ca9f2ddda",
+      "question": "GK: What is the red planet called?",
+      "answer": "Mars is called the red planet.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614402+00:00"
+    },
+    {
+      "id": "f8142b090ab74d2b8002c3ff83708c63",
+      "question": "GK: How many wheels does a car have?",
+      "answer": "A car has four wheels.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614406+00:00"
+    },
+    {
+      "id": "fadacb5aa2434610b7b41ba5ca128248",
+      "question": "Which is the largest continent by area?",
+      "answer": "Asia.",
+      "grade_id": "lkg",
+      "subject": "Geography",
+      "subjects": [
+        "Geography"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614408+00:00"
+    },
+    {
+      "id": "fb7e4afc2b2b42b69574f70312d7cbfa",
+      "question": "GK: What do bees make?",
+      "answer": "Bees make honey.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614411+00:00"
+    },
+    {
+      "id": "fc88d667f1c242fcbbf8288700ce042c",
+      "question": "Which continent is known as the \"Dark Continent\"?",
+      "answer": "Africa.",
+      "grade_id": "lkg",
+      "subject": "Geography",
+      "subjects": [
+        "Geography"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614414+00:00"
+    },
+    {
+      "id": "fd7906fcd5234d53841961d902775713",
+      "question": "What color is an apple?",
+      "answer": "Red!",
+      "grade_id": "nursery",
+      "subject": "Colors",
+      "subjects": [
+        "Colors"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614417+00:00"
+    },
+    {
+      "id": "ff21b5088d1f41ea8dbe9324f7b7340c",
+      "question": "How many eyes do you have?",
+      "answer": "Two!",
+      "grade_id": "nursery",
+      "subject": "Body",
+      "subjects": [
+        "Body"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614420+00:00"
+    },
+    {
+      "id": "ff5cb3d1a9d24303b5eda0965d4a7974",
+      "question": "Joke: What do you call a dinosaur that is sleeping?",
+      "answer": "A dino-snore.",
+      "grade_id": "lkg",
+      "subject": "Jokes",
+      "subjects": [
+        "Jokes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-20T11:43:44.614423+00:00"
+    }
+  ],
+  "passed_stages": [
+    "letters",
+    "nursery"
+  ],
+  "active_test": null,
+  "test_history": [
+    {
+      "stage": "nursery",
+      "questions_asked": 1,
+      "answers_passed": 0,
+      "needs_learning": 1,
+      "passed": false,
+      "created_at": "2026-10-19T11:18:49.637956+00:00"
+    },
+    {
+      "stage": "nursery",
+      "questions_asked": 22,
+      "answers_passed": 20,
+      "needs_learning": 2,
+      "passed": true,
+      "created_at": "2026-10-19T15:27:15.689642+00:00"
+    }
+  ]
+}

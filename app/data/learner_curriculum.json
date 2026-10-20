@@ -1,0 +1,1499 @@
+{
+  "grades": {
+    "nursery": {
+      "sentences": [
+        "I am learning.",
+        "You are kind.",
+        "We learn new words.",
+        "The cat sleeps.",
+        "A dog runs.",
+        "The bird can fly.",
+        "The sun is bright.",
+        "Water is clear.",
+        "An apple is a fruit.",
+        "I like apples.",
+        "The child reads a book.",
+        "A friend helps me.",
+        "The small cat sits.",
+        "The happy dog plays.",
+        "A sentence has words.",
+        "Words make a sentence.",
+        "The ball is red.",
+        "I see a blue sky.",
+        "The fish swims in water.",
+        "My mother is kind.",
+        "We play at school.",
+        "The moon shines at night."
+      ],
+      "letter_words": [
+        {
+          "letter": "A",
+          "word": "apple"
+        },
+        {
+          "letter": "B",
+          "word": "ball"
+        },
+        {
+          "letter": "C",
+          "word": "cat"
+        },
+        {
+          "letter": "D",
+          "word": "dog"
+        },
+        {
+          "letter": "E",
+          "word": "egg"
+        },
+        {
+          "letter": "F",
+          "word": "fish"
+        },
+        {
+          "letter": "G",
+          "word": "goat"
+        },
+        {
+          "letter": "H",
+          "word": "hat"
+        },
+        {
+          "letter": "I",
+          "word": "igloo"
+        },
+        {
+          "letter": "J",
+          "word": "jug"
+        },
+        {
+          "letter": "K",
+          "word": "kite"
+        },
+        {
+          "letter": "L",
+          "word": "lion"
+        },
+        {
+          "letter": "M",
+          "word": "moon"
+        },
+        {
+          "letter": "N",
+          "word": "nest"
+        },
+        {
+          "letter": "O",
+          "word": "orange"
+        },
+        {
+          "letter": "P",
+          "word": "pen"
+        },
+        {
+          "letter": "Q",
+          "word": "queen"
+        },
+        {
+          "letter": "R",
+          "word": "rabbit"
+        },
+        {
+          "letter": "S",
+          "word": "sun"
+        },
+        {
+          "letter": "T",
+          "word": "tiger"
+        },
+        {
+          "letter": "U",
+          "word": "umbrella"
+        },
+        {
+          "letter": "V",
+          "word": "van"
+        },
+        {
+          "letter": "W",
+          "word": "watch"
+        },
+        {
+          "letter": "X",
+          "word": "xylophone"
+        },
+        {
+          "letter": "Y",
+          "word": "yo-yo"
+        },
+        {
+          "letter": "Z",
+          "word": "zebra"
+        }
+      ],
+      "knowledge_topics": {
+        "body_parts": [
+          {
+            "name": "head",
+            "function": "It holds the brain and supports the eyes, ears, nose, and mouth."
+          },
+          {
+            "name": "eye",
+            "function": "It helps us see."
+          },
+          {
+            "name": "ear",
+            "function": "It helps us hear sounds."
+          },
+          {
+            "name": "nose",
+            "function": "It helps us smell and breathe."
+          },
+          {
+            "name": "mouth",
+            "function": "It helps us eat, drink, and speak."
+          },
+          {
+            "name": "tooth",
+            "function": "It helps us bite and chew food."
+          },
+          {
+            "name": "tongue",
+            "function": "It helps us taste food and make sounds when we speak."
+          },
+          {
+            "name": "neck",
+            "function": "It connects the head to the body and helps the head move."
+          },
+          {
+            "name": "shoulder",
+            "function": "It connects the arm to the upper body."
+          },
+          {
+            "name": "arm",
+            "function": "It helps us lift, carry, and reach for things."
+          },
+          {
+            "name": "elbow",
+            "function": "It lets the arm bend."
+          },
+          {
+            "name": "hand",
+            "function": "It helps us hold and touch things."
+          },
+          {
+            "name": "finger",
+            "function": "It helps us touch, hold, and pick up small things."
+          },
+          {
+            "name": "chest",
+            "function": "It protects important organs such as the heart and lungs."
+          },
+          {
+            "name": "stomach",
+            "function": "It helps digest the food we eat."
+          },
+          {
+            "name": "leg",
+            "function": "It helps us stand, walk, and run."
+          },
+          {
+            "name": "knee",
+            "function": "It lets the leg bend."
+          },
+          {
+            "name": "foot",
+            "function": "It helps us stand, walk, and balance."
+          }
+        ],
+        "animals": [
+          {
+            "name": "ant",
+            "description": "a tiny insect that lives in groups"
+          },
+          {
+            "name": "bear",
+            "description": "a large furry animal"
+          },
+          {
+            "name": "cat",
+            "description": "a small animal often kept as a pet"
+          },
+          {
+            "name": "cow",
+            "description": "a farm animal that gives milk"
+          },
+          {
+            "name": "deer",
+            "description": "an animal with long legs; many males grow antlers"
+          },
+          {
+            "name": "dog",
+            "description": "an animal often kept as a pet"
+          },
+          {
+            "name": "elephant",
+            "description": "a very large animal with a trunk"
+          },
+          {
+            "name": "fish",
+            "description": "an animal that lives and breathes in water"
+          },
+          {
+            "name": "giraffe",
+            "description": "a tall animal with a very long neck"
+          },
+          {
+            "name": "horse",
+            "description": "a strong animal that can be ridden"
+          },
+          {
+            "name": "lion",
+            "description": "a large wild cat"
+          },
+          {
+            "name": "monkey",
+            "description": "an animal that can climb trees"
+          },
+          {
+            "name": "owl",
+            "description": "a bird that is often active at night"
+          },
+          {
+            "name": "rabbit",
+            "description": "a small animal with long ears"
+          },
+          {
+            "name": "sheep",
+            "description": "a farm animal that grows wool"
+          },
+          {
+            "name": "tiger",
+            "description": "a large wild cat with dark stripes"
+          },
+          {
+            "name": "whale",
+            "description": "a very large animal that lives in the sea"
+          },
+          {
+            "name": "zebra",
+            "description": "an animal with black and white stripes"
+          }
+        ],
+        "fruits": [
+          {
+            "name": "apple",
+            "description": "a crisp fruit that can be red, green, or yellow"
+          },
+          {
+            "name": "banana",
+            "description": "a long, soft fruit with a yellow peel"
+          },
+          {
+            "name": "blueberry",
+            "description": "a small blue fruit"
+          },
+          {
+            "name": "cherry",
+            "description": "a small round fruit with a pit"
+          },
+          {
+            "name": "grape",
+            "description": "a small, round fruit that grows in bunches"
+          },
+          {
+            "name": "guava",
+            "description": "a fragrant fruit with green or yellow skin"
+          },
+          {
+            "name": "kiwi",
+            "description": "a small fruit with fuzzy brown skin and green flesh"
+          },
+          {
+            "name": "lemon",
+            "description": "a sour yellow citrus fruit"
+          },
+          {
+            "name": "mango",
+            "description": "a sweet tropical fruit with a large seed"
+          },
+          {
+            "name": "orange",
+            "description": "a round citrus fruit with orange skin"
+          },
+          {
+            "name": "papaya",
+            "description": "a soft tropical fruit with orange flesh"
+          },
+          {
+            "name": "peach",
+            "description": "a soft fruit with fuzzy skin and a large pit"
+          },
+          {
+            "name": "pear",
+            "description": "a sweet fruit that is wider at the bottom"
+          },
+          {
+            "name": "pineapple",
+            "description": "a tropical fruit with a spiky outside"
+          },
+          {
+            "name": "strawberry",
+            "description": "a red fruit with tiny seeds on its outside"
+          },
+          {
+            "name": "watermelon",
+            "description": "a large fruit with green skin and juicy flesh"
+          }
+        ],
+        "vegetables": [
+          {
+            "name": "bean",
+            "description": "a vegetable seed that grows in a pod"
+          },
+          {
+            "name": "broccoli",
+            "description": "a green vegetable with a tree-like shape"
+          },
+          {
+            "name": "cabbage",
+            "description": "a leafy vegetable with a round head"
+          },
+          {
+            "name": "carrot",
+            "description": "a crunchy orange root vegetable"
+          },
+          {
+            "name": "cauliflower",
+            "description": "a vegetable with a white, bumpy head"
+          },
+          {
+            "name": "corn",
+            "description": "a grain with yellow kernels on a cob"
+          },
+          {
+            "name": "cucumber",
+            "description": "a long, crisp green vegetable"
+          },
+          {
+            "name": "eggplant",
+            "description": "a soft vegetable often with shiny purple skin"
+          },
+          {
+            "name": "lettuce",
+            "description": "a leafy green vegetable often used in salads"
+          },
+          {
+            "name": "onion",
+            "description": "a layered vegetable with a strong smell"
+          },
+          {
+            "name": "pea",
+            "description": "a small, round green seed that grows in a pod"
+          },
+          {
+            "name": "pepper",
+            "description": "a vegetable that can be green, red, or yellow"
+          },
+          {
+            "name": "potato",
+            "description": "a starchy root vegetable that grows underground"
+          },
+          {
+            "name": "pumpkin",
+            "description": "a large orange squash"
+          },
+          {
+            "name": "spinach",
+            "description": "a leafy green vegetable"
+          },
+          {
+            "name": "tomato",
+            "description": "a soft red fruit commonly used as a vegetable"
+          }
+        ],
+        "shapes": [
+          {
+            "name": "circle",
+            "description": "a round shape with no corners"
+          },
+          {
+            "name": "triangle",
+            "description": "a shape with three straight sides and three corners"
+          },
+          {
+            "name": "square",
+            "description": "a shape with four equal sides and four corners"
+          },
+          {
+            "name": "rectangle",
+            "description": "a shape with four sides and four square corners"
+          },
+          {
+            "name": "oval",
+            "description": "a rounded shape stretched like an egg"
+          },
+          {
+            "name": "diamond",
+            "description": "a four-sided shape that looks like a tilted square"
+          },
+          {
+            "name": "star",
+            "description": "a shape with points around it"
+          },
+          {
+            "name": "heart",
+            "description": "a shape with two rounded bumps and a point at the bottom"
+          },
+          {
+            "name": "pentagon",
+            "description": "a shape with five sides"
+          },
+          {
+            "name": "hexagon",
+            "description": "a shape with six sides"
+          }
+        ],
+        "colors": [
+          {
+            "name": "red",
+            "example": "an apple"
+          },
+          {
+            "name": "orange",
+            "example": "a carrot"
+          },
+          {
+            "name": "yellow",
+            "example": "the Sun in a drawing"
+          },
+          {
+            "name": "green",
+            "example": "a leaf"
+          },
+          {
+            "name": "blue",
+            "example": "a clear daytime sky"
+          },
+          {
+            "name": "purple",
+            "example": "a plum"
+          },
+          {
+            "name": "pink",
+            "example": "a flower"
+          },
+          {
+            "name": "brown",
+            "example": "tree bark"
+          },
+          {
+            "name": "black",
+            "example": "the night sky"
+          },
+          {
+            "name": "white",
+            "example": "a cloud"
+          },
+          {
+            "name": "gray",
+            "example": "an elephant"
+          },
+          {
+            "name": "gold",
+            "example": "a shiny medal"
+          }
+        ],
+        "date_time": {
+          "days": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+            "Sunday"
+          ],
+          "months": [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December"
+          ],
+          "facts": [
+            {
+              "question": "How many days are in a week?",
+              "answer": "There are seven days in a week."
+            },
+            {
+              "question": "How many months are in a year?",
+              "answer": "There are twelve months in a year."
+            },
+            {
+              "question": "How many days are in a year?",
+              "answer": "A common year has 365 days. A leap year has 366 days."
+            },
+            {
+              "question": "How many hours are in a day?",
+              "answer": "There are 24 hours in a day."
+            },
+            {
+              "question": "How many minutes are in an hour?",
+              "answer": "There are 60 minutes in an hour."
+            },
+            {
+              "question": "How many seconds are in a minute?",
+              "answer": "There are 60 seconds in a minute."
+            },
+            {
+              "question": "What does a clock tell us?",
+              "answer": "A clock tells us the time."
+            },
+            {
+              "question": "What does a calendar show?",
+              "answer": "A calendar shows days, weeks, and months. It helps us keep track of dates."
+            },
+            {
+              "question": "What is a date?",
+              "answer": "A date tells us a day, a month, and often a year."
+            },
+            {
+              "question": "What is a calendar year?",
+              "answer": "A calendar year has twelve months, from January through December."
+            },
+            {
+              "question": "What does the short hand on a clock show?",
+              "answer": "The short hand on an analog clock shows the hour."
+            },
+            {
+              "question": "What does the long hand on a clock show?",
+              "answer": "The long hand on an analog clock shows the minutes."
+            },
+            {
+              "question": "What is the difference between a.m. and p.m.?",
+              "answer": "A.M. is the time from midnight until before noon. P.M. is the time from noon until before midnight."
+            }
+          ]
+        }
+      },
+      "words": [
+        {
+          "word": "apple",
+          "meaning": "a round fruit that can be red, green, or yellow"
+        },
+        {
+          "word": "cat",
+          "meaning": "a small animal often kept as a pet"
+        },
+        {
+          "word": "dog",
+          "meaning": "an animal often kept as a pet"
+        },
+        {
+          "word": "book",
+          "meaning": "pages with writing or pictures joined together"
+        },
+        {
+          "word": "water",
+          "meaning": "the clear liquid people drink"
+        },
+        {
+          "word": "sun",
+          "meaning": "the star that gives Earth light and warmth"
+        },
+        {
+          "word": "bird",
+          "meaning": "an animal with feathers, wings, and a beak"
+        },
+        {
+          "word": "ball",
+          "meaning": "a round object used for playing"
+        },
+        {
+          "word": "red",
+          "meaning": "the color of a ripe tomato"
+        },
+        {
+          "word": "blue",
+          "meaning": "the color of a clear daytime sky"
+        },
+        {
+          "word": "happy",
+          "meaning": "feeling pleased or glad"
+        },
+        {
+          "word": "friend",
+          "meaning": "someone you like and care about"
+        }
+      ],
+      "lessons": [
+        {
+          "question": "What is a circle?",
+          "answer": "A circle is a round shape with no corners.",
+          "grade_id": "nursery",
+          "subject": "Shapes",
+          "kind": "starter"
+        },
+        {
+          "question": "How many sides does a triangle have?",
+          "answer": "A triangle has three sides.",
+          "grade_id": "nursery",
+          "subject": "Shapes",
+          "kind": "starter"
+        },
+        {
+          "question": "How many sides does a square have?",
+          "answer": "A square has four equal sides.",
+          "grade_id": "nursery",
+          "subject": "Shapes",
+          "kind": "starter"
+        },
+        {
+          "question": "What is one plus one?",
+          "answer": "One plus one is two.",
+          "grade_id": "nursery",
+          "subject": "Numbers",
+          "kind": "starter"
+        },
+        {
+          "question": "What number comes after two?",
+          "answer": "Three comes after two.",
+          "grade_id": "nursery",
+          "subject": "Numbers",
+          "kind": "starter"
+        },
+        {
+          "question": "Count from one to five.",
+          "answer": "One, two, three, four, five.",
+          "grade_id": "nursery",
+          "subject": "Numbers",
+          "kind": "starter"
+        },
+        {
+          "question": "What is zero?",
+          "answer": "Zero means none; it represents a quantity of nothing.",
+          "grade_id": "nursery",
+          "subject": "Numbers",
+          "kind": "starter"
+        },
+        {
+          "question": "What number comes before one?",
+          "answer": "Zero comes before one.",
+          "grade_id": "nursery",
+          "subject": "Numbers",
+          "kind": "starter"
+        },
+        {
+          "question": "What number comes after five?",
+          "answer": "Six comes after five.",
+          "grade_id": "nursery",
+          "subject": "Numbers",
+          "kind": "starter"
+        },
+        {
+          "question": "What number comes after nine?",
+          "answer": "Ten comes after nine.",
+          "grade_id": "nursery",
+          "subject": "Numbers",
+          "kind": "starter"
+        },
+        {
+          "question": "How many is one more than three?",
+          "answer": "One more than three is four.",
+          "grade_id": "nursery",
+          "subject": "Numbers",
+          "kind": "starter"
+        },
+        {
+          "question": "How many is one less than five?",
+          "answer": "One less than five is four.",
+          "grade_id": "nursery",
+          "subject": "Numbers",
+          "kind": "starter"
+        },
+        {
+          "question": "How can I greet someone?",
+          "answer": "You can say “Hello!” or “Hi!” to greet someone.",
+          "grade_id": "nursery",
+          "subject": "Feelings & expressions",
+          "kind": "starter"
+        },
+        {
+          "question": "What can I say when something surprises me?",
+          "answer": "You can say “Wow!” when something surprises you.",
+          "grade_id": "nursery",
+          "subject": "Feelings & expressions",
+          "kind": "starter"
+        },
+        {
+          "question": "What can I say when something is wonderful?",
+          "answer": "You can say “Amazing!” when something is wonderful.",
+          "grade_id": "nursery",
+          "subject": "Feelings & expressions",
+          "kind": "starter"
+        },
+        {
+          "question": "How can I say thank you?",
+          "answer": "Say “Thank you!” to show gratitude.",
+          "grade_id": "nursery",
+          "subject": "Feelings & expressions",
+          "kind": "starter"
+        },
+        {
+          "question": "How can I tell someone I feel happy?",
+          "answer": "You can say “I feel happy!” or “I’m happy!”",
+          "grade_id": "nursery",
+          "subject": "Feelings & expressions",
+          "kind": "starter"
+        },
+        {
+          "question": "What can I say when I make a mistake?",
+          "answer": "You can say “I’m sorry” when you want to apologize.",
+          "grade_id": "nursery",
+          "subject": "Feelings & expressions",
+          "kind": "starter"
+        },
+        {
+          "question": "What does excited mean?",
+          "answer": "Excited means feeling very happy and eager about something.",
+          "grade_id": "nursery",
+          "subject": "Feelings & expressions",
+          "kind": "starter"
+        },
+        {
+          "question": "What color is the sky on a clear day?",
+          "answer": "The sky often looks blue on a clear day.",
+          "grade_id": "nursery",
+          "subject": "Colors"
+        },
+        {
+          "question": "What does a bird use to fly?",
+          "answer": "A bird uses its wings to fly.",
+          "grade_id": "nursery",
+          "subject": "My World"
+        },
+        {
+          "question": "What do people drink when they are thirsty?",
+          "answer": "People drink water when they are thirsty.",
+          "grade_id": "nursery",
+          "subject": "My World"
+        },
+        {
+          "question": "What is a number system?",
+          "answer": "The number system we use is the decimal system. It has the digits 0 to 9, and the places are ones, tens, hundreds, and thousands.",
+          "grade_id": "nursery",
+          "subject": "Numbers",
+          "kind": "starter"
+        },
+        {
+          "question": "What are the digits?",
+          "answer": "The digits are 0, 1, 2, 3, 4, 5, 6, 7, 8, and 9. We write ten as 10 because we have one one and one ten.",
+          "grade_id": "nursery",
+          "subject": "Numbers",
+          "kind": "starter"
+        },
+        {
+          "question": "What comes after 10?",
+          "answer": "The number after 10 is 11. The number after 11 is 12.",
+          "grade_id": "nursery",
+          "subject": "Numbers",
+          "kind": "starter"
+        },
+        {
+          "question": "What comes before 10?",
+          "answer": "The number before 10 is 9. The number before 9 is 8.",
+          "grade_id": "nursery",
+          "subject": "Numbers",
+          "kind": "starter"
+        },
+        {
+          "question": "How many numbers are there from 1 to 10?",
+          "answer": "There are ten numbers from 1 to 10.",
+          "grade_id": "nursery",
+          "subject": "Numbers",
+          "kind": "starter"
+        },
+        {
+          "question": "What is the ones place?",
+          "answer": "The ones place is the first place on the right. In 23, the 3 is in the ones place.",
+          "grade_id": "nursery",
+          "subject": "Numbers",
+          "kind": "starter"
+        },
+        {
+          "question": "What is the tens place?",
+          "answer": "The tens place is the second place from the right. In 23, the 2 is in the tens place.",
+          "grade_id": "nursery",
+          "subject": "Numbers",
+          "kind": "starter"
+        },
+        {
+          "question": "What is a whole number?",
+          "answer": "A whole number is a number that starts at 0 and goes up: 0, 1, 2, 3, 4, and so on.",
+          "grade_id": "nursery",
+          "subject": "Numbers",
+          "kind": "starter"
+        },
+        {
+          "question": "What is a full stop?",
+          "answer": "A full stop marks the end of a sentence. It is written like this: .",
+          "grade_id": "nursery",
+          "subject": "Punctuation",
+          "kind": "starter"
+        },
+        {
+          "question": "What is a question mark?",
+          "answer": "A question mark shows that a sentence is a question. It is written like this: ?",
+          "grade_id": "nursery",
+          "subject": "Punctuation",
+          "kind": "starter"
+        },
+        {
+          "question": "What is a comma?",
+          "answer": "A comma separates items in a list or parts of a sentence. It is written like this: ,",
+          "grade_id": "nursery",
+          "subject": "Punctuation",
+          "kind": "starter"
+        },
+        {
+          "question": "What is punctuation?",
+          "answer": "Punctuation marks are the signs that show the parts of a sentence, such as full stops, question marks, and commas.",
+          "grade_id": "nursery",
+          "subject": "Punctuation",
+          "kind": "starter"
+        }
+      ]
+    },
+    "lkg": {
+      "sentences": [
+        "A plant needs water and sunlight.",
+        "The roots hold the plant in the soil.",
+        "A seed can grow into a plant.",
+        "Leaves help a plant make food.",
+        "A fish lives in water.",
+        "A bird builds a nest.",
+        "A home keeps people safe.",
+        "A teacher helps children learn.",
+        "We read words from left to right.",
+        "A noun names a person, place, animal, or thing.",
+        "A verb tells what someone or something does.",
+        "Three plus two equals five.",
+        "Five take away two equals three.",
+        "A square has four sides.",
+        "A rectangle has four corners.",
+        "We should wash our hands before eating.",
+        "The day is bright and the night is dark.",
+        "We take turns when we play together.",
+        "A family cares for one another.",
+        "The little seed grows into a green plant."
+      ],
+      "words": [
+        {
+          "word": "plant",
+          "meaning": "a living thing that grows in soil and usually has leaves"
+        },
+        {
+          "word": "root",
+          "meaning": "the part of a plant that takes in water and holds it in the soil"
+        },
+        {
+          "word": "leaf",
+          "meaning": "the flat green part of many plants"
+        },
+        {
+          "word": "seed",
+          "meaning": "a small part of a plant that can grow into a new plant"
+        },
+        {
+          "word": "teacher",
+          "meaning": "a person who helps others learn"
+        },
+        {
+          "word": "family",
+          "meaning": "a group of related people who care for one another"
+        },
+        {
+          "word": "noun",
+          "meaning": "a word that names a person, place, animal, or thing"
+        },
+        {
+          "word": "verb",
+          "meaning": "a word that tells an action or what someone does"
+        },
+        {
+          "word": "add",
+          "meaning": "to put numbers or amounts together"
+        },
+        {
+          "word": "subtract",
+          "meaning": "to take one number or amount away from another"
+        },
+        {
+          "word": "rectangle",
+          "meaning": "a four-sided shape with four square corners"
+        },
+        {
+          "word": "healthy",
+          "meaning": "well and not sick"
+        }
+      ],
+      "lessons": [
+        {
+          "question": "What does a plant need to grow?",
+          "answer": "A plant needs water, air, sunlight, and nutrients to grow.",
+          "grade_id": "lkg",
+          "subject": "Nature"
+        },
+        {
+          "question": "What do roots do for a plant?",
+          "answer": "Roots hold a plant in the soil and take in water.",
+          "grade_id": "lkg",
+          "subject": "Nature"
+        },
+        {
+          "question": "What can a seed grow into?",
+          "answer": "A seed can grow into a new plant.",
+          "grade_id": "lkg",
+          "subject": "Nature"
+        },
+        {
+          "question": "What do leaves do for a plant?",
+          "answer": "Leaves help a plant make food through photosynthesis.",
+          "grade_id": "lkg",
+          "subject": "Nature"
+        },
+        {
+          "question": "What is three plus two?",
+          "answer": "Three plus two equals five.",
+          "grade_id": "lkg",
+          "subject": "Math"
+        },
+        {
+          "question": "What is five minus two?",
+          "answer": "Five minus two equals three.",
+          "grade_id": "lkg",
+          "subject": "Math"
+        },
+        {
+          "question": "How many corners does a rectangle have?",
+          "answer": "A rectangle has four corners.",
+          "grade_id": "lkg",
+          "subject": "Shapes"
+        },
+        {
+          "question": "Why do we wash our hands?",
+          "answer": "We wash our hands to remove dirt and germs and help stay healthy.",
+          "grade_id": "lkg",
+          "subject": "Daily Life"
+        },
+        {
+          "question": "Who helps children learn at school?",
+          "answer": "A teacher helps children learn at school.",
+          "grade_id": "lkg",
+          "subject": "Daily Life"
+        },
+        {
+          "question": "Where does a fish live?",
+          "answer": "A fish lives in water.",
+          "grade_id": "lkg",
+          "subject": "Nature"
+        },
+        {
+          "question": "How can we be kind when playing?",
+          "answer": "We can take turns, share, and use kind words.",
+          "grade_id": "lkg",
+          "subject": "Social Skills"
+        },
+        {
+          "question": "What is a number?",
+          "answer": "A number tells how many or which place. We write numbers with digits such as 0, 1, 2, 3, and 4.",
+          "grade_id": "lkg",
+          "subject": "Math"
+        },
+        {
+          "question": "What does zero mean?",
+          "answer": "Zero means none. If there are no apples in a basket, there are zero apples.",
+          "grade_id": "lkg",
+          "subject": "Math"
+        },
+        {
+          "question": "What does adding mean?",
+          "answer": "Adding puts groups together. If you have 2 blocks and get 1 more, 2 + 1 = 3 blocks.",
+          "grade_id": "lkg",
+          "subject": "Math"
+        },
+        {
+          "question": "What does subtracting mean?",
+          "answer": "Subtracting takes some away. If you have 4 apples and eat 1, 4 - 1 = 3 apples.",
+          "grade_id": "lkg",
+          "subject": "Math"
+        },
+        {
+          "question": "How can I find the answer to a small number sum?",
+          "answer": "Count objects or use your fingers. For 2 + 3, start at 2 and count three more: 3, 4, 5. The answer is 5.",
+          "grade_id": "lkg",
+          "subject": "Math"
+        },
+        {
+          "question": "What is a noun?",
+          "answer": "A noun names a person, place, animal, or thing. In 'The cat sits,' cat is a noun.",
+          "grade_id": "lkg",
+          "subject": "English Grammar"
+        },
+        {
+          "question": "What is a pronoun?",
+          "answer": "A pronoun is a short word we use instead of a naming word. I, you, he, she, it, and we are pronouns.",
+          "grade_id": "lkg",
+          "subject": "English Grammar"
+        },
+        {
+          "question": "What is a verb?",
+          "answer": "A verb tells what someone or something does. In 'The dog runs,' runs is the verb.",
+          "grade_id": "lkg",
+          "subject": "English Grammar"
+        },
+        {
+          "question": "What is an adjective?",
+          "answer": "An adjective describes a naming word. In 'the red ball,' red describes the ball.",
+          "grade_id": "lkg",
+          "subject": "English Grammar"
+        },
+        {
+          "question": "What is an adverb?",
+          "answer": "An adverb tells us more about an action, such as how it happens. In 'The bird sings sweetly,' sweetly tells how it sings.",
+          "grade_id": "lkg",
+          "subject": "English Grammar"
+        },
+        {
+          "question": "What is a preposition?",
+          "answer": "A preposition tells where something is. In 'The ball is under the chair,' under is a preposition.",
+          "grade_id": "lkg",
+          "subject": "English Grammar"
+        },
+        {
+          "question": "What is a conjunction?",
+          "answer": "A conjunction joins words or ideas. And is a conjunction in 'I see a cat and a dog.'",
+          "grade_id": "lkg",
+          "subject": "English Grammar"
+        },
+        {
+          "question": "What is an interjection?",
+          "answer": "An interjection is a short word that shows a feeling. 'Wow!' shows surprise.",
+          "grade_id": "lkg",
+          "subject": "English Grammar"
+        },
+        {
+          "question": "What does punctuation do?",
+          "answer": "Punctuation marks help us read. A full stop ends a telling sentence, a question mark ends a question, and an exclamation mark shows strong feeling.",
+          "grade_id": "lkg",
+          "subject": "English Grammar"
+        },
+        {
+          "question": "How do I make a sentence from a word?",
+          "answer": "Think of an idea about the word, then say who or what and what they do. For 'bird,' write 'The bird can fly.' Start with a capital letter and end with a full stop.",
+          "grade_id": "lkg",
+          "subject": "Sentence Making"
+        },
+        {
+          "question": "What are past, present, and future?",
+          "answer": "Past is already done: 'I played.' Present is happening now: 'I play.' Future is yet to happen: 'I will play.'",
+          "grade_id": "lkg",
+          "subject": "English Grammar"
+        },
+        {
+          "question": "What is the simple sentence?",
+          "answer": "A simple sentence has one subject and one verb and says one thing, like The cat sleeps.",
+          "grade_id": "lkg",
+          "subject": "English Grammar",
+          "kind": "starter"
+        },
+        {
+          "question": "What is a subject?",
+          "answer": "The subject is the word or words that tell who or what the sentence is about, like The cat in The cat sleeps.",
+          "grade_id": "lkg",
+          "subject": "English Grammar",
+          "kind": "starter"
+        },
+        {
+          "question": "What is an object?",
+          "answer": "The object is the word that receives the action, like ball in The child kicks the ball.",
+          "grade_id": "lkg",
+          "subject": "English Grammar",
+          "kind": "starter"
+        },
+        {
+          "question": "What is the past tense?",
+          "answer": "The past tense shows something that already happened. We say ate instead of eat, and ran instead of run.",
+          "grade_id": "lkg",
+          "subject": "Tenses",
+          "kind": "starter"
+        },
+        {
+          "question": "What is the present tense?",
+          "answer": "The present tense shows what is happening now. We say eat instead of ate, and run instead of ran.",
+          "grade_id": "lkg",
+          "subject": "Tenses",
+          "kind": "starter"
+        },
+        {
+          "question": "What is the future tense?",
+          "answer": "The future tense shows what will happen later. We say will eat instead of ate, and will run instead of ran.",
+          "grade_id": "lkg",
+          "subject": "Tenses",
+          "kind": "starter"
+        },
+        {
+          "question": "How do you make a verb in the past tense?",
+          "answer": "Most verbs add ed, like walk becomes walked. Some verbs change, like go becomes went.",
+          "grade_id": "lkg",
+          "subject": "Tenses",
+          "kind": "starter"
+        },
+        {
+          "question": "How do you make a verb in the future tense?",
+          "answer": "We put will in front of the verb, like I will eat the apple.",
+          "grade_id": "lkg",
+          "subject": "Tenses",
+          "kind": "starter"
+        },
+        {
+          "question": "How do you add?",
+          "answer": "To add, you put two numbers together. 2 plus 3 is 5.",
+          "grade_id": "lkg",
+          "subject": "Calculation",
+          "kind": "starter"
+        },
+        {
+          "question": "How do you subtract?",
+          "answer": "To subtract, you take away one number from another. 5 minus 3 is 2.",
+          "grade_id": "lkg",
+          "subject": "Calculation",
+          "kind": "starter"
+        },
+        {
+          "question": "What is addition?",
+          "answer": "Addition is putting numbers together to make a bigger number. Adding 4 and 6 gives 10.",
+          "grade_id": "lkg",
+          "subject": "Calculation",
+          "kind": "starter"
+        },
+        {
+          "question": "What is subtraction?",
+          "answer": "Subtraction is taking away from a number to make a smaller one. Subtracting 3 from 9 gives 6.",
+          "grade_id": "lkg",
+          "subject": "Calculation",
+          "kind": "starter"
+        },
+        {
+          "question": "How do you multiply?",
+          "answer": "To multiply, you add the same number again and again. 3 times 4 is 12.",
+          "grade_id": "lkg",
+          "subject": "Calculation",
+          "kind": "starter"
+        },
+        {
+          "question": "How do you divide?",
+          "answer": "To divide, you share a number into equal groups. 12 divided by 3 is 4.",
+          "grade_id": "lkg",
+          "subject": "Calculation",
+          "kind": "starter"
+        },
+        {
+          "question": "What is multiplication?",
+          "answer": "Multiplication is adding a number to itself a number of times. 5 times 6 is 30.",
+          "grade_id": "lkg",
+          "subject": "Calculation",
+          "kind": "starter"
+        },
+        {
+          "question": "What is division?",
+          "answer": "Division is sharing a number into equal parts. 20 divided by 5 is 4.",
+          "grade_id": "lkg",
+          "subject": "Calculation",
+          "kind": "starter"
+        },
+        {
+          "question": "What is the square root of 16?",
+          "answer": "The square root of 16 is 4, because 4 times 4 is 16.",
+          "grade_id": "lkg",
+          "subject": "Calculation",
+          "kind": "starter"
+        },
+        {
+          "question": "What is the square root of 25?",
+          "answer": "The square root of 25 is 5, because 5 times 5 is 25.",
+          "grade_id": "lkg",
+          "subject": "Calculation",
+          "kind": "starter"
+        },
+        {
+          "question": "What is a square root?",
+          "answer": "A square root asks what number multiplied by itself makes a number. Two groups of 2 make 4, so the square root of 4 is 2. We write √4 = 2.",
+          "grade_id": "lkg",
+          "subject": "Calculation"
+        }
+      ]
+    },
+    "ukg": {
+      "sentences": [
+        "Living things need food, water, and air.",
+        "A habitat is a place where a plant or animal lives.",
+        "The Earth moves around the Sun.",
+        "The Moon moves around the Earth.",
+        "Plants and animals depend on their environment.",
+        "A question ends with a question mark.",
+        "A sentence begins with a capital letter.",
+        "An adjective describes a noun.",
+        "Six groups of two make twelve.",
+        "Twenty divided into four equal groups makes five.",
+        "We can compare numbers using greater than and less than.",
+        "A map helps us find places and directions.",
+        "A community is a group of people living or working together.",
+        "The weather can be sunny, cloudy, rainy, or windy.",
+        "The four seasons are spring, summer, autumn, and winter.",
+        "Exercise and healthy food help our bodies grow.",
+        "We can reuse paper to reduce waste.",
+        "A simple machine helps make work easier.",
+        "A planet travels around a star.",
+        "The Earth has land, water, and air."
+      ],
+      "words": [
+        {
+          "word": "habitat",
+          "meaning": "the natural home of a plant or animal"
+        },
+        {
+          "word": "environment",
+          "meaning": "the air, water, land, and living things around us"
+        },
+        {
+          "word": "living",
+          "meaning": "being alive and able to grow or change"
+        },
+        {
+          "word": "adjective",
+          "meaning": "a word that describes a person, place, animal, or thing"
+        },
+        {
+          "word": "community",
+          "meaning": "people who live or work in the same area"
+        },
+        {
+          "word": "planet",
+          "meaning": "a large round object that travels around a star"
+        },
+        {
+          "word": "season",
+          "meaning": "one of the parts of the year with different weather"
+        },
+        {
+          "word": "recycle",
+          "meaning": "to make used materials into something that can be used again"
+        },
+        {
+          "word": "equal",
+          "meaning": "the same in amount, size, or value"
+        },
+        {
+          "word": "direction",
+          "meaning": "the way toward a place, such as north or south"
+        },
+        {
+          "word": "multiply",
+          "meaning": "to add the same number several times"
+        },
+        {
+          "word": "divide",
+          "meaning": "to split into equal groups or parts"
+        }
+      ],
+      "lessons": [
+        {
+          "question": "What is a habitat?",
+          "answer": "A habitat is the natural place where a plant or animal lives.",
+          "grade_id": "ukg",
+          "subject": "Science"
+        },
+        {
+          "question": "What does the Earth move around?",
+          "answer": "The Earth moves around the Sun.",
+          "grade_id": "ukg",
+          "subject": "Science"
+        },
+        {
+          "question": "What does the Moon move around?",
+          "answer": "The Moon moves around the Earth.",
+          "grade_id": "ukg",
+          "subject": "Science"
+        },
+        {
+          "question": "What is an adjective?",
+          "answer": "An adjective is a word that describes a noun.",
+          "grade_id": "ukg",
+          "subject": "Language"
+        },
+        {
+          "question": "What punctuation mark ends a question?",
+          "answer": "A question mark ends a question.",
+          "grade_id": "ukg",
+          "subject": "Language"
+        },
+        {
+          "question": "What is six times two?",
+          "answer": "Six times two equals twelve.",
+          "grade_id": "ukg",
+          "subject": "Math"
+        },
+        {
+          "question": "What is twenty divided by four?",
+          "answer": "Twenty divided by four equals five.",
+          "grade_id": "ukg",
+          "subject": "Math"
+        },
+        {
+          "question": "What is a community?",
+          "answer": "A community is a group of people who live or work in the same area.",
+          "grade_id": "ukg",
+          "subject": "Social Studies"
+        },
+        {
+          "question": "Name four kinds of weather.",
+          "answer": "Four kinds of weather are sunny, cloudy, rainy, and windy.",
+          "grade_id": "ukg",
+          "subject": "Science"
+        },
+        {
+          "question": "What are the four seasons?",
+          "answer": "The four seasons are spring, summer, autumn, and winter.",
+          "grade_id": "ukg",
+          "subject": "Science"
+        },
+        {
+          "question": "How can we reduce waste?",
+          "answer": "We can reduce waste by reusing and recycling materials.",
+          "grade_id": "ukg",
+          "subject": "Environment"
+        },
+        {
+          "question": "What is a map used for?",
+          "answer": "A map helps us find places and understand directions.",
+          "grade_id": "ukg",
+          "subject": "Social Studies"
+        },
+        {
+          "question": "What is the number system?",
+          "answer": "We use the digits 0 to 9 to write numbers. A digit's place tells its value: in 24, 2 means two tens and 4 means four ones.",
+          "grade_id": "ukg",
+          "subject": "Math"
+        },
+        {
+          "question": "How do I add two numbers?",
+          "answer": "Put the amounts together. For example, 12 + 5 = 17. You can count on from 12: 13, 14, 15, 16, 17.",
+          "grade_id": "ukg",
+          "subject": "Math"
+        },
+        {
+          "question": "How do I subtract two numbers?",
+          "answer": "Take one amount away from another. For example, 15 - 4 = 11. Count back four steps from 15 to get 11.",
+          "grade_id": "ukg",
+          "subject": "Math"
+        },
+        {
+          "question": "What does multiplication mean?",
+          "answer": "Multiplication adds equal groups. Three groups of 2 stars make 2 + 2 + 2 = 6, so 3 × 2 = 6.",
+          "grade_id": "ukg",
+          "subject": "Math"
+        },
+        {
+          "question": "What does division mean?",
+          "answer": "Division shares into equal groups. If 8 grapes are shared equally between 2 children, each gets 4. So 8 ÷ 2 = 4.",
+          "grade_id": "ukg",
+          "subject": "Math"
+        },
+        {
+          "question": "How can I check a simple calculation?",
+          "answer": "Use objects, draw a picture, count, or do the opposite operation. For 9 - 3 = 6, check by adding 6 + 3 to get 9.",
+          "grade_id": "ukg",
+          "subject": "Math"
+        },
+        {
+          "question": "What is a pronoun?",
+          "answer": "A pronoun takes the place of a noun. Instead of 'Mina has a book. Mina reads,' we can say 'Mina has a book. She reads.' She is a pronoun.",
+          "grade_id": "ukg",
+          "subject": "English Grammar"
+        },
+        {
+          "question": "What is an adverb?",
+          "answer": "An adverb can tell how an action happens. In 'The rabbit hops quickly,' quickly tells how the rabbit hops.",
+          "grade_id": "ukg",
+          "subject": "English Grammar"
+        },
+        {
+          "question": "What is a preposition?",
+          "answer": "A preposition shows how a noun or pronoun relates to another word, often telling place or direction. In 'The cat is beside me,' beside is a preposition.",
+          "grade_id": "ukg",
+          "subject": "English Grammar"
+        },
+        {
+          "question": "What are conjunctions?",
+          "answer": "Conjunctions join words or ideas. And, but, and or are conjunctions: 'I like apples and pears.'",
+          "grade_id": "ukg",
+          "subject": "English Grammar"
+        },
+        {
+          "question": "What is an interjection?",
+          "answer": "An interjection shows a sudden feeling. In 'Hooray! We won!' Hooray is an interjection and the exclamation mark shows excitement.",
+          "grade_id": "ukg",
+          "subject": "English Grammar"
+        },
+        {
+          "question": "How do I use punctuation in a sentence?",
+          "answer": "Begin with a capital letter. Use a full stop for a telling sentence, a question mark for a question, and an exclamation mark for a strong feeling. Example: 'Can you help me?'",
+          "grade_id": "ukg",
+          "subject": "English Grammar"
+        },
+        {
+          "question": "How do I make a sentence from a given word?",
+          "answer": "Use the word in a clear idea with who or what and an action. For 'garden,' you can write 'We play in the garden.' Begin with a capital letter and add the right end mark.",
+          "grade_id": "ukg",
+          "subject": "Sentence Making"
+        },
+        {
+          "question": "How do past, present, and future verbs differ?",
+          "answer": "Past tells what already happened: 'She jumped.' Present tells what happens now: 'She jumps.' Future tells what will happen: 'She will jump.'",
+          "grade_id": "ukg",
+          "subject": "English Grammar"
+        },
+        {
+          "question": "What is a place value?",
+          "answer": "A place value is the value of a digit because of the place it sits in. In 47, the 4 is worth forty and the 7 is worth seven.",
+          "grade_id": "ukg",
+          "subject": "Numbers",
+          "kind": "starter"
+        },
+        {
+          "question": "What is the highest place value?",
+          "answer": "In our number system the places grow: ones, tens, hundreds, thousands, ten thousands, and then hundred thousands.",
+          "grade_id": "ukg",
+          "subject": "Numbers",
+          "kind": "starter"
+        },
+        {
+          "question": "What is a number fact?",
+          "answer": "A number fact is a pair of numbers that add up to a whole, like 3 and 5 make 8.",
+          "grade_id": "ukg",
+          "subject": "Numbers",
+          "kind": "starter"
+        }
+      ]
+    }
+  }
+}
