@@ -70,3 +70,11 @@ def list_tenants(
 @router.get("/auth/me", response_model=UserOut)
 def auth_me(authorization: str = Header(""), db: Session = Depends(get_session)) -> UserOut:
     return get_bearer_user(authorization, db)
+
+
+@router.post("/auth/refresh", response_model=TokenResponse)
+def auth_refresh(
+    authorization: str = Header(""), db: Session = Depends(get_session)
+) -> TokenResponse:
+    """Renew the session of the signed-in user, so they do not sign in again."""
+    return auth.refresh_session(get_bearer_user(authorization, db))

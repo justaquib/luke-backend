@@ -57,2049 +57,6 @@
   "word_cards": [],
   "lesson_cards": [
     {
-      "id": "299b702db80a486da4168af6a9b5fb29",
-      "question": "Geography: What is a hemisphere?",
-      "answer": "A hemisphere is one half of the earth.",
-      "grade_id": "lkg",
-      "subject": "Geography",
-      "subjects": [
-        "Geography"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T13:30:45.091612+00:00"
-    },
-    {
-      "id": "09767f9f4e4a4f5fadc80b6ba2602d86",
-      "question": "Geography: What is the Northern Hemisphere?",
-      "answer": "The Northern Hemisphere is the top half of the earth.",
-      "grade_id": "lkg",
-      "subject": "Geography",
-      "subjects": [
-        "Geography"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T13:30:45.091612+00:00"
-    },
-    {
-      "id": "a55aeaf5e1934dda9440e2ca35dfce79",
-      "question": "Geography: What is the Southern Hemisphere?",
-      "answer": "The Southern Hemisphere is the bottom half of the earth.",
-      "grade_id": "lkg",
-      "subject": "Geography",
-      "subjects": [
-        "Geography"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T13:30:45.091612+00:00"
-    },
-    {
-      "id": "222e99d9cfa54fac90dc312bbf3dbf5e",
-      "question": "Geography: What is a natural resource?",
-      "answer": "A natural resource is something from nature that people use.",
-      "grade_id": "lkg",
-      "subject": "Geography",
-      "subjects": [
-        "Geography"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T13:30:45.091612+00:00"
-    },
-    {
-      "id": "fdf119db69d349aa98e1923aa2de0112",
-      "question": "Geography: What is water?",
-      "answer": "Water is a clear liquid that all living things need.",
-      "grade_id": "lkg",
-      "subject": "Geography",
-      "subjects": [
-        "Geography"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T13:30:45.091612+00:00"
-    },
-    {
-      "id": "a92cace907054c0ab18ea4e35a0dfd56",
-      "question": "Geography: What is soil?",
-      "answer": "Soil is the top layer of earth where plants grow.",
-      "grade_id": "lkg",
-      "subject": "Geography",
-      "subjects": [
-        "Geography"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T13:30:45.091612+00:00"
-    },
-    {
-      "id": "ef4bccaa9dd04715936fda26759d9ef3",
-      "question": "Geography: What is sand?",
-      "answer": "Sand is tiny grains of rock found on beaches and in deserts.",
-      "grade_id": "lkg",
-      "subject": "Geography",
-      "subjects": [
-        "Geography"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T13:30:45.091612+00:00"
-    },
-    {
-      "id": "07acf399e7be46c0acd343f48832d967",
-      "question": "Geography: What is a rock?",
-      "answer": "A rock is a hard natural material.",
-      "grade_id": "lkg",
-      "subject": "Geography",
-      "subjects": [
-        "Geography"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T13:30:45.091612+00:00"
-    },
-    {
-      "id": "0fc08dec558f4257b8e7dafe356fa1c3",
-      "question": "Geography: What is a mountain range?",
-      "answer": "A mountain range is a group of mountains together.",
-      "grade_id": "lkg",
-      "subject": "Geography",
-      "subjects": [
-        "Geography"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T13:30:45.091612+00:00"
-    },
-    {
-      "id": "fae318b1aaa64d7f86886a523bf07f26",
-      "question": "Geography: What is a river bank?",
-      "answer": "A river bank is the land along the side of a river.",
-      "grade_id": "lkg",
-      "subject": "Geography",
-      "subjects": [
-        "Geography"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T13:30:45.091612+00:00"
-    },
-    {
-      "id": "9378920cd39c4ad39755b61e80be3846",
-      "question": "Geography: What is a stream?",
-      "answer": "A stream is a small river.",
-      "grade_id": "lkg",
-      "subject": "Geography",
-      "subjects": [
-        "Geography"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T13:30:45.091612+00:00"
-    },
-    {
-      "id": "8b88d099fe6d440594ece7ba19edce35",
-      "question": "Geography: What is a waterfall?",
-      "answer": "A waterfall is water falling from a high place.",
-      "grade_id": "lkg",
-      "subject": "Geography",
-      "subjects": [
-        "Geography"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T13:30:45.091612+00:00"
-    },
-    {
-      "id": "332f87a4ac3e47a9b559241bedaf679b",
-      "question": "Geography: What is a pond?",
-      "answer": "A pond is a small body of water.",
-      "grade_id": "lkg",
-      "subject": "Geography",
-      "subjects": [
-        "Geography"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T13:30:45.091612+00:00"
-    },
-    {
-      "id": "84820fcbe27c408495373c2d1f3a15ed",
-      "question": "Geography: What is a swamp?",
-      "answer": "A swamp is soft wet land with plants.",
-      "grade_id": "lkg",
-      "subject": "Geography",
-      "subjects": [
-        "Geography"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T13:30:57.486946+00:00"
-    },
-    {
-      "id": "29b930c0333942da84d4a3a773a50df1",
-      "question": "Geography: What is a cave?",
-      "answer": "A cave is a hollow space in rock or ground.",
-      "grade_id": "lkg",
-      "subject": "Geography",
-      "subjects": [
-        "Geography"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T13:30:57.486946+00:00"
-    },
-    {
-      "id": "564ff834efe948dfbdd73b2abcbe6fb2",
-      "question": "Geography: What is a volcano?",
-      "answer": "A volcano is a mountain that can erupt with hot rock.",
-      "grade_id": "lkg",
-      "subject": "Geography",
-      "subjects": [
-        "Geography"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T13:30:57.486946+00:00"
-    },
-    {
-      "id": "3a717a1a4c154a7e97908cdc3f33ec55",
-      "question": "Geography: What is an earthquake?",
-      "answer": "An earthquake is a shaking of the ground.",
-      "grade_id": "lkg",
-      "subject": "Geography",
-      "subjects": [
-        "Geography"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T13:30:57.486946+00:00"
-    },
-    {
-      "id": "c14bf0d016e0437db1fb34dda2392c07",
-      "question": "Geography: What is a flood?",
-      "answer": "A flood is water covering land that is usually dry.",
-      "grade_id": "lkg",
-      "subject": "Geography",
-      "subjects": [
-        "Geography"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T13:30:57.486946+00:00"
-    },
-    {
-      "id": "714dca99022a4c078f9ba8ced9d6df1e",
-      "question": "Geography: What is a drought?",
-      "answer": "A drought is a long time with no rain.",
-      "grade_id": "lkg",
-      "subject": "Geography",
-      "subjects": [
-        "Geography"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T13:30:57.486946+00:00"
-    },
-    {
-      "id": "edffae691a2f4d0c86dcedaaeb111e5a",
-      "question": "Geography: What is a hurricane?",
-      "answer": "A hurricane is a very strong storm with wind and rain.",
-      "grade_id": "lkg",
-      "subject": "Geography",
-      "subjects": [
-        "Geography"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T13:30:57.486946+00:00"
-    },
-    {
-      "id": "47c5c1a3f02948acbc3d1f9e003213f7",
-      "question": "Geography: What is a tornado?",
-      "answer": "A tornado is a fast spinning wind storm.",
-      "grade_id": "lkg",
-      "subject": "Geography",
-      "subjects": [
-        "Geography"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T13:30:57.486946+00:00"
-    },
-    {
-      "id": "174ba67c159240cb8b0533a02a528332",
-      "question": "Geography: What is a tsunami?",
-      "answer": "A tsunami is a huge wave after an earthquake.",
-      "grade_id": "lkg",
-      "subject": "Geography",
-      "subjects": [
-        "Geography"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T13:30:57.486946+00:00"
-    },
-    {
-      "id": "64099fb1dde348028a4bdeaf48e293dc",
-      "question": "Geography: What is a natural disaster?",
-      "answer": "A natural disaster is a harmful event caused by nature.",
-      "grade_id": "lkg",
-      "subject": "Geography",
-      "subjects": [
-        "Geography"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T13:30:57.486946+00:00"
-    },
-    {
-      "id": "75b37d5533e54e8eab6dc0a22a74a964",
-      "question": "Geography: What is a city map?",
-      "answer": "A city map shows the streets and buildings of a city.",
-      "grade_id": "lkg",
-      "subject": "Geography",
-      "subjects": [
-        "Geography"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T13:30:57.486946+00:00"
-    },
-    {
-      "id": "6a1dd9667ae842d28a9c2eaeb3649aad",
-      "question": "Geography: What is a country map?",
-      "answer": "A country map shows the towns and land of a country.",
-      "grade_id": "lkg",
-      "subject": "Geography",
-      "subjects": [
-        "Geography"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T13:30:57.486946+00:00"
-    },
-    {
-      "id": "700e43fb3b4846da97c8c4d6b97b3a2d",
-      "question": "Geography: What is a world map?",
-      "answer": "A world map shows all the countries and oceans of the earth.",
-      "grade_id": "lkg",
-      "subject": "Geography",
-      "subjects": [
-        "Geography"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T13:30:57.486946+00:00"
-    },
-    {
-      "id": "a748b75f4a6c451f91c971e64a4617b8",
-      "question": "Geography: What is a capital of India?",
-      "answer": "The capital of India is New Delhi.",
-      "grade_id": "lkg",
-      "subject": "Geography",
-      "subjects": [
-        "Geography"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T13:30:57.486946+00:00"
-    },
-    {
-      "id": "4a4e3baa11614781a0cb12dc2ce50855",
-      "question": "Geography: What is a capital of the United States?",
-      "answer": "The capital of the United States is Washington, D.C.",
-      "grade_id": "lkg",
-      "subject": "Geography",
-      "subjects": [
-        "Geography"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T13:30:57.486946+00:00"
-    },
-    {
-      "id": "324ade79b894494ba7d8e94496445217",
-      "question": "Geography: What is a capital of the United Kingdom?",
-      "answer": "The capital of the United Kingdom is London.",
-      "grade_id": "lkg",
-      "subject": "Geography",
-      "subjects": [
-        "Geography"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T13:30:57.486946+00:00"
-    },
-    {
-      "id": "6b2fdd713f87422d9eaf7413f4b1fa4b",
-      "question": "Geography: What is a capital of France?",
-      "answer": "The capital of France is Paris.",
-      "grade_id": "lkg",
-      "subject": "Geography",
-      "subjects": [
-        "Geography"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T13:30:57.486946+00:00"
-    },
-    {
-      "id": "3ab6172c79a5462a8b9d3def78303233",
-      "question": "Geography: What is a capital of Japan?",
-      "answer": "The capital of Japan is Tokyo.",
-      "grade_id": "lkg",
-      "subject": "Geography",
-      "subjects": [
-        "Geography"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T13:30:57.486946+00:00"
-    },
-    {
-      "id": "8179fc2b817c4b48a5800c4798c11687",
-      "question": "Geography: What is a capital of China?",
-      "answer": "The capital of China is Beijing.",
-      "grade_id": "lkg",
-      "subject": "Geography",
-      "subjects": [
-        "Geography"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T13:30:57.486946+00:00"
-    },
-    {
-      "id": "b08d949936ed49a782bf39d5e724d750",
-      "question": "Geography: What is a capital of Australia?",
-      "answer": "The capital of Australia is Canberra.",
-      "grade_id": "lkg",
-      "subject": "Geography",
-      "subjects": [
-        "Geography"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T13:30:57.486946+00:00"
-    },
-    {
-      "id": "bf75ec4477ec42f8b2690459e2fe11cf",
-      "question": "Geography: What is a capital of Brazil?",
-      "answer": "The capital of Brazil is Brasília.",
-      "grade_id": "lkg",
-      "subject": "Geography",
-      "subjects": [
-        "Geography"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T13:30:57.486946+00:00"
-    },
-    {
-      "id": "84b830484ef64e4eae283a91b567b952",
-      "question": "Geography: What is a capital of Egypt?",
-      "answer": "The capital of Egypt is Cairo.",
-      "grade_id": "lkg",
-      "subject": "Geography",
-      "subjects": [
-        "Geography"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T13:30:57.486946+00:00"
-    },
-    {
-      "id": "b8bffee147e84f6ca3eea0715d22e1d2",
-      "question": "Geography: What is a capital of Canada?",
-      "answer": "The capital of Canada is Ottawa.",
-      "grade_id": "lkg",
-      "subject": "Geography",
-      "subjects": [
-        "Geography"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T13:30:57.486946+00:00"
-    },
-    {
-      "id": "10cf72d3f96d4e68b745463e58adef43",
-      "question": "Geography: Where is the Amazon River?",
-      "answer": "The Amazon River is in South America.",
-      "grade_id": "lkg",
-      "subject": "Geography",
-      "subjects": [
-        "Geography"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T13:30:57.486946+00:00"
-    },
-    {
-      "id": "8b35ae2236384242a154e85dd197c1fc",
-      "question": "Geography: Where is the Nile River?",
-      "answer": "The Nile River is in Africa.",
-      "grade_id": "lkg",
-      "subject": "Geography",
-      "subjects": [
-        "Geography"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T13:30:57.486946+00:00"
-    },
-    {
-      "id": "336e28139875456fab73af007280ba6a",
-      "question": "Geography: Where is Mount Everest?",
-      "answer": "Mount Everest is in Asia.",
-      "grade_id": "lkg",
-      "subject": "Geography",
-      "subjects": [
-        "Geography"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T13:30:57.486946+00:00"
-    },
-    {
-      "id": "240283f9b6704fa6b6ad4593a82c7b06",
-      "question": "Geography: Where is the Sahara Desert?",
-      "answer": "The Sahara Desert is in Africa.",
-      "grade_id": "lkg",
-      "subject": "Geography",
-      "subjects": [
-        "Geography"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T13:30:57.486946+00:00"
-    },
-    {
-      "id": "b18c2802cd664af2b81d72f5c97b9bb5",
-      "question": "Geography: Where is the Great Wall?",
-      "answer": "The Great Wall is in China.",
-      "grade_id": "lkg",
-      "subject": "Geography",
-      "subjects": [
-        "Geography"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T13:30:57.486946+00:00"
-    },
-    {
-      "id": "68ab296cbac848afb17649e2ebe033f4",
-      "question": "Geography: Where is the Eiffel Tower?",
-      "answer": "The Eiffel Tower is in Paris, France.",
-      "grade_id": "lkg",
-      "subject": "Geography",
-      "subjects": [
-        "Geography"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T13:30:57.486946+00:00"
-    },
-    {
-      "id": "6f62ccbd586a49aea66230a8f93e2ec8",
-      "question": "Geography: Where is the Taj Mahal?",
-      "answer": "The Taj Mahal is in India.",
-      "grade_id": "lkg",
-      "subject": "Geography",
-      "subjects": [
-        "Geography"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T13:30:57.486946+00:00"
-    },
-    {
-      "id": "51bb9ce8852a48c8be738ea29f666b10",
-      "question": "Emotions: What is an emotion?",
-      "answer": "An emotion is a feeling inside a person.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:12.154718+00:00"
-    },
-    {
-      "id": "31ad0f67288a43eeb1fe4f66e41e799f",
-      "question": "Emotions: What is a feeling?",
-      "answer": "A feeling is something you sense inside yourself.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:12.154718+00:00"
-    },
-    {
-      "id": "0a255a6f55ad40b587a4c6f7ab808cca",
-      "question": "Emotions: What is happy?",
-      "answer": "Happy means feeling good and joyful.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:12.154718+00:00"
-    },
-    {
-      "id": "46242341ce664ae18c8b074830b0d290",
-      "question": "Emotions: What is sad?",
-      "answer": "Sad means feeling unhappy or down.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:12.154718+00:00"
-    },
-    {
-      "id": "b87bf61e86a545cbad76856148ce85c0",
-      "question": "Emotions: What is angry?",
-      "answer": "Angry means feeling upset and cross.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:12.154718+00:00"
-    },
-    {
-      "id": "931d917c7d8d4d63bbdda67b2fe4a483",
-      "question": "Emotions: What is scared?",
-      "answer": "Scared means feeling afraid.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:12.154718+00:00"
-    },
-    {
-      "id": "06bd7ff1b09a4ffdab02821672ff08bf",
-      "question": "Emotions: What is excited?",
-      "answer": "Excited means feeling full of energy and joy.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:12.154718+00:00"
-    },
-    {
-      "id": "c000cbe49bbe4f318afc0d6610a58e24",
-      "question": "Emotions: What is tired?",
-      "answer": "Tired means feeling sleepy and without energy.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:12.154718+00:00"
-    },
-    {
-      "id": "8630f1c1f3bd444b84b44da575d6404b",
-      "question": "Emotions: What is bored?",
-      "answer": "Bored means feeling that nothing is interesting.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:12.154718+00:00"
-    },
-    {
-      "id": "f9e501ab56e1419c9393e5cef6b6bba1",
-      "question": "Emotions: What is surprised?",
-      "answer": "Surprised means feeling shocked by something unexpected.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:12.154718+00:00"
-    },
-    {
-      "id": "577106247e3e45deb4d93306176f2205",
-      "question": "Emotions: What is confused?",
-      "answer": "Confused means feeling that something is not clear.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:12.154718+00:00"
-    },
-    {
-      "id": "0641f987465c484c97c5840d13e74241",
-      "question": "Emotions: What is proud?",
-      "answer": "Proud means feeling good about something you did.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:12.154718+00:00"
-    },
-    {
-      "id": "b4029ce1c24b408ab290682140e3b78c",
-      "question": "Emotions: What is shy?",
-      "answer": "Shy means feeling quiet around new people.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:12.154718+00:00"
-    },
-    {
-      "id": "c131f71d464b4811a0f933cc57ee3e21",
-      "question": "Emotions: What is lonely?",
-      "answer": "Lonely means feeling sad because you are alone.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:12.154718+00:00"
-    },
-    {
-      "id": "9118ddb923134dcdbc07e916379608df",
-      "question": "Emotions: What is calm?",
-      "answer": "Calm means feeling peaceful and quiet.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:12.154718+00:00"
-    },
-    {
-      "id": "801625198d854ce1824e515e85d1eca6",
-      "question": "Emotions: What is nervous?",
-      "answer": "Nervous means feeling worried about something.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:12.154718+00:00"
-    },
-    {
-      "id": "7896122ce3b74d929af8fc20d881b0b0",
-      "question": "Emotions: What is jealous?",
-      "answer": "Jealous means feeling unhappy because someone has something you want.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:12.154718+00:00"
-    },
-    {
-      "id": "c06483a8d6c141a889bd5b3b55641206",
-      "question": "Emotions: What is kind?",
-      "answer": "Kind means caring about other people.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:12.154718+00:00"
-    },
-    {
-      "id": "0e354f119dc64c15ba30b172044d11cd",
-      "question": "Emotions: What is love?",
-      "answer": "Love is a strong feeling of caring for someone.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:12.154718+00:00"
-    },
-    {
-      "id": "81d4c1f189b74bb391f0595d4abb6477",
-      "question": "Emotions: What is fear?",
-      "answer": "Fear is the feeling of being scared.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:12.154718+00:00"
-    },
-    {
-      "id": "0fb64394afcc49ec8907f69ff258cca1",
-      "question": "Emotions: What is joy?",
-      "answer": "Joy is a strong feeling of happiness.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:12.154718+00:00"
-    },
-    {
-      "id": "4751dabbc4814953909bc220fd582295",
-      "question": "Emotions: What is sadness?",
-      "answer": "Sadness is the feeling of being sad.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:12.154718+00:00"
-    },
-    {
-      "id": "eb029cac281941b7ba107a3018c3ee14",
-      "question": "Emotions: What is anger?",
-      "answer": "Anger is the feeling of being angry.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:12.154718+00:00"
-    },
-    {
-      "id": "92d2aadbdac841df864d8e488f34aa10",
-      "question": "Emotions: What is worry?",
-      "answer": "Worry is the feeling of being nervous about something.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:12.154718+00:00"
-    },
-    {
-      "id": "81d9fe6089444784ac70e30ac461bbbc",
-      "question": "Emotions: What is hope?",
-      "answer": "Hope is the feeling that good things will happen.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:12.154718+00:00"
-    },
-    {
-      "id": "646fea035c3340e799cd2e44a79733a5",
-      "question": "Emotions: What is laughter?",
-      "answer": "Laughter is the sound we make when we are happy.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:12.154718+00:00"
-    },
-    {
-      "id": "a8d1fa718610467289aee0d07c2750f5",
-      "question": "Emotions: What is a smile?",
-      "answer": "A smile is a happy look on the face.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:12.154718+00:00"
-    },
-    {
-      "id": "fa0ceef49ef947ce946aaaf41a014f8b",
-      "question": "Emotions: What is a frown?",
-      "answer": "A frown is a sad or angry look on the face.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:12.154718+00:00"
-    },
-    {
-      "id": "c3c118904a954d16b1cc508fcd954f2f",
-      "question": "Emotions: What are tears?",
-      "answer": "Tears are drops of water from the eyes when we cry.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:12.154718+00:00"
-    },
-    {
-      "id": "838923ae5f1d4345a7810bc40d06a571",
-      "question": "Emotions: What is crying?",
-      "answer": "Crying is shedding tears when we feel sad or hurt.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:12.154718+00:00"
-    },
-    {
-      "id": "da281214d861491697e1b8c7e5e5260a",
-      "question": "Emotions: What is a hug?",
-      "answer": "A hug is holding someone close to show care.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:12.154718+00:00"
-    },
-    {
-      "id": "5b87e0f8a01f4ab7afac62555ff00cc0",
-      "question": "Emotions: What is a kiss?",
-      "answer": "A kiss is touching someone with the lips to show love.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:12.154718+00:00"
-    },
-    {
-      "id": "ff471a86a92c48c7aadf17a9c5382a14",
-      "question": "Emotions: What is a friend?",
-      "answer": "A friend is someone you like and care about.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:12.154718+00:00"
-    },
-    {
-      "id": "06a024e5f1c5429d9c8fc93050bde2df",
-      "question": "Emotions: What is friendship?",
-      "answer": "Friendship is the feeling between two friends.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:12.154718+00:00"
-    },
-    {
-      "id": "3920caf5fede40f2b6a9d0d2f38085bf",
-      "question": "Emotions: What is sharing?",
-      "answer": "Sharing is giving some of what you have to others.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:12.154718+00:00"
-    },
-    {
-      "id": "4aeb1b597a174fbdb63dd59bf95d752e",
-      "question": "Emotions: What is caring?",
-      "answer": "Caring is looking after someone and wanting them to be well.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:12.154718+00:00"
-    },
-    {
-      "id": "e25f846d543e4870bb6006bcba2f8d49",
-      "question": "Emotions: What is helping?",
-      "answer": "Helping is doing something to make things easier for someone.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:12.154718+00:00"
-    },
-    {
-      "id": "a5317ad89cab487e91a6d12e93cae3c0",
-      "question": "Emotions: What is being rude?",
-      "answer": "Being rude means being unkind to others.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:59.687749+00:00"
-    },
-    {
-      "id": "c1a07df7ff7e404589287580f36dc140",
-      "question": "Emotions: What is being gentle?",
-      "answer": "Being gentle means being soft and careful.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:59.687749+00:00"
-    },
-    {
-      "id": "81c7244217634cbfa191c22104e69d97",
-      "question": "Emotions: What is being brave?",
-      "answer": "Being brave means being strong even when you are scared.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:59.687749+00:00"
-    },
-    {
-      "id": "e6968d6bd31c495885e68ad0a3375fb5",
-      "question": "Emotions: What is being honest?",
-      "answer": "Being honest means telling the truth.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:59.687749+00:00"
-    },
-    {
-      "id": "56b2e2be57de4639aab6955715d6266a",
-      "question": "Emotions: What is being patient?",
-      "answer": "Being patient means waiting calmly without getting upset.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:59.687749+00:00"
-    },
-    {
-      "id": "606f5512192e48a984647899ea20abef",
-      "question": "Emotions: What is being grateful?",
-      "answer": "Being grateful means feeling thankful for what you have.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:59.687749+00:00"
-    },
-    {
-      "id": "92f019e148764369b87651e458e450fe",
-      "question": "Emotions: What is being sorry?",
-      "answer": "Being sorry means feeling bad about a mistake you made.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:59.687749+00:00"
-    },
-    {
-      "id": "2c7863a2110240ac9d8e268bb7e8c2e9",
-      "question": "Emotions: What is forgiving?",
-      "answer": "Forgiving is letting go of anger toward someone who hurt you.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:59.687749+00:00"
-    },
-    {
-      "id": "3b302bebfcf44248aa523c8fa5c92631",
-      "question": "Emotions: How do you show happiness?",
-      "answer": "You show happiness by smiling and laughing.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:59.687749+00:00"
-    },
-    {
-      "id": "4e32894f9fc54a09a8c4908a03db92f9",
-      "question": "Emotions: How do you show sadness?",
-      "answer": "You show sadness by crying or looking down.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:59.687749+00:00"
-    },
-    {
-      "id": "40b050fdd4ad4b9aba1f535fe8198836",
-      "question": "Emotions: How do you show anger?",
-      "answer": "You show anger by frowning or speaking loudly.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:59.687749+00:00"
-    },
-    {
-      "id": "0482ec2b780641429c54529012a5ab07",
-      "question": "Emotions: How do you show fear?",
-      "answer": "You show fear by shaking or hiding.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:59.687749+00:00"
-    },
-    {
-      "id": "8df8e0c1a31f451781119ccea44d480c",
-      "question": "Emotions: How do you show love?",
-      "answer": "You show love by hugging and being kind.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:59.687749+00:00"
-    },
-    {
-      "id": "d06248b4bc1d49579bdef9848a01a0c5",
-      "question": "Emotions: How do you show kindness?",
-      "answer": "You show kindness by helping and sharing.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:59.687749+00:00"
-    },
-    {
-      "id": "1a10fd4ed0944d73a947241bd3c46637",
-      "question": "Emotions: How do you show respect?",
-      "answer": "You show respect by listening and being polite.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:59.687749+00:00"
-    },
-    {
-      "id": "d0371280441e4627bc3fd39b04261268",
-      "question": "Emotions: How do you show you are listening?",
-      "answer": "You show you are listening by looking at the speaker.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:59.687749+00:00"
-    },
-    {
-      "id": "91b81076b2674ddb9a479911ed5bf16e",
-      "question": "Emotions: What makes a person happy?",
-      "answer": "Playing with friends makes a person happy.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:59.687749+00:00"
-    },
-    {
-      "id": "76ecbd539d574b8db1bafc822ee03195",
-      "question": "Emotions: What makes a person sad?",
-      "answer": "Losing a toy makes a person sad.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:59.687749+00:00"
-    },
-    {
-      "id": "b2aae5c51fd34cdcbe030021970c5c28",
-      "question": "Emotions: What makes a person angry?",
-      "answer": "Being treated unfairly makes a person angry.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:59.687749+00:00"
-    },
-    {
-      "id": "ef2c87bfce1d4fc0965d658aa7b826b4",
-      "question": "Emotions: What makes a person scared?",
-      "answer": "Loud noises can make a person scared.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:59.687749+00:00"
-    },
-    {
-      "id": "610374496c2c476c8b58315c36c7ea1f",
-      "question": "Emotions: What makes a person excited?",
-      "answer": "A birthday party makes a person excited.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:59.687749+00:00"
-    },
-    {
-      "id": "e106cf8a7fde4ec1bedb760b5902d333",
-      "question": "Emotions: What makes a person calm?",
-      "answer": "Soft music makes a person calm.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:59.687749+00:00"
-    },
-    {
-      "id": "844b954d515e493180bf3248a71ec2ea",
-      "question": "Emotions: What makes a person proud?",
-      "answer": "Doing something well makes a person proud.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:59.687749+00:00"
-    },
-    {
-      "id": "bd74b33d66224f2f85c82bc2f2439cf6",
-      "question": "Emotions: What makes a person lonely?",
-      "answer": "Having no one to play with makes a person lonely.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:59.687749+00:00"
-    },
-    {
-      "id": "6866f36c287e4e33a6cf906fa70d4467",
-      "question": "Emotions: What makes a person nervous?",
-      "answer": "Speaking in front of others can make a person nervous.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:59.687749+00:00"
-    },
-    {
-      "id": "3707d811ad934749b3ca182a86eaf996",
-      "question": "Emotions: What makes a person tired?",
-      "answer": "Playing all day makes a person tired.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:59.687749+00:00"
-    },
-    {
-      "id": "ca455833c3d043148854556c1897e09a",
-      "question": "Emotions: What is a happy face?",
-      "answer": "A happy face has a smile.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:59.687749+00:00"
-    },
-    {
-      "id": "e2d42f33364a45009d84ef5e47ae6d39",
-      "question": "Emotions: What is a sad face?",
-      "answer": "A sad face has a frown.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:59.687749+00:00"
-    },
-    {
-      "id": "9b65b001da2c4f9a8b0806f115fc00df",
-      "question": "Emotions: What is an angry face?",
-      "answer": "An angry face has furrowed brows.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:59.687749+00:00"
-    },
-    {
-      "id": "38d14c778fcd41f293cdc83f74b01d5b",
-      "question": "Emotions: What is a scared face?",
-      "answer": "A scared face has wide eyes.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:59.687749+00:00"
-    },
-    {
-      "id": "45b0095ef0a349ad9db7d7800d66d3ae",
-      "question": "Emotions: What is a surprised face?",
-      "answer": "A surprised face has an open mouth.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:59.687749+00:00"
-    },
-    {
-      "id": "dc3efcf8282e4fc8a56c472cc58ebb5e",
-      "question": "Emotions: What is a calm face?",
-      "answer": "A calm face is relaxed and peaceful.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:59.687749+00:00"
-    },
-    {
-      "id": "216fbb158795491894954d4844593e65",
-      "question": "Emotions: What is a proud face?",
-      "answer": "A proud face has a small smile and looks up.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:59.687749+00:00"
-    },
-    {
-      "id": "93fef37aa5194d9fa0a3cf819b14dcc0",
-      "question": "Emotions: What is a bored face?",
-      "answer": "A bored face looks tired and uninterested.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:59.687749+00:00"
-    },
-    {
-      "id": "15933c7ef35449beb71931b6cc763033",
-      "question": "Emotions: What is a confused face?",
-      "answer": "A confused face has a tilted head and squinted eyes.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:21:59.687749+00:00"
-    },
-    {
-      "id": "1b126ffde653429da6451efd688c5501",
-      "question": "Emotions: What is a shy face?",
-      "answer": "A shy face looks down and may blush.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:22:22.181932+00:00"
-    },
-    {
-      "id": "ffc5b00a95b342deb14568f0ed6eeff5",
-      "question": "Emotions: What does happy mean for a child?",
-      "answer": "Happy means feeling good and wanting to play.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:22:22.181932+00:00"
-    },
-    {
-      "id": "874f4972000845ec83acb1c984d611c8",
-      "question": "Emotions: What does sad mean for a child?",
-      "answer": "Sad means feeling hurt and wanting comfort.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:22:22.181932+00:00"
-    },
-    {
-      "id": "c329d58f9a734fcea09b82a9b850aa9b",
-      "question": "Emotions: What does angry mean for a child?",
-      "answer": "Angry means feeling upset and wanting to shout.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:22:22.181932+00:00"
-    },
-    {
-      "id": "07cd7293d3ec42778dffe974ecd99b9b",
-      "question": "Emotions: What does scared mean for a child?",
-      "answer": "Scared means feeling afraid and wanting to hide.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:22:22.181932+00:00"
-    },
-    {
-      "id": "55975d9290b841bfb167a0aebffb6072",
-      "question": "Emotions: What is a good way to calm down when angry?",
-      "answer": "A good way to calm down is to take deep breaths.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:22:22.181932+00:00"
-    },
-    {
-      "id": "98b50ad5b5f3474f8dc8d22cf67149a3",
-      "question": "Emotions: What is a good way to feel better when sad?",
-      "answer": "A good way to feel better is to talk to a friend.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:22:22.181932+00:00"
-    },
-    {
-      "id": "759ea99d30bd407eab8c8e166a56c397",
-      "question": "Emotions: What is a good way to feel brave?",
-      "answer": "A good way to feel brave is to remember you are safe.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:22:22.181932+00:00"
-    },
-    {
-      "id": "f6ab86d85c0046a49af339ae596abd29",
-      "question": "Emotions: What is a good way to show you care?",
-      "answer": "A good way to show you care is to listen and help.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:22:22.181932+00:00"
-    },
-    {
-      "id": "f26391a8d72341e786df89dedeb487ba",
-      "question": "Emotions: What is empathy?",
-      "answer": "Empathy is understanding how someone else feels.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:22:22.181932+00:00"
-    },
-    {
-      "id": "73a691a63da54be5acf6f7c071c74773",
-      "question": "Emotions: What is sympathy?",
-      "answer": "Sympathy is feeling sorry for someone who is hurt.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:22:22.181932+00:00"
-    },
-    {
-      "id": "4962eb8449574e658e5fe28257d3e1dd",
-      "question": "Emotions: What is a compliment?",
-      "answer": "A compliment is a kind thing you say to someone.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:22:22.181932+00:00"
-    },
-    {
-      "id": "2b32220f3a184e6396248a2cbeb9ac6b",
-      "question": "Emotions: What is an apology?",
-      "answer": "An apology is saying sorry for a mistake.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:22:22.181932+00:00"
-    },
-    {
-      "id": "7fed14478f9a40a197e5cdcf4c5e8005",
-      "question": "Emotions: What is a thank you?",
-      "answer": "A thank you is a polite word to show gratitude.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:22:22.181932+00:00"
-    },
-    {
-      "id": "aeaee18fca284c94a3b7cbf30bbd6a92",
-      "question": "Emotions: What is a please?",
-      "answer": "Please is a polite word used when asking for something.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:22:22.181932+00:00"
-    },
-    {
-      "id": "ae76d51057c9451db31d295bcd2120a7",
-      "question": "Emotions: What is a hello?",
-      "answer": "Hello is a polite word used when meeting someone.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:22:22.181932+00:00"
-    },
-    {
-      "id": "e6aaa1a20eac432c962a78a74de450ea",
-      "question": "Emotions: What is a goodbye?",
-      "answer": "Goodbye is a polite word used when leaving.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:22:22.181932+00:00"
-    },
-    {
-      "id": "cbf1427106a44a5bbbf902cc2e076c8d",
-      "question": "Emotions: What is a good morning?",
-      "answer": "Good morning is a polite greeting used in the morning.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:22:22.181932+00:00"
-    },
-    {
-      "id": "b32f06003b22426c99dd56efb7872cfe",
-      "question": "Emotions: What is a good night?",
-      "answer": "Good night is a polite greeting used at bedtime.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:22:22.181932+00:00"
-    },
-    {
-      "id": "2c0cf00af3d040b0ac6b08ce2785ed80",
-      "question": "Emotions: What is a family?",
-      "answer": "A family is a group of people who love and care for each other.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:22:22.181932+00:00"
-    },
-    {
-      "id": "f9d9e6e1c805489188c9c4b82c5502d4",
-      "question": "Emotions: What is a home?",
-      "answer": "A home is a place where you feel safe and loved.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:22:22.181932+00:00"
-    },
-    {
-      "id": "2cc2fb9361614643bc48902c0808a8a9",
-      "question": "Emotions: What is safety?",
-      "answer": "Safety is being free from harm.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:22:22.181932+00:00"
-    },
-    {
-      "id": "d6982399ff5c4cabbd44f939f4562b3e",
-      "question": "Emotions: What is trust?",
-      "answer": "Trust is believing that someone will not hurt you.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:22:22.181932+00:00"
-    },
-    {
-      "id": "d4acca775114449ca597d55d6c9b83ca",
-      "question": "Emotions: What is a mistake?",
-      "answer": "A mistake is something done wrong by accident.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:22:22.181932+00:00"
-    },
-    {
-      "id": "bca75e578f664693a03ac1ada5932fe6",
-      "question": "Emotions: What is learning from a mistake?",
-      "answer": "Learning from a mistake is understanding how to do better next time.",
-      "grade_id": "lkg",
-      "subject": "Emotions",
-      "subjects": [
-        "Emotions"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:22:22.181932+00:00"
-    },
-    {
-      "id": "bb160a3963d44747a7ba5a9e75f1b4b2",
-      "question": "Story: The Thirsty Crow",
-      "answer": "A crow was very thirsty.\nIt found a pot with a little water.\nThe water was too low to reach.\nThe crow dropped small stones into the pot.\nThe water rose up.\nThe crow drank the water.\nLesson: Think carefully to solve a problem.",
-      "grade_id": "lkg",
-      "subject": "Language",
-      "subjects": [
-        "Language"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:37:18.404796+00:00"
-    },
-    {
-      "id": "c8a636d743294ec0a9c69ae51b5d8c28",
-      "question": "Story: The Hare and the Tortoise",
-      "answer": "A hare laughed at a slow tortoise.\nThe tortoise asked for a race.\nThe hare ran fast and then slept.\nThe tortoise kept walking slowly.\nThe tortoise reached the end first.\nLesson: Slow and steady wins the race.",
-      "grade_id": "lkg",
-      "subject": "Language",
-      "subjects": [
-        "Language"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:37:18.404796+00:00"
-    },
-    {
-      "id": "2a1e447c5b4c4ffd834c3c22b1aad5f9",
-      "question": "Story: The Boy Who Cried Wolf",
-      "answer": "A boy watched sheep on a hill.\nHe shouted wolf to trick the villagers.\nThe villagers ran to help but found no wolf.\nThe boy laughed.\nOne day a real wolf came.\nThe boy shouted for help.\nNo one believed him.\nLesson: Never tell lies.",
-      "grade_id": "lkg",
-      "subject": "Language",
-      "subjects": [
-        "Language"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:37:18.404796+00:00"
-    },
-    {
-      "id": "209e336432134e11bdf6ab391fc680a6",
-      "question": "Story: The Golden Egg",
-      "answer": "A farmer had a goose.\nThe goose laid one golden egg each day.\nThe farmer wanted all the gold at once.\nHe cut open the goose.\nThere was no gold inside.\nLesson: Do not be greedy.",
-      "grade_id": "lkg",
-      "subject": "Language",
-      "subjects": [
-        "Language"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:37:18.404796+00:00"
-    },
-    {
-      "id": "e297257c2d434cf7a2f6a8a99d3be349",
-      "question": "Story: The Ant and the Grasshopper",
-      "answer": "An ant worked all summer.\nA grasshopper sang and played.\nThe ant stored food for winter.\nWinter came and the grasshopper had nothing.\nThe ant shared its food.\nLesson: Work today for a better tomorrow.",
-      "grade_id": "lkg",
-      "subject": "Language",
-      "subjects": [
-        "Language"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:37:18.404796+00:00"
-    },
-    {
-      "id": "d6318cb4784b41d29b2df1d10dc12dbe",
-      "question": "Story: The Fox and the Grapes",
-      "answer": "A fox saw grapes high on a vine.\nThe fox jumped but could not reach them.\nThe fox jumped again and again.\nThe fox gave up and walked away.\nThe fox said the grapes were sour.\nLesson: It is easy to hate what you cannot have.",
-      "grade_id": "lkg",
-      "subject": "Language",
-      "subjects": [
-        "Language"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:37:18.404796+00:00"
-    },
-    {
-      "id": "782a07ae739f40f6a224145cf43e5135",
-      "question": "Story: The Two Friends and the Bear",
-      "answer": "Two friends walked through a forest.\nA bear came toward them.\nOne friend climbed a tree.\nThe other friend lay still on the ground.\nThe bear sniffed him and walked away.\nLesson: A true friend stays with you in danger.",
-      "grade_id": "lkg",
-      "subject": "Language",
-      "subjects": [
-        "Language"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:37:18.404796+00:00"
-    },
-    {
-      "id": "b755ecde72354006b8114cf3ea8e37cc",
-      "question": "Story: The Ugly Duckling",
-      "answer": "A little duckling looked different from the others.\nThe other ducks laughed at him.\nHe felt sad and alone.\nHe grew up and became a beautiful swan.\nLesson: Do not judge by looks.",
-      "grade_id": "lkg",
-      "subject": "Language",
-      "subjects": [
-        "Language"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:37:18.404796+00:00"
-    },
-    {
-      "id": "2446706119e7402db9bd3a76b97d513d",
-      "question": "Story: The Little Red Hen",
-      "answer": "A little red hen found some seeds.\nShe asked for help to plant them.\nNo one wanted to help.\nShe planted and watered the seeds alone.\nShe made bread from the wheat.\nNo one wanted to help eat it.\nLesson: Those who do not help do not share the reward.",
-      "grade_id": "lkg",
-      "subject": "Language",
-      "subjects": [
-        "Language"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:37:18.404796+00:00"
-    },
-    {
-      "id": "f1aad1753d4a47c9baf4bd789fa0b553",
-      "question": "Joke: Why did the chicken cross the road?",
-      "answer": "To get to the other side.",
-      "grade_id": "lkg",
-      "subject": "Jokes",
-      "subjects": [
-        "Jokes"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:48:25.957401+00:00"
-    },
-    {
-      "id": "644a7f12c96f40d5903d1ec0da73d388",
-      "question": "Joke: What do you call a bear with no teeth?",
-      "answer": "A gummy bear.",
-      "grade_id": "lkg",
-      "subject": "Jokes",
-      "subjects": [
-        "Jokes"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:48:25.957401+00:00"
-    },
-    {
-      "id": "ed9eb72db7664bf0948d2b0adf5a5c2d",
-      "question": "Joke: Why did the banana go to the doctor?",
-      "answer": "It was not peeling well.",
-      "grade_id": "lkg",
-      "subject": "Jokes",
-      "subjects": [
-        "Jokes"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:48:25.957401+00:00"
-    },
-    {
-      "id": "17000b141e4948b68fcfbe467357b377",
-      "question": "Joke: What do you call a sleeping bull?",
-      "answer": "A bulldozer.",
-      "grade_id": "lkg",
-      "subject": "Jokes",
-      "subjects": [
-        "Jokes"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:48:25.957401+00:00"
-    },
-    {
-      "id": "e6e30105b5864198a54553551cf749f3",
-      "question": "Joke: Why did the cookie go to the nurse?",
-      "answer": "It felt crummy.",
-      "grade_id": "lkg",
-      "subject": "Jokes",
-      "subjects": [
-        "Jokes"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:48:25.957401+00:00"
-    },
-    {
-      "id": "e5a29bc1d2e5483fa482fdf22f271f7d",
-      "question": "Joke: What do you call a fish wearing a bowtie?",
-      "answer": "So-fish-ticated.",
-      "grade_id": "lkg",
-      "subject": "Jokes",
-      "subjects": [
-        "Jokes"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:48:25.957401+00:00"
-    },
-    {
-      "id": "d249adccd51a4f8693dd5d262f27c10e",
-      "question": "Joke: Why did the scarecrow win an award?",
-      "answer": "He was outstanding in his field.",
-      "grade_id": "lkg",
-      "subject": "Jokes",
-      "subjects": [
-        "Jokes"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:48:25.957401+00:00"
-    },
-    {
-      "id": "c44b849278514034aa1681d844535bad",
-      "question": "Joke: What do you call a snowman in summer?",
-      "answer": "A puddle.",
-      "grade_id": "lkg",
-      "subject": "Jokes",
-      "subjects": [
-        "Jokes"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:48:25.957401+00:00"
-    },
-    {
-      "id": "6d94366335b049ff845ea588ba8e4178",
-      "question": "Joke: Why did the math book look sad?",
-      "answer": "It had too many problems.",
-      "grade_id": "lkg",
-      "subject": "Jokes",
-      "subjects": [
-        "Jokes"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:48:25.957401+00:00"
-    },
-    {
-      "id": "98ae39404746464fb04bd862a7f01af6",
-      "question": "Joke: What do you call a dog that does magic?",
-      "answer": "A labracadabrador.",
-      "grade_id": "lkg",
-      "subject": "Jokes",
-      "subjects": [
-        "Jokes"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:48:25.957401+00:00"
-    },
-    {
-      "id": "409f0cef2cea4cfd976d269c638a7407",
-      "question": "Joke: Why did the orange stop rolling?",
-      "answer": "It ran out of juice.",
-      "grade_id": "lkg",
-      "subject": "Jokes",
-      "subjects": [
-        "Jokes"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:48:25.957401+00:00"
-    },
-    {
-      "id": "1b03d10ada8e49b68455a3c12e449fba",
-      "question": "Joke: What do you call a pig that does karate?",
-      "answer": "A pork chop.",
-      "grade_id": "lkg",
-      "subject": "Jokes",
-      "subjects": [
-        "Jokes"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:48:25.957401+00:00"
-    },
-    {
-      "id": "5464ca4eb3194e3a93780bb58b87f9dc",
-      "question": "Joke: Why did the bicycle fall over?",
-      "answer": "It was two-tired.",
-      "grade_id": "lkg",
-      "subject": "Jokes",
-      "subjects": [
-        "Jokes"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:48:25.957401+00:00"
-    },
-    {
-      "id": "a2dd553e8d364d0da715119b68efda8a",
-      "question": "Joke: What do you call a cow with no legs?",
-      "answer": "Ground beef.",
-      "grade_id": "lkg",
-      "subject": "Jokes",
-      "subjects": [
-        "Jokes"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:48:25.957401+00:00"
-    },
-    {
-      "id": "5b448c7ac83a4398a805cc257ff6755e",
-      "question": "Joke: Why did the teddy bear say no to dessert?",
-      "answer": "She was stuffed.",
-      "grade_id": "lkg",
-      "subject": "Jokes",
-      "subjects": [
-        "Jokes"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:48:25.957401+00:00"
-    },
-    {
-      "id": "aa6531d1f27b4fb0a57e1c17df9aaf11",
-      "question": "Joke: What do you call a dinosaur that is sleeping?",
-      "answer": "A dino-snore.",
-      "grade_id": "lkg",
-      "subject": "Jokes",
-      "subjects": [
-        "Jokes"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:48:25.957401+00:00"
-    },
-    {
-      "id": "c7988b3658094ca9bcc72c91bd7fe53d",
-      "question": "Joke: Why did the teacher wear sunglasses?",
-      "answer": "Her class was so bright.",
-      "grade_id": "lkg",
-      "subject": "Jokes",
-      "subjects": [
-        "Jokes"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:48:25.957401+00:00"
-    },
-    {
-      "id": "d84fcf9b42bb412287b6f4e4a9af166f",
-      "question": "Joke: What do you call a rabbit with fleas?",
-      "answer": "Bugs Bunny.",
-      "grade_id": "lkg",
-      "subject": "Jokes",
-      "subjects": [
-        "Jokes"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:48:25.957401+00:00"
-    },
-    {
-      "id": "8f2076d59d3b4866a4d2547cd872d48b",
-      "question": "Poem: Twinkle Twinkle Little Star",
-      "answer": "Twinkle, twinkle, little star,\nHow I wonder what you are.\nUp above the world so high,\nLike a diamond in the sky.",
-      "grade_id": "lkg",
-      "subject": "Language, Poems",
-      "subjects": [
-        "Language",
-        "Poems"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:49:04.610102+00:00"
-    },
-    {
-      "id": "d4e9bdb61a2c48dd820926434bb5e684",
-      "question": "Poem: Humpty Dumpty",
-      "answer": "Humpty Dumpty sat on a wall,\nHumpty Dumpty had a great fall.\nAll the king's horses and all the king's men,\nCould not put Humpty together again.",
-      "grade_id": "lkg",
-      "subject": "Language, Poems",
-      "subjects": [
-        "Language",
-        "Poems"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:49:04.610102+00:00"
-    },
-    {
-      "id": "a688f940152441b7aec8a38a19c27fbb",
-      "question": "Poem: Jack and Jill",
-      "answer": "Jack and Jill went up the hill,\nTo fetch a pail of water.\nJack fell down and broke his crown,\nAnd Jill came tumbling after.",
-      "grade_id": "lkg",
-      "subject": "Language, Poems",
-      "subjects": [
-        "Language",
-        "Poems"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:49:04.610102+00:00"
-    },
-    {
       "id": "f390680a2ce64ec98897c7e75eb8c8f4",
       "question": "Poem: Baa Baa Black Sheep",
       "answer": "Baa, baa, black sheep,\nHave you any wool?\nYes sir, yes sir,\nThree bags full.",
@@ -2907,18 +864,6 @@
       "id": "e388132c2aa14061a41272b3256ac990",
       "question": "GK: What is a number?",
       "answer": "A number tells how many things there are.",
-      "grade_id": "lkg",
-      "subject": "General Knowledge",
-      "subjects": [
-        "General Knowledge"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T15:13:56.554849+00:00"
-    },
-    {
-      "id": "c90e56f881cf467ba921db24ded9a8ed",
-      "question": "GK: What is a shape?",
-      "answer": "A shape is the outline or form of something.",
       "grade_id": "lkg",
       "subject": "General Knowledge",
       "subjects": [
@@ -6216,6 +4161,2142 @@
       ],
       "confidence": 0.5,
       "created_at": "2026-10-21T15:46:38.231371+00:00"
+    },
+    {
+      "id": "2853a9d69fa9484585b1ef129ab61374",
+      "question": "Geography: How many continents are on Earth?",
+      "answer": "There are seven continents on Earth.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:28:48.802003+00:00"
+    },
+    {
+      "id": "99609bc82b0f4807947d129c7d5dcc08",
+      "question": "Geography: How many continents are there in the world?",
+      "answer": "There are seven continents in the world.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:28:48.802003+00:00"
+    },
+    {
+      "id": "83b0a167525045378e9aac5b7254ce23",
+      "question": "Geography: What is the number of continents?",
+      "answer": "The number of continents is seven.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:28:48.802003+00:00"
+    },
+    {
+      "id": "6543407b226848d7b8a4f2b70f362d4a",
+      "question": "Geography: Are there seven continents?",
+      "answer": "Yes, there are seven continents.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:28:48.802003+00:00"
+    },
+    {
+      "id": "570492a7ca2a47bea4e1a4d52a135588",
+      "question": "Geography: Are there five continents?",
+      "answer": "No, there are seven continents.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:28:48.802003+00:00"
+    },
+    {
+      "id": "835c9e8d262d4e16a2758d9b032b94d4",
+      "question": "Geography: Are there six continents?",
+      "answer": "No, there are seven continents.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:28:48.802003+00:00"
+    },
+    {
+      "id": "939d26acab97402a9137dacd1644ac62",
+      "question": "Geography: Is there one continent?",
+      "answer": "No, there are seven continents.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:28:48.802003+00:00"
+    },
+    {
+      "id": "2f911ac5aa83465384d0d6514f2d29b6",
+      "question": "Geography: How many continents does Earth have?",
+      "answer": "Earth has seven continents.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:28:48.802003+00:00"
+    },
+    {
+      "id": "52238dae096c455dbe53b1e0c9568fcc",
+      "question": "Geography: How many continents are there on our planet?",
+      "answer": "There are seven continents on our planet.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:28:48.802003+00:00"
+    },
+    {
+      "id": "12306e20f2974e03a958949e362e2658",
+      "question": "Geography: Name the seven continents.",
+      "answer": "The seven continents are Asia, Africa, North America, South America, Antarctica, Europe, and Australia.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:29:00.868572+00:00"
+    },
+    {
+      "id": "98f59a7ef94443619ab0d93bfd43210c",
+      "question": "Geography: What are the seven continents?",
+      "answer": "The seven continents are Asia, Africa, North America, South America, Antarctica, Europe, and Australia.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:29:00.868572+00:00"
+    },
+    {
+      "id": "f16e17c4a8c04763a69bc541934aca42",
+      "question": "Geography: List the seven continents.",
+      "answer": "Asia, Africa, North America, South America, Antarctica, Europe, and Australia.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:29:00.868572+00:00"
+    },
+    {
+      "id": "300481f907574d379e9c66dd8712065d",
+      "question": "Geography: What is the first continent in the list?",
+      "answer": "Asia is the first continent in the list.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:29:00.868572+00:00"
+    },
+    {
+      "id": "54c2ea0b027346999b6fb0e1c1e4a4a2",
+      "question": "Geography: What is the last continent in the list?",
+      "answer": "Australia is the last continent in the list.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:29:00.868572+00:00"
+    },
+    {
+      "id": "ac4e7dcb2c484f7b9801cb6b0ecb1ce7",
+      "question": "Geography: Is Antarctica a continent?",
+      "answer": "Yes, Antarctica is a continent.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:29:00.868572+00:00"
+    },
+    {
+      "id": "f9a8e46a5ef248759f9a8bef045bfd2f",
+      "question": "Geography: Is Europe a continent?",
+      "answer": "Yes, Europe is a continent.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:29:00.868572+00:00"
+    },
+    {
+      "id": "5caac6d1e04041b7ab01a75945f2ed75",
+      "question": "Geography: Is Australia a continent?",
+      "answer": "Yes, Australia is a continent.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:29:00.868572+00:00"
+    },
+    {
+      "id": "c3370e82c093429e9e753e49ec195f68",
+      "question": "Geography: Is Asia a continent?",
+      "answer": "Yes, Asia is a continent.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:29:00.868572+00:00"
+    },
+    {
+      "id": "93bb7caf1ac1495f8724443cc7f61b3b",
+      "question": "Geography: Is Africa a continent?",
+      "answer": "Yes, Africa is a continent.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:29:00.868572+00:00"
+    },
+    {
+      "id": "d2f52e431c4b4b5bb7ee107fd94e095f",
+      "question": "Geography: Which continent is the coldest?",
+      "answer": "Antarctica is the coldest continent.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:29:14.336815+00:00"
+    },
+    {
+      "id": "a5290b6550254638bf20d6acf535df45",
+      "question": "Geography: Which continent is the hottest?",
+      "answer": "Africa is the hottest continent.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:29:14.336815+00:00"
+    },
+    {
+      "id": "704d99892a0a43149afb156a6da37e72",
+      "question": "Geography: Which continent has the most people?",
+      "answer": "Asia has the most people.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:29:14.336815+00:00"
+    },
+    {
+      "id": "9db23fe724454537bcb365b4c6e408b4",
+      "question": "Geography: Which continent has the fewest people?",
+      "answer": "Antarctica has the fewest people.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:29:14.336815+00:00"
+    },
+    {
+      "id": "3d357a5dca7448b9ba1f3a85741c690c",
+      "question": "Geography: Which continent is at the bottom of the Earth?",
+      "answer": "Antarctica is at the bottom of the Earth.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:29:14.336815+00:00"
+    },
+    {
+      "id": "db2f0268f53042a79e65e8fe59cc23d9",
+      "question": "Geography: Which continent do we live on if we live in India?",
+      "answer": "India is in Asia.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:29:14.336815+00:00"
+    },
+    {
+      "id": "a08e5df1e9104ef481c4b4f372bbafac",
+      "question": "Geography: Which continent is the Sahara Desert in?",
+      "answer": "The Sahara Desert is in Africa.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:29:14.336815+00:00"
+    },
+    {
+      "id": "ea6be9b3f7c3498cbeb82d0c2305b892",
+      "question": "Geography: Why are there seven continents?",
+      "answer": "There are seven continents because that is how the large land areas of the Earth are divided.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:29:27.829875+00:00"
+    },
+    {
+      "id": "535d6e6e612f4975bb1571c4eb8706c4",
+      "question": "Geography: What is a continent?",
+      "answer": "A continent is a very large area of land.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:29:27.829875+00:00"
+    },
+    {
+      "id": "5c5f88825f6b4981aecfcfdb40642e09",
+      "question": "Geography: Why is Asia called a continent?",
+      "answer": "Asia is called a continent because it is a very large area of land.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:29:27.829875+00:00"
+    },
+    {
+      "id": "e5da89d854f044a2b6ab52a162060840",
+      "question": "Geography: Why is Africa called a continent?",
+      "answer": "Africa is called a continent because it is a very large area of land.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:29:27.829875+00:00"
+    },
+    {
+      "id": "d6766979c4814dc2a56b28ad69aa0e4a",
+      "question": "Geography: Why is Antarctica called a continent?",
+      "answer": "Antarctica is called a continent because it is a very large area of land.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:29:27.829875+00:00"
+    },
+    {
+      "id": "66ffa56241094741ad4a26b6b9caf9d1",
+      "question": "Geography: Why is Australia called a continent?",
+      "answer": "Australia is called a continent because it is a very large area of land.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:29:27.829875+00:00"
+    },
+    {
+      "id": "1cf910b6ee0d414099e927c41b805866",
+      "question": "Geography: Why is Europe called a continent?",
+      "answer": "Europe is called a continent because it is a very large area of land.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:29:27.829875+00:00"
+    },
+    {
+      "id": "be8c0c4798904294970dbb0dc9b1ddd2",
+      "question": "Geography: Is a country a continent?",
+      "answer": "No, a country is smaller than a continent.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:29:27.829875+00:00"
+    },
+    {
+      "id": "fa2988194ce64f06be5fa18dcbcec2de",
+      "question": "Geography: Is India a continent?",
+      "answer": "No, India is a country in Asia.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:29:27.829875+00:00"
+    },
+    {
+      "id": "6565d92b12274385a0091305506e377f",
+      "question": "Geography: What is the difference between a continent and a country?",
+      "answer": "A continent is a very large area of land, but a country is a smaller land with its own government.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:29:27.829875+00:00"
+    },
+    {
+      "id": "84b5f135f3ee49e180ce716f129e82d1",
+      "question": "Geography: How many continents are there?",
+      "answer": "There are seven continents.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:29:44.222110+00:00"
+    },
+    {
+      "id": "344e4d89faf54932ae1d80205883ebe2",
+      "question": "Geography: Name one continent.",
+      "answer": "Asia is a continent.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:29:44.222110+00:00"
+    },
+    {
+      "id": "ea67fbdd82aa4b209ccbb9a02ba22db5",
+      "question": "Geography: Name two continents.",
+      "answer": "Asia and Africa are continents.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:29:44.222110+00:00"
+    },
+    {
+      "id": "24343978f3f04f9daa72dab76d03f047",
+      "question": "Geography: Name three continents.",
+      "answer": "Asia, Africa, and Europe are continents.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:29:44.222110+00:00"
+    },
+    {
+      "id": "10d0334e0614437eb06b6e5fa27bd429",
+      "question": "Geography: Which continent is the largest?",
+      "answer": "Asia is the largest continent.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:29:44.222110+00:00"
+    },
+    {
+      "id": "5fedb52cfccb411a9a01a01a628f6e64",
+      "question": "Geography: Which continent is the smallest?",
+      "answer": "Australia is the smallest continent.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:29:44.222110+00:00"
+    },
+    {
+      "id": "5334d4ef6a474ccc944fe6c767fe138b",
+      "question": "Geography: Is Antarctica hot or cold?",
+      "answer": "Antarctica is cold.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:29:44.222110+00:00"
+    },
+    {
+      "id": "9246bb0fe07a4a0599394ccdb61a7bee",
+      "question": "Geography: Which continent is a desert?",
+      "answer": "Africa has the Sahara Desert.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:29:44.222110+00:00"
+    },
+    {
+      "id": "5a87bc70595046478ec24413917902f2",
+      "question": "Geography: Where is Asia?",
+      "answer": "Asia is in the eastern part of the world.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:29:44.222110+00:00"
+    },
+    {
+      "id": "59e3f670e30f4230900ad6224af75e72",
+      "question": "Geography: Where is Europe?",
+      "answer": "Europe is in the northern part of the world.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:29:44.222110+00:00"
+    },
+    {
+      "id": "c213ba518408443085f8008b345f768c",
+      "question": "Geography: Which continent is at the top of the Earth?",
+      "answer": "The Arctic is at the top, but it is not a continent.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:30:18.150837+00:00"
+    },
+    {
+      "id": "5071e2f106354b6487369879a7836c84",
+      "question": "Geography: Which continent is closest to the North Pole?",
+      "answer": "Europe and Asia are closest to the North Pole.",
+      "grade_id": "lkg",
+      "subject": "General Knowledge",
+      "subjects": [
+        "General Knowledge"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:30:18.150837+00:00"
+    },
+    {
+      "id": "e0de9ff55d9e4cd8ad3438dfb922fc96",
+      "question": "Body: How many fingers do we have?",
+      "answer": "We have ten fingers.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:40:49.793402+00:00"
+    },
+    {
+      "id": "3129c07a880242c3b42c5ca7e28925d4",
+      "question": "Body: How many fingers do we have on both hands?",
+      "answer": "We have ten fingers on both hands.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:40:49.793402+00:00"
+    },
+    {
+      "id": "72117c6f7ad44c9aa1c3d49845898230",
+      "question": "Body: How many fingers does a person have?",
+      "answer": "A person has ten fingers.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:40:49.793402+00:00"
+    },
+    {
+      "id": "a0931f7d7dd945cc9564bab46b2bf2f3",
+      "question": "Body: How many fingers does a human have?",
+      "answer": "A human has ten fingers.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:40:49.793402+00:00"
+    },
+    {
+      "id": "19fdd82ab0b749afb7b9c97d33ba6fc9",
+      "question": "Body: How many fingers are on one hand?",
+      "answer": "There are five fingers on one hand.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:40:49.793402+00:00"
+    },
+    {
+      "id": "4980c8203ac440a3b43809efcfefcf28",
+      "question": "Body: How many fingers are on each hand?",
+      "answer": "There are five fingers on each hand.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:40:49.793402+00:00"
+    },
+    {
+      "id": "e38d13b265464f6392b14975358b7e7c",
+      "question": "Body: How many fingers do you have?",
+      "answer": "I have ten fingers.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:40:49.793402+00:00"
+    },
+    {
+      "id": "d6ce2b78be534d61b1f60c1fc54c37b0",
+      "question": "Body: How many fingers does a child have?",
+      "answer": "A child has ten fingers.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:40:49.793402+00:00"
+    },
+    {
+      "id": "a1f6e17e3c194cc4be7cfe2636a67164",
+      "question": "Body: How many fingers are there in total?",
+      "answer": "There are ten fingers in total.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:40:49.793402+00:00"
+    },
+    {
+      "id": "922328306e314258aeaf56ba6996aa91",
+      "question": "Body: Count the fingers on two hands.",
+      "answer": "Two hands have ten fingers.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:40:49.793402+00:00"
+    },
+    {
+      "id": "64d4aed0e599496e90b117df2aa49a56",
+      "question": "Body: How many toes do we have?",
+      "answer": "We have ten toes.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:01.533424+00:00"
+    },
+    {
+      "id": "f93a41e93cdd4b1ca04ca9b1850b7f01",
+      "question": "Body: How many toes do we have on both feet?",
+      "answer": "We have ten toes on both feet.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:01.533424+00:00"
+    },
+    {
+      "id": "3329d8e8df1241a8866d805033156073",
+      "question": "Body: How many toes does a person have?",
+      "answer": "A person has ten toes.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:01.533424+00:00"
+    },
+    {
+      "id": "cd8cc76a533841a083245650fe35a9cf",
+      "question": "Body: How many toes does a human have?",
+      "answer": "A human has ten toes.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:01.533424+00:00"
+    },
+    {
+      "id": "812c5cb2b32745e59d2418573f8ba7f6",
+      "question": "Body: How many toes are on one foot?",
+      "answer": "There are five toes on one foot.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:01.533424+00:00"
+    },
+    {
+      "id": "c43d0c6ce4d44ac3a1200af0e4ec4e72",
+      "question": "Body: How many toes are on each foot?",
+      "answer": "There are five toes on each foot.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:01.533424+00:00"
+    },
+    {
+      "id": "89bb89bd7caf4a3483989a9d851d5792",
+      "question": "Body: How many toes do you have?",
+      "answer": "I have ten toes.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:01.533424+00:00"
+    },
+    {
+      "id": "b8611f7b5be94a1a945e976ff0caf16b",
+      "question": "Body: How many toes does a child have?",
+      "answer": "A child has ten toes.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:01.533424+00:00"
+    },
+    {
+      "id": "9ce775d61daa4c97b0596efbbbe1d5ad",
+      "question": "Body: How many toes are there in total?",
+      "answer": "There are ten toes in total.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:01.533424+00:00"
+    },
+    {
+      "id": "4befe8272a0d4c28bf0fee439323a50c",
+      "question": "Body: Count the toes on two feet.",
+      "answer": "Two feet have ten toes.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:01.533424+00:00"
+    },
+    {
+      "id": "f858bb89238c43658b9666262c88524c",
+      "question": "Body: How many eyes do we have?",
+      "answer": "We have two eyes.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:11.816413+00:00"
+    },
+    {
+      "id": "adb1f80658894e10813b29afe1e7b806",
+      "question": "Body: How many eyes does a person have?",
+      "answer": "A person has two eyes.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:11.816413+00:00"
+    },
+    {
+      "id": "0c800ab800be44c6a743224f69b38541",
+      "question": "Body: How many ears do we have?",
+      "answer": "We have two ears.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:11.816413+00:00"
+    },
+    {
+      "id": "5a4394dc8d9441b384c5c49ad722061f",
+      "question": "Body: How many ears does a person have?",
+      "answer": "A person has two ears.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:11.816413+00:00"
+    },
+    {
+      "id": "5042c214be2e4c839dfb884ae41c7b2b",
+      "question": "Body: How many noses do we have?",
+      "answer": "We have one nose.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:11.816413+00:00"
+    },
+    {
+      "id": "38bb1b4d29f3453d8af27bee15d2873f",
+      "question": "Body: How many mouths do we have?",
+      "answer": "We have one mouth.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:11.816413+00:00"
+    },
+    {
+      "id": "f8026c4ac510480ea1db819df226ba61",
+      "question": "Body: How many eyes do you have?",
+      "answer": "I have two eyes.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:11.816413+00:00"
+    },
+    {
+      "id": "632a073d9e944753a7670c0513f00b78",
+      "question": "Body: How many ears do you have?",
+      "answer": "I have two ears.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:11.816413+00:00"
+    },
+    {
+      "id": "5a2e1fcb60064e31bf4ad113fcd26f26",
+      "question": "Body: How many noses does a person have?",
+      "answer": "A person has one nose.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:11.816413+00:00"
+    },
+    {
+      "id": "fa9d3f0d45ef4d8b8d7a323f6c9aa87b",
+      "question": "Body: How many mouths does a person have?",
+      "answer": "A person has one mouth.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:11.816413+00:00"
+    },
+    {
+      "id": "9a193941d5784489a15b11976bb43608",
+      "question": "Body: How many hands do we have?",
+      "answer": "We have two hands.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:22.565106+00:00"
+    },
+    {
+      "id": "8319b4afb14f493ea4ffdd973c9037cd",
+      "question": "Body: How many feet do we have?",
+      "answer": "We have two feet.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:22.565106+00:00"
+    },
+    {
+      "id": "473a09aa32364c1c83f5f0f664a1105a",
+      "question": "Body: How many legs do we have?",
+      "answer": "We have two legs.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:22.565106+00:00"
+    },
+    {
+      "id": "6623dbfc3fa444939a8aa420565ed36f",
+      "question": "Body: How many arms do we have?",
+      "answer": "We have two arms.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:22.565106+00:00"
+    },
+    {
+      "id": "2390a022891746b789f8bae0d6abb32f",
+      "question": "Body: How many hands does a person have?",
+      "answer": "A person has two hands.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:22.565106+00:00"
+    },
+    {
+      "id": "d6f867e8bb3b4de49429be21c8f35468",
+      "question": "Body: How many feet does a person have?",
+      "answer": "A person has two feet.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:22.565106+00:00"
+    },
+    {
+      "id": "648a3efe1645420c9662180b3c4d269e",
+      "question": "Body: How many legs does a person have?",
+      "answer": "A person has two legs.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:22.565106+00:00"
+    },
+    {
+      "id": "c00730d74ea3445dafdfb476e4f10bf2",
+      "question": "Body: How many arms does a person have?",
+      "answer": "A person has two arms.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:22.565106+00:00"
+    },
+    {
+      "id": "434eb44569dc4b25aaae862e7499efbd",
+      "question": "Body: How many hands do you have?",
+      "answer": "I have two hands.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:22.565106+00:00"
+    },
+    {
+      "id": "5569d9101dd64ac1a6649061504719de",
+      "question": "Body: How many legs do you have?",
+      "answer": "I have two legs.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:22.565106+00:00"
+    },
+    {
+      "id": "83fa36aef5644cbe89268df742e09ae0",
+      "question": "Body: How many teeth does an adult have?",
+      "answer": "An adult has thirty-two teeth.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:33.264982+00:00"
+    },
+    {
+      "id": "d6f2ffb865794c20932d41db6529bd08",
+      "question": "Body: How many teeth does a child have?",
+      "answer": "A child has twenty baby teeth.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:33.264982+00:00"
+    },
+    {
+      "id": "979c2332da4342728d8a853fe91047a0",
+      "question": "Body: How many bones does an adult have?",
+      "answer": "An adult has two hundred and six bones.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:33.264982+00:00"
+    },
+    {
+      "id": "49f8911c296e4d20a93671a52771e7ab",
+      "question": "Body: How many bones does a baby have?",
+      "answer": "A baby has about three hundred bones.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:33.264982+00:00"
+    },
+    {
+      "id": "211a53a79c2044c68b946580660d3a6c",
+      "question": "Body: How many hearts do we have?",
+      "answer": "We have one heart.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:33.264982+00:00"
+    },
+    {
+      "id": "1d6fa4d8ab504554a6ed9755c00a1836",
+      "question": "Body: How many brains do we have?",
+      "answer": "We have one brain.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:33.264982+00:00"
+    },
+    {
+      "id": "e282f95784ee4fc6945c0c9ea88f2c83",
+      "question": "Body: How many hearts does a person have?",
+      "answer": "A person has one heart.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:33.264982+00:00"
+    },
+    {
+      "id": "1817c4fd274d4403b7479e852bdfbc55",
+      "question": "Body: How many brains does a person have?",
+      "answer": "A person has one brain.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:33.264982+00:00"
+    },
+    {
+      "id": "47ebabca46a443acb420fa38838a514e",
+      "question": "Body: How many lungs do we have?",
+      "answer": "We have two lungs.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:46.262996+00:00"
+    },
+    {
+      "id": "8a76999643574d298a80ebb4988f7e44",
+      "question": "Body: How many kidneys do we have?",
+      "answer": "We have two kidneys.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:46.262996+00:00"
+    },
+    {
+      "id": "49c971a5ea0c4f0aa9eb22e0a43cb98a",
+      "question": "Body: How many stomachs do we have?",
+      "answer": "We have one stomach.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:46.262996+00:00"
+    },
+    {
+      "id": "0a05145e24a442cfb9a34396cfde6817",
+      "question": "Body: How many livers do we have?",
+      "answer": "We have one liver.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:46.262996+00:00"
+    },
+    {
+      "id": "fa1a1fca6c2e481f9d8bc64d61f5252d",
+      "question": "Body: How many senses do we have?",
+      "answer": "We have five senses.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:46.262996+00:00"
+    },
+    {
+      "id": "353624dd4c9641cb8f4fba40ceb2f5f5",
+      "question": "Body: How many senses does a person have?",
+      "answer": "A person has five senses.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:46.262996+00:00"
+    },
+    {
+      "id": "4ce2d8fcf42e4ad0ad75e57ef211c7d2",
+      "question": "Body: What are the five senses?",
+      "answer": "The five senses are sight, hearing, smell, taste, and touch.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:46.262996+00:00"
+    },
+    {
+      "id": "046b67d8f6274bad969b186c56648724",
+      "question": "Body: How many kidneys does a person have?",
+      "answer": "A person has two kidneys.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:46.262996+00:00"
+    },
+    {
+      "id": "4b0b61dc49254fa3b75fce2e0a5c8e52",
+      "question": "Body: How many lungs does a person have?",
+      "answer": "A person has two lungs.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:46.262996+00:00"
+    },
+    {
+      "id": "ba34cae59efe4c498c11fd7da31921c3",
+      "question": "Body: How many stomachs does a person have?",
+      "answer": "A person has one stomach.",
+      "grade_id": "lkg",
+      "subject": "Body Parts, Biology",
+      "subjects": [
+        "Body Parts",
+        "Biology"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T16:41:46.262996+00:00"
+    },
+    {
+      "id": "808d5e5b4a99491a9306bc52d8b12a6c",
+      "question": "Shapes: What is a shape?",
+      "answer": "A shape is the outline or form of something.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:30:22.650342+00:00"
+    },
+    {
+      "id": "b9d1870d4f344723baae2c6a1e0d5e8a",
+      "question": "Shapes: What is a flat shape?",
+      "answer": "A flat shape is a shape that lies on a surface.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:30:22.650342+00:00"
+    },
+    {
+      "id": "a4ad215625c54931b092a8ddceccf525",
+      "question": "Shapes: What is a solid shape?",
+      "answer": "A solid shape is a shape that has length, width, and height.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:30:22.650342+00:00"
+    },
+    {
+      "id": "647f3b99bd6d479697a8d318a14f6180",
+      "question": "Shapes: What is a corner?",
+      "answer": "A corner is the point where two sides meet.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:30:22.650342+00:00"
+    },
+    {
+      "id": "28d47287259e432e912df179d5b30058",
+      "question": "Shapes: What is a side?",
+      "answer": "A side is a line that forms the edge of a shape.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:30:22.650342+00:00"
+    },
+    {
+      "id": "5194815cf0e244ae90aea08802bd8c54",
+      "question": "Shapes: What is a circle?",
+      "answer": "A circle is a round shape with no corners.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:30:36.015449+00:00"
+    },
+    {
+      "id": "1f95847483ec470ba37c168d469f69cf",
+      "question": "Shapes: Is a circle round?",
+      "answer": "Yes, a circle is round.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:30:36.015449+00:00"
+    },
+    {
+      "id": "e740e73071bd45de8586d13829506517",
+      "question": "Shapes: Give an example of a circle.",
+      "answer": "A wheel is an example of a circle.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:30:36.015449+00:00"
+    },
+    {
+      "id": "2aa42b53b5664a02b4207e1182a3d648",
+      "question": "Shapes: What shape is a wheel?",
+      "answer": "A wheel is a circle.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:30:36.015449+00:00"
+    },
+    {
+      "id": "0fcbf87877754a0aba6ecde60986ce74",
+      "question": "Shapes: What shape is a clock?",
+      "answer": "A clock is a circle.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:30:36.015449+00:00"
+    },
+    {
+      "id": "743feade3f7d4db2a0f0b963edd14ef9",
+      "question": "Shapes: What shape is the sun?",
+      "answer": "The sun is a circle.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:30:36.015449+00:00"
+    },
+    {
+      "id": "5ed1ab48dd874da0a8e373d7b4c83b73",
+      "question": "Shapes: What is a square?",
+      "answer": "A square is a shape with four equal sides and four corners.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:30:47.184417+00:00"
+    },
+    {
+      "id": "331d52d8e27a448e9b9842e01a225886",
+      "question": "Shapes: Are all sides of a square equal?",
+      "answer": "Yes, all sides of a square are equal.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:30:47.184417+00:00"
+    },
+    {
+      "id": "7ee12d152f8944d6bcb0e97c5d35a18c",
+      "question": "Shapes: Give an example of a square.",
+      "answer": "A chessboard is an example of a square.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:30:47.184417+00:00"
+    },
+    {
+      "id": "92e19b94c1064a5eb00296b18b7bd974",
+      "question": "Shapes: What shape is a chessboard?",
+      "answer": "A chessboard is a square.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:30:47.184417+00:00"
+    },
+    {
+      "id": "2e2bfadd5db84231bf65dfaefc806d57",
+      "question": "Shapes: What shape is a window?",
+      "answer": "A window is a square.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:30:47.184417+00:00"
+    },
+    {
+      "id": "81e4bfad849240b89b8f0f5eaffe3cb0",
+      "question": "Shapes: What shape is a tile?",
+      "answer": "A tile is a square.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:30:47.184417+00:00"
+    },
+    {
+      "id": "c896a87528aa4f0cae8c4588d992ce5c",
+      "question": "Shapes: What is a rectangle?",
+      "answer": "A rectangle is a shape with four sides and four corners.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:30:56.499463+00:00"
+    },
+    {
+      "id": "23f19a40610142dab53a2640ea6e2dfb",
+      "question": "Shapes: Are all sides of a rectangle equal?",
+      "answer": "No, only the opposite sides of a rectangle are equal.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:30:56.499463+00:00"
+    },
+    {
+      "id": "705d19b439f24b99a16eeae94e68b2bc",
+      "question": "Shapes: Give an example of a rectangle.",
+      "answer": "A door is an example of a rectangle.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:30:56.499463+00:00"
+    },
+    {
+      "id": "5a93467f1293453583ead4b6dcf3a9c8",
+      "question": "Shapes: What shape is a door?",
+      "answer": "A door is a rectangle.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:30:56.499463+00:00"
+    },
+    {
+      "id": "ffdd018d070147b8a09e2fbf73df73ea",
+      "question": "Shapes: What shape is a book?",
+      "answer": "A book is a rectangle.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:30:56.499463+00:00"
+    },
+    {
+      "id": "bbcc51a1e8b041a18fd28d447456f876",
+      "question": "Shapes: What shape is a phone?",
+      "answer": "A phone is a rectangle.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:30:56.499463+00:00"
+    },
+    {
+      "id": "11c3c505e03344409924492fe8bc741c",
+      "question": "Shapes: What is a triangle?",
+      "answer": "A triangle is a shape with three sides and three corners.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:31:25.798034+00:00"
+    },
+    {
+      "id": "715c1a755e76461dbc163ff5c37c5f12",
+      "question": "Shapes: Give an example of a triangle.",
+      "answer": "A slice of pizza is an example of a triangle.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:31:25.798034+00:00"
+    },
+    {
+      "id": "5d7c91823ddd4fc4a5f14b7a3e2affb9",
+      "question": "Shapes: What shape is a pizza slice?",
+      "answer": "A pizza slice is a triangle.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:31:25.798034+00:00"
+    },
+    {
+      "id": "0b0e10bfbfd745d1b20cb142dcc20a8b",
+      "question": "Shapes: What shape is a mountain?",
+      "answer": "A mountain is shaped like a triangle.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:31:25.798034+00:00"
+    },
+    {
+      "id": "836206faf12446a4bdfc6c82eda0a4ee",
+      "question": "Shapes: What shape is a sailboat sail?",
+      "answer": "A sailboat sail is a triangle.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:31:25.798034+00:00"
+    },
+    {
+      "id": "dcd24c1507b34beb82a6a783523c2649",
+      "question": "Shapes: What shape is a yield sign?",
+      "answer": "A yield sign is a triangle.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:31:25.798034+00:00"
+    },
+    {
+      "id": "0b39cd103cec49dd8efd0ef639d7d21c",
+      "question": "Shapes: What is an oval?",
+      "answer": "An oval is a round shape that is longer than it is wide.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:31:47.698443+00:00"
+    },
+    {
+      "id": "7e3f6bc0decc4a5490d51ddab7a3a53e",
+      "question": "Shapes: Is an oval round?",
+      "answer": "Yes, an oval is round but stretched.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:31:47.698443+00:00"
+    },
+    {
+      "id": "b5d14b0204b842ceafbc92cdd03bb945",
+      "question": "Shapes: Give an example of an oval.",
+      "answer": "An egg is an example of an oval.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:31:47.698443+00:00"
+    },
+    {
+      "id": "52387d2a68b740918e5480416e31608f",
+      "question": "Shapes: What shape is an egg?",
+      "answer": "An egg is an oval.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:31:47.698443+00:00"
+    },
+    {
+      "id": "708bd958dba049fc950b04c1ea1dbae5",
+      "question": "Shapes: What shape is a rugby ball?",
+      "answer": "A rugby ball is an oval.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:31:47.698443+00:00"
+    },
+    {
+      "id": "e9f1ac55ffa34912b43c838c7ca7a0ec",
+      "question": "Shapes: What is a star shape?",
+      "answer": "A star shape has points around a center.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:32:13.459170+00:00"
+    },
+    {
+      "id": "a63e6a015a834ce2b3e9e0d455be7388",
+      "question": "Shapes: How many points does a star have?",
+      "answer": "A star has five points.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:32:13.459170+00:00"
+    },
+    {
+      "id": "6699e55305c745b9abd2a17bc1f3cfd3",
+      "question": "Shapes: Give an example of a star shape.",
+      "answer": "A star in the sky is drawn as a star shape.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:32:13.459170+00:00"
+    },
+    {
+      "id": "09ba3713ac6945d6ac3103cfce44c522",
+      "question": "Shapes: What shape is a starfish?",
+      "answer": "A starfish is shaped like a star.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:32:13.459170+00:00"
+    },
+    {
+      "id": "a5b2bb16274646b39bb2cb68a7a8db3a",
+      "question": "Shapes: What shape is a Christmas star?",
+      "answer": "A Christmas star is a star shape.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:32:13.459170+00:00"
+    },
+    {
+      "id": "f96ad04e06cf493f9cd10df02145bf8a",
+      "question": "Shapes: What is a heart shape?",
+      "answer": "A heart shape is a shape with two round tops and a point at the bottom.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:32:24.199968+00:00"
+    },
+    {
+      "id": "baa37268e8a84f20bab0862502efab64",
+      "question": "Shapes: Where do we see a heart shape?",
+      "answer": "We see a heart shape on cards and gifts.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:32:24.199968+00:00"
+    },
+    {
+      "id": "fb9b84fd426d4bdb9f6514eb4a7da9eb",
+      "question": "Shapes: What shape is a heart?",
+      "answer": "A heart is a heart shape.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:32:24.199968+00:00"
+    },
+    {
+      "id": "58e7cc8f808542598bd98ed72688eec4",
+      "question": "Shapes: What shape is a candy heart?",
+      "answer": "A candy heart is a heart shape.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:32:24.199968+00:00"
+    },
+    {
+      "id": "f91b977bb9e4411ea06a77b9a7445c2b",
+      "question": "Shapes: What shape is a heart sticker?",
+      "answer": "A heart sticker is a heart shape.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:32:24.199968+00:00"
+    },
+    {
+      "id": "bd6a543da91246cd8575261df20e3044",
+      "question": "Shapes: What is a cube?",
+      "answer": "A cube is a solid shape with six square faces.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:32:38.631521+00:00"
+    },
+    {
+      "id": "a3882606d46146a2b7807fd096c056a4",
+      "question": "Shapes: What is a sphere?",
+      "answer": "A sphere is a round solid shape like a ball.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:32:38.631521+00:00"
+    },
+    {
+      "id": "d2c655edbc9e4c78b7a853acca26efd0",
+      "question": "Shapes: What is a cylinder?",
+      "answer": "A cylinder is a solid shape with round ends.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:32:38.631521+00:00"
+    },
+    {
+      "id": "be5f8d7ca4444db89c49d57f908fe0c8",
+      "question": "Shapes: What is a cone?",
+      "answer": "A cone is a solid shape with a round base and a point.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:32:38.631521+00:00"
+    },
+    {
+      "id": "a7e98846f319435d8deadc5177429e0a",
+      "question": "Shapes: What is a pyramid?",
+      "answer": "A pyramid is a solid shape with a flat base and triangle sides.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:32:38.631521+00:00"
+    },
+    {
+      "id": "8afa4c3786d64fa8ab802427c7c26b16",
+      "question": "Shapes: Give an example of a cube.",
+      "answer": "A dice is an example of a cube.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:32:38.631521+00:00"
+    },
+    {
+      "id": "57b4b22a479e49a58d08107c60cb02a1",
+      "question": "Shapes: Give an example of a sphere.",
+      "answer": "A ball is an example of a sphere.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:32:38.631521+00:00"
+    },
+    {
+      "id": "bb675973bf7b4fc8bc13bf975eed29b7",
+      "question": "Shapes: Give an example of a cylinder.",
+      "answer": "A can is an example of a cylinder.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:32:38.631521+00:00"
+    },
+    {
+      "id": "98870eab9cce4ee288eb9b1124ef8b37",
+      "question": "Shapes: Give an example of a cone.",
+      "answer": "An ice cream cone is an example of a cone.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:32:38.631521+00:00"
+    },
+    {
+      "id": "a8dff2f97f8b49de9dc44cab0057fe76",
+      "question": "Shapes: Give an example of a pyramid.",
+      "answer": "The pyramids of Egypt are examples of a pyramid.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:32:38.631521+00:00"
+    },
+    {
+      "id": "9ef177a3b0544b6fba137f03e2b9c263",
+      "question": "Shapes: How many sides does a triangle have?",
+      "answer": "A triangle has three sides.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:32:50.767591+00:00"
+    },
+    {
+      "id": "5898b42f58764784b9d960849a71fc49",
+      "question": "Shapes: How many sides does a square have?",
+      "answer": "A square has four sides.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:32:50.767591+00:00"
+    },
+    {
+      "id": "58868da1e538404697a194d08df7c894",
+      "question": "Shapes: How many sides does a rectangle have?",
+      "answer": "A rectangle has four sides.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:32:50.767591+00:00"
+    },
+    {
+      "id": "1b9534c380b240ceb760d15180e669ae",
+      "question": "Shapes: How many sides does a circle have?",
+      "answer": "A circle has no straight sides.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:32:50.767591+00:00"
+    },
+    {
+      "id": "b553b7735b0f42ea98738789470d8af5",
+      "question": "Shapes: How many corners does a triangle have?",
+      "answer": "A triangle has three corners.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:32:50.767591+00:00"
+    },
+    {
+      "id": "9830d181f03d41e5a71948fac435946c",
+      "question": "Shapes: How many corners does a square have?",
+      "answer": "A square has four corners.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:32:50.767591+00:00"
+    },
+    {
+      "id": "fda6672db48c4270b69348b63ea85a18",
+      "question": "Shapes: How many corners does a rectangle have?",
+      "answer": "A rectangle has four corners.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:32:50.767591+00:00"
+    },
+    {
+      "id": "88eb9205bf05418a9bcc647b5f2baf0d",
+      "question": "Shapes: How many corners does a circle have?",
+      "answer": "A circle has no corners.",
+      "grade_id": "lkg",
+      "subject": "Math, Shapes",
+      "subjects": [
+        "Math",
+        "Shapes"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-21T17:32:50.767591+00:00"
     }
   ],
   "passed_stages": [
@@ -6225,14 +6306,14 @@
   "active_test": {
     "stage": "lkg",
     "kind": "mock",
-    "questions_asked": 2,
-    "answers_passed": 0,
-    "needs_learning": 2,
-    "awaiting_score": false,
-    "last_question": "How many finger do we have?",
-    "last_answer": "I haven't learned an answer to that grade's lessons yet.",
-    "last_source": "not_learned",
-    "last_source_detail": ""
+    "questions_asked": 6,
+    "answers_passed": 1,
+    "needs_learning": 4,
+    "awaiting_score": true,
+    "last_question": "Name 5 animals",
+    "last_answer": "Some animals are ant, bear, cat, cow, deer, dog, elephant, fish, giraffe, horse, lion, monkey, owl, rabbit, sheep, tiger, whale, zebra.",
+    "last_source": "learner",
+    "last_source_detail": "Learner curriculum"
   },
   "test_history": [
     {
@@ -6355,6 +6436,12 @@
     "pair:gk what is a neem tree|gk what is a tree",
     "pair:gk what is a plant|gk what is a rose plant",
     "pair:gk why is a mango plant called a tree|gk why is a tree called a plant",
-    "pair:gk what is a fruit|gk what is inside a fruit"
+    "pair:gk what is a fruit|gk what is inside a fruit",
+    "answer:no there are seven continents",
+    "answer:the seven continents are asia africa north america south america antarctica europe and australia",
+    "pair:geography are there seven continents|geography why are there seven continents",
+    "pair:shapes what is a flat shape|shapes what is a shape",
+    "pair:shapes what is a star shape|shapes what shape is a christmas star",
+    "pair:shapes what is a heart shape|shapes what shape is a heart"
   ]
 }

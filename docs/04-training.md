@@ -127,6 +127,25 @@ curl http://localhost:8000/language-model/brain/sources \
   -H "Authorization: Bearer $TOKEN"
 ```
 
+## Correcting an answer that was wrong
+
+Mark an answer wrong in the chat and write the answer that should have been
+given. The correction is taught straight away:
+
+- the right answer is stored as a trained answer, so the assistant answers
+  the question correctly from then on,
+- the correction is kept in the brain's memory, so the writing model learns
+  the wording and the heads learn from it,
+- the question is asked again to check that the assistant keeps it.
+
+```bash
+curl -X POST http://localhost:8000/language-model/brain/correction \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $TOKEN" \
+  -d '{"question":"What are the rudiments?","answer":"I do not know.",
+       "correction":"The rudiments are the basic first principles of a subject."}'
+```
+
 ## Data model
 
 **Postgres**

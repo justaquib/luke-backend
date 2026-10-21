@@ -9,7 +9,7 @@ from __future__ import annotations
 import multiprocessing
 from typing import Any
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
@@ -17,9 +17,11 @@ from app.config import settings
 from app.core.files import folder_size
 from app.core.security import get_bearer_user, tenant_id_of
 from app.db.database import Faq, PendingQuestion, User, get_session
+from app.schemas import CorrectionBody
 from app.services import brain as brain_service
 from app.services import documents as documents_service
 from app.services import storage as storage_service
+from app.services.language import corrections as correction_service
 from app.services.language import lessons as lesson_service
 from app.services.language import reporting
 from app.services.language import runtime as runtime_service
@@ -132,3 +134,19 @@ def language_model_brain_sources(
     tenant_id = tenant_id_of(user)
     writer = brain_service.writer_state(tenant_id)
     return training_report_service.tenant_report(tenant_id, db, writer)
+
+
+@router.post("/brain/correction")
+def correct_brain_answer(
+    body: CorrectionBody,
+    user: User = Depends(get_bearer_user),
+    db: Session = Depends(get_session),
+) -> dict[str, Any]:
+    """Teach the assistant the right answer to a question it answered wrongly."""
+    tenant_id = tenant_id_of(user)
+    try:
+        return correction_service.correct(
+            tenant_id, body.question, body.answer, body.correction, db
+        )
+    except ValueError as error:
+        raise HTTPException(400, str(error)) from error

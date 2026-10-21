@@ -78,7 +78,7 @@ def _disabled_sources(detected: list[str], app_settings: dict) -> list[str]:
     return disabled
 
 
-def _faq_hit(req: QueryRequest, entities: list, tenant_id: int) -> QueryResponse | None:
+def _faq_hit(req: QueryRequest, entities: list, tenant_id: int | None) -> QueryResponse | None:
     hits = vector_store.search_faq(req.question, n_results=1, tenant_id=tenant_id)
     if not hits:
         return None
@@ -101,7 +101,7 @@ def _faq_hit(req: QueryRequest, entities: list, tenant_id: int) -> QueryResponse
     return None
 
 
-def _loose_intent(req: QueryRequest, tenant_id: int) -> dict | None:
+def _loose_intent(req: QueryRequest, tenant_id: int | None) -> dict | None:
     hits = vector_store.search_faq_loose(req.question, n_results=3, tenant_id=tenant_id)
     if not hits:
         return None
@@ -183,7 +183,9 @@ def _wiki_response(
     )
 
 
-def _docs_response(req: QueryRequest, entities: list, tenant_id: int) -> QueryResponse | None:
+def _docs_response(
+    req: QueryRequest, entities: list, tenant_id: int | None
+) -> QueryResponse | None:
     hits = vector_store.query(req.question, n_results=req.n_results, tenant_id=tenant_id)
     if not hits:
         return None
@@ -198,7 +200,9 @@ def _docs_response(req: QueryRequest, entities: list, tenant_id: int) -> QueryRe
     )
 
 
-def _request_response(req: QueryRequest, entities: list, tenant_id: int) -> QueryResponse | None:
+def _request_response(
+    req: QueryRequest, entities: list, tenant_id: int | None
+) -> QueryResponse | None:
     """Answer a request for something to be written, from the taught material.
 
     A request is not a question, so it is not looked up in the trained
@@ -260,14 +264,17 @@ def answer_question(
     """Answer a chat question using FAQs, documents, intents, or integrations."""
     user = lookup_user(authorization, db)
     if user.is_systemadmin:
-        raise HTTPException(403, "System admin cannot query")
+        # The system administrator has no tenant of their own: they look after
+        # every tenant, so the assistant answers them from all of it, and from
+        # the lessons they taught themselves.
+        return _answer_for_tenant(req, db, None, default_response)
     if not user.tenant_id:
         raise HTTPException(403, "User is not assigned to a tenant")
     return _answer_for_tenant(req, db, user.tenant_id, default_response)
 
 
 def _answer_for_tenant(
-    req: QueryRequest, db: Session, tenant_id: int, default_response: DefaultResponse
+    req: QueryRequest, db: Session, tenant_id: int | None, default_response: DefaultResponse
 ) -> QueryResponse:
     entities = nlp.extract_entities(req.question)
     app_settings = req.apps or {}
@@ -294,7 +301,7 @@ def _answer_for_tenant(
 
 
 def _loose_intent_response(
-    req: QueryRequest, entities: list, tenant_id: int
+    req: QueryRequest, entities: list, tenant_id: int | None
 ) -> QueryResponse | None:
     """The answer of a saved intent that covers the question."""
     intent = _loose_intent(req, tenant_id)

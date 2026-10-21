@@ -149,6 +149,16 @@ def systemadmin_login(req: SystemAdminLogin, db: Session) -> TokenResponse:
     return _token_for(user)
 
 
+def refresh_session(user: User) -> TokenResponse:
+    """Give a signed-in user a new token, so the session keeps going.
+
+    The token is short-lived enough that a user who opens the app every day
+    should not have to sign in again every day. A session that is still good
+    is renewed here.
+    """
+    return _token_for(user)
+
+
 def accept_invite(req: AcceptInviteRequest, invite_token: str, db: Session) -> TokenResponse:
     """Accept an invitation using a Google identity."""
     invite = _invite_for_token(db, invite_token)

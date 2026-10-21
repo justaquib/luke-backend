@@ -869,6 +869,433 @@
           "grade_id": "nursery",
           "subject": "Punctuation",
           "kind": "starter"
+        },
+        {
+          "question": "Why do we brush our teeth every day?",
+          "answer": "Brushing our teeth every day keeps them clean and free of decay.",
+          "grade_id": "nursery",
+          "subject": "Daily Life",
+          "kind": "starter"
+        },
+        {
+          "question": "Why do we sleep at night?",
+          "answer": "We sleep at night so our bodies rest and grow.",
+          "grade_id": "nursery",
+          "subject": "Daily Life",
+          "kind": "starter"
+        },
+        {
+          "question": "Why do we wear a helmet on a bicycle?",
+          "answer": "A helmet protects our head if we fall off.",
+          "grade_id": "nursery",
+          "subject": "Daily Life",
+          "kind": "starter"
+        },
+        {
+          "question": "Why do we look both ways before we cross?",
+          "answer": "Looking both ways keeps us safe from traffic.",
+          "grade_id": "nursery",
+          "subject": "Daily Life",
+          "kind": "starter"
+        },
+        {
+          "question": "Why do we tie our shoelaces?",
+          "answer": "Tied shoelaces keep our shoes on and stop us tripping.",
+          "grade_id": "nursery",
+          "subject": "Daily Life",
+          "kind": "starter"
+        },
+        {
+          "question": "Why do we cover our mouth when we cough?",
+          "answer": "Covering our mouth stops germs from spreading.",
+          "grade_id": "nursery",
+          "subject": "Daily Life",
+          "kind": "starter"
+        },
+        {
+          "question": "Why do we rest after we play?",
+          "answer": "Resting after play gives our muscles time to grow strong.",
+          "grade_id": "nursery",
+          "subject": "Daily Life",
+          "kind": "starter"
+        },
+        {
+          "question": "What do we use to open a door?",
+          "answer": "We use a door handle to open a door.",
+          "grade_id": "nursery",
+          "subject": "My World",
+          "kind": "starter"
+        },
+        {
+          "question": "What do we use to cut paper?",
+          "answer": "We use scissors to cut paper.",
+          "grade_id": "nursery",
+          "subject": "My World",
+          "kind": "starter"
+        },
+        {
+          "question": "What do we use to write a letter?",
+          "answer": "We use a pen and paper to write a letter.",
+          "grade_id": "nursery",
+          "subject": "My World",
+          "kind": "starter"
+        },
+        {
+          "question": "What do we use to keep our hands warm?",
+          "answer": "We use gloves to keep our hands warm.",
+          "grade_id": "nursery",
+          "subject": "My World",
+          "kind": "starter"
+        },
+        {
+          "question": "What do we use to water the plants?",
+          "answer": "We use a watering can to water the plants.",
+          "grade_id": "nursery",
+          "subject": "My World",
+          "kind": "starter"
+        },
+        {
+          "question": "How can I ask for help politely?",
+          "answer": "You can say “Could you help me, please?” when you need help.",
+          "grade_id": "nursery",
+          "subject": "Feelings & expressions",
+          "kind": "starter"
+        },
+        {
+          "question": "How can I share with a friend?",
+          "answer": "You can share by taking turns and offering your things to others.",
+          "grade_id": "nursery",
+          "subject": "Feelings & expressions",
+          "kind": "starter"
+        },
+        {
+          "question": "How can I show that I am listening?",
+          "answer": "You can show you are listening by looking at the speaker and nodding.",
+          "grade_id": "nursery",
+          "subject": "Feelings & expressions",
+          "kind": "starter"
+        },
+        {
+          "question": "How can I calm down when I am angry?",
+          "answer": "You can take slow breaths and count to ten when you feel angry.",
+          "grade_id": "nursery",
+          "subject": "Feelings & expressions",
+          "kind": "starter"
+        },
+        {
+          "question": "How can I say that I am sorry?",
+          "answer": "You can say “I am sorry” when you have hurt someone or made a mistake.",
+          "grade_id": "nursery",
+          "subject": "Feelings & expressions",
+          "kind": "starter"
+        },
+        {
+          "question": "What can I say when I am proud of myself?",
+          "answer": "You can say “I am proud of myself” when you have done something well.",
+          "grade_id": "nursery",
+          "subject": "Feelings & expressions",
+          "kind": "starter"
+        },
+        {
+          "question": "What can I say when I feel nervous?",
+          "answer": "You can say “I feel nervous” and ask a grown-up for help.",
+          "grade_id": "nursery",
+          "subject": "Feelings & expressions",
+          "kind": "starter"
+        },
+        {
+          "question": "What does brave mean?",
+          "answer": "Brave means you do the hard thing even when you are afraid.",
+          "grade_id": "nursery",
+          "subject": "Feelings & expressions",
+          "kind": "starter"
+        },
+        {
+          "question": "What does kind mean?",
+          "answer": "Kind means you treat others well and think of their feelings.",
+          "grade_id": "nursery",
+          "subject": "Feelings & expressions",
+          "kind": "starter"
+        },
+        {
+          "question": "What does tired mean?",
+          "answer": "Tired means your body needs rest.",
+          "grade_id": "nursery",
+          "subject": "Feelings & expressions",
+          "kind": "starter"
+        },
+        {
+          "question": "How can we wait our turn?",
+          "answer": "We wait our turn by sitting quietly until it is our time.",
+          "grade_id": "nursery",
+          "subject": "Social Skills",
+          "kind": "starter"
+        },
+        {
+          "question": "How can we ask a friend to play?",
+          "answer": "We ask “May I play with you?” when we want to join in.",
+          "grade_id": "nursery",
+          "subject": "Social Skills",
+          "kind": "starter"
+        },
+        {
+          "question": "How can we make a new friend?",
+          "answer": "We make a friend by smiling, talking and sharing.",
+          "grade_id": "nursery",
+          "subject": "Social Skills",
+          "kind": "starter"
+        },
+        {
+          "question": "How can we say no politely?",
+          "answer": "We say “No, thank you” when we do not want to do something.",
+          "grade_id": "nursery",
+          "subject": "Social Skills",
+          "kind": "starter"
+        },
+        {
+          "question": "How can we keep our promise?",
+          "answer": "We keep our promise by doing what we said we would do.",
+          "grade_id": "nursery",
+          "subject": "Social Skills",
+          "kind": "starter"
+        },
+        {
+          "question": "How can we tell the truth?",
+          "answer": "We tell the truth by saying what really happened.",
+          "grade_id": "nursery",
+          "subject": "Social Skills",
+          "kind": "starter"
+        },
+        {
+          "question": "How many is two more than four?",
+          "answer": "Two more than four is six.",
+          "grade_id": "nursery",
+          "subject": "Numbers",
+          "kind": "starter"
+        },
+        {
+          "question": "How many is three less than seven?",
+          "answer": "Three less than seven is four.",
+          "grade_id": "nursery",
+          "subject": "Numbers",
+          "kind": "starter"
+        },
+        {
+          "question": "What comes after 20?",
+          "answer": "Twenty-one comes after 20.",
+          "grade_id": "nursery",
+          "subject": "Numbers",
+          "kind": "starter"
+        },
+        {
+          "question": "What comes before 20?",
+          "answer": "Nineteen comes before 20.",
+          "grade_id": "nursery",
+          "subject": "Numbers",
+          "kind": "starter"
+        },
+        {
+          "question": "Count from six to ten.",
+          "answer": "Six, seven, eight, nine, ten.",
+          "grade_id": "nursery",
+          "subject": "Numbers",
+          "kind": "starter"
+        },
+        {
+          "question": "Which number is bigger, eight or five?",
+          "answer": "Eight is bigger than five.",
+          "grade_id": "nursery",
+          "subject": "Numbers",
+          "kind": "starter"
+        },
+        {
+          "question": "What number comes after 99?",
+          "answer": "One hundred comes after 99.",
+          "grade_id": "nursery",
+          "subject": "Numbers",
+          "kind": "starter"
+        },
+        {
+          "question": "What is a letter?",
+          "answer": "A letter is a written sign of the alphabet.",
+          "grade_id": "nursery",
+          "subject": "Language",
+          "kind": "starter"
+        },
+        {
+          "question": "What is a vowel?",
+          "answer": "A, E, I, O and U are the vowels.",
+          "grade_id": "nursery",
+          "subject": "Language",
+          "kind": "starter"
+        },
+        {
+          "question": "What is a consonant?",
+          "answer": "The letters that are not vowels are consonants.",
+          "grade_id": "nursery",
+          "subject": "Language",
+          "kind": "starter"
+        },
+        {
+          "question": "What is a capital letter?",
+          "answer": "A capital letter is a big letter that starts a name or a sentence.",
+          "grade_id": "nursery",
+          "subject": "English Grammar",
+          "kind": "starter"
+        },
+        {
+          "question": "What is a plural?",
+          "answer": "A plural is more than one, like cats.",
+          "grade_id": "nursery",
+          "subject": "English Grammar",
+          "kind": "starter"
+        },
+        {
+          "question": "What is a sentence?",
+          "answer": "A sentence is a full group of words that tells something.",
+          "grade_id": "nursery",
+          "subject": "English Grammar",
+          "kind": "starter"
+        },
+        {
+          "question": "What is the skin for?",
+          "answer": "The skin covers our body and keeps what is inside safe.",
+          "grade_id": "nursery",
+          "subject": "Body",
+          "kind": "starter"
+        },
+        {
+          "question": "What is the hair for?",
+          "answer": "Hair keeps our head warm.",
+          "grade_id": "nursery",
+          "subject": "Body",
+          "kind": "starter"
+        },
+        {
+          "question": "What do our nails do?",
+          "answer": "Our nails protect the ends of our fingers.",
+          "grade_id": "nursery",
+          "subject": "Body",
+          "kind": "starter"
+        },
+        {
+          "question": "Why do we blink our eyes?",
+          "answer": "We blink to keep our eyes wet and clean.",
+          "grade_id": "nursery",
+          "subject": "Body",
+          "kind": "starter"
+        },
+        {
+          "question": "What do our lungs do?",
+          "answer": "Our lungs take in the air we breathe.",
+          "grade_id": "nursery",
+          "subject": "Body",
+          "kind": "starter"
+        },
+        {
+          "question": "Which animal is known as the king of the jungle?",
+          "answer": "The lion is known as the king of the jungle.",
+          "grade_id": "nursery",
+          "subject": "Animals",
+          "kind": "starter"
+        },
+        {
+          "question": "Which insects make honey?",
+          "answer": "Bees make honey.",
+          "grade_id": "nursery",
+          "subject": "Animals",
+          "kind": "starter"
+        },
+        {
+          "question": "Which animal carries its home on its back?",
+          "answer": "A snail carries its home on its back.",
+          "grade_id": "nursery",
+          "subject": "Animals",
+          "kind": "starter"
+        },
+        {
+          "question": "Which fruit is yellow and long?",
+          "answer": "A banana is yellow and long.",
+          "grade_id": "nursery",
+          "subject": "Fruits",
+          "kind": "starter"
+        },
+        {
+          "question": "Which fruit has a stone in the middle?",
+          "answer": "A peach and a plum have a stone in the middle.",
+          "grade_id": "nursery",
+          "subject": "Fruits",
+          "kind": "starter"
+        },
+        {
+          "question": "Which fruit is small, round and purple?",
+          "answer": "A grape is small, round and purple.",
+          "grade_id": "nursery",
+          "subject": "Fruits",
+          "kind": "starter"
+        },
+        {
+          "question": "Which vegetable keeps our eyes healthy?",
+          "answer": "Carrots keep our eyes healthy.",
+          "grade_id": "nursery",
+          "subject": "Vegetables",
+          "kind": "starter"
+        },
+        {
+          "question": "Which vegetable is green and round?",
+          "answer": "A cabbage is green and round.",
+          "grade_id": "nursery",
+          "subject": "Vegetables",
+          "kind": "starter"
+        },
+        {
+          "question": "Which vegetable can we eat raw?",
+          "answer": "A carrot can be eaten raw.",
+          "grade_id": "nursery",
+          "subject": "Vegetables",
+          "kind": "starter"
+        },
+        {
+          "question": "Which color is a lemon?",
+          "answer": "A lemon is yellow.",
+          "grade_id": "nursery",
+          "subject": "Colors",
+          "kind": "starter"
+        },
+        {
+          "question": "Which color is a banana?",
+          "answer": "A banana is yellow.",
+          "grade_id": "nursery",
+          "subject": "Colors",
+          "kind": "starter"
+        },
+        {
+          "question": "Which shape has three corners?",
+          "answer": "A triangle has three corners.",
+          "grade_id": "nursery",
+          "subject": "Shapes",
+          "kind": "starter"
+        },
+        {
+          "question": "Which shape can roll?",
+          "answer": "A cylinder can roll.",
+          "grade_id": "nursery",
+          "subject": "Shapes",
+          "kind": "starter"
+        },
+        {
+          "question": "Which shape has six faces?",
+          "answer": "A cube has six faces.",
+          "grade_id": "nursery",
+          "subject": "Shapes",
+          "kind": "starter"
+        },
+        {
+          "question": "Which month do we celebrate Christmas in?",
+          "answer": "We celebrate Christmas in December.",
+          "grade_id": "nursery",
+          "subject": "Date & Time",
+          "kind": "starter"
         }
       ]
     },
@@ -1239,6 +1666,318 @@
           "answer": "A square root asks what number multiplied by itself makes a number. Two groups of 2 make 4, so the square root of 4 is 2. We write √4 = 2.",
           "grade_id": "lkg",
           "subject": "Calculation"
+        },
+        {
+          "question": "What do flowers do for a plant?",
+          "answer": "Flowers help a plant make seeds.",
+          "grade_id": "lkg",
+          "subject": "Nature"
+        },
+        {
+          "question": "What does a stem do?",
+          "answer": "A stem holds up the plant and carries water to the leaves.",
+          "grade_id": "lkg",
+          "subject": "Nature"
+        },
+        {
+          "question": "What does a caterpillar turn into?",
+          "answer": "A caterpillar turns into a butterfly.",
+          "grade_id": "lkg",
+          "subject": "Nature"
+        },
+        {
+          "question": "What does a frog do when it hatches?",
+          "answer": "A young frog starts as a tadpole and grows legs.",
+          "grade_id": "lkg",
+          "subject": "Nature"
+        },
+        {
+          "question": "Why do birds build nests?",
+          "answer": "Birds build nests to keep their eggs safe and warm.",
+          "grade_id": "lkg",
+          "subject": "Nature"
+        },
+        {
+          "question": "What is a pond?",
+          "answer": "A pond is a small pool of water with plants and animals in it.",
+          "grade_id": "lkg",
+          "subject": "Nature"
+        },
+        {
+          "question": "What do bees collect from flowers?",
+          "answer": "Bees collect nectar from flowers and turn it into honey.",
+          "grade_id": "lkg",
+          "subject": "Nature"
+        },
+        {
+          "question": "What is camouflage?",
+          "answer": "Camouflage is when an animal's colours hide it in its home.",
+          "grade_id": "lkg",
+          "subject": "Nature"
+        },
+        {
+          "question": "What is the Sun?",
+          "answer": "The Sun is the star that gives us light and heat.",
+          "grade_id": "lkg",
+          "subject": "Science"
+        },
+        {
+          "question": "What is the Moon?",
+          "answer": "The Moon is the round object that moves around the Earth.",
+          "grade_id": "lkg",
+          "subject": "Science"
+        },
+        {
+          "question": "What is a shadow?",
+          "answer": "A shadow is the dark shape that light makes when something blocks it.",
+          "grade_id": "lkg",
+          "subject": "Science"
+        },
+        {
+          "question": "What happens when water is heated?",
+          "answer": "Water becomes steam when it is heated.",
+          "grade_id": "lkg",
+          "subject": "Science"
+        },
+        {
+          "question": "What happens when water is cooled?",
+          "answer": "Water becomes ice when it is cooled.",
+          "grade_id": "lkg",
+          "subject": "Science"
+        },
+        {
+          "question": "What is air?",
+          "answer": "Air is the gas around us that we breathe.",
+          "grade_id": "lkg",
+          "subject": "Science"
+        },
+        {
+          "question": "What is a rainbow?",
+          "answer": "A rainbow is the band of colours that appears when the sun shines through rain.",
+          "grade_id": "lkg",
+          "subject": "Science"
+        },
+        {
+          "question": "How do we keep our house clean?",
+          "answer": "We keep our house clean by putting things away and sweeping the floor.",
+          "grade_id": "lkg",
+          "subject": "Daily Life"
+        },
+        {
+          "question": "What should we do before we eat food?",
+          "answer": "We should wash our hands before we eat food.",
+          "grade_id": "lkg",
+          "subject": "Daily Life"
+        },
+        {
+          "question": "Why do we queue for our turn?",
+          "answer": "We queue so that everyone is served fairly.",
+          "grade_id": "lkg",
+          "subject": "Daily Life"
+        },
+        {
+          "question": "How do we take care of a pet?",
+          "answer": "We take care of a pet by feeding it, giving it water and loving it.",
+          "grade_id": "lkg",
+          "subject": "Daily Life"
+        },
+        {
+          "question": "What should we do when we feel unwell?",
+          "answer": "We should tell a grown-up when we feel unwell.",
+          "grade_id": "lkg",
+          "subject": "Daily Life"
+        },
+        {
+          "question": "Why do we exercise?",
+          "answer": "Exercise keeps our bodies strong and our hearts healthy.",
+          "grade_id": "lkg",
+          "subject": "Daily Life"
+        },
+        {
+          "question": "How can we be a good team member?",
+          "answer": "We are a good team member when we listen and do our share of the work.",
+          "grade_id": "lkg",
+          "subject": "Social Skills"
+        },
+        {
+          "question": "How can we handle a disagreement?",
+          "answer": "We handle a disagreement by talking calmly and finding a way both agree on.",
+          "grade_id": "lkg",
+          "subject": "Social Skills"
+        },
+        {
+          "question": "How can we help a new classmate?",
+          "answer": "We help a new classmate by saying hello and showing them around.",
+          "grade_id": "lkg",
+          "subject": "Social Skills"
+        },
+        {
+          "question": "What should we do if we make someone sad?",
+          "answer": "We should say sorry and try to cheer them up.",
+          "grade_id": "lkg",
+          "subject": "Social Skills"
+        },
+        {
+          "question": "Why is it rude to interrupt?",
+          "answer": "Interrupting is rude because the person talking has not finished.",
+          "grade_id": "lkg",
+          "subject": "Social Skills"
+        },
+        {
+          "question": "What should we do when we win a game?",
+          "answer": "We should be happy for the others and say well played.",
+          "grade_id": "lkg",
+          "subject": "Social Skills"
+        },
+        {
+          "question": "What is a village?",
+          "answer": "A village is a small place where people live and work.",
+          "grade_id": "lkg",
+          "subject": "Social Studies"
+        },
+        {
+          "question": "What is a city?",
+          "answer": "A city is a big place where many people live and work.",
+          "grade_id": "lkg",
+          "subject": "Social Studies"
+        },
+        {
+          "question": "What is a market?",
+          "answer": "A market is a place where people buy and sell food and other things.",
+          "grade_id": "lkg",
+          "subject": "Social Studies"
+        },
+        {
+          "question": "What is a school?",
+          "answer": "A school is a place where children go to learn.",
+          "grade_id": "lkg",
+          "subject": "Social Studies"
+        },
+        {
+          "question": "Why do we save water?",
+          "answer": "We save water because clean water is not endless and every drop helps.",
+          "grade_id": "lkg",
+          "subject": "Environment"
+        },
+        {
+          "question": "What can we reuse?",
+          "answer": "We can reuse a bottle, a bag and a jar instead of throwing them away.",
+          "grade_id": "lkg",
+          "subject": "Environment"
+        },
+        {
+          "question": "Why should we not cut down trees?",
+          "answer": "Trees give us air, shade and homes for animals, so we should not cut them down.",
+          "grade_id": "lkg",
+          "subject": "Environment"
+        },
+        {
+          "question": "Why do we need clean air?",
+          "answer": "We need clean air to breathe and stay healthy.",
+          "grade_id": "lkg",
+          "subject": "Environment"
+        },
+        {
+          "question": "What happens when we waste food?",
+          "answer": "Wasting food is bad because someone else could have eaten it.",
+          "grade_id": "lkg",
+          "subject": "Environment"
+        },
+        {
+          "question": "What is four plus four?",
+          "answer": "Four plus four is eight.",
+          "grade_id": "lkg",
+          "subject": "Math"
+        },
+        {
+          "question": "What is seven minus three?",
+          "answer": "Seven minus three is four.",
+          "grade_id": "lkg",
+          "subject": "Math"
+        },
+        {
+          "question": "How many tens are in a hundred?",
+          "answer": "There are ten tens in a hundred.",
+          "grade_id": "lkg",
+          "subject": "Math"
+        },
+        {
+          "question": "What number is half of ten?",
+          "answer": "Half of ten is five.",
+          "grade_id": "lkg",
+          "subject": "Math"
+        },
+        {
+          "question": "How many more is seven than four?",
+          "answer": "Seven is three more than four.",
+          "grade_id": "lkg",
+          "subject": "Math"
+        },
+        {
+          "question": "What is a group of ten called?",
+          "answer": "A group of ten is called a ten.",
+          "grade_id": "lkg",
+          "subject": "Math"
+        },
+        {
+          "question": "What is six times three?",
+          "answer": "Six times three is eighteen.",
+          "grade_id": "lkg",
+          "subject": "Calculation"
+        },
+        {
+          "question": "What is twelve divided by three?",
+          "answer": "Twelve divided by three is four.",
+          "grade_id": "lkg",
+          "subject": "Calculation"
+        },
+        {
+          "question": "What do we call a word that names more than one?",
+          "answer": "We call a word that names more than one a plural noun.",
+          "grade_id": "lkg",
+          "subject": "English Grammar"
+        },
+        {
+          "question": "What is a compound word?",
+          "answer": "A compound word is two words joined to make one word, like playground.",
+          "grade_id": "lkg",
+          "subject": "English Grammar"
+        },
+        {
+          "question": "What is a palindrome?",
+          "answer": "A palindrome is a word that reads the same backwards, like level.",
+          "grade_id": "lkg",
+          "subject": "English Grammar"
+        },
+        {
+          "question": "What is a synonym?",
+          "answer": "A synonym is a word with the same meaning as another word.",
+          "grade_id": "lkg",
+          "subject": "English Grammar"
+        },
+        {
+          "question": "What is an antonym?",
+          "answer": "An antonym is a word with the opposite meaning.",
+          "grade_id": "lkg",
+          "subject": "English Grammar"
+        },
+        {
+          "question": "What is an apostrophe?",
+          "answer": "An apostrophe shows that a word is missing a letter, like don't.",
+          "grade_id": "lkg",
+          "subject": "Punctuation"
+        },
+        {
+          "question": "Where do we put a comma?",
+          "answer": "We put a comma to separate the parts of a sentence.",
+          "grade_id": "lkg",
+          "subject": "Punctuation"
+        },
+        {
+          "question": "How do we make a question?",
+          "answer": "We make a question by asking for something and ending it with a question mark.",
+          "grade_id": "lkg",
+          "subject": "Sentence Making"
         }
       ]
     },

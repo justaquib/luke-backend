@@ -1331,6 +1331,24 @@ def learned_corrections(tenant_id: int | None) -> int:
     return sum(1 for entry in load_feedback(tenant_id) if entry.get("learned"))
 
 
+def mark_correction_learned(
+    tenant_id: int | None, question: str, correction: str
+) -> bool:
+    """Mark the correction as kept, when the assistant now answers it right.
+
+    The entry that was kept is the last one for this question and this
+    correction, so a correction that is taught twice is not counted twice.
+    """
+    with _LOCK:
+        entries = load_feedback(tenant_id)
+        for entry in reversed(entries):
+            if entry.get("question") == question and entry.get("correction") == correction:
+                entry["learned"] = True
+                save_feedback(tenant_id, entries)
+                return True
+    return False
+
+
 def verify_correction(tenant_id: int | None, question: str, correction: str) -> dict[str, Any]:
     """Ask the corrected question again and check that Luke keeps the correction."""
     answer = ""

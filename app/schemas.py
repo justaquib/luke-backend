@@ -291,6 +291,14 @@ class LessonBody(BaseModel):
     title: str = ""
 
 
+class CorrectionBody(BaseModel):
+    """The right answer to a question the assistant answered wrongly."""
+
+    question: str
+    answer: str = ""
+    correction: str
+
+
 class DuplicateAcceptBody(BaseModel):
     """The group of repeating lessons the trainer wants to keep as they are."""
 

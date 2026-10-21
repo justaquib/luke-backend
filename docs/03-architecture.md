@@ -105,6 +105,7 @@ read the request; the work is done by the services in `app/services/language/`.
 | `GET /language-model/graph`            | The shape of what the tenant has learned                   |
 | `GET /language-model/brain`            | What the brain knows about itself, and the level it reached |
 | `GET /language-model/brain/sources`    | What the brain trains from, and how the training works    |
+| `POST /language-model/brain/correction` | Teach the right answer to a question answered wrongly    |
 | `POST /language-model/brain/train`     | Train the brain on the tenant's own material               |
 | `POST /language-model/brain/test`      | Run the level tests again and report the rungs it passed   |
 | `POST /language-model/lessons/check`   | Report what the learner already knows about a lesson       |
@@ -124,6 +125,10 @@ read the request; the work is done by the services in `app/services/language/`.
 
 Every route needs the same bearer token as the rest of the API and only ever
 reads or writes the tenant of the signed in user.
+
+A session lasts a week. `POST /auth/refresh` gives a signed-in user a new
+token, so the app renews the session while it is in use instead of asking the
+user to sign in again every day.
 
 A lesson is a question and an answer. A story, a lesson or a topic is taught
 as one passage instead: it is filed under the name it was given, every
@@ -215,6 +220,27 @@ Every word of a written answer is checked against the material it was given.
 An answer that uses a word the trainer never taught is refused, and the taught
 answer is used instead. A request about something never taught is refused as
 well: the brain says it does not know instead of inventing.
+
+### The system administrator in the chat
+
+The system administrator has no tenant of their own: they look after every
+tenant instead of belonging to one. The chat answers them anyway, reading the
+material of the tenant-less bucket (where the lessons they taught themselves
+live) and, with no tenant filter on it, the approved answers and the
+documents of every tenant they look after. A user without a tenant is still
+turned away, because they have no assistant of their own.
+
+### Correcting an answer
+
+`POST /language-model/brain/correction` takes the question, the answer that
+was given and the answer that should have been given. It:
+
+- stores the right answer as a trained answer of the tenant, so the next
+  question of that kind is answered correctly from the FAQ collection,
+- keeps the correction in the brain's own memory, so the writing model learns
+  the right wording and the heads learn from it,
+- asks the question again and checks that the assistant keeps the correction,
+  so the trainer is told whether it really learned it.
 
 ### The instruction test
 
