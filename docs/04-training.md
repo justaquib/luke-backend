@@ -91,6 +91,42 @@ ChromaDB returns a **distance** for each candidate (cosine, lower = closer).
 
 If your trained answers are not being matched, raise the threshold (e.g. `0.7`). If irrelevant answers are sneaking in, lower it (e.g. `0.4`).
 
+## Training the brain
+
+The brain is the writing model behind the assistant. It is trained from
+everything the tenant has given, not only from the lessons in the learner:
+
+| Source | What it is |
+| --- | --- |
+| Lessons | The question and the answer of every lesson, and the starter lessons of the grades the tenant reached. |
+| Approved answers | The questions and the answers that were approved in the Trainer. |
+| Corrections | The answers the trainer corrected. |
+| Documents | The chunks of every uploaded document. |
+| Words | The words and the meanings that were taught with the dictionary. |
+| Sentences | The sentences that were taught on their own. |
+
+Every source becomes a sentence, so its words reach the vocabulary, and a
+request with its answer, so the model learns to answer a request it was never
+worded for. The questions of the approved answers are learned that way too,
+so the trainer's own answers are written in the model's words and not only
+looked up.
+
+Training takes about a minute and runs in its own process, so the app stays
+usable while the brain learns. The brain page asks the brain again until the
+training is done, and the small info button beside **Train the brain** opens
+a panel that says what the brain has trained from and what the training does
+with it.
+
+```bash
+# start the training
+curl -X POST http://localhost:8000/language-model/brain/train \
+  -H "Authorization: Bearer $TOKEN"
+
+# read what it trains from
+curl http://localhost:8000/language-model/brain/sources \
+  -H "Authorization: Bearer $TOKEN"
+```
+
 ## Data model
 
 **Postgres**

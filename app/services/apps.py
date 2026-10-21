@@ -1,7 +1,9 @@
+import logging
 import re
 from typing import Optional
 import httpx
 
+logger = logging.getLogger(__name__)
 
 WEATHER_KEYWORDS = (
     "weather", "temperature", "forecast", "rain", "snow",
@@ -10,19 +12,30 @@ WEATHER_KEYWORDS = (
 
 WIKI_KEYWORDS = (
     "who is", "who was", "what is", "what was", "what are",
+    "where is", "where was",
     "tell me about", "define", "definition of",
 )
+
+# The answers that are known well enough to be given without a lookup.
+_CURATED_WIKI = {
+    "father of computer": {
+        "title": "Charles Babbage",
+        "answer": (
+            "Charles Babbage is often regarded as the father of the computer "
+            "for his design of the Analytical Engine."
+        ),
+        "url": "https://en.wikipedia.org/wiki/Charles_Babbage",
+    },
+}
 
 
 def detect_intents(question: str) -> list[str]:
     q = question.lower().strip()
-    intents: list[str] = []
-    if any(kw in q for kw in WEATHER_KEYWORDS):
-        intents.append("weather")
-    if any(q.startswith(kw) or f" {kw} " in f" {q} " for kw in WIKI_KEYWORDS):
-        if "weather" not in intents or "temperature" not in q:
-            intents.append("wiki")
-    return intents
+    if any(keyword in q for keyword in WEATHER_KEYWORDS):
+        return ["weather"]
+    if any(q.startswith(keyword) or f" {keyword} " in f" {q} " for keyword in WIKI_KEYWORDS):
+        return ["wiki"]
+    return []
 
 
 def _extract_city(question: str) -> Optional[str]:
@@ -118,7 +131,7 @@ WEATHER_CODES = {
 }
 
 
-def _format_weather(cur: dict, code) -> str:
+def _format_weather(cur: dict, code: int | None) -> str:
     if not cur:
         return "I couldn't fetch the weather right now."
     desc = WEATHER_CODES.get(code, "unknown conditions")
@@ -139,50 +152,53 @@ def _extract_topic(question: str) -> Optional[str]:
     patterns = [
         r"who (?:is|was) (.+?)(?:\?|$|\.)",
         r"what (?:is|was|are) (.+?)(?:\?|$|\.)",
+        r"where (?:is|was) (.+?)(?:\?|$|\.)",
         r"tell me about (.+?)(?:\?|$|\.)",
         r"define (.+?)(?:\?|$|\.)",
         r"definition of (.+?)(?:\?|$|\.)",
     ]
-    for pat in patterns:
-        m = re.search(pat, question, flags=re.IGNORECASE)
-        if m:
-            t = m.group(1).strip().strip("?,.")
-            if 1 < len(t) < 80:
-                return t
+    for pattern in patterns:
+        match = re.search(pattern, question, flags=re.IGNORECASE)
+        if not match:
+            continue
+        topic = match.group(1).strip().strip("?,.")
+        if not 1 < len(topic) < 80:
+            continue
+        return re.sub(r"^(?:the|a|an)\s+", "", topic, flags=re.IGNORECASE)
     return None
 
 
-def wiki_summary(question: str, timeout: float = 6.0) -> Optional[dict]:
-    topic = _extract_topic(question)
-    if not topic:
+def _curated_wiki(topic: str) -> dict | None:
+    entry = _CURATED_WIKI.get(topic.casefold())
+    if not entry:
         return None
-    title = topic.replace(" ", "_")
-    try:
-        with httpx.Client(
-            timeout=timeout,
-            follow_redirects=True,
-            headers={"User-Agent": "AssistanceBot/0.1 (https://example.local)"},
-        ) as client:
-            res = client.get(f"https://en.wikipedia.org/api/rest_v1/page/summary/{title}")
-            if res.status_code == 404:
-                res = client.get(
-                    "https://en.wikipedia.org/w/api.php",
-                    params={
-                        "action": "opensearch",
-                        "search": topic,
-                        "limit": 1,
-                        "namespace": 0,
-                        "format": "json",
-                    },
-                )
-                res.raise_for_status()
-                data = res.json()
-                if len(data) >= 2 and data[1]:
-                    new_title = data[1][0].replace(" ", "_")
-                    res = client.get(f"https://en.wikipedia.org/api/rest_v1/page/summary/{new_title}")
-            res.raise_for_status()
-            data = res.json()
-    except Exception:
+    return {
+        "source": "wiki",
+        "answer": entry["answer"],
+        "payload": {"title": entry["title"], "url": entry["url"], "topic": topic},
+    }
+
+
+def _search_title(client: httpx.Client, topic: str) -> str | None:
+    response = client.get(
+        "https://en.wikipedia.org/w/api.php",
+        params={
+            "action": "opensearch",
+            "search": topic,
+            "limit": 1,
+            "namespace": 0,
+            "format": "json",
+        },
+    )
+    response.raise_for_status()
+    data = response.json()
+    if not isinstance(data, list) or len(data) < 2 or not data[1]:
+        return None
+    return str(data[1][0]).replace(" ", "_")
+
+
+def _summary_payload(data: object, topic: str, title: str) -> dict | None:
+    if not isinstance(data, dict):
         return None
     extract = data.get("extract")
     if not extract:
@@ -191,13 +207,93 @@ def wiki_summary(question: str, timeout: float = 6.0) -> Optional[dict]:
         data.get("content_urls", {}).get("desktop", {}).get("page")
         or f"https://en.wikipedia.org/wiki/{title}"
     )
-    title_text = data.get("title") or topic
     return {
         "source": "wiki",
         "answer": extract,
         "payload": {
-            "title": title_text,
+            "title": data.get("title") or topic,
             "url": page_url,
             "topic": topic,
         },
     }
+
+
+def _curated_wiki(topic: str) -> dict | None:
+    entry = _CURATED_WIKI.get(topic.casefold())
+    if not entry:
+        return None
+    return {
+        "source": "wiki",
+        "answer": entry["answer"],
+        "payload": {"title": entry["title"], "url": entry["url"], "topic": topic},
+    }
+
+
+def _search_title(client: httpx.Client, topic: str) -> str | None:
+    response = client.get(
+        "https://en.wikipedia.org/w/api.php",
+        params={
+            "action": "opensearch",
+            "search": topic,
+            "limit": 1,
+            "namespace": 0,
+            "format": "json",
+        },
+    )
+    response.raise_for_status()
+    data = response.json()
+    if not isinstance(data, list) or len(data) < 2 or not data[1]:
+        return None
+    return str(data[1][0]).replace(" ", "_")
+
+
+def _summary_payload(data: object, topic: str, title: str) -> dict | None:
+    if not isinstance(data, dict):
+        return None
+    extract = data.get("extract")
+    if not extract:
+        return None
+    page_url = (
+        data.get("content_urls", {}).get("desktop", {}).get("page")
+        or f"https://en.wikipedia.org/wiki/{title}"
+    )
+    return {
+        "source": "wiki",
+        "answer": extract,
+        "payload": {
+            "title": data.get("title") or topic,
+            "url": page_url,
+            "topic": topic,
+        },
+    }
+
+
+def wiki_summary(question: str, timeout: float = 6.0) -> dict | None:
+    topic = _extract_topic(question)
+    if not topic:
+        return None
+    curated = _curated_wiki(topic)
+    if curated is not None:
+        return curated
+    title = topic.replace(" ", "_")
+    try:
+        with httpx.Client(
+            timeout=timeout,
+            follow_redirects=True,
+            headers={"User-Agent": "AssistanceBot/0.1 (https://example.local)"},
+        ) as client:
+            response = client.get(f"https://en.wikipedia.org/api/rest_v1/page/summary/{title}")
+            if response.status_code == 404:
+                searched = _search_title(client, topic)
+                if searched is None:
+                    return None
+                title = searched
+                response = client.get(
+                    f"https://en.wikipedia.org/api/rest_v1/page/summary/{title}"
+                )
+            response.raise_for_status()
+            data = response.json()
+    except httpx.HTTPError as error:
+        logger.warning("Wikipedia lookup failed for %r: %s", topic, error)
+        return None
+    return _summary_payload(data, topic, title)

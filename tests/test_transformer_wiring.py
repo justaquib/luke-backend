@@ -1,7 +1,9 @@
 """Tests for the transformer that writes in the trainer's words and proposes answers."""
 
-from app import main as api
-from app.services import brain, language_logic, transformer_lm
+from app.services import brain, language_logic, transformer
+from app.services import query as query_service
+from app.services.language import runtime
+from app.services.transformer.settings import TrainingSettings
 
 
 def test_the_corpus_holds_what_the_trainer_taught(monkeypatch, tmp_path):
@@ -22,36 +24,36 @@ def test_the_corpus_holds_what_the_trainer_taught(monkeypatch, tmp_path):
 
 def test_a_question_the_model_was_never_taught_gets_a_proposal(monkeypatch):
     class FakeWriter:
-        def generate(self, prompt, max_tokens=24):
+        def generate(self, prompt, settings=None):
             return "A kite is a light frame with a tail."
 
     monkeypatch.setattr(brain, "load_writer", lambda tenant_id: FakeWriter())
 
-    proposal = api._propose_answer(None, "what is a kite?")
+    proposal = query_service.propose_answer(None, "what is a kite?")
 
     assert proposal == "A kite is a light frame with a tail."
 
 
 def test_a_proposal_that_says_nothing_is_not_offered(monkeypatch):
     class QuietWriter:
-        def generate(self, prompt, max_tokens=24):
+        def generate(self, prompt, settings=None):
             return "No."
 
     monkeypatch.setattr(brain, "load_writer", lambda tenant_id: QuietWriter())
 
-    assert api._propose_answer(None, "what is a kite?") is None
+    assert query_service.propose_answer(None, "what is a kite?") is None
 
 
 def test_without_a_model_there_is_no_proposal(monkeypatch):
     monkeypatch.setattr(brain, "load_writer", lambda tenant_id: None)
 
-    assert api._propose_answer(None, "what is a kite?") is None
+    assert query_service.propose_answer(None, "what is a kite?") is None
 
 
 def test_the_writer_is_kept_for_the_tenant(tmp_path, monkeypatch):
-    monkeypatch.setattr(brain, "BRAIN_DIR", tmp_path)
+    monkeypatch.setattr(runtime, "_DATA_DIR", tmp_path)
     brain._WRITER_CACHE.clear()
-    writer = transformer_lm.TransformerWriter()
+    writer = transformer.TransformerWriter()
     writer.config = {**writer.config, "d_model": 32, "layers": 1, "heads": 2, "context": 32}
     writer.fit(
         [
@@ -62,7 +64,7 @@ def test_the_writer_is_kept_for_the_tenant(tmp_path, monkeypatch):
             "The night sky is black.",
             "The moon shines at night.",
         ],
-        steps=20,
+        settings=TrainingSettings(steps=20),
     )
     writer.save(brain.writer_path(None))
     brain._WRITER_CACHE.clear()

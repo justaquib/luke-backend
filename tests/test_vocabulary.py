@@ -82,11 +82,16 @@ def test_the_old_word_list_is_not_fully_inside_the_transformers():
     # ids cannot be produced. How many there are changes with the corpus, so
     # the gap is checked, not counted.
     assert missing
-    # None of the shared words share an id, so the two mappings were never
-    # interchangeable.
+    # The two mappings are not interchangeable: a word that is in both does
+    # not always carry the same id. The ids overlap, so a number on its own
+    # cannot be told apart, and the guard is what refuses a retired mapping.
     shared = [token for token in old.tokens if token in canonical]
     assert shared
-    assert all(old.id_of(token) != canonical.id_of(token) for token in shared)
+    different = [token for token in shared if old.id_of(token) != canonical.id_of(token)]
+    assert different, "the two mappings would be interchangeable"
+    # The retired mapping itself is refused, so a mixed id can never be built.
+    with pytest.raises(vocabulary.VocabularyError):
+        vocabulary.guard_tensor_ids([0], "a test", old)
 
 
 def test_the_sidebar_list_is_the_canonical_vocabulary():

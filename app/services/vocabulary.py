@@ -13,8 +13,8 @@ tensor bound for the transformer.
 from __future__ import annotations
 
 import json
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Iterable
 
 CANONICAL_OWNER = "transformer"
 LEGACY_DIRECTORY = Path(__file__).resolve().parent.parent / "legacy"
@@ -68,10 +68,13 @@ class Vocabulary:
             raise VocabularyError(
                 f"the '{self.owner}' vocabulary is retired and must not produce ids"
             )
-        from app.services.transformer_lm import tokenize
+        from app.services.transformer import tokenize
 
         unknown = self._index.get("<unk>")
-        return [self._index.get(token, unknown if unknown is not None else 0) for token in tokenize(text)]
+        return [
+            self._index.get(token, unknown if unknown is not None else 0)
+            for token in tokenize(text)
+        ]
 
     def decode(self, ids: Iterable[int]) -> str:
         return " ".join(token for token in (self.token_of(int(i)) for i in ids) if token)
@@ -109,7 +112,9 @@ def retired_names() -> list[str]:
     return sorted(path.name for path in LEGACY_DIRECTORY.glob("*.json"))
 
 
-def guard_tensor_ids(ids: Iterable[int], source: str, vocabulary: Vocabulary | None = None) -> list[int]:
+def guard_tensor_ids(
+    ids: Iterable[int], source: str, vocabulary: Vocabulary | None = None
+) -> list[int]:
     """Check ids before they are bound for the transformer.
 
     An id that the canonical vocabulary does not hold would be read as
@@ -163,10 +168,7 @@ def assert_single_vocabulary(tenant_id: int | None = None) -> dict:
         # The guard is what stops it, and the guard has to be reached.
         shared = [token for token in old.tokens if token in vocab]
         if shared:
-            different = [
-                token for token in shared
-                if old.id_of(token) != vocab.id_of(token)
-            ]
+            different = [token for token in shared if old.id_of(token) != vocab.id_of(token)]
             if not different:
                 problems.append(
                     f"the retired vocabulary '{name}' has the same ids as the canonical one"

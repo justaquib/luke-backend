@@ -1,21 +1,32 @@
+"""ChromaDB access for documents, FAQs, intents, and pending questions."""
+
+from __future__ import annotations
+
+import json
+import logging
 import os
+from typing import Any
+
 import chromadb
 from chromadb.config import Settings as ChromaSettings
+
 from app.config import settings
 
-
-_client = None
+logger = logging.getLogger(__name__)
+_CLIENTS: list[chromadb.PersistentClient] = []
 
 
 def get_client() -> chromadb.PersistentClient:
-    global _client
-    if _client is None:
+    """Return the process-wide persistent Chroma client."""
+    if not _CLIENTS:
         os.makedirs(settings.chroma_persist_dir, exist_ok=True)
-        _client = chromadb.PersistentClient(
-            path=settings.chroma_persist_dir,
-            settings=ChromaSettings(anonymized_telemetry=False),
+        _CLIENTS.append(
+            chromadb.PersistentClient(
+                path=settings.chroma_persist_dir,
+                settings=ChromaSettings(anonymized_telemetry=False),
+            )
         )
-    return _client
+    return _CLIENTS[0]
 
 
 def get_collection():
@@ -30,221 +41,351 @@ def get_intents_collection():
     return get_client().get_or_create_collection(name=settings.chroma_intents_collection)
 
 
-def add_chunks(source: str, chunks: list[str], ids: list[str]) -> int:
-    coll = get_collection()
-    coll.add(documents=chunks, ids=ids, metadatas=[{"source": source} for _ in chunks])
+def _tenant_metadata(tenant_id: int | None) -> dict[str, Any]:
+    return {} if tenant_id is None else {"tenant_id": str(tenant_id)}
+
+
+def add_chunks(
+    source: str,
+    chunks: list[str],
+    ids: list[str],
+    tenant_id: int | None = None,
+    page_numbers: list[int] | None = None,
+    pdf_fields: list[dict[str, str]] | None = None,
+) -> int:
+    """Store document chunks with source, tenant, page, and field metadata."""
+    metadatas = [
+        {
+            "source": source,
+            **_tenant_metadata(tenant_id),
+            **(
+                {"page_number": page_numbers[index]}
+                if page_numbers is not None and index < len(page_numbers)
+                else {}
+            ),
+            **(
+                {"pdf_fields": json.dumps(pdf_fields[index])}
+                if pdf_fields is not None and index < len(pdf_fields)
+                else {}
+            ),
+        }
+        for index in range(len(chunks))
+    ]
+    get_collection().add(documents=chunks, ids=ids, metadatas=metadatas)
     return len(chunks)
 
 
-def query(question: str, n_results: int = 4) -> list[dict]:
-    coll = get_collection()
-    if coll.count() == 0:
+def _where(conditions: dict[str, Any], tenant_id: int | None) -> dict[str, Any] | None:
+    combined = {**conditions, **_tenant_metadata(tenant_id)}
+    if not combined:
+        return None
+    if len(combined) == 1:
+        return combined
+    return {"$and": [{key: value} for key, value in combined.items()]}
+
+
+def _terms(text: str) -> set[str]:
+    return {
+        token
+        for token in "".join(character if character.isalnum() else " " for character in text.lower()).split()
+        if len(token) > 2
+    }
+
+
+def _rerank(question: str, hits: list[dict]) -> list[dict]:
+    wanted = _terms(question)
+    return sorted(
+        hits,
+        key=lambda hit: (
+            -len(wanted & _terms(str(hit.get("text", "")))),
+            float(hit.get("distance") or 1.0),
+        ),
+    )
+
+
+def query(question: str, n_results: int = 4, tenant_id: int | None = None) -> list[dict]:
+    """Search document chunks and rerank semantic candidates by question terms."""
+    collection = get_collection()
+    if collection.count() == 0:
         return []
-    res = coll.query(query_texts=[question], n_results=n_results)
-    out = []
-    for i, doc in enumerate(res["documents"][0]):
-        meta = res["metadatas"][0][i] if res.get("metadatas") else {}
-        dist = res["distances"][0][i] if res.get("distances") else None
-        out.append({"text": doc, "metadata": meta, "distance": dist})
-    return out
+    fetch = max(n_results * 2, 2)
+    result = collection.query(
+        query_texts=[question], n_results=fetch, where=_where({}, tenant_id)
+    )
+    documents = result.get("documents") or [[]]
+    metadatas = result.get("metadatas") or [[]]
+    distances = result.get("distances") or [[]]
+    hits = [
+        {
+            "text": documents[0][index],
+            "metadata": metadatas[0][index] if metadatas and index < len(metadatas[0]) else {},
+            "distance": distances[0][index] if distances and index < len(distances[0]) else None,
+        }
+        for index in range(len(documents[0]))
+    ]
+    return _rerank(question, hits)[:n_results]
 
 
 def collection_size() -> int:
     return get_collection().count()
 
 
-def upsert_faq(faq_id: int, question: str, answer: str, status: str = "pending") -> None:
-    coll = get_faq_collection()
-    coll.upsert(
+def upsert_faq(
+    faq_id: int,
+    question: str,
+    answer: str,
+    status: str = "pending",
+    tenant_id: int | None = None,
+) -> None:
+    """Insert or update one FAQ in its vector collection."""
+    get_faq_collection().upsert(
         ids=[str(faq_id)],
         documents=[question],
-        metadatas=[{"answer": answer, "faq_id": faq_id, "status": status}],
+        metadatas=[
+            {
+                "answer": answer,
+                "faq_id": faq_id,
+                "status": status,
+                **_tenant_metadata(tenant_id),
+            }
+        ],
     )
+
+
+def _delete(collection, ids: list[str]) -> None:
+    try:
+        collection.delete(ids=ids)
+    except chromadb.errors.ChromaError as error:
+        logger.warning("Could not delete vector ids %s: %s", ids, error)
 
 
 def delete_faq(faq_id: int) -> None:
-    coll = get_faq_collection()
+    _delete(get_faq_collection(), [str(faq_id)])
+
+
+def delete_chunks_by_source(source: str) -> None:
+    """Remove every chunk that came from one document."""
+    collection = get_collection()
+    if collection.count() == 0:
+        return
     try:
-        coll.delete(ids=[str(faq_id)])
-    except Exception:
-        pass
+        collection.delete(where={"source": source})
+    except chromadb.errors.ChromaError as error:
+        logger.warning("Could not delete the chunks of %s: %s", source, error)
 
 
-def search_faq(question: str, n_results: int = 1) -> list[dict]:
-    coll = get_faq_collection()
-    if coll.count() == 0:
+def search_lessons(
+    question: str, n_results: int = 3, tenant_id: int | None = None
+) -> list[dict]:
+    """The learned lessons that look like the question that was asked.
+
+    The lessons live in the tenant's own learner file, so they are matched on
+    the words they share with the question.
+    """
+    from app.services import language_logic
+
+    try:
+        cards = language_logic.all_lesson_cards(tenant_id)
+    except (OSError, ValueError) as error:
+        logger.warning("Could not read the lessons of tenant %s: %s", tenant_id, error)
         return []
-    res = coll.query(
-        query_texts=[question],
-        n_results=n_results,
-        where={"status": "approved"},
-    )
-    out = []
-    for i, doc in enumerate(res["documents"][0]):
-        meta = res["metadatas"][0][i] if res.get("metadatas") else {}
-        dist = res["distances"][0][i] if res.get("distances") else None
-        out.append({"question": doc, "answer": meta.get("answer", ""), "distance": dist, "faq_id": meta.get("faq_id")})
-    return out
-
-
-def search_faq_loose(question: str, n_results: int = 5) -> list[dict]:
-    coll = get_faq_collection()
-    if coll.count() == 0:
-        return []
-    res = coll.query(
-        query_texts=[question],
-        n_results=n_results,
-    )
-    out = []
-    docs = res.get("documents", [[]])[0]
-    metas = res.get("metadatas", [[]])[0]
-    dists = res.get("distances", [[]])[0]
-    for i in range(len(docs)):
-        meta = metas[i] if i < len(metas) else {}
-        dist = dists[i] if i < len(dists) else None
-        out.append({
-            "question": docs[i],
-            "answer": meta.get("answer", ""),
-            "distance": dist,
-            "faq_id": meta.get("faq_id"),
-            "status": meta.get("status"),
-        })
-    return out
-
-
-def search_faq_in(question: str, faq_ids: list[int], n_results: int = 50) -> list[dict]:
-    coll = get_faq_collection()
-    if coll.count() == 0 or not faq_ids:
-        return []
-    res = coll.query(
-        query_texts=[question],
-        n_results=n_results,
-        where={"faq_id": {"$in": [str(i) for i in faq_ids]}},
-    )
-    out = []
-    docs = res.get("documents", [[]])[0]
-    metas = res.get("metadatas", [[]])[0]
-    dists = res.get("distances", [[]])[0]
-    for i in range(len(docs)):
-        meta = metas[i] if i < len(metas) else {}
-        out.append({
-            "question": docs[i],
-            "answer": meta.get("answer", ""),
-            "distance": dists[i] if i < len(dists) else None,
-            "faq_id": meta.get("faq_id"),
-            "status": meta.get("status"),
-        })
-    return out
-
-
-def search_pending(question: str, candidates: list[str], n_results: int = 50) -> list[dict]:
-    coll = get_intents_collection()
-    if coll.count() == 0 or not candidates:
-        return []
-    res = coll.query(
-        query_texts=[question],
-        n_results=n_results,
-        where={"kind": "pending"},
-    )
-    out = []
-    docs = res.get("documents", [[]])[0]
-    metas = res.get("metadatas", [[]])[0]
-    dists = res.get("distances", [[]])[0]
-    for i in range(len(docs)):
-        meta = metas[i] if i < len(metas) else {}
-        text = docs[i]
-        if text not in candidates:
+    wanted = _terms(question)
+    hits: list[dict] = []
+    for card in cards:
+        terms = _terms(str(card.get("question", "")))
+        if not terms or not wanted:
             continue
-        out.append({
-            "pending_id": meta.get("pending_id"),
-            "question": text,
-            "distance": dists[i] if i < len(dists) else None,
-        })
-    return out
+        overlap = len(wanted & terms) / len(wanted | terms)
+        if overlap <= 0:
+            continue
+        hits.append(
+            {
+                "lesson_id": card.get("id"),
+                "question": card.get("question", ""),
+                "answer": card.get("answer", ""),
+                "distance": round(1 - overlap, 4),
+            }
+        )
+    hits.sort(key=lambda hit: hit["distance"])
+    return hits[:n_results]
 
 
-def search_pending_all(question: str, n_results: int = 25) -> list[dict]:
-    coll = get_intents_collection()
-    if coll.count() == 0:
+def _faq_hits(result: dict, include_status: bool) -> list[dict]:
+    documents = (result.get("documents") or [[]])[0]
+    metadatas = (result.get("metadatas") or [[]])[0]
+    distances = (result.get("distances") or [[]])[0]
+    hits: list[dict] = []
+    for index, document in enumerate(documents):
+        metadata = metadatas[index] if index < len(metadatas) else {}
+        hit = {
+            "question": document,
+            "answer": metadata.get("answer", ""),
+            "distance": distances[index] if index < len(distances) else None,
+            "faq_id": metadata.get("faq_id"),
+        }
+        if include_status:
+            hit["status"] = metadata.get("status")
+        hits.append(hit)
+    return hits
+
+
+def search_faq(
+    question: str, n_results: int = 1, tenant_id: int | None = None
+) -> list[dict]:
+    """Search approved FAQs for the closest answer."""
+    collection = get_faq_collection()
+    if collection.count() == 0:
         return []
-    res = coll.query(
+    result = collection.query(
         query_texts=[question],
         n_results=n_results,
-        where={"kind": "pending"},
+        where=_where({"status": "approved"}, tenant_id),
     )
-    out = []
-    docs = res.get("documents", [[]])[0]
-    metas = res.get("metadatas", [[]])[0]
-    dists = res.get("distances", [[]])[0]
-    for i in range(len(docs)):
-        meta = metas[i] if i < len(metas) else {}
-        out.append({
-            "pending_id": meta.get("pending_id"),
-            "question": docs[i],
-            "distance": dists[i] if i < len(dists) else None,
-        })
-    return out
+    return _faq_hits(result, include_status=False)
 
 
-def index_pending(pending_id: int, question: str) -> None:
-    coll = get_intents_collection()
-    coll.upsert(
+def search_faq_loose(
+    question: str, n_results: int = 5, tenant_id: int | None = None
+) -> list[dict]:
+    """Search every FAQ regardless of status."""
+    collection = get_faq_collection()
+    if collection.count() == 0:
+        return []
+    result = collection.query(
+        query_texts=[question], n_results=n_results, where=_where({}, tenant_id)
+    )
+    return _faq_hits(result, include_status=True)
+
+
+def search_faq_in(
+    question: str, faq_ids: list[int], n_results: int = 50, tenant_id: int | None = None
+) -> list[dict]:
+    """Search only the given FAQ ids."""
+    collection = get_faq_collection()
+    if collection.count() == 0 or not faq_ids:
+        return []
+    where = _where({"faq_id": {"$in": [int(faq_id) for faq_id in faq_ids]}}, tenant_id)
+    result = collection.query(
+        query_texts=[question], n_results=n_results, where=where
+    )
+    return _faq_hits(result, include_status=True)
+
+
+def search_pending(
+    question: str,
+    candidates: list[str],
+    n_results: int = 50,
+    tenant_id: int | None = None,
+) -> list[dict]:
+    """Search pending questions and keep only the supplied candidates."""
+    collection = get_intents_collection()
+    if collection.count() == 0 or not candidates:
+        return []
+    result = collection.query(
+        query_texts=[question],
+        n_results=n_results,
+        where=_where({"kind": "pending"}, tenant_id),
+    )
+    return [
+        hit
+        for hit in _pending_hits(result)
+        if hit["question"] in candidates
+    ]
+
+
+def _pending_hits(result: dict) -> list[dict]:
+    documents = (result.get("documents") or [[]])[0]
+    metadatas = (result.get("metadatas") or [[]])[0]
+    distances = (result.get("distances") or [[]])[0]
+    return [
+        {
+            "pending_id": metadatas[index].get("pending_id") if index < len(metadatas) else None,
+            "question": document,
+            "distance": distances[index] if index < len(distances) else None,
+        }
+        for index, document in enumerate(documents)
+    ]
+
+
+def search_pending_all(
+    question: str, n_results: int = 25, tenant_id: int | None = None
+) -> list[dict]:
+    """Search every pending question."""
+    collection = get_intents_collection()
+    if collection.count() == 0:
+        return []
+    result = collection.query(
+        query_texts=[question],
+        n_results=n_results,
+        where=_where({"kind": "pending"}, tenant_id),
+    )
+    return _pending_hits(result)
+
+
+def index_pending(pending_id: int, question: str, tenant_id: int | None = None) -> None:
+    """Insert or update a pending question in the intent index."""
+    get_intents_collection().upsert(
         ids=[f"pending-{pending_id}"],
         documents=[question],
-        metadatas=[{"kind": "pending", "pending_id": pending_id}],
+        metadatas=[
+            {"kind": "pending", "pending_id": pending_id, **_tenant_metadata(tenant_id)}
+        ],
     )
 
 
 def delete_pending_index(pending_id: int) -> None:
-    coll = get_intents_collection()
-    try:
-        coll.delete(ids=[f"pending-{pending_id}"])
-    except Exception:
-        pass
+    _delete(get_intents_collection(), [f"pending-{pending_id}"])
 
 
-def upsert_intent(intent_id: int, name: str, response_template: str, faq_id: int | None) -> None:
-    coll = get_intents_collection()
-    meta = {"kind": "intent", "name": name, "response_template": response_template}
+def upsert_intent(
+    intent_id: int,
+    name: str,
+    response_template: str,
+    faq_id: int | None,
+    tenant_id: int | None = None,
+) -> None:
+    """Insert or update one intent in its vector collection."""
+    metadata: dict[str, Any] = {
+        "kind": "intent",
+        "name": name,
+        "response_template": response_template,
+        **_tenant_metadata(tenant_id),
+    }
     if faq_id is not None:
-        meta["faq_id"] = faq_id
-    coll.upsert(
-        ids=[f"intent-{intent_id}"],
-        documents=[name],
-        metadatas=[meta],
-    )
+        metadata["faq_id"] = faq_id
+    get_intents_collection().upsert(ids=[f"intent-{intent_id}"], documents=[name], metadatas=[metadata])
 
 
 def delete_intent(intent_id: int) -> None:
-    coll = get_intents_collection()
-    try:
-        coll.delete(ids=[f"intent-{intent_id}"])
-    except Exception:
-        pass
+    _delete(get_intents_collection(), [f"intent-{intent_id}"])
 
 
-def search_intents(question: str, n_results: int = 1) -> list[dict]:
-    coll = get_intents_collection()
-    if coll.count() == 0:
+def search_intents(
+    question: str, n_results: int = 1, tenant_id: int | None = None
+) -> list[dict]:
+    """Search named intents."""
+    collection = get_intents_collection()
+    if collection.count() == 0:
         return []
-    res = coll.query(
+    result = collection.query(
         query_texts=[question],
         n_results=n_results,
-        where={"kind": "intent"},
+        where=_where({"kind": "intent"}, tenant_id),
     )
-    out = []
-    docs = res.get("documents", [[]])[0]
-    metas = res.get("metadatas", [[]])[0]
-    dists = res.get("distances", [[]])[0]
-    for i in range(len(docs)):
-        meta = metas[i] if i < len(metas) else {}
-        out.append({
-            "name": docs[i],
-            "response_template": meta.get("response_template", ""),
-            "faq_id": meta.get("faq_id"),
-            "distance": dists[i] if i < len(dists) else None,
-        })
-    return out
+    documents = (result.get("documents") or [[]])[0]
+    metadatas = (result.get("metadatas") or [[]])[0]
+    distances = (result.get("distances") or [[]])[0]
+    return [
+        {
+            "name": document,
+            "response_template": metadatas[index].get("response_template", "")
+            if index < len(metadatas)
+            else "",
+            "faq_id": metadatas[index].get("faq_id") if index < len(metadatas) else None,
+            "distance": distances[index] if index < len(distances) else None,
+        }
+        for index, document in enumerate(documents)
+    ]
 
 
 def faq_size() -> int:

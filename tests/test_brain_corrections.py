@@ -3,11 +3,12 @@
 import json
 
 from app.services import brain
+from app.services.language import runtime
 
 
 def _use_temp_feedback(monkeypatch, tmp_path):
     path = tmp_path / "feedback-0.json"
-    monkeypatch.setattr(brain, "BRAIN_DIR", tmp_path)
+    monkeypatch.setattr(runtime, "_DATA_DIR", tmp_path)
     monkeypatch.setattr(brain, "feedback_path", lambda tenant_id: path)
     return path
 

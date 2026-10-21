@@ -1,4 +1,8 @@
+from typing import Literal
+
 from pydantic import BaseModel, EmailStr
+
+RULE_KINDS = {"instruction", "own_words", "short"}
 from typing import Optional
 from datetime import datetime
 
@@ -213,7 +217,7 @@ class GoogleAuthRequest(BaseModel):
 
 class TokenResponse(BaseModel):
     access_token: str
-    token_type: str = "bearer"
+    token_type: str = "bearer"  # noqa: S105 -- OAuth token type label, not a secret
 
 
 class UserOut(BaseModel):
@@ -269,3 +273,75 @@ class AcceptInviteRequest(BaseModel):
 
 
 MergePreview.model_rebuild()
+
+
+class RuleCreate(BaseModel):
+    text: str
+    kind: Literal["instruction", "own_words", "short"] = "instruction"
+
+
+class LessonBody(BaseModel):
+    """A lesson the trainer wants to teach."""
+
+    lesson: str
+    stage: str = "nursery"
+    subject: str = "General"
+    skip_duplicates: bool = False
+    kind: Literal["qa", "story"] = "qa"
+    title: str = ""
+
+
+class DuplicateAcceptBody(BaseModel):
+    """The group of repeating lessons the trainer wants to keep as they are."""
+
+    key: str
+
+
+class LessonUpdateBody(BaseModel):
+    """An edit to a lesson the learner already holds."""
+
+    answer: str
+    question: str | None = None
+    confidence: float | None = None
+    subject: str | None = None
+
+
+class PreviewBody(BaseModel):
+    """A question the trainer asks the learner."""
+
+    question: str
+    skip_trainer: bool = False
+
+
+class TestStartBody(BaseModel):
+    """The kind of grade test to start."""
+
+    stage: str | None = None
+    kind: str = "trainer"
+
+
+class TestQuestionBody(BaseModel):
+    """A question asked during a grade test."""
+
+    question: str
+
+
+class TestScoreBody(BaseModel):
+    """Whether the learner's answer was good enough."""
+
+    passed: bool
+
+
+class DictionaryLearnBody(BaseModel):
+    """A dictionary word and the meaning to teach."""
+
+    word: str
+    meaning: str
+    stage: str = "nursery"
+
+
+class SentenceBody(BaseModel):
+    """The words to build a sentence from."""
+
+    words: list[str] = []
+    word: str | None = None

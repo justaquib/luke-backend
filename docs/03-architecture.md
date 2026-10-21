@@ -90,6 +90,140 @@ assistance/
 
 Trivial helpers for the frontend to know if the backend is alive and how much has been ingested.
 
+### The language learner (`/language-model`)
+
+The learner and the brain pages read and write the tenant's own small model. The
+routes live in `app/routers/language_model.py` (the learner) and
+`app/routers/language_brain.py` (the brain); they only check the caller and
+read the request; the work is done by the services in `app/services/language/`.
+
+| Route                                  | What it does                                              |
+| -------------------------------------- | --------------------------------------------------------- |
+| `GET /language-model/state`            | The saved state: stages, lessons, words, active test      |
+| `GET /language-model/store`            | What the store holds: the files, the numbers, the size on disk |
+| `GET /language-model/words`            | The words the answering model can write with, page by page |
+| `GET /language-model/graph`            | The shape of what the tenant has learned                   |
+| `GET /language-model/brain`            | What the brain knows about itself, and the level it reached |
+| `GET /language-model/brain/sources`    | What the brain trains from, and how the training works    |
+| `POST /language-model/brain/train`     | Train the brain on the tenant's own material               |
+| `POST /language-model/brain/test`      | Run the level tests again and report the rungs it passed   |
+| `POST /language-model/lessons/check`   | Report what the learner already knows about a lesson       |
+| `GET /language-model/lessons/duplicates` | The lessons that repeat each other, grouped for review    |
+| `POST /language-model/lessons/duplicates/accept` | Keep every lesson of a group: the repeat is on purpose |
+| `POST /language-model/lessons`         | Teach a lesson, or a story, a lesson or a topic            |
+| `PUT /language-model/lessons/{id}`     | Edit a lesson the learner already holds                    |
+| `DELETE /language-model/lessons/{id}`  | Remove a lesson                                            |
+| `POST /language-model/preview`         | Answer a question with the learner's own material only     |
+| `POST /language-model/test/start`      | Start a mock test, a final exam, or a trainer led test     |
+| `POST /language-model/test/question`   | Ask the learner a question during a grade test             |
+| `POST /language-model/test/score`      | Score the learner's last answer                            |
+| `POST /language-model/test/finish`     | Close the test and open the next grade when it is passed   |
+| `GET /language-model/dictionary`       | Look a word up in the offline dictionary                    |
+| `POST /language-model/dictionary/learn`| Teach the learner a word and the meaning it should keep    |
+| `POST /language-model/sentence`        | Build a sentence from the words the learner knows          |
+
+Every route needs the same bearer token as the rest of the API and only ever
+reads or writes the tenant of the signed in user.
+
+A lesson is a question and an answer. A story, a lesson or a topic is taught
+as one passage instead: it is filed under the name it was given, every
+sentence of it is taught on its own as well, and the learner can ask for it
+by that name or by its topic.
+
+Training the brain takes about a minute, so it runs in its own process: the
+app stays usable while the model learns. The tenant's learner file carries a
+`training-<tenant>.json` marker while that runs, and the page asks the brain
+again until the marker is gone. The transformer is written next to the model
+and the page picks it up as soon as the file changes, so the vocabulary grows
+with every lesson that was taught.
+
+### What the brain trains from
+
+The training is built from every source the trainer has given, and they are
+collected in one place, `app/services/language/training_materials.py`:
+
+| Source | What it is |
+| --- | --- |
+| Lessons | The question and the answer of every lesson in the learner, and the starter lessons of the grades it reached. |
+| Approved answers | The questions and the answers the trainer approved in the Trainer. |
+| Corrections | The answers the trainer corrected, so the model stops making the same mistake. |
+| Documents | The chunks of every uploaded document. |
+| Words | The words and the meanings that were taught with the dictionary. |
+| Sentences | The sentences that were taught on their own. |
+
+Every source becomes two things: a sentence, so the words of it reach the
+vocabulary, and a request with its answer, so the model learns to answer a
+request it was never worded for. The questions and the answers of the approved
+answers are learned this way as well, so the trainer's own answers are not
+only looked up but written in the model's own words.
+
+`GET /language-model/brain/sources` reads the same material and reports it,
+so the trainer can see what the brain learns from and how the training works.
+The report and the training cannot drift apart, because they are built from
+the same list.
+
+### Finding the lesson that answers a question
+
+The learner has to find the lesson it was taught, even when the question is
+asked in other words. The lookup lives in
+`app/services/language/matching.py` and reads the question in the words of
+the lesson:
+
+- the mark that names the kind of lesson (`GK:`, `Poem:`, `Story:`) is not a
+  word of the question, so it does not count against the lesson,
+- the endings of the words are left off, so "rudiment" finds the lesson that
+  was taught as "rudiments",
+- the numbers are kept, so "the square root of 25" is not answered with the
+  lesson about 16,
+- two lessons that share their words are told apart by the wording of the
+  question, so "What does the head do?" is not answered with "What is the
+  head?".
+
+### Answering a request, not a question
+
+A lesson is taught as a question and an answer, so a lookup finds it. A
+request is different: "write a short poem about the rain" shares almost no
+words with the lesson "Poem: Rain Rain Go Away", so no amount of question
+matching finds it.
+
+The brain answers requests in three steps.
+
+| Step | Where | What happens |
+| --- | --- | --- |
+| Read the request | `app/services/language/shapes.py`, `requests.py` | The request is matched against the shapes it knows: a poem about a topic, a list of a topic, some facts about a topic. The topic is taken out of it. |
+| Find the material | `app/services/language/topics.py`, `requests.py` | The lesson about that topic is found through the topic index. A word that many lessons share does not name any one of them, so it is not in the index: the assistant refuses rather than choosing one at random. |
+| Write the answer | `app/services/transformer/` | The trained model writes the answer from the lesson it was given. |
+
+The transformer is trained on both kinds of example, and the loss is taken
+over the answer alone:
+
+- a plain sentence, so the model keeps writing in the trainer's style,
+- a request and its answer, so the model answers what it is asked,
+- a request, the material it may use, and the answer.
+
+Taking the loss over the answer alone is what makes the model answer a
+request: the request and the material are read, never scored. The words of a
+request are marked with `<instr>`, the material with `<ctx>`, and the answer
+with `<resp>`, so the model knows which part is which.
+
+Every lesson is asked for in many wordings, so the model learns the subject
+rather than one phrasing of it. A subject belongs to one lesson only: when two
+lessons claim the same subject, the one that asks about it the most directly
+keeps it, so the model is never taught two different answers to one request.
+
+Every word of a written answer is checked against the material it was given.
+An answer that uses a word the trainer never taught is refused, and the taught
+answer is used instead. A request about something never taught is refused as
+well: the brain says it does not know instead of inventing.
+
+### The instruction test
+
+The brain page shows how well the model answers requests it was never
+worded for. The requests used for the measure are held out of the training,
+so a model that only memorises scores nothing on them. The score is in
+`model_level.instruction_following`, and the requests themselves are in
+`model_level.instruction_probes`.
+
 ## Data model
 
 ### ChromaDB collections
@@ -168,6 +302,9 @@ All knobs live in `.env`:
 | `CHROMA_COLLECTION` | Collection name                                  |
 | `SPACY_MODEL`       | spaCy model to load (sm / md / lg)               |
 | `CORS_ORIGINS`      | Comma-separated list of allowed frontend origins |
+| `BASE_ANSWER_CONFIDENCE` | The confidence a fresh answer starts with  |
+| `MAX_ANSWER_CONFIDENCE`  | The highest confidence an answer can reach |
+| `CONFIDENCE_STEP`   | How much a correction raises the confidence      |
 
 `settings.cors_list` splits the CSV into a list for the CORS middleware.
 

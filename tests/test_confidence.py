@@ -7,6 +7,7 @@ from sqlalchemy.orm import sessionmaker
 from app import main as api
 from app.db.database import Base, Faq
 from app.services import language_logic
+from app.services import query as query_service
 
 
 def _use_temp_state(monkeypatch, tmp_path):
@@ -78,7 +79,7 @@ def test_a_confirmed_lesson_answer_is_not_copied_to_the_trained_answers(monkeypa
         "General",
     )
 
-    result = api._confirm_existing_answer(
+    result = query_service.confirm_existing_answer(
         None,
         "what is a kite?",
         "A kite is a light frame with a tail.",
@@ -95,7 +96,7 @@ def test_a_confirmed_new_answer_becomes_a_trained_answer(monkeypatch, tmp_path, 
     _use_temp_state(monkeypatch, tmp_path)
     monkeypatch.setattr(api.vector_store, "upsert_faq", lambda *args, **kwargs: None)
 
-    result = api._confirm_existing_answer(
+    result = query_service.confirm_existing_answer(
         None,
         "what is the airspeed of a swallow?",
         "It flies at about 40 km/h.",
@@ -122,7 +123,7 @@ def test_a_confirmed_trained_answer_becomes_more_trusted_without_a_copy(monkeypa
     )
     db.commit()
 
-    result = api._confirm_existing_answer(
+    result = query_service.confirm_existing_answer(
         None,
         "what is a kite?",
         "A kite is a light frame with a tail.",
@@ -138,4 +139,4 @@ def test_a_trusted_answer_wins_over_a_closer_unproven_one():
     close = {"distance": 0.30, "confidence": 0.5}
     trusted = {"distance": 0.34, "confidence": 1.0}
 
-    assert api._faq_confidence_rank(trusted) < api._faq_confidence_rank(close)
+    assert query_service.faq_confidence_rank(trusted) < query_service.faq_confidence_rank(close)

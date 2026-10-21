@@ -161,7 +161,7 @@ def _chunks_report(tenant_id: int | None) -> dict[str, Any]:
 
 def _model_report(tenant_id: int | None) -> dict[str, Any]:
     """The files that hold the model, and what is inside them."""
-    brain_dir = brain.BRAIN_DIR
+    brain_dir = brain.brain_dir()
     files: list[dict[str, Any]] = []
     total = 0
     if brain_dir.is_dir():

@@ -4,7 +4,11 @@ from unittest.mock import Mock, patch
 
 import pymupdf
 
-from app.main import _answer_from_document, _extract_pdf_field_values, _faq_field_subjects_compatible
+from app.core.pdf_fields import (
+    _extract_pdf_field_values,
+    answer_from_document,
+    faq_field_subjects_compatible,
+)
 from app.services import vector_store
 
 
@@ -59,7 +63,7 @@ class PdfFieldAnswerTests(unittest.TestCase):
 
     def test_question_context_does_not_become_part_of_field_name(self):
         hit = self.make_hit({"customer_name": "Avery SamplePerson"})
-        answer = _answer_from_document(
+        answer = answer_from_document(
             "What is the customer name in the confirmation voucher?", [hit]
         )
         self.assertEqual(answer, "Customer name: Avery SamplePerson")
@@ -69,21 +73,21 @@ class PdfFieldAnswerTests(unittest.TestCase):
         with_agent = self.make_hit({"customer_name": "Avery SamplePerson", "agent": "Jordan Helper"})
         without_agent = self.make_hit({"customer_name": "Avery SamplePerson"})
 
-        self.assertEqual(_answer_from_document(question, [with_agent]), "Agent: Jordan Helper")
+        self.assertEqual(answer_from_document(question, [with_agent]), "Agent: Jordan Helper")
         self.assertEqual(
-            _answer_from_document(question, [without_agent]),
+            answer_from_document(question, [without_agent]),
             "I couldn't reliably identify the agent in this document. Please check the source passage.",
         )
 
     def test_faq_matching_rejects_a_different_requested_field(self):
         self.assertFalse(
-            _faq_field_subjects_compatible(
+            faq_field_subjects_compatible(
                 "What is the name of the agent in the confirmation voucher?",
                 "What is the customer name in the confirmation voucher?",
             )
         )
         self.assertTrue(
-            _faq_field_subjects_compatible(
+            faq_field_subjects_compatible(
                 "What is the customer name in the voucher?",
                 "Who is the customer named on this confirmation voucher?",
             )
@@ -92,18 +96,18 @@ class PdfFieldAnswerTests(unittest.TestCase):
     def test_voucher_number_and_booking_date_are_returned_as_labeled_values(self):
         hit = self.make_hit({"voucher_no": "002", "booking_date": "17 Sep 2026"})
         self.assertEqual(
-            _answer_from_document("What is the voucher number?", [hit]),
+            answer_from_document("What is the voucher number?", [hit]),
             "Voucher no: 002",
         )
         self.assertEqual(
-            _answer_from_document("What was the booking date in the voucher?", [hit]),
+            answer_from_document("What was the booking date in the voucher?", [hit]),
             "Booking date: 17 Sep 2026",
         )
 
     def test_other_positioned_field_labels_can_be_asked_in_context(self):
         hit = self.make_hit({"reservation_code": "AB-2048"})
         self.assertEqual(
-            _answer_from_document("What is the reservation code on this voucher?", [hit]),
+            answer_from_document("What is the reservation code on this voucher?", [hit]),
             "Reservation code: AB-2048",
         )
 
@@ -157,21 +161,21 @@ class PdfFieldAnswerTests(unittest.TestCase):
         missing = self.make_hit({"customer_name": ""}, "CUSTOMER NAME AGENT MOBILE NO EMAIL")
         unclear = "I couldn't reliably identify the customer name in this document. Please check the source passage."
         self.assertEqual(
-            _answer_from_document("What is the customer name?", [missing]), unclear
+            answer_from_document("What is the customer name?", [missing]), unclear
         )
         conflicting = [
             self.make_hit({"customer_name": "Avery SamplePerson"}),
             self.make_hit({"customer_name": "Jordan Otherperson"}),
         ]
         self.assertEqual(
-            _answer_from_document("What is the customer name?", conflicting), unclear
+            answer_from_document("What is the customer name?", conflicting), unclear
         )
         ambiguous_dates = self.make_hit(
             {"booking_date": "17 Sep 2026", "journey_date": "05 Oct 2026"}
         )
         self.assertIn(
             "multiple possible fields",
-            _answer_from_document("What is the date?", [ambiguous_dates]),
+            answer_from_document("What is the date?", [ambiguous_dates]),
         )
 
     def test_general_question_returns_a_short_evidence_snippet(self):
@@ -181,7 +185,7 @@ class PdfFieldAnswerTests(unittest.TestCase):
             + "The trip includes a ferry transfer to Havelock Island. "
             + "Additional voucher conditions follow. " * 20
         )
-        answer = _answer_from_document(
+        answer = answer_from_document(
             "What does the trip include?", [self.make_hit({}, passage)]
         )
         self.assertIn("ferry transfer to Havelock Island", answer)

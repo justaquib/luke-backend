@@ -1,5 +1,18 @@
-from sqlalchemy import Column, Integer, String, Text, DateTime, Boolean, ForeignKey, create_engine, inspect, text
-from sqlalchemy.orm import declarative_base, relationship, sessionmaker
+from sqlalchemy import (
+    Boolean,
+    Column,
+    DateTime,
+    Float,
+    ForeignKey,
+    Integer,
+    String,
+    Text,
+    create_engine,
+    inspect,
+    text,
+)
+from sqlalchemy.orm import Session, declarative_base, relationship, sessionmaker
+from collections.abc import Iterator
 from datetime import datetime
 from app.config import settings
 
@@ -55,6 +68,7 @@ class Faq(Base):
     answer = Column(Text, nullable=False)
     status = Column(String, nullable=False, default="pending")
     tenant_id = Column(Integer, ForeignKey("tenants.id"), nullable=True)
+    confidence = Column(Float, nullable=False, default=settings.base_answer_confidence)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
@@ -117,7 +131,7 @@ def init_db() -> None:
     Base.metadata.create_all(bind=engine)
 
 
-def get_session():
+def get_session() -> Iterator[Session]:
     db = SessionLocal()
     try:
         yield db

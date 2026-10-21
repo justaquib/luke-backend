@@ -22,20 +22,44 @@ from __future__ import annotations
 import json
 import re
 import threading
+import time
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import torch
 
 from app.services import vector_store
+from app.services.language import runtime as language_runtime
+
+if TYPE_CHECKING:
+    from app.services.language.training_materials import TrainingSet
 
 
-BRAIN_DIR = Path(__file__).resolve().parents[2] / ".language_model"
 _LOCK = threading.RLock()
 
+
+def brain_dir() -> Path:
+    """Where the trained models are kept: beside the learner's own file.
+
+    It is the same folder the learner file lives in, so a tenant's models
+    are found next to its own lessons and the two can be kept together.
+    """
+    return language_runtime.data_dir()
+
+
 _EMOTION_WORDS: dict[str, tuple[str, ...]] = {
-    "happy": ("happy", "glad", "pleased", "joy", "joyful", "excited", "cheerful", "smile", "delight"),
+    "happy": (
+        "happy",
+        "glad",
+        "pleased",
+        "joy",
+        "joyful",
+        "excited",
+        "cheerful",
+        "smile",
+        "delight",
+    ),
     "sad": ("sad", "unhappy", "upset", "cry", "crying", "lonely", "sorry", "hurt"),
     "angry": ("angry", "mad", "annoyed", "annoying", "cross", "furious", "upset"),
     "tired": ("tired", "sleepy", "exhausted", "weary", "sleep"),
@@ -72,7 +96,13 @@ class LinearHead:
         self.bias: torch.Tensor | None = None
         self.fitted = False
 
-    def fit(self, features: list[list[float]], targets: list[int], epochs: int = 200, learning_rate: float = 0.1) -> bool:
+    def fit(
+        self,
+        features: list[list[float]],
+        targets: list[int],
+        epochs: int = 200,
+        learning_rate: float = 0.1,
+    ) -> bool:
         if len(features) < max(4, len(self.labels)):
             return False
         if len(set(targets)) < 2:
@@ -89,9 +119,10 @@ class LinearHead:
         x = x / (x.norm(dim=1, keepdim=True) + 1e-8)
         y = torch.tensor(targets, dtype=torch.long)
         generator = torch.Generator().manual_seed(self.seed)
-        self.weights = torch.randn(
-            (x.shape[1], len(self.labels)), generator=generator, dtype=torch.float32
-        ) * 0.05
+        self.weights = (
+            torch.randn((x.shape[1], len(self.labels)), generator=generator, dtype=torch.float32)
+            * 0.05
+        )
         self.bias = torch.zeros(len(self.labels), dtype=torch.float32)
         one_hot = torch.zeros((len(y), len(self.labels)), dtype=torch.float32)
         one_hot[torch.arange(len(y)), y] = 1
@@ -309,19 +340,36 @@ def rung_probes(tenant_id: int | None) -> dict[str, list[dict[str, Any]]]:
         if card.get("question") and card.get("answer")
     ][:_PROBE_LIMIT]
 
-    exact = [{"question": item["question"], "answer": item["answer"], "form": "asked as taught"} for item in taught]
+    exact = [
+        {"question": item["question"], "answer": item["answer"], "form": "asked as taught"}
+        for item in taught
+    ]
     reworded = [
-        {"question": _reframe(item["question"]), "answer": item["answer"], "form": "asked in other words"}
+        {
+            "question": _reframe(item["question"]),
+            "answer": item["answer"],
+            "form": "asked in other words",
+        }
         for item in taught
     ]
     swapped: list[dict[str, Any]] = []
     for item in taught:
         alternative = _swap_synonym(item["question"])
         if alternative:
-            swapped.append({"question": alternative, "answer": item["answer"], "form": "asked with another word"})
+            swapped.append(
+                {
+                    "question": alternative,
+                    "answer": item["answer"],
+                    "form": "asked with another word",
+                }
+            )
 
     explained = [
-        {"question": f"Explain: {item['question']}", "answer": item["answer"], "form": "asked for an explanation"}
+        {
+            "question": f"Explain: {item['question']}",
+            "answer": item["answer"],
+            "form": "asked for an explanation",
+        }
         for item in taught
     ]
 
@@ -361,7 +409,11 @@ def rung_results(
     import time
 
     brain_state = brain_state if brain_state is not None else state(tenant_id)
-    knowledge = knowledge if knowledge is not None else {"lessons": 0, "passed_grades": 0, "stage": "nursery"}
+    knowledge = (
+        knowledge
+        if knowledge is not None
+        else {"lessons": 0, "passed_grades": 0, "stage": "nursery"}
+    )
 
     cache_key = f"{_tenant_key(tenant_id)}"
     if not force:
@@ -392,100 +444,189 @@ def rung_results(
                 answer = hits[0].get("answer", "")
             if _answer_matches(answer, probe["answer"]):
                 passed += 1
-                passes.append({
-                    "question": probe["question"],
-                    "expected": probe["answer"],
-                    "form": probe["form"],
-                    "answered": answer,
-                })
+                passes.append(
+                    {
+                        "question": probe["question"],
+                        "expected": probe["answer"],
+                        "form": probe["form"],
+                        "answered": answer,
+                    }
+                )
             else:
-                failures.append({
-                    "question": probe["question"],
-                    "expected": probe["answer"],
-                    "form": probe["form"],
-                    "answered": answer,
-                })
+                failures.append(
+                    {
+                        "question": probe["question"],
+                        "expected": probe["answer"],
+                        "form": probe["form"],
+                        "answered": answer,
+                    }
+                )
         total = len(probes)
-        results.append({
-            "rung": rung,
-            "probes": total,
-            "passed": passed,
-            "rate": round(passed / total, 2) if total else 0.0,
-            "passes": passes,
-            "failures": failures[:4],
-        })
+        results.append(
+            {
+                "rung": rung,
+                "probes": total,
+                "passed": passed,
+                "rate": round(passed / total, 2) if total else 0.0,
+                "passes": passes,
+                "failures": failures[:4],
+            }
+        )
 
     # The capabilities that come from the training itself.
     subjects = _subject_coverage(tenant_id)
     # The transformer is the writer now, so it counts as the writing model.
     written = bool(brain_state.get("trained")) or load_writer(tenant_id) is not None
-    results.append({
-        "rung": "0.4",
-        "probes": 1,
-        "passed": 1 if written else 0,
-        "rate": 1.0 if written else 0.0,
-        "passes": [{"question": "Write a new sentence about what you know", "expected": "a sentence in the taught style", "form": "from the training", "answered": "it writes new sentences in the style it was taught"}] if written else [],
-        "failures": [] if written else [{"question": "Write a new sentence about what you know", "expected": "a sentence in the taught style", "form": "never taught"}],
-        "detail": "the writing model is trained" if written else "the writing model is not trained yet",
-    })
+    results.append(
+        {
+            "rung": "0.4",
+            "probes": 1,
+            "passed": 1 if written else 0,
+            "rate": 1.0 if written else 0.0,
+            "passes": [
+                {
+                    "question": "Write a new sentence about what you know",
+                    "expected": "a sentence in the taught style",
+                    "form": "from the training",
+                    "answered": "it writes new sentences in the style it was taught",
+                }
+            ]
+            if written
+            else [],
+            "failures": []
+            if written
+            else [
+                {
+                    "question": "Write a new sentence about what you know",
+                    "expected": "a sentence in the taught style",
+                    "form": "never taught",
+                }
+            ],
+            "detail": "the writing model is trained"
+            if written
+            else "the writing model is not trained yet",
+        }
+    )
     corrections = brain_state.get("corrections", 0)
     kept = brain_state.get("learned_corrections", 0)
-    results.append({
-        "rung": "0.6",
-        "probes": CORRECTION_LIMIT,
-        "passed": kept,
-        "rate": round(kept / CORRECTION_LIMIT, 2) if CORRECTION_LIMIT else 0.0,
-        "passes": [
-            {
-                "question": "Learn from a correction and keep it",
-                "expected": "the corrected answer is used afterwards",
-                "form": "kept correction",
-                "answered": "it kept a correction and answers with it",
-            }
-            for _ in range(min(kept, CORRECTION_LIMIT))
-        ],
-        "failures": [] if kept >= CORRECTION_LIMIT else [{
-            "question": "Learn from a correction and keep it",
-            "expected": f"{CORRECTION_LIMIT} corrections answered correctly after being taught",
-            "form": "never taught",
-        }],
-        "detail": f"{kept} of {CORRECTION_LIMIT} corrections kept",
-    })
+    results.append(
+        {
+            "rung": "0.6",
+            "probes": CORRECTION_LIMIT,
+            "passed": kept,
+            "rate": round(kept / CORRECTION_LIMIT, 2) if CORRECTION_LIMIT else 0.0,
+            "passes": [
+                {
+                    "question": "Learn from a correction and keep it",
+                    "expected": "the corrected answer is used afterwards",
+                    "form": "kept correction",
+                    "answered": "it kept a correction and answers with it",
+                }
+                for _ in range(min(kept, CORRECTION_LIMIT))
+            ],
+            "failures": []
+            if kept >= CORRECTION_LIMIT
+            else [
+                {
+                    "question": "Learn from a correction and keep it",
+                    "expected": f"{CORRECTION_LIMIT} corrections answered correctly after being taught",
+                    "form": "never taught",
+                }
+            ],
+            "detail": f"{kept} of {CORRECTION_LIMIT} corrections kept",
+        }
+    )
     grades = knowledge.get("passed_grades", 0)
-    results.append({
-        "rung": "0.7",
-        "probes": 1,
-        "passed": 1 if grades else 0,
-        "rate": 1.0 if grades else 0.0,
-        "passes": [{"question": "Pass the final exam", "expected": "one grade exam passed", "form": "from the training", "answered": f"{grades} grade exam(s) passed"}] if grades else [],
-        "failures": [] if grades else [{"question": "Pass the final exam", "expected": "one grade exam passed", "form": "never taught"}],
-        "detail": f"{grades} grade exams passed" if grades else "no final exam passed yet",
-    })
+    results.append(
+        {
+            "rung": "0.7",
+            "probes": 1,
+            "passed": 1 if grades else 0,
+            "rate": 1.0 if grades else 0.0,
+            "passes": [
+                {
+                    "question": "Pass the final exam",
+                    "expected": "one grade exam passed",
+                    "form": "from the training",
+                    "answered": f"{grades} grade exam(s) passed",
+                }
+            ]
+            if grades
+            else [],
+            "failures": []
+            if grades
+            else [
+                {
+                    "question": "Pass the final exam",
+                    "expected": "one grade exam passed",
+                    "form": "never taught",
+                }
+            ],
+            "detail": f"{grades} grade exams passed" if grades else "no final exam passed yet",
+        }
+    )
     grounded = bool(brain_state.get("confidence_ready"))
-    results.append({
-        "rung": "0.8",
-        "probes": 1,
-        "passed": 1 if grounded else 0,
-        "rate": 1.0 if grounded else 0.0,
-        "passes": [{"question": "Say when you do not know", "expected": "a trained confidence head", "form": "from the training", "answered": "it says when it does not know"}] if grounded else [],
-        "failures": [] if grounded else [{"question": "Say when you do not know", "expected": "a trained confidence head", "form": "never taught"}],
-        "detail": "it knows the edge of its knowledge" if grounded else "it has not learned where its knowledge ends",
-    })
+    results.append(
+        {
+            "rung": "0.8",
+            "probes": 1,
+            "passed": 1 if grounded else 0,
+            "rate": 1.0 if grounded else 0.0,
+            "passes": [
+                {
+                    "question": "Say when you do not know",
+                    "expected": "a trained confidence head",
+                    "form": "from the training",
+                    "answered": "it says when it does not know",
+                }
+            ]
+            if grounded
+            else [],
+            "failures": []
+            if grounded
+            else [
+                {
+                    "question": "Say when you do not know",
+                    "expected": "a trained confidence head",
+                    "form": "never taught",
+                }
+            ],
+            "detail": "it knows the edge of its knowledge"
+            if grounded
+            else "it has not learned where its knowledge ends",
+        }
+    )
     deep = 1 if any(count >= 5 for count in subjects.values()) else 0
-    results.append({
-        "rung": "0.9",
-        "probes": 1,
-        "passed": deep,
-        "rate": 1.0 if deep else 0.0,
-        "passes": [{
-            "question": "Hold one subject in depth",
-            "expected": "five questions on one topic",
-            "form": "from the training",
-            "answered": f"deepest subject: {max(subjects, key=lambda key: subjects[key])} ({max(subjects.values()) if subjects else 0}) questions",
-        }] if deep else [],
-        "failures": [] if deep else [{"question": "Hold one subject in depth", "expected": "five questions on one topic", "form": "never taught"}],
-        "detail": f"deepest subject: {max(subjects, key=lambda key: subjects[key])} ({max(subjects.values()) if subjects else 0})" if subjects else "no subject yet",
-    })
+    results.append(
+        {
+            "rung": "0.9",
+            "probes": 1,
+            "passed": deep,
+            "rate": 1.0 if deep else 0.0,
+            "passes": [
+                {
+                    "question": "Hold one subject in depth",
+                    "expected": "five questions on one topic",
+                    "form": "from the training",
+                    "answered": f"deepest subject: {max(subjects, key=lambda key: subjects[key])} ({max(subjects.values()) if subjects else 0}) questions",
+                }
+            ]
+            if deep
+            else [],
+            "failures": []
+            if deep
+            else [
+                {
+                    "question": "Hold one subject in depth",
+                    "expected": "five questions on one topic",
+                    "form": "never taught",
+                }
+            ],
+            "detail": f"deepest subject: {max(subjects, key=lambda key: subjects[key])} ({max(subjects.values()) if subjects else 0})"
+            if subjects
+            else "no subject yet",
+        }
+    )
 
     for rung in results:
         rung["test"] = _RUNG_TESTS.get(rung["rung"], "")
@@ -507,6 +648,22 @@ def _subject_coverage(tenant_id: int | None) -> dict[str, int]:
         subject = (card.get("subject") or "General").strip() or "General"
         counts[subject] = counts.get(subject, 0) + 1
     return counts
+
+
+def instruction_score(tenant_id: int | None) -> dict[str, Any]:
+    """How well the model answers the requests it was never trained on.
+
+    A model that only looks things up answers the request it was taught and
+    nothing else. This measures the other half.
+    """
+    from app.services.language import evaluation as evaluation_service
+    from app.services.language.lessons import all_lesson_cards
+
+    try:
+        cards = all_lesson_cards(tenant_id)
+    except (OSError, ValueError):
+        cards = []
+    return evaluation_service.evaluate(tenant_id, cards, load_writer(tenant_id))
 
 
 def generality_score(tenant_id: int | None) -> dict[str, Any]:
@@ -541,13 +698,14 @@ def generality_score(tenant_id: int | None) -> dict[str, Any]:
     return {"score": round(score, 2), "cap": cap, "probes": probes}
 
 
-
 # The ladder is measured against the transformer's vocabulary, the one live
 # token list. The threshold counts the words the model writes with.
 _CANONICAL_VOCABULARY_FLOOR = 400
 
 
-def model_capabilities(tenant_id: int | None, brain_state: dict[str, Any], knowledge: dict[str, Any]) -> list[dict[str, Any]]:
+def model_capabilities(
+    tenant_id: int | None, brain_state: dict[str, Any], knowledge: dict[str, Any]
+) -> list[dict[str, Any]]:
     """What the brain can actually do, in the order the levels need it.
 
     The level follows the capabilities, not the size of the data set: a large
@@ -703,7 +861,9 @@ def _coverage(tenant_id: int | None) -> dict[str, Any]:
             if tenant_id is not None:
                 document_query = document_query.where(Document.tenant_id == tenant_id)
                 answer_query = answer_query.where(Faq.tenant_id == tenant_id)
-            coverage["documents"] = len({row.source for row in db.execute(document_query).scalars().all()})
+            coverage["documents"] = len(
+                {row.source for row in db.execute(document_query).scalars().all()}
+            )
             coverage["trained_answers"] = len(db.execute(answer_query).scalars().all())
     except Exception:
         pass
@@ -736,30 +896,36 @@ def next_steps(
     steps: list[dict[str, Any]] = []
 
     if documents == 0:
-        steps.append({
-            "action": "add_document",
-            "title": "Give it a book to read",
-            "detail": "Luke has no document to read yet. Add a PDF, a novel or any related file in the Trainer's Documents tab: the pages are split into chunks, every chunk is embedded for meaning, and the passages are read back word by word when a question needs them.",
-            "link": "/trainer?tab=documents",
-            "link_label": "Add a document",
-        })
+        steps.append(
+            {
+                "action": "add_document",
+                "title": "Give it a book to read",
+                "detail": "Luke has no document to read yet. Add a PDF, a novel or any related file in the Trainer's Documents tab: the pages are split into chunks, every chunk is embedded for meaning, and the passages are read back word by word when a question needs them.",
+                "link": "/trainer?tab=documents",
+                "link_label": "Add a document",
+            }
+        )
     elif chunks < 40:
-        steps.append({
-            "action": "add_document",
-            "title": "Give it more pages to read",
-            "detail": f"Only {chunks} chunks are indexed. More pages means more text chunked, embedded and read word by word.",
-            "link": "/trainer?tab=documents",
-            "link_label": "Add a document",
-        })
+        steps.append(
+            {
+                "action": "add_document",
+                "title": "Give it more pages to read",
+                "detail": f"Only {chunks} chunks are indexed. More pages means more text chunked, embedded and read word by word.",
+                "link": "/trainer?tab=documents",
+                "link_label": "Add a document",
+            }
+        )
 
     if answers < 5:
-        steps.append({
-            "action": "add_answer",
-            "title": "Store more trained answers",
-            "detail": "The Trainer keeps the question and answer pairs. The more it holds, the more it can answer without guessing.",
-            "link": "/trainer?tab=new",
-            "link_label": "Add a Q&A",
-        })
+        steps.append(
+            {
+                "action": "add_answer",
+                "title": "Store more trained answers",
+                "detail": "The Trainer keeps the question and answer pairs. The more it holds, the more it can answer without guessing.",
+                "link": "/trainer?tab=new",
+                "link_label": "Add a Q&A",
+            }
+        )
 
     for rung in rungs:
         if rung["probes"] and rung["rate"] < 0.6:
@@ -774,23 +940,27 @@ def next_steps(
                 "0.8": "Give it a few corrections so it learns where its knowledge ends and says so instead of guessing.",
                 "0.9": "Teach more questions on one topic so it holds a whole subject.",
             }
-            steps.append({
-                "action": "add_lesson",
-                "title": f"Pass the Luke {rung['rung']} test",
-                "detail": hints.get(rung["rung"], "Teach more of what Luke should know."),
-                "link": "/trainer?tab=language",
-                "link_label": "Teach a lesson",
-            })
+            steps.append(
+                {
+                    "action": "add_lesson",
+                    "title": f"Pass the Luke {rung['rung']} test",
+                    "detail": hints.get(rung["rung"], "Teach more of what Luke should know."),
+                    "link": "/trainer?tab=language",
+                    "link_label": "Teach a lesson",
+                }
+            )
             break
 
     if knowledge.get("lessons", 0) == 0:
-        steps.append({
-            "action": "add_lesson",
-            "title": "Add your first lesson",
-            "detail": "Luke starts empty. Teach it a question and the answer it should give.",
-            "link": "/trainer?tab=language",
-            "link_label": "Open the learner",
-        })
+        steps.append(
+            {
+                "action": "add_lesson",
+                "title": "Add your first lesson",
+                "detail": "Luke starts empty. Teach it a question and the answer it should give.",
+                "link": "/trainer?tab=language",
+                "link_label": "Open the learner",
+            }
+        )
 
     grade = knowledge.get("stage", "nursery")
     if grade and grade != "complete":
@@ -800,45 +970,55 @@ def next_steps(
             (stage["title"] for stage in language_logic.STAGES if stage["id"] == grade),
             str(grade).replace("_", " ").title(),
         )
-        steps.append({
-            "action": "mock_test",
-            "title": f"Take a mock test for {grade_name}",
-            "detail": "A mock test is practice. It never advances the grade, so you can see what still needs learning.",
-            "link": "/trainer?tab=language",
-            "link_label": "Open the learner",
-        })
-        steps.append({
-            "action": "final_exam",
-            "title": f"Pass the {grade_name} final exam to advance the school grade",
-            "detail": "The final exam moves Luke to the next grade once it answers at least 80% of the questions correctly.",
-            "link": "/trainer?tab=language",
-            "link_label": "Open the learner",
-        })
+        steps.append(
+            {
+                "action": "mock_test",
+                "title": f"Take a mock test for {grade_name}",
+                "detail": "A mock test is practice. It never advances the grade, so you can see what still needs learning.",
+                "link": "/trainer?tab=language",
+                "link_label": "Open the learner",
+            }
+        )
+        steps.append(
+            {
+                "action": "final_exam",
+                "title": f"Pass the {grade_name} final exam to advance the school grade",
+                "detail": "The final exam moves Luke to the next grade once it answers at least 80% of the questions correctly.",
+                "link": "/trainer?tab=language",
+                "link_label": "Open the learner",
+            }
+        )
     if knowledge.get("lessons", 0) < 40:
-        steps.append({
-            "action": "add_lesson",
-            "title": "Add more knowledge to the school",
-            "detail": f"{knowledge.get('lessons', 0)} lessons are taught. Every lesson is a question and answer the learner can use, and the school grades are built on them.",
-            "link": "/trainer?tab=language",
-            "link_label": "Teach a lesson",
-        })
+        steps.append(
+            {
+                "action": "add_lesson",
+                "title": "Add more knowledge to the school",
+                "detail": f"{knowledge.get('lessons', 0)} lessons are taught. Every lesson is a question and answer the learner can use, and the school grades are built on them.",
+                "link": "/trainer?tab=language",
+                "link_label": "Teach a lesson",
+            }
+        )
 
     if brain_state.get("corrections", 0) == 0:
-        steps.append({
-            "action": "rate_answers",
-            "title": "Mark one answer wrong and correct it",
-            "detail": "In the chat, mark an answer wrong and type the right one. Luke learns it, and the correction becomes part of its memory.",
-            "link": "/chat",
-            "link_label": "Open the chat",
-        })
+        steps.append(
+            {
+                "action": "rate_answers",
+                "title": "Mark one answer wrong and correct it",
+                "detail": "In the chat, mark an answer wrong and type the right one. Luke learns it, and the correction becomes part of its memory.",
+                "link": "/chat",
+                "link_label": "Open the chat",
+            }
+        )
 
-    steps.append({
-        "action": "train_brain",
-        "title": "Train the brain",
-        "detail": "Training rebuilds the writing model and the emotion head from everything Luke has been taught, then tests the level again.",
-        "link": "",
-        "link_label": "",
-    })
+    steps.append(
+        {
+            "action": "train_brain",
+            "title": "Train the brain",
+            "detail": "Training rebuilds the writing model and the emotion head from everything Luke has been taught, then tests the level again.",
+            "link": "",
+            "link_label": "",
+        }
+    )
 
     return steps
 
@@ -865,6 +1045,7 @@ def model_level(tenant_id: int | None, force: bool = False) -> dict[str, Any]:
 
     capabilities = model_capabilities(tenant_id, brain_state, knowledge)
     generality = generality_score(tenant_id)
+    instructions = instruction_score(tenant_id)
     coverage = _coverage(tenant_id)
     knowledge["items"] = coverage.get("chunks", 0)
     coverage["lessons"] = knowledge.get("lessons", 0)
@@ -921,12 +1102,14 @@ def model_level(tenant_id: int | None, force: bool = False) -> dict[str, Any]:
         "generality": generality["score"],
         "generality_cap": generality["cap"],
         "generality_probes": generality["probes"],
+        "instruction_following": instructions["score"],
+        "instruction_probes": instructions["probes"],
+        "instruction_total": instructions["total"],
         "frontier_level": 6.0,
         "frontier_title": BENCHMARK_TITLE,
         "frontier_note": BENCHMARK_NOTE,
         "model_name": "Luke",
     }
-
 
 
 # ------------------------------------------------------------- the brain
@@ -938,64 +1121,120 @@ def _tenant_key(tenant_id: int | None) -> int:
 
 def brain_path(tenant_id: int | None, name: str) -> Path:
     """Where a trained head is kept. The old numpy files are not read."""
-    return BRAIN_DIR / f"brain-{_tenant_key(tenant_id)}-{name}.pt"
+    return brain_dir() / f"brain-{_tenant_key(tenant_id)}-{name}.pt"
 
 
 def writer_path(tenant_id: int | None) -> Path:
     """Where the transformer that writes in the trainer's words is kept."""
-    return BRAIN_DIR / f"transformer-{_tenant_key(tenant_id)}.pt"
+    return brain_dir() / f"transformer-{_tenant_key(tenant_id)}.pt"
 
 
-_WRITER_CACHE: dict[str, Any] = {}
+_WRITER_CACHE: dict[str, tuple[Any, float]] = {}
 
 
 def load_writer(tenant_id: int | None):
     """The trained transformer of this tenant, if it has one.
 
     It is kept in memory, so the answers do not have to load it every time.
+    The file is watched, so a model that was trained in another process is
+    picked up as soon as it lands.
     """
-    from app.services import transformer_lm
+    from app.services import transformer
 
     key = _tenant_key(tenant_id)
+    path = writer_path(tenant_id)
+    if not path.exists():
+        return None
+    stamp = path.stat().st_mtime
     cached = _WRITER_CACHE.get(key)
-    if cached is not None:
-        return cached
-    writer = transformer_lm.TransformerWriter.load(writer_path(tenant_id))
+    if cached is not None and cached[1] == stamp:
+        return cached[0]
+    writer = transformer.TransformerWriter.load(path)
     if writer is None:
         return None
-    _WRITER_CACHE[key] = writer
+    _WRITER_CACHE[key] = (writer, stamp)
     return writer
 
 
-def train_writer(tenant_id: int | None, corpus: list[str], steps: int = 3000) -> dict[str, Any]:
-    """Train the transformer from scratch on the tenant's own sentences."""
-    from app.services import transformer_lm
+def train_writer(
+    tenant_id: int | None,
+    corpus: list[str],
+    steps: int = 3000,
+    instructions: list[tuple[str, str]] | None = None,
+    contexts: list[tuple[str, str, str]] | None = None,
+    config: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Train the transformer from scratch on the tenant's own sentences.
 
-    writer = transformer_lm.TransformerWriter()
-    report = writer.fit(corpus, steps=steps)
+    The sentences teach the model the trainer's words, the instructions teach
+    it to answer a request, and the grounded pairs teach it to answer from the
+    material it was given.
+    """
+    from app.services import transformer
+    from app.services.transformer.settings import TrainingSettings
+
+    writer = transformer.TransformerWriter(config=config)
+    report = writer.fit(
+        corpus,
+        instructions=instructions or [],
+        contexts=contexts or [],
+        settings=TrainingSettings(steps=steps),
+    )
     if report.get("trained"):
-        writer.save(writer_path(tenant_id))
-        _WRITER_CACHE[_tenant_key(tenant_id)] = writer
+        path = writer_path(tenant_id)
+        writer.save(path)
+        _WRITER_CACHE[_tenant_key(tenant_id)] = (writer, path.stat().st_mtime)
     return report
 
 
-_TRAINING: dict[str, bool] = {}
+TRAINING_TIMEOUT_SECONDS = 30 * 60
+
+
+def training_path(tenant_id: int | None) -> Path:
+    """The marker that says this tenant's brain is training."""
+    return brain_dir() / f"training-{_tenant_key(tenant_id)}.json"
 
 
 def mark_training(tenant_id: int | None, value: bool) -> None:
-    """Note that the brain is training, so the page can say so."""
-    _TRAINING[_tenant_key(tenant_id)] = value
+    """Note that the brain is training, so the page can say so.
+
+    The note is written next to the model, so a training that runs in another
+    process is seen as well.
+    """
+    path = training_path(tenant_id)
+    if value:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps({"started": time.time()}), encoding="utf-8")
+        return
+    path.unlink(missing_ok=True)
 
 
 def clear_training(tenant_id: int | None = None) -> None:
     if tenant_id is None:
-        _TRAINING.clear()
-    else:
-        _TRAINING.pop(_tenant_key(tenant_id), None)
+        for path in brain_dir().glob("training-*.json"):
+            path.unlink(missing_ok=True)
+        return
+    training_path(tenant_id).unlink(missing_ok=True)
 
 
 def is_training(tenant_id: int | None) -> bool:
-    return bool(_TRAINING.get(_tenant_key(tenant_id)))
+    """Whether this tenant's brain is being trained right now.
+
+    The marker on disk is the truth: the training runs in its own process, so
+    the flag cannot be kept in memory alone.
+    """
+    path = training_path(tenant_id)
+    if not path.exists():
+        return False
+    try:
+        started = float(json.loads(path.read_text(encoding="utf-8")).get("started", 0))
+    except (OSError, ValueError, TypeError):
+        started = 0
+    if started and time.time() - started > TRAINING_TIMEOUT_SECONDS:
+        # A training that was interrupted leaves its marker behind.
+        path.unlink(missing_ok=True)
+        return False
+    return True
 
 
 def writer_state(tenant_id: int | None) -> dict[str, Any]:
@@ -1008,27 +1247,32 @@ def writer_state(tenant_id: int | None) -> dict[str, Any]:
         "loss": writer.loss,
         "steps": writer.steps,
         "vocabulary": len(writer.vocabulary),
-        "parameters": sum(parameter.numel() for parameter in writer.model.parameters()) if writer.model else 0,
+        "parameters": sum(parameter.numel() for parameter in writer.model.parameters())
+        if writer.model
+        else 0,
         "device": transformer_device(),
     }
 
 
 def transformer_device() -> str:
-    from app.services import transformer_lm
+    from app.services import transformer
 
-    return transformer_lm.device_name()
+    return transformer.device_name()
 
 
 def write_with_transformer(tenant_id: int | None, prompt: str, max_tokens: int = 24) -> str | None:
     """Let the trained transformer write what comes after the prompt."""
+    from app.services import transformer
+    from app.services.transformer.settings import WritingSettings
+
     writer = load_writer(tenant_id)
     if writer is None:
         return None
-    return writer.generate(prompt, max_tokens=max_tokens)
+    return writer.generate(prompt, settings=WritingSettings(max_words=max_tokens))
 
 
 def feedback_path(tenant_id: int | None) -> Path:
-    return BRAIN_DIR / f"feedback-{_tenant_key(tenant_id)}.json"
+    return brain_dir() / f"feedback-{_tenant_key(tenant_id)}.json"
 
 
 def load_feedback(tenant_id: int | None) -> list[dict[str, Any]]:
@@ -1064,14 +1308,16 @@ def record_feedback(
     """
     with _LOCK:
         entries = load_feedback(tenant_id)
-        entries.append({
-            "question": (question or "").strip()[:600],
-            "answer": (answer or "").strip()[:1200],
-            "correct": bool(correct),
-            "correction": (correction or "").strip()[:1200],
-            "learned": learned,
-            "created_at": datetime.now(timezone.utc).isoformat(),
-        })
+        entries.append(
+            {
+                "question": (question or "").strip()[:600],
+                "answer": (answer or "").strip()[:1200],
+                "correct": bool(correct),
+                "correction": (correction or "").strip()[:1200],
+                "learned": learned,
+                "created_at": datetime.now(timezone.utc).isoformat(),
+            }
+        )
         save_feedback(tenant_id, entries)
     return {
         "entries": len(entries),
@@ -1109,7 +1355,9 @@ def emotion_of(text: str) -> str:
     return "neutral"
 
 
-def emotion_training_sentences(sentences: list[str], lessons: list[dict] | None = None) -> tuple[list[str], list[str]]:
+def emotion_training_sentences(
+    sentences: list[str], lessons: list[dict] | None = None
+) -> tuple[list[str], list[str]]:
     """Label the taught sentences and lessons by the feeling they express."""
     labelled: list[str] = []
     labels: list[str] = []
@@ -1140,47 +1388,76 @@ def _embedding_features(texts: list[str]) -> list[list[float]]:
         return []
 
 
-def train(tenant_id: int | None, corpus: list[str], lessons: list[dict] | None = None) -> dict[str, Any]:
+def train(
+    tenant_id: int | None,
+    materials: TrainingSet,
+    config: dict[str, Any] | None = None,
+    steps: int = 3000,
+) -> dict[str, Any]:
     """Train the writer and the heads from the tenant's material and feedback.
 
-    The transformer is the writer now, so the small writer is only trained when
-    there is no transformer yet.
+    The transformer is the writer, so it is trained again on everything the
+    tenant has taught: every lesson, every approved answer, every correction
+    and every document is in the material, and the vocabulary grows with it.
+    The questions are turned into requests as well, so the writer learns to
+    answer a request and not only to be looked up.
     """
     with _LOCK:
         feedback = load_feedback(tenant_id)
     corrections = [entry["correction"] for entry in feedback if entry.get("correction")]
-    training_sentences = [sentence for sentence in corpus if sentence] + corrections
+    training_sentences = [sentence for sentence in materials.sentences if sentence]
 
-    # The transformer is the writer now. The old numpy writer, and the
-    # vocabulary it carried, are retired.
-    writer_report = {"trained": load_writer(tenant_id) is not None, "reason": "the transformer is the writer"}
+    # The transformer is the writer now, so it is trained again on everything
+    # the tenant has taught: the vocabulary grows with every lesson.
+    mark_training(tenant_id, True)
+    try:
+        writer_report = train_writer(
+            tenant_id,
+            training_sentences,
+            instructions=list(materials.instructions),
+            contexts=list(materials.contexts),
+            config=config,
+            steps=steps,
+        )
+    finally:
+        clear_training(tenant_id)
 
-    emotion_labels = ["neutral"] + sorted(_EMOTION_WORDS)
+    emotion_examples = _train_emotion_head(tenant_id, training_sentences)
+    if feedback:
+        _train_feedback_heads(tenant_id, feedback)
+    return {
+        "writer": writer_report,
+        "emotion_examples": emotion_examples,
+        "feedback_entries": len(feedback),
+        "corrections": len(corrections),
+    }
+
+
+def _train_emotion_head(tenant_id: int | None, training_sentences: list[str]) -> int:
+    """Teach the emotion head from the tenant's own sentences."""
+    emotion_labels = ["neutral", *sorted(_EMOTION_WORDS)]
     head = LinearHead(emotion_labels)
-    sentences, emotions = emotion_training_sentences(training_sentences, lessons)
+    sentences, emotions = emotion_training_sentences(training_sentences, None)
     features = _embedding_features(sentences)
     targets = [emotion_labels.index(emotion) for emotion in emotions]
-    if features and len(features) == len(targets):
-        if head.fit(features, targets):
-            head.save(brain_path(tenant_id, "emotion"))
+    if features and len(features) == len(targets) and head.fit(features, targets):
+        head.save(brain_path(tenant_id, "emotion"))
+    return len(sentences)
 
+
+def _train_feedback_heads(tenant_id: int | None, feedback: list[dict[str, Any]]) -> None:
+    """Teach the heads that read a question and judge the answer."""
     clarify = LinearHead(["answer", "ask_back"])
     correct = LinearHead(["correct", "wrong"])
-    if feedback:
-        questions = [entry["question"] for entry in feedback if entry.get("question")]
-        features = _embedding_features(questions)
-        if features and len(features) == len(feedback):
-            clarify.fit(features, [0 if entry.get("correct") else 1 for entry in feedback])
-            correct.fit(features, [0 if entry.get("correct") else 1 for entry in feedback])
-            clarify.save(brain_path(tenant_id, "clarify"))
-            correct.save(brain_path(tenant_id, "correct"))
-
-        return {
-            "writer": writer_report,
-            "emotion_examples": len(sentences),
-            "feedback_entries": len(feedback),
-            "corrections": len(corrections),
-        }
+    questions = [entry["question"] for entry in feedback if entry.get("question")]
+    features = _embedding_features(questions)
+    if not features or len(features) != len(feedback):
+        return
+    labels = [0 if entry.get("correct") else 1 for entry in feedback]
+    clarify.fit(features, labels)
+    correct.fit(features, labels)
+    clarify.save(brain_path(tenant_id, "clarify"))
+    correct.save(brain_path(tenant_id, "correct"))
 
 
 def state(tenant_id: int | None) -> dict[str, Any]:
@@ -1228,7 +1505,12 @@ def feel(tenant_id: int | None, text: str) -> dict[str, Any]:
         if features:
             label, confidence, scores = head.predict(features)
             if confidence >= 0.45:
-                return {"emotion": label, "confidence": confidence, "scores": scores, "source": "trained"}
+                return {
+                    "emotion": label,
+                    "confidence": confidence,
+                    "scores": scores,
+                    "source": "trained",
+                }
     return {"emotion": emotion_of(text), "confidence": 0.4, "scores": {}, "source": "words"}
 
 

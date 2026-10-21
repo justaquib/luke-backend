@@ -1,0 +1,64 @@
+[tool.ruff]
+target-version = "py313"
+line-length = 100
+extend-exclude = [
+    ".venv",
+    "__pycache__",
+    ".chroma",
+    ".language_model",
+    "uploads",
+    "app/legacy",
+]
+
+[tool.ruff.lint]
+select = [
+    "E",
+    "F",
+    "W",
+    "I",
+    "N",
+    "UP",
+    "B",
+    "SIM",
+    "C90",
+    "PL",
+    "RUF",
+    "S",
+    "TID",
+    "ANN",
+]
+ignore = [
+    "ANN401",
+    "PLR2004",
+    "S101",
+    "B008",
+    "RUF001",
+    "PLC0415",
+]
+fixable = ["ALL"]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 10
+
+[tool.ruff.lint.pylint]
+max-args = 5
+max-branches = 12
+max-statements = 50
+
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "parents"
+
+[tool.ruff.lint.flake8-tidy-imports.banned-api]
+"numpy" = { msg = "Do not import numpy directly; use the standard library or torch." }
+"scikit-learn" = { msg = "Do not add scikit-learn; it depends on numpy." }
+"transformers" = { msg = "No pretrained transformer packages." }
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["ANN001", "ANN201", "ANN202", "PLR2004", "S101", "SLF001"]
+"app/config.py" = ["S105", "S106"]
+"scripts/**/*.py" = ["ANN001", "ANN201", "T201"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "lf"

@@ -16,6 +16,9 @@ class Settings(BaseSettings):
     faq_match_threshold: float = 0.55
     intent_match_threshold: float = 0.75
     intent_merge_threshold: float = 0.35
+    base_answer_confidence: float = 0.5
+    max_answer_confidence: float = 0.95
+    confidence_step: float = 0.05
     spacy_model: str = "en_core_web_sm"
     cors_origins: str = "http://localhost:4200"
     upload_dir: str = "./uploads"
