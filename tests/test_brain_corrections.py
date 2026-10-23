@@ -65,7 +65,7 @@ def test_the_corrected_rung_needs_five_kept_corrections(monkeypatch, tmp_path):
     monkeypatch.setattr(brain, "_subject_coverage", lambda tenant_id: {})
 
     rungs = brain.rung_results(None, force=True)
-    corrected = next(rung for rung in rungs if rung["rung"] == "0.6")
+    corrected = next(rung for rung in rungs if rung["rung"] == "0.0.6")
 
     assert corrected["probes"] == 5
     assert corrected["passed"] == 4
@@ -80,7 +80,7 @@ def test_the_corrected_rung_passes_with_five_kept_corrections(monkeypatch, tmp_p
     monkeypatch.setattr(brain, "_subject_coverage", lambda tenant_id: {})
 
     rungs = brain.rung_results(None, force=True)
-    corrected = next(rung for rung in rungs if rung["rung"] == "0.6")
+    corrected = next(rung for rung in rungs if rung["rung"] == "0.0.6")
 
     assert corrected["passed"] == 5
     assert corrected["rate"] == 1.0

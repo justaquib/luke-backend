@@ -8,7 +8,9 @@ what makes it answer a request rather than continue a text.
 from __future__ import annotations
 
 from collections.abc import Sequence
+from itertools import zip_longest
 
+from app.services.transformer import difficulty
 from app.services.transformer.tokens import (
     CONTEXT,
     FINISH,
@@ -68,19 +70,59 @@ def all_words(
     return words
 
 
+def _ordered(
+    sentences: Sequence[tuple[list[int], int, int]],
+    instructions: Sequence[tuple[list[int], int, int]],
+    contexts: Sequence[tuple[list[int], int, int]],
+) -> list[tuple[list[int], int]]:
+    """The examples in the order the model should learn them.
+
+    The examples of every kind are mixed, so that a part of the training is
+    always made of plain sentences, a part of requests and their answers, and
+    a part of requests with the material they are answered from. They are then
+    ordered by how hard they are, so the easy ones are learned first.
+    """
+    groups = [sorted(sentences, key=_level), sorted(instructions, key=_level)]
+    groups.append(sorted(contexts, key=_level))
+    mixed: list[tuple[list[int], int, int]] = []
+    for row in zip_longest(*groups):
+        for item in row:
+            if item is not None:
+                mixed.append(item)
+    mixed.sort(key=_level)
+    return [example for example, _, _ in mixed]
+
+
+def _level(item: tuple[list[int], int, int]) -> int:
+    """How hard an example is."""
+    return item[2]
+
+
 def build(
     writer: object,
     sentences: Sequence[str],
     instructions: Sequence[tuple[str, str]],
     contexts: Sequence[tuple[str, str, str]],
 ) -> list[tuple[list[int], int]]:
-    """Every training example the model learns from."""
-    examples = [sentence_example(writer, sentence) for sentence in sentences]
-    examples += [
-        instruction_example(writer, instruction, response) for instruction, response in instructions
+    """Every training example the model learns from, the easy ones first.
+
+    The examples are ordered by how hard they are, so the training can be a
+    curriculum: the simple sentences are learned before the compound ones.
+    """
+    plain = [
+        (sentence_example(writer, sentence), 0, difficulty.level_of(sentence))
+        for sentence in sentences
     ]
-    examples += [
-        instruction_example(writer, instruction, response, context)
+    asked = [
+        (instruction_example(writer, instruction, response), 0, difficulty.level_of(response))
+        for instruction, response in instructions
+    ]
+    grounded = [
+        (
+            instruction_example(writer, instruction, response, context),
+            0,
+            difficulty.level_of(response),
+        )
         for instruction, context, response in contexts
     ]
-    return examples
+    return _ordered(plain, asked, grounded)

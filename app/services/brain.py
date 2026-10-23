@@ -20,16 +20,21 @@ the trainer gives, and it runs locally on PyTorch. No model is downloaded.
 from __future__ import annotations
 
 import json
+import logging
 import re
 import threading
 import time
+from collections.abc import Callable
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 import torch
 
-from app.services import vector_store
+from app.services import embeddings, training_progress, vector_store
+from app.services.brain_paths import brain_dir, brain_path, writer_path
+from app.services.brain_paths import tenant_key as _tenant_key
+from app.services.heads import LinearHead
 from app.services.language import runtime as language_runtime
 
 if TYPE_CHECKING:
@@ -38,14 +43,9 @@ if TYPE_CHECKING:
 
 _LOCK = threading.RLock()
 
+LOGGER = logging.getLogger(__name__)
 
-def brain_dir() -> Path:
-    """Where the trained models are kept: beside the learner's own file.
 
-    It is the same folder the learner file lives in, so a tenant's models
-    are found next to its own lessons and the two can be kept together.
-    """
-    return language_runtime.data_dir()
 
 
 _EMOTION_WORDS: dict[str, tuple[str, ...]] = {
@@ -82,184 +82,82 @@ def _sentences(text: str) -> list[str]:
 # ---------------------------------------------------------------- the writer
 
 
-class LinearHead:
-    """A softmax classifier over the assistant's neural embeddings.
-
-    It runs on PyTorch, the same library the writer uses, so the app needs
-    one library for its models and not two.
-    """
-
-    def __init__(self, labels: list[str], seed: int = 11) -> None:
-        self.labels = labels
-        self.seed = seed
-        self.weights: torch.Tensor | None = None
-        self.bias: torch.Tensor | None = None
-        self.fitted = False
-
-    def fit(
-        self,
-        features: list[list[float]],
-        targets: list[int],
-        epochs: int = 200,
-        learning_rate: float = 0.1,
-    ) -> bool:
-        if len(features) < max(4, len(self.labels)):
-            return False
-        if len(set(targets)) < 2:
-            # There is only one kind of answer to learn from, so the head
-            # learns that: it says the same for everything it was shown.
-            x = torch.tensor(features, dtype=torch.float32)
-            y = torch.tensor(targets, dtype=torch.long)
-            counts = torch.bincount(y, minlength=len(self.labels)).to(torch.float32)
-            self.weights = torch.zeros((x.shape[1], len(self.labels)), dtype=torch.float32)
-            self.bias = torch.log(counts.clamp(min=1.0) / counts.sum())
-            self.fitted = True
-            return True
-        x = torch.tensor(features, dtype=torch.float32)
-        x = x / (x.norm(dim=1, keepdim=True) + 1e-8)
-        y = torch.tensor(targets, dtype=torch.long)
-        generator = torch.Generator().manual_seed(self.seed)
-        self.weights = (
-            torch.randn((x.shape[1], len(self.labels)), generator=generator, dtype=torch.float32)
-            * 0.05
-        )
-        self.bias = torch.zeros(len(self.labels), dtype=torch.float32)
-        one_hot = torch.zeros((len(y), len(self.labels)), dtype=torch.float32)
-        one_hot[torch.arange(len(y)), y] = 1
-        # Rare feelings should count as much as common ones.
-        counts = torch.bincount(y, minlength=len(self.labels)).to(torch.float32)
-        class_weights = counts.sum() / (len(self.labels) * counts.clamp(min=1.0))
-        weights = class_weights[y].reshape(-1, 1)
-
-        for _ in range(epochs):
-            logits = x @ self.weights + self.bias
-            logits -= logits.max(dim=1, keepdim=True).values
-            probabilities = torch.exp(logits)
-            probabilities /= probabilities.sum(dim=1, keepdim=True)
-            grad = torch.clamp((probabilities - one_hot) * weights / len(y), -1.0, 1.0)
-            grad = torch.nan_to_num(grad)
-            if not torch.isfinite(grad).all():
-                # The numbers went out of hand, so the training stops here
-                # instead of writing nonsense into the model.
-                break
-            self.weights -= learning_rate * (x.T @ grad + 0.002 * self.weights)
-            self.bias -= learning_rate * grad.sum(dim=0)
-        self.weights = torch.nan_to_num(self.weights)
-        self.bias = torch.nan_to_num(self.bias)
-        self.fitted = True
-        return True
-
-    def predict(self, features: list[list[float]]) -> tuple[str, float, dict[str, float]]:
-        if not self.fitted or self.weights is None or self.bias is None:
-            return self.labels[0], 0.0, {}
-        x = torch.tensor(features, dtype=torch.float32)
-        x = x / (x.norm(dim=1, keepdim=True) + 1e-8)
-        logits = x @ self.weights + self.bias
-        logits -= logits.max(dim=1, keepdim=True).values
-        probabilities = torch.exp(logits)
-        probabilities /= probabilities.sum(dim=1, keepdim=True)
-        index = int(torch.argmax(probabilities[0]).item())
-        scores = {
-            label: round(float(value), 3)
-            for label, value in zip(self.labels, probabilities[0].tolist())
-        }
-        return self.labels[index], round(float(probabilities[0][index].item()), 3), scores
-
-    def save(self, path: Path) -> None:
-        if self.weights is None or self.bias is None:
-            return
-        path.parent.mkdir(parents=True, exist_ok=True)
-        torch.save(
-            {"labels": list(self.labels), "weights": self.weights, "bias": self.bias},
-            path,
-        )
-
-    @classmethod
-    def load(cls, path: Path) -> "LinearHead | None":
-        if not path.is_file():
-            return None
-        try:
-            data = torch.load(path, map_location="cpu", weights_only=False)
-            head = cls([str(label) for label in data["labels"]])
-            head.weights = data["weights"].to(torch.float32)
-            head.bias = data["bias"].to(torch.float32)
-            head.fitted = True
-            return head
-        except Exception:
-            return None
-
-
 # ------------------------------------------------------------- the levels
 
 
 LUKE_LEVELS: list[dict[str, Any]] = [
     {
-        "level": 0.0,
+        "level": "0.0.0",
         "name": "Seed",
         "description": "It holds what it was taught and can look it up, but it cannot answer anything on its own.",
         "reference": "The floor of the scale: material without general answering.",
     },
     {
-        "level": 0.1,
+        "level": "0.0.1",
         "name": "Cued",
         "description": "It finds the answer when asked exactly as it was taught.",
         "reference": "Teach it something and it can give that back.",
     },
     {
-        "level": 0.2,
+        "level": "0.0.2",
         "name": "Paraphrased",
         "description": "It finds the answer when the question is worded differently.",
         "reference": "It survives a rewording of the question.",
     },
     {
-        "level": 0.3,
+        "level": "0.0.3",
         "name": "Generalised",
         "description": "It answers about the topic without the exact question.",
         "reference": "It knows the topic, not only the sentence.",
     },
     {
-        "level": 0.4,
+        "level": "0.0.4",
         "name": "Written",
         "description": "It writes new sentences in the style it was taught.",
         "reference": "It composes instead of quoting.",
     },
     {
-        "level": 0.5,
+        "level": "0.0.5",
         "name": "Explained",
         "description": "It explains an answer when it is asked to.",
         "reference": "It can say why, not only what.",
     },
     {
-        "level": 0.6,
+        "level": "0.0.6",
         "name": "Corrected",
         "description": "It learns from a correction and keeps it.",
         "reference": "A wrong answer turns into a right one, and stays right.",
     },
     {
-        "level": 0.7,
+        "level": "0.0.7",
         "name": "Examined",
         "description": "It passes the final exam of a school grade.",
         "reference": "The school says it is ready for the next grade.",
     },
     {
-        "level": 0.8,
+        "level": "0.0.8",
         "name": "Grounded",
         "description": "It says it does not know instead of guessing.",
         "reference": "Knowing the edge of its knowledge is a kind of intelligence.",
     },
     {
-        "level": 0.9,
+        "level": "0.0.9",
         "name": "Teacher",
         "description": "It holds a whole subject: many questions, one topic.",
         "reference": "Depth, not a list of facts.",
     },
     {
-        "level": 1.0,
+        "level": "0.1.0",
         "name": "Independent",
         "description": "It answers a question it was never taught, in its own words.",
         "reference": "The long road: every lesson, every correction and every exam widens what it can do.",
     },
 ]
+
+# The level the brain starts on, and the one it can climb to today. Further
+# rungs are added between the milestones (0.1.1, 0.2.0 and so on) as the
+# brain learns to do more, so the numbers keep the same three-segment shape.
+_SEED_LEVEL = "0.0.0"
 
 BENCHMARK_TITLE = "Luna 6 · Frontier"
 BENCHMARK_NOTE = "Luna 6 is the class of a frontier chat model such as GPT or Claude at the top of its range. Luke is not one of those: it is built from scratch and trained only on what you teach it, so it is measured against that bar honestly."
@@ -374,24 +272,24 @@ def rung_probes(tenant_id: int | None) -> dict[str, list[dict[str, Any]]]:
     ]
 
     return {
-        "0.1": exact,
-        "0.2": reworded,
-        "0.3": swapped,
-        "0.5": explained,
+        "0.0.1": exact,
+        "0.0.2": reworded,
+        "0.0.3": swapped,
+        "0.0.5": explained,
     }
 
 
 _RUNG_TESTS = {
-    "0.1": "Can it find the answer when asked exactly as it was taught?",
-    "0.2": "Can it find the answer when the question is worded differently?",
-    "0.3": "Can it answer about the topic without the exact question?",
-    "0.4": "Can it write new sentences in the style you taught?",
-    "0.5": "Can it explain an answer when it is asked to?",
-    "0.6": "Has it learned from a correction and kept it?",
-    "0.7": "Has it passed the final exam of a grade?",
-    "0.8": "Does it say it does not know instead of guessing?",
-    "0.9": "Does it hold one whole subject in depth?",
-    "1.0": "Can it answer a question it was never taught, in its own words?",
+    "0.0.1": "Can it find the answer when asked exactly as it was taught?",
+    "0.0.2": "Can it find the answer when the question is worded differently?",
+    "0.0.3": "Can it answer about the topic without the exact question?",
+    "0.0.4": "Can it write new sentences in the style you taught?",
+    "0.0.5": "Can it explain an answer when it is asked to?",
+    "0.0.6": "Has it learned from a correction and kept it?",
+    "0.0.7": "Has it passed the final exam of a grade?",
+    "0.0.8": "Does it say it does not know instead of guessing?",
+    "0.0.9": "Does it hold one whole subject in depth?",
+    "0.1.0": "Can it answer a question it was never taught, in its own words?",
 }
 
 
@@ -479,7 +377,7 @@ def rung_results(
     written = bool(brain_state.get("trained")) or load_writer(tenant_id) is not None
     results.append(
         {
-            "rung": "0.4",
+            "rung": "0.0.4",
             "probes": 1,
             "passed": 1 if written else 0,
             "rate": 1.0 if written else 0.0,
@@ -511,7 +409,7 @@ def rung_results(
     kept = brain_state.get("learned_corrections", 0)
     results.append(
         {
-            "rung": "0.6",
+            "rung": "0.0.6",
             "probes": CORRECTION_LIMIT,
             "passed": kept,
             "rate": round(kept / CORRECTION_LIMIT, 2) if CORRECTION_LIMIT else 0.0,
@@ -539,7 +437,7 @@ def rung_results(
     grades = knowledge.get("passed_grades", 0)
     results.append(
         {
-            "rung": "0.7",
+            "rung": "0.0.7",
             "probes": 1,
             "passed": 1 if grades else 0,
             "rate": 1.0 if grades else 0.0,
@@ -568,7 +466,7 @@ def rung_results(
     grounded = bool(brain_state.get("confidence_ready"))
     results.append(
         {
-            "rung": "0.8",
+            "rung": "0.0.8",
             "probes": 1,
             "passed": 1 if grounded else 0,
             "rate": 1.0 if grounded else 0.0,
@@ -599,7 +497,7 @@ def rung_results(
     deep = 1 if any(count >= 5 for count in subjects.values()) else 0
     results.append(
         {
-            "rung": "0.9",
+            "rung": "0.0.9",
             "probes": 1,
             "passed": deep,
             "rate": 1.0 if deep else 0.0,
@@ -630,7 +528,7 @@ def rung_results(
 
     for rung in results:
         rung["test"] = _RUNG_TESTS.get(rung["rung"], "")
-    results.sort(key=lambda item: float(item["rung"]))
+    results.sort(key=lambda item: level_order(item["rung"]))
     _RUNG_CACHE[cache_key] = (time.time(), results)
     return results
 
@@ -650,12 +548,57 @@ def _subject_coverage(tenant_id: int | None) -> dict[str, int]:
     return counts
 
 
+def _instruction_path(tenant_id: int | None) -> Path:
+    """Where the last instruction measurement is kept."""
+    return brain_dir() / f"instruction-{_tenant_key(tenant_id)}.json"
+
+
+def _unmeasured_instruction() -> dict[str, Any]:
+    """The instruction score before the trainer has run the first test."""
+    return {
+        "score": 0.0,
+        "passed": 0,
+        "total": 0,
+        "probes": [],
+        "measured": False,
+        "measured_at": None,
+    }
+
+
+def stored_instruction(tenant_id: int | None) -> dict[str, Any]:
+    """The last instruction measurement that was stored, if there is one."""
+    try:
+        data = json.loads(_instruction_path(tenant_id).read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return _unmeasured_instruction()
+    return data if isinstance(data, dict) else _unmeasured_instruction()
+
+
+def save_instruction(tenant_id: int | None, result: dict[str, Any]) -> None:
+    """Keep the instruction measurement beside the tenant's other numbers."""
+    path = _instruction_path(tenant_id)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    payload = {
+        **result,
+        "measured": True,
+        "measured_at": datetime.now(timezone.utc).isoformat(),
+    }
+    path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+
+
 def instruction_score(tenant_id: int | None) -> dict[str, Any]:
     """How well the model answers the requests it was never trained on.
 
-    A model that only looks things up answers the request it was taught and
-    nothing else. This measures the other half.
+    The measurement takes about a minute, so the last one is stored and the
+    brain page reads the stored number instead of measuring on every load.
+    A fresh measurement is taken when the trainer runs the level test, or
+    when a training has just finished.
     """
+    return stored_instruction(tenant_id)
+
+
+def remeasure_instruction(tenant_id: int | None) -> dict[str, Any]:
+    """Run the instruction test again and keep the measurement."""
     from app.services.language import evaluation as evaluation_service
     from app.services.language.lessons import all_lesson_cards
 
@@ -663,7 +606,9 @@ def instruction_score(tenant_id: int | None) -> dict[str, Any]:
         cards = all_lesson_cards(tenant_id)
     except (OSError, ValueError):
         cards = []
-    return evaluation_service.evaluate(tenant_id, cards, load_writer(tenant_id))
+    result = evaluation_service.evaluate(tenant_id, cards, load_writer(tenant_id))
+    save_instruction(tenant_id, result)
+    return result
 
 
 def generality_score(tenant_id: int | None) -> dict[str, Any]:
@@ -791,54 +736,90 @@ def model_capabilities(
     ]
 
 
-_VOLUME_STEPS = (
-    (0, 0.0),
-    (1, 0.1),
-    (25, 0.2),
-    (100, 0.3),
-    (500, 0.4),
+# Stages of growth on the maturity side: how much material the brain has
+# taken in. They sit on their own human scale, like the stages of a growing
+# child, and never borrow the names of the model levels, because volume is
+# not intelligence.
+_MATURITY_STAGES: tuple[tuple[int, str, str], ...] = (
+    (0, "Newborn", "Nothing is indexed yet; the brain has not started to take in the world."),
+    (1, "First words", "The first lesson or answer is in; recognition begins."),
+    (25, "Toddler", "A handful of words and lessons; it repeats what it was taught."),
+    (100, "Schoolchild", "Enough material to answer across several subjects."),
+    (500, "Scholar", "Deep material with documents, many topics and whole subjects."),
 )
 
 
 def training_volume_level(items: int) -> dict[str, Any]:
-    """Where the amount of learned material sits on the same ladder.
+    """Where the amount of learned material sits on the maturity scale.
 
-    Volume is not intelligence, so it can never carry the model far up the
-    scale: a hundred thousand documents still do not make a model reason.
+    Volume is not intelligence, so it never touches the model level: a
+    hundred thousand documents still do not make a model reason. The stages
+    follow the human brain instead, from newborn to scholar.
     """
-    level = 0.0
-    for threshold, value in _VOLUME_STEPS:
-        if items >= threshold:
-            level = value
-    entry = _level_entry(level)
+    index = 0
+    for position, stage in enumerate(_MATURITY_STAGES):
+        if items >= stage[0]:
+            index = position
+    stages = [
+        {
+            "title": title,
+            "items": threshold,
+            "detail": detail,
+            "reached": position <= index,
+            "current": position == index,
+        }
+        for position, (threshold, title, detail) in enumerate(_MATURITY_STAGES)
+    ]
+    _, title, detail = _MATURITY_STAGES[index]
+    next_stage: dict[str, Any] | None = None
+    if index + 1 < len(_MATURITY_STAGES):
+        threshold, next_title, _next_detail = _MATURITY_STAGES[index + 1]
+        next_stage = {"title": next_title, "items": threshold}
     return {
-        "level": level,
-        "title": entry["title"],
-        "name": entry["name"],
+        "title": title,
+        "detail": detail,
         "items": items,
+        "stages": stages,
+        "next_stage": next_stage,
     }
 
 
-def _level_title(level: float) -> str:
-    number = f"{level:g}"
-    return f"Luke {number}"
+def level_order(level: str) -> tuple[int, int, int]:
+    """The ladder id as three numbers, so ids sort as 0.0.1, 0.0.9, 0.1.0."""
+    values: list[int] = []
+    for part in str(level).split("."):
+        try:
+            values.append(int(part))
+        except ValueError:
+            values.append(0)
+    while len(values) < 3:
+        values.append(0)
+    return (values[0], values[1], values[2])
 
 
-def _level_entry(level: float) -> dict[str, Any]:
-    """The ladder entry for a level, which can sit between two whole levels."""
-    best = LUKE_LEVELS[0]
+def level_value(level: str) -> float:
+    """The same ladder id as one number, for bars and progress shares."""
+    major, minor, patch = level_order(level)
+    return major + minor / 10 + patch / 100
+
+
+def _level_title(level: str) -> str:
+    return f"Luke {level}"
+
+
+def _level_entry(level: str) -> dict[str, Any]:
+    """The ladder entry for a level id."""
     for entry in LUKE_LEVELS:
-        if entry["level"] <= level + 1e-9:
-            best = entry
-        else:
-            break
-    return {**best, "title": f"{_level_title(best['level'])} · {best['name']}"}
+        if str(entry["level"]) == level:
+            return {**entry, "title": _level_title(level)}
+    return {**LUKE_LEVELS[0], "title": _level_title(_SEED_LEVEL)}
 
 
-def _next_level_entry(level: float) -> dict[str, Any] | None:
+def _next_level_entry(level: str) -> dict[str, Any] | None:
+    order = level_order(level)
     for entry in LUKE_LEVELS:
-        if entry["level"] > level + 1e-9:
-            return {**entry, "title": f"{_level_title(entry['level'])} · {entry['name']}"}
+        if level_order(str(entry["level"])) > order:
+            return {**entry, "title": f"{_level_title(str(entry['level']))} · {entry['name']}"}
     return None
 
 
@@ -879,7 +860,7 @@ def next_steps(
     brain_state: dict[str, Any],
     knowledge: dict[str, Any],
     rungs: list[dict[str, Any]],
-    level: float,
+    level: str,
     coverage: dict[str, Any] | None = None,
 ) -> list[dict[str, Any]]:
     """What to do next to advance, in the order it helps most.
@@ -930,15 +911,15 @@ def next_steps(
     for rung in rungs:
         if rung["probes"] and rung["rate"] < 0.6:
             hints = {
-                "0.1": "Teach Luke a question and answer it cannot already answer.",
-                "0.2": "Teach the same answers again in different words, so it can find them when the question is reworded.",
-                "0.3": "Teach the topic rather than the exact question, and add a few phrasings of it.",
-                "0.4": "Train the brain so its writing model learns the style of your lessons.",
-                "0.5": "Teach the reason as well as the answer, so it can explain it when asked.",
-                "0.6": f"Mark an answer wrong in the chat and give the right one. {max(0, CORRECTION_LIMIT - kept)} more kept corrections and Luke passes this rung.",
-                "0.7": "Pass the final exam of the grade it is studying.",
-                "0.8": "Give it a few corrections so it learns where its knowledge ends and says so instead of guessing.",
-                "0.9": "Teach more questions on one topic so it holds a whole subject.",
+                "0.0.1": "Teach Luke a question and answer it cannot already answer.",
+                "0.0.2": "Teach the same answers again in different words, so it can find them when the question is reworded.",
+                "0.0.3": "Teach the topic rather than the exact question, and add a few phrasings of it.",
+                "0.0.4": "Train the brain so its writing model learns the style of your lessons.",
+                "0.0.5": "Teach the reason as well as the answer, so it can explain it when asked.",
+                "0.0.6": f"Mark an answer wrong in the chat and give the right one. {max(0, CORRECTION_LIMIT - kept)} more kept corrections and Luke passes this rung.",
+                "0.0.7": "Pass the final exam of the grade it is studying.",
+                "0.0.8": "Give it a few corrections so it learns where its knowledge ends and says so instead of guessing.",
+                "0.0.9": "Teach more questions on one topic so it holds a whole subject.",
             }
             steps.append(
                 {
@@ -1023,14 +1004,54 @@ def next_steps(
     return steps
 
 
-def model_level(tenant_id: int | None, force: bool = False) -> dict[str, Any]:
-    """The level the brain has reached, measured by what it can do.
+def _level_state_path(tenant_id: int | None) -> Path:
+    """Where the trainer's approved model level is kept."""
+    return brain_dir() / f"level-{_tenant_key(tenant_id)}.json"
 
-    A local model is held to the same scale as a frontier one, and it is
-    capped by how far it can answer on its own: a retriever cannot reach the
-    levels that need real reasoning, however much it was taught.
+
+def approved_level(tenant_id: int | None) -> str:
+    """The level the trainer has approved, or the seed if none was."""
+    path = _level_state_path(tenant_id)
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return _SEED_LEVEL
+    level = str(data.get("approved_level", _SEED_LEVEL)) if isinstance(data, dict) else _SEED_LEVEL
+    if level not in {str(entry["level"]) for entry in LUKE_LEVELS}:
+        return _SEED_LEVEL
+    return level
+
+
+def approve_level(tenant_id: int | None) -> dict[str, Any]:
+    """Promote the brain to the level its measurements have reached.
+
+    Nothing is promoted on its own: the measured level can run ahead of the
+    displayed one, and this call from the trainer closes the gap. The
+    approval is kept with a small history, so the climb is on record.
     """
-    brain_state = state(tenant_id)
+    level = model_level(tenant_id)
+    measured = str(level["measured_level"])
+    previous = approved_level(tenant_id)
+    if level_order(measured) <= level_order(previous):
+        raise ValueError("Luke has not measured a higher level than is approved.")
+    path = _level_state_path(tenant_id)
+    history: list[Any] = []
+    try:
+        stored = json.loads(path.read_text(encoding="utf-8"))
+        history = list(stored.get("history", [])) if isinstance(stored, dict) else []
+    except (OSError, json.JSONDecodeError):
+        history = []
+    history.append({"level": measured, "approved_at": datetime.now(timezone.utc).isoformat()})
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        json.dumps({"approved_level": measured, "history": history[-20:]}, indent=2),
+        encoding="utf-8",
+    )
+    return {"approved_level": measured, "previous_level": previous, "history": history}
+
+
+def _knowledge(tenant_id: int | None) -> dict[str, Any]:
+    """What the school has taught: lessons, grades and the current one."""
     knowledge: dict[str, Any] = {"lessons": 0, "passed_grades": 0, "items": 0}
     try:
         from app.services import language_logic
@@ -1042,7 +1063,40 @@ def model_level(tenant_id: int | None, force: bool = False) -> dict[str, Any]:
         knowledge["stage"] = model_state.get("current_stage_id")
     except Exception:
         pass
+    return knowledge
 
+
+def _measured_level(rungs: list[dict[str, Any]], score: float) -> str:
+    """The level the measurements qualify, before any approval.
+
+    The rungs are taken in order from the seed, so a gap stops the climb,
+    and the top rung answers a question it was never taught: the stretch a
+    model reaches when its own words hold up without being taught.
+    """
+    ladder_ids = [str(entry["level"]) for entry in LUKE_LEVELS]
+    by_id = {str(rung["rung"]): rung for rung in rungs}
+    measured = _SEED_LEVEL
+    for level_id in ladder_ids[1:]:
+        rung = by_id.get(level_id)
+        if rung is None or not rung["probes"] or rung["rate"] < 0.6:
+            break
+        measured = level_id
+    if score >= 0.5:
+        measured = ladder_ids[-1]
+    return measured
+
+
+def model_level(tenant_id: int | None, force: bool = False) -> dict[str, Any]:
+    """The level the brain has reached, measured by what it can do.
+
+    A local model is held to the same scale as a frontier one, and it is
+    capped by how far it can answer on its own: a retriever cannot reach the
+    levels that need real reasoning, however much it was taught. What it
+    measures as and what is displayed are two different numbers: the level
+    only moves when the trainer approves the promotion.
+    """
+    brain_state = state(tenant_id)
+    knowledge = _knowledge(tenant_id)
     capabilities = model_capabilities(tenant_id, brain_state, knowledge)
     generality = generality_score(tenant_id)
     instructions = instruction_score(tenant_id)
@@ -1052,30 +1106,13 @@ def model_level(tenant_id: int | None, force: bool = False) -> dict[str, Any]:
     coverage["passed_grades"] = knowledge.get("passed_grades", 0)
     coverage["current_stage"] = knowledge.get("stage", "nursery")
 
-    # The level is the intelligence level, measured by how far the model can
-    # answer on its own. A checklist of features never lifts it: a retriever
-    # with every feature is still a retriever.
-    score = generality["score"]
     rungs = rung_results(tenant_id, force=force, brain_state=brain_state, knowledge=knowledge)
+    measured = _measured_level(rungs, generality["score"])
 
-    # The level is the highest rung it has passed. The rungs are in order, and
-    # every one of them is something a model built from scratch can be taught.
-    rung_level = 0.0
-    for rung in rungs:
-        if rung["probes"] and rung["rate"] >= 0.6:
-            rung_level = float(rung["rung"])
-        else:
-            break
-
-    # The top rung is the stretch: answering a question it was never taught,
-    # in its own words. It needs no pre-trained model, only more lessons,
-    # more corrections and more exams.
-    if score >= 0.5:
-        rung_level = 1.0
-    level = rung_level
-
+    # The displayed level never moves on its own: the trainer approves it.
+    level = approved_level(tenant_id)
     current = _level_entry(level)
-    following = _next_level_entry(level)
+    following = _next_level_entry(measured if level_order(measured) > level_order(level) else level)
     steps = next_steps(tenant_id, brain_state, knowledge, rungs, level, coverage)
     missing = [capability["name"] for capability in capabilities if not capability["ready"]]
     next_detail = next(
@@ -1085,6 +1122,9 @@ def model_level(tenant_id: int | None, force: bool = False) -> dict[str, Any]:
 
     return {
         "level": level,
+        "measured_level": measured,
+        "approval_ready": level_order(measured) > level_order(level),
+        "level_value": round(level_value(level), 4),
         "name": current["name"],
         "title": current["title"],
         "description": current["description"],
@@ -1105,6 +1145,7 @@ def model_level(tenant_id: int | None, force: bool = False) -> dict[str, Any]:
         "instruction_following": instructions["score"],
         "instruction_probes": instructions["probes"],
         "instruction_total": instructions["total"],
+        "instruction_measured": bool(instructions.get("measured")),
         "frontier_level": 6.0,
         "frontier_title": BENCHMARK_TITLE,
         "frontier_note": BENCHMARK_NOTE,
@@ -1113,20 +1154,6 @@ def model_level(tenant_id: int | None, force: bool = False) -> dict[str, Any]:
 
 
 # ------------------------------------------------------------- the brain
-
-
-def _tenant_key(tenant_id: int | None) -> int:
-    return tenant_id if tenant_id is not None else 0
-
-
-def brain_path(tenant_id: int | None, name: str) -> Path:
-    """Where a trained head is kept. The old numpy files are not read."""
-    return brain_dir() / f"brain-{_tenant_key(tenant_id)}-{name}.pt"
-
-
-def writer_path(tenant_id: int | None) -> Path:
-    """Where the transformer that writes in the trainer's words is kept."""
-    return brain_dir() / f"transformer-{_tenant_key(tenant_id)}.pt"
 
 
 _WRITER_CACHE: dict[str, tuple[Any, float]] = {}
@@ -1159,16 +1186,21 @@ def load_writer(tenant_id: int | None):
 def train_writer(
     tenant_id: int | None,
     corpus: list[str],
-    steps: int = 3000,
+    steps: int = 0,
     instructions: list[tuple[str, str]] | None = None,
     contexts: list[tuple[str, str, str]] | None = None,
     config: dict[str, Any] | None = None,
+    progress: Callable[[int, int], None] | None = None,
 ) -> dict[str, Any]:
     """Train the transformer from scratch on the tenant's own sentences.
 
+    ``steps`` of 0 means the training is measured against the material:
+    the passes it has to make decide how long it trains.
+
     The sentences teach the model the trainer's words, the instructions teach
     it to answer a request, and the grounded pairs teach it to answer from the
-    material it was given.
+    material it was given. ``progress`` is told how far the training has
+    come, so a training in its own process can be watched from the page.
     """
     from app.services import transformer
     from app.services.transformer.settings import TrainingSettings
@@ -1179,6 +1211,7 @@ def train_writer(
         instructions=instructions or [],
         contexts=contexts or [],
         settings=TrainingSettings(steps=steps),
+        progress=progress,
     )
     if report.get("trained"):
         path = writer_path(tenant_id)
@@ -1398,10 +1431,11 @@ def emotion_training_sentences(
 
 
 def _embedding_features(texts: list[str]) -> list[list[float]]:
+    """The embedding of every text, in the space the collections are stored in."""
     if not texts:
         return []
     try:
-        return vector_store.embed_texts(texts)
+        return embeddings.embed_texts(texts)
     except Exception:
         return []
 
@@ -1410,15 +1444,16 @@ def train(
     tenant_id: int | None,
     materials: TrainingSet,
     config: dict[str, Any] | None = None,
-    steps: int = 3000,
+    steps: int = 0,
 ) -> dict[str, Any]:
     """Train the writer and the heads from the tenant's material and feedback.
 
-    The transformer is the writer, so it is trained again on everything the
-    tenant has taught: every lesson, every approved answer, every correction
-    and every document is in the material, and the vocabulary grows with it.
-    The questions are turned into requests as well, so the writer learns to
-    answer a request and not only to be looked up.
+    ``steps`` of 0 means the writer trains as long as the material asks for
+    (see ``train_writer``). The transformer is the writer, so it is trained
+    again on everything the tenant has taught: every lesson, every approved
+    answer, every correction and every document is in the material, and the
+    vocabulary grows with it. The questions are turned into requests as well,
+    so the writer learns to answer a request and not only to be looked up.
     """
     with _LOCK:
         feedback = load_feedback(tenant_id)
@@ -1426,7 +1461,9 @@ def train(
     training_sentences = [sentence for sentence in materials.sentences if sentence]
 
     # The transformer is the writer now, so it is trained again on everything
-    # the tenant has taught: the vocabulary grows with every lesson.
+    # the tenant has taught: the vocabulary grows with every lesson. The
+    # checklist is written beside the model, so the page can watch it move.
+    training_progress.start(tenant_id)
     mark_training(tenant_id, True)
     try:
         writer_report = train_writer(
@@ -1436,19 +1473,59 @@ def train(
             contexts=list(materials.contexts),
             config=config,
             steps=steps,
+            progress=_follow_writer_steps(tenant_id),
         )
+        training_progress.stage(tenant_id, "writer", training_progress.DONE)
+        emotion_examples = _train_emotion_head(tenant_id, training_sentences)
+        training_progress.stage(tenant_id, "emotion", training_progress.DONE)
+        intent_examples = _train_intent_head(tenant_id, materials)
+        training_progress.stage(tenant_id, "intent", training_progress.DONE)
+        if feedback:
+            _train_feedback_heads(tenant_id, feedback)
+        training_progress.stage(tenant_id, "feedback", training_progress.DONE)
     finally:
         clear_training(tenant_id)
-
-    emotion_examples = _train_emotion_head(tenant_id, training_sentences)
-    if feedback:
-        _train_feedback_heads(tenant_id, feedback)
+        training_progress.finish(tenant_id)
+    # The trainer asked for this run, so the instruction measurement is worth
+    # a fresh one: the model it measures has just changed.
+    try:
+        remeasure_instruction(tenant_id)
+    except (OSError, ValueError, RuntimeError) as error:
+        LOGGER.warning("The instruction test could not rerun after training: %s", error)
     return {
         "writer": writer_report,
         "emotion_examples": emotion_examples,
+        "intent_examples": intent_examples,
         "feedback_entries": len(feedback),
         "corrections": len(corrections),
     }
+
+
+def _follow_writer_steps(tenant_id: int | None) -> Callable[[int, int], None]:
+    """The steps of the writer, noted in the checklist as they happen."""
+    started = time.time()
+
+    def follow(done: int, total: int) -> None:
+        elapsed = max(time.time() - started, 0.001)
+        rate = max(done, 1) / elapsed
+        remaining = max(total - done, 0)
+        training_progress.steps(tenant_id, done, total, eta_seconds=remaining / rate)
+
+    return follow
+
+
+def _train_intent_head(tenant_id: int | None, materials: TrainingSet) -> int:
+    """Teach the intent head from the tenant's own lessons.
+
+    The head reads the kind of a question from its meaning, the same way the
+    emotion head reads the feeling in a sentence.
+    """
+    from app.services.reasoning import intent as intent_service
+
+    cards = [
+        material.as_card() for material in materials.materials if material.question.strip()
+    ]
+    return intent_service.train(tenant_id, cards)
 
 
 def _train_emotion_head(tenant_id: int | None, training_sentences: list[str]) -> int:
@@ -1490,6 +1567,7 @@ def state(tenant_id: int | None) -> dict[str, Any]:
     emotion = LinearHead.load(brain_path(tenant_id, "emotion"))
     clarify = LinearHead.load(brain_path(tenant_id, "clarify"))
     correct = LinearHead.load(brain_path(tenant_id, "correct"))
+    intent = LinearHead.load(brain_path(tenant_id, "intent"))
     transformer = load_writer(tenant_id)
     canonical = vocabulary_service.canonical(tenant_id)
     return {
@@ -1498,10 +1576,13 @@ def state(tenant_id: int | None) -> dict[str, Any]:
         "transformer": writer_state(tenant_id),
         "transformer_ready": transformer is not None,
         "training": is_training(tenant_id),
+        "progress": training_progress.read(tenant_id),
         "emotions": emotion.labels if emotion else [],
         "emotion_ready": bool(emotion and emotion.fitted),
         "clarify_ready": bool(clarify and clarify.fitted),
         "confidence_ready": bool(correct and correct.fitted),
+        "intent_ready": bool(intent and intent.fitted),
+        "intents": intent.labels if intent else [],
         "feedback_entries": len(feedback),
         "correct_answers": sum(1 for entry in feedback if entry.get("correct")),
         "wrong_answers": sum(1 for entry in feedback if not entry.get("correct")),

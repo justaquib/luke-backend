@@ -25,6 +25,9 @@ QUESTION_FORMS: tuple[str, ...] = (
     "Answer: {question}",
     "Tell me: {question}",
     "Question: {question}\nAnswer:",
+    "Please answer: {question}",
+    "My question is: {question}",
+    "I would like to know: {question}",
 )
 
 # The ways a lesson is asked for that the model is never trained on. They are
@@ -57,6 +60,11 @@ TOPIC_FORMS: dict[str, tuple[str, ...]] = {
         "Compose a poem about {topic}.",
         "Write something about {topic} in a poem.",
         "Write a poem on the subject of {topic}.",
+        "Write me a short poem about {topic}.",
+        "Can you make a poem about {topic}?",
+        "Put a poem about {topic} in writing.",
+        "I need a poem about {topic}.",
+        "Make up a poem about {topic}.",
     ),
     "list": (
         "Name some {topic}.",
@@ -69,8 +77,12 @@ TOPIC_FORMS: dict[str, tuple[str, ...]] = {
         "I want a list of {topic}.",
         "Please list the {topic}.",
         "Could you name some {topic}?",
-        "Tell me about {topic}.",
-        "What do you know about {topic}?",
+        "List out some {topic}.",
+        "Give me a few {topic}.",
+        "Tell me a few {topic}.",
+        "I need some {topic}.",
+        "List me some {topic}.",
+        "List some {topic} for me.",
     ),
     "fact": (
         "Tell me about {topic}.",
@@ -84,6 +96,12 @@ TOPIC_FORMS: dict[str, tuple[str, ...]] = {
         "What can you tell me about {topic}?",
         "Give me a few facts about {topic}.",
         "I want to hear about {topic}.",
+        "Tell me what you know about {topic}.",
+        "Give me a bit about {topic}.",
+        "Give me some info about {topic}.",
+        "I want to learn about {topic}.",
+        "What can you say about {topic}?",
+        "Tell me about {topic} please.",
     ),
 }
 
@@ -110,6 +128,7 @@ _LEADING_PREFIXES = (
     "joke:",
     "general knowledge:",
 )
+
 
 @dataclass(frozen=True)
 class Instruction:

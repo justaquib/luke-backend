@@ -154,7 +154,12 @@ def upsert_faq(
 
 def _delete(collection, ids: list[str]) -> None:
     try:
-        collection.delete(ids=ids)
+        stored = set(collection.get(ids=ids).get("ids") or [])
+        missing = [id_ for id_ in ids if id_ not in stored]
+        if missing:
+            logger.debug("Vector ids %s were already gone; nothing to delete.", missing)
+        if stored:
+            collection.delete(ids=sorted(stored))
     except chromadb.errors.ChromaError as error:
         logger.warning("Could not delete vector ids %s: %s", ids, error)
 

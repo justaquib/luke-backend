@@ -27,7 +27,8 @@ REQUEST_SHAPES: tuple[tuple[re.Pattern[str], str], ...] = (
     ),
     (
         re.compile(
-            r"\b(?:write|compose|make|create|recite|say|give)\s+(?:me\s+)?(?:a\s+|an\s+|the\s+)?"
+            r"\b(?:write|compose|make(?:\s+up)?|create|recite|say|give)\s+(?:me\s+)?"
+            r"(?:a\s+|an\s+|the\s+)?"
             r"(?:short\s+|little\s+|small\s+|new\s+)?"
             r"(?P<art>poem|rhyme|song|verse|story|letter|sentence|list)\s+"
             r"(?:about|on|for)\s+(?:the\s+)?(?P<topic>[^.?]+)",
@@ -67,6 +68,90 @@ REQUEST_SHAPES: tuple[tuple[re.Pattern[str], str], ...] = (
             re.IGNORECASE,
         ),
         "art",
+    ),
+    (
+        re.compile(
+            r"\bput\s+(?:me\s+)?(?:a\s+|an\s+|the\s+)?"
+            r"(?P<art>poem|rhyme|song|verse|story|letter|sentence|list)\s+"
+            r"(?:about|on|for)\s+(?:the\s+)?(?P<topic>[^.?]+?)\s+in writing\b",
+            re.IGNORECASE,
+        ),
+        "art",
+    ),
+    (
+        re.compile(
+            r"\bi need\s+(?:a\s+|an\s+|one\s+)?"
+            r"(?P<art>poem|rhyme|song|verse|story|letter|sentence|list)\s+"
+            r"(?:about|on|for)\s+(?:the\s+)?(?P<topic>[^.?]+)",
+            re.IGNORECASE,
+        ),
+        "art",
+    ),
+    (
+        re.compile(
+            r"\btell me\s+(?:everything\s+|all\s+|the details\s+|what you know\s+)?about\s+"
+            r"(?:the\s+)?(?P<topic>[^.?]+)",
+            re.IGNORECASE,
+        ),
+        "fact",
+    ),
+    (
+        re.compile(
+            r"\bwhat can you say about\s+(?:the\s+)?(?P<topic>[^.?]+)",
+            re.IGNORECASE,
+        ),
+        "fact",
+    ),
+    (
+        re.compile(
+            r"\bwhat do you know about\s+(?:the\s+)?(?P<topic>[^.?]+)",
+            re.IGNORECASE,
+        ),
+        "fact",
+    ),
+    (
+        re.compile(
+            r"\bwhat can you tell me about\s+(?:the\s+)?(?P<topic>[^.?]+)",
+            re.IGNORECASE,
+        ),
+        "fact",
+    ),
+    (
+        re.compile(
+            r"\bgive me (?:information|some info|the details|a few facts|a bit)\s+about\s+"
+            r"(?:the\s+)?(?P<topic>[^.?]+)",
+            re.IGNORECASE,
+        ),
+        "fact",
+    ),
+    (
+        re.compile(
+            r"\bexplain\s+(?P<topic>[^.?]+)\s+to me\b",
+            re.IGNORECASE,
+        ),
+        "fact",
+    ),
+    (
+        re.compile(
+            r"\bi (?:would like to know about|want to hear about|want to learn about)\s+"
+            r"(?P<topic>[^.?]+)",
+            re.IGNORECASE,
+        ),
+        "fact",
+    ),
+    (
+        re.compile(
+            r"\bwhat is there to know about\s+(?P<topic>[^.?]+)",
+            re.IGNORECASE,
+        ),
+        "fact",
+    ),
+    (
+        re.compile(
+            r"\btell me about the\s+(?P<topic>[^.?]+)\s+please",
+            re.IGNORECASE,
+        ),
+        "fact",
     ),
     (
         re.compile(
@@ -112,6 +197,20 @@ REQUEST_SHAPES: tuple[tuple[re.Pattern[str], str], ...] = (
     ),
     (
         re.compile(
+            r"\blist out\s+(?:some|a few)\s+(?P<topic>[^.?]+)",
+            re.IGNORECASE,
+        ),
+        "list",
+    ),
+    (
+        re.compile(
+            r"\bi need\s+(?:some|a few)\s+(?P<topic>[^.?]+)",
+            re.IGNORECASE,
+        ),
+        "list",
+    ),
+    (
+        re.compile(
             r"\bi want a list of\s+(?P<topic>[^.?]+)",
             re.IGNORECASE,
         ),
@@ -123,63 +222,5 @@ REQUEST_SHAPES: tuple[tuple[re.Pattern[str], str], ...] = (
             re.IGNORECASE,
         ),
         "list",
-    ),
-    (
-        re.compile(
-            r"\btell me\s+(?:everything\s+|all\s+|the details\s+)?about\s+"
-            r"(?:the\s+)?(?P<topic>[^.?]+)",
-            re.IGNORECASE,
-        ),
-        "fact",
-    ),
-    (
-        re.compile(
-            r"\bwhat do you know about\s+(?:the\s+)?(?P<topic>[^.?]+)",
-            re.IGNORECASE,
-        ),
-        "fact",
-    ),
-    (
-        re.compile(
-            r"\bwhat can you tell me about\s+(?:the\s+)?(?P<topic>[^.?]+)",
-            re.IGNORECASE,
-        ),
-        "fact",
-    ),
-    (
-        re.compile(
-            r"\bgive me (?:information|some info|the details|a few facts)\s+about\s+"
-            r"(?:the\s+)?(?P<topic>[^.?]+)",
-            re.IGNORECASE,
-        ),
-        "fact",
-    ),
-    (
-        re.compile(
-            r"\bexplain\s+(?P<topic>[^.?]+)\s+to me\b",
-            re.IGNORECASE,
-        ),
-        "fact",
-    ),
-    (
-        re.compile(
-            r"\bi (?:would like to know about|want to hear about)\s+(?P<topic>[^.?]+)",
-            re.IGNORECASE,
-        ),
-        "fact",
-    ),
-    (
-        re.compile(
-            r"\bwhat is there to know about\s+(?P<topic>[^.?]+)",
-            re.IGNORECASE,
-        ),
-        "fact",
-    ),
-    (
-        re.compile(
-            r"\btell me about the\s+(?P<topic>[^.?]+)\s+please",
-            re.IGNORECASE,
-        ),
-        "fact",
     ),
 )

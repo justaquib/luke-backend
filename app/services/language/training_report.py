@@ -115,7 +115,7 @@ def tenant_report(
     never say something the training did not do.
     """
     materials = materials_service.gather(tenant_id, db)
-    training = materials_service.training_set(materials)
+    training = materials_service.training_set(materials, tenant_id)
     return source_report(materials, training, writer)
 
 

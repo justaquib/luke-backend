@@ -11,14 +11,16 @@ answer a request the trainer never worded that way.
 
 from __future__ import annotations
 
-from collections.abc import Iterable, Sequence
+from collections.abc import Callable, Iterable, Sequence
 from pathlib import Path
 from typing import Any
 
 import torch
 
+from app.services.transformer import critique as critique_service
 from app.services.transformer import examples as example_service
-from app.services.transformer import freewriting
+from app.services.transformer import freewriting, quality
+from app.services.transformer.critique import Answer, Critique
 from app.services.transformer.model import MODEL_CONFIG, TinyTransformer, device_name
 from app.services.transformer.settings import ReadingSettings, TrainingSettings, WritingSettings
 from app.services.transformer.tokens import (
@@ -53,6 +55,14 @@ class TransformerWriter:
         self.last_confidence: float = 0.0
         # The least sure word of the last sentence it wrote.
         self.last_least_chance: float = 0.0
+        # How sure it was about every single word it wrote.
+        self.last_token_confidences: list[float] = []
+        # The words it wrote.
+        self.last_written_words: list[str] = []
+        # The words it was not sure about.
+        self.last_uncertain_words: list[str] = []
+        # What it thought of the last answer it wrote.
+        self.last_critique: Critique | None = None
 
     # -- the vocabulary ---------------------------------------------------
 
@@ -89,34 +99,46 @@ class TransformerWriter:
         instructions: Sequence[tuple[str, str]] = (),
         contexts: Sequence[tuple[str, str, str]] = (),
         settings: TrainingSettings | None = None,
+        progress: Callable[[int, int], None] | None = None,
     ) -> dict[str, Any]:
-        """Learn the words of the sentences and the answers to the requests."""
+        """Learn the words of the sentences and the answers to the requests.
+
+        The sentences that are not worth the training steps are left out, and
+        the rest are learned from the easy ones to the hard ones. ``progress``
+        is told how far the training has come, at every check the loss is
+        read at.
+        """
         settings = settings or TrainingSettings()
         words = example_service.all_words(sentences, instructions, contexts)
         self._build_vocabulary(words)
-        examples = example_service.build(self, sentences, instructions, contexts)
+        kept = quality.keep(sentences)
+        examples = example_service.build(self, kept, instructions, contexts)
         if len(examples) < 4 or len(self.vocabulary) < 8:
             return {"trained": False, "reason": "not enough words to train on"}
-        model, loss, seconds = train_model(
+        model, report, seconds = train_model(
             len(self.vocabulary),
             examples,
-            self.config,
+            {**self.config, "pad_id": self.index[PAD]},
             settings=settings,
-            pad_id=self.index[PAD],
+            progress=progress,
         )
         # The answers are written on the processor, so the training in the
         # background never meets another use of the GPU.
         self.model = model.to("cpu")
         self.trained = True
-        self.loss = round(loss, 4)
-        self.steps = settings.steps
+        self.loss = report.loss
+        self.steps = report.steps
         return {
             "trained": True,
             "vocabulary": len(self.vocabulary),
             "sentences": len(examples),
             "tokens": len(self.vocabulary),
-            "steps": settings.steps,
-            "loss": self.loss,
+            "steps": report.steps,
+            "loss": report.loss,
+            "best_loss": report.best_loss,
+            "stopped_early": report.stopped_early,
+            "curve": report.curve,
+            "dropped_sentences": len(sentences) - len(kept),
             "seconds": round(seconds, 1),
             "parameters": sum(parameter.numel() for parameter in model.parameters()),
             "device": device_name(),
@@ -131,7 +153,12 @@ class TransformerWriter:
         max_words: int = 64,
         reading: ReadingSettings | None = None,
     ) -> str | None:
-        """Answer a request in the words the model was taught."""
+        """Answer a request in the words the model was taught.
+
+        The model reads its own answer before it is given away. When the
+        answer is not good enough, the model is asked again with the critique
+        in front of it, and the better of the two answers is the one kept.
+        """
         if not self.trained or self.model is None:
             return None
         reading = reading or ReadingSettings()
@@ -139,7 +166,57 @@ class TransformerWriter:
         written = self._write(tokens, max_words)
         if not written:
             return None
-        return self.decode(written)
+        answer = self.decode(written)
+        first = Answer(answer, self._critique(answer, context))
+        if first.critique.should_retry:
+            answer = self._write_again(instruction, context, reading, max_words, first)
+        self.last_critique = first.critique if answer == first.text else self.last_critique
+        return answer
+
+    def _write_again(
+        self,
+        instruction: str,
+        context: str,
+        reading: ReadingSettings,
+        max_words: int,
+        first: Answer,
+    ) -> str:
+        """Write the answer again, with the critique in front of the model.
+
+        The first answer is kept when the second one is not better, and the
+        words the model was sure about stay the words of the answer that is
+        given away.
+        """
+        saved = (self.last_token_confidences, self.last_written_words, self.last_uncertain_words)
+        tokens = self._encode_instruction(
+            instruction, f"{context} {first.critique.summary}", reading
+        )
+        written = self._write(tokens, max_words)
+        if not written:
+            self._restore(saved)
+            self.last_critique = first.critique
+            return first.text
+        answer = self.decode(written)
+        critique = self._critique(answer, context)
+        if critique.confidence < first.critique.confidence:
+            self._restore(saved)
+            self.last_critique = first.critique
+            return first.text
+        self.last_critique = critique
+        return answer
+
+    def _restore(self, saved: tuple[list[float], list[str], list[str]]) -> None:
+        """Put back what the model was sure about before it wrote again."""
+        self.last_token_confidences, self.last_written_words, self.last_uncertain_words = saved
+
+    def _critique(self, answer: str, context: str) -> Critique:
+        """What the model thinks of the answer it wrote."""
+        return critique_service.critique(
+            answer,
+            self.last_token_confidences,
+            self.last_written_words,
+            material=context,
+        )
 
     def _encode_instruction(
         self, instruction: str, context: str, reading: ReadingSettings
@@ -169,10 +246,13 @@ class TransformerWriter:
         """The words the model writes after reading what it has read.
 
         The answer ends when the model says it is done, not at the first full
-        stop: a poem has a full stop in the middle of it.
+        stop: a poem has a full stop in the middle of it. How sure the model
+        was about every word is kept, so the answer can be read again before
+        it is given away.
         """
         device = next(self.model.parameters()).device
         written: list[int] = []
+        chances: list[float] = []
         confidence = 0.0
         least_chance = 1.0
         finish = self.index.get(FINISH)
@@ -188,10 +268,11 @@ class TransformerWriter:
                     # The same word twice in a row is a stutter, not an answer.
                     logits[tokens[-1]] = min(float(logits[tokens[-1]]), -1e4)
                 token_id = int(torch.argmax(logits).item())
-                chances = torch.softmax(logits, dim=-1)
-                chance = float(chances[token_id].clamp_min(1e-9).item())
+                chances_of_words = torch.softmax(logits, dim=-1)
+                chance = float(chances_of_words[token_id].clamp_min(1e-9).item())
                 confidence += chance
                 least_chance = min(least_chance, chance)
+                chances.append(chance)
                 tokens.append(token_id)
                 written.append(token_id)
                 if token_id == finish:
@@ -199,6 +280,17 @@ class TransformerWriter:
         skip = {self.index.get(START), self.index.get(FINISH), self.index.get(PAD)}
         self.last_confidence = round(confidence / max(len(written), 1), 3)
         self.last_least_chance = round(least_chance, 4)
+        self.last_token_confidences = [round(chance, 4) for chance in chances]
+        self.last_written_words = [
+            self.vocabulary[token] for token in written if token < len(self.vocabulary)
+        ]
+        self.last_uncertain_words = [
+            word
+            for word, chance in zip(
+                self.last_written_words, self.last_token_confidences, strict=False
+            )
+            if chance < critique_service.MIN_WORD_CONFIDENCE
+        ]
         return [token for token in written if token not in skip]
 
     def generate(

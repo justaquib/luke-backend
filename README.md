@@ -96,6 +96,8 @@ Step-by-step guides in `docs/`:
 - `docs/03-architecture.md` — file layout, request flow, data model, extension ideas
 - `docs/04-training.md` — FAQ learning flow, `/faq` API, trainer page, threshold tuning
 - `docs/05-frontend-ux.md` — Angular shell layout, sessions, train-mode UX, settings
+- `docs/06-frontier-model-evaluation.md` — the standard techniques the frontier labs measure with, and how this app maps to them
+- `docs/07-model-measurements.md` — the app's own measured numbers, kept current after every improvement
 
 ## Notes
 

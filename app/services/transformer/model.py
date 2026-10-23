@@ -8,10 +8,10 @@ import torch
 from torch import nn
 
 MODEL_CONFIG: dict[str, Any] = {
-    "d_model": 128,
-    "layers": 3,
-    "heads": 4,
-    "context": 192,
+    "d_model": 192,
+    "layers": 4,
+    "heads": 8,
+    "context": 256,
     "dropout": 0.1,
 }
 

@@ -59,7 +59,7 @@ def language_model_store(
         },
         "model": {
             "name": state.get("model_name", ""),
-            "level": brain.get("model_level", {}).get("level", 0),
+            "level": brain.get("model_level", {}).get("level", "0.0.0"),
             "title": brain.get("model_level", {}).get("title", ""),
             "vocabulary": int(brain.get("vocabulary", 0)),
             "parameters": int((brain.get("transformer") or {}).get("parameters", 0)),
@@ -89,14 +89,29 @@ def test_language_model_level(
 ) -> dict[str, Any]:
     """Run the level tests again and report how the model did on each rung."""
     tenant_id = tenant_id_of(user)
+    instruction = brain_service.remeasure_instruction(tenant_id)
     rungs = brain_service.rung_results(tenant_id, force=True)
     passed = sum(1 for rung in rungs if float(rung.get("rate", 0)) >= 0.6)
     return {
         "state": reporting.brain_state(tenant_id, force=True),
         "rungs": rungs,
+        "instruction": instruction,
         "passed": passed,
         "total": len(rungs),
     }
+
+
+@router.post("/brain/level/approve")
+def approve_language_model_level(
+    user: User = Depends(get_bearer_user),
+) -> dict[str, Any]:
+    """Promote the brain to the level it has measured, on the trainer's word."""
+    tenant_id = tenant_id_of(user)
+    try:
+        promoted = brain_service.approve_level(tenant_id)
+    except ValueError as error:
+        raise HTTPException(400, str(error)) from error
+    return {"state": reporting.brain_state(tenant_id, force=True), **promoted}
 
 
 @router.post("/brain/train")
@@ -112,7 +127,7 @@ def train_language_model_brain(
     """
     tenant_id = tenant_id_of(user)
     materials = materials_service.gather(tenant_id, db)
-    training = materials_service.training_set(materials)
+    training = materials_service.training_set(materials, tenant_id)
     brain_service.mark_training(tenant_id, True)
     process = multiprocessing.get_context("spawn").Process(
         target=brain_service.train, args=(tenant_id, training), daemon=True

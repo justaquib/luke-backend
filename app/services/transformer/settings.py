@@ -11,14 +11,30 @@ from dataclasses import dataclass
 
 @dataclass(frozen=True)
 class TrainingSettings:
-    """How long the model trains and how big the batches are."""
+    """How long the model trains and how big the batches are.
 
-    steps: int = 3000
+    ``steps`` of 0 means the training is measured against the material: one
+    pass count decides, and the steps the training asks for grow with the
+    material it has to learn. An explicit number of steps is honoured as it
+    was given, so a caller that needs a short training still gets one.
+    """
+
+    steps: int = 0
     batch_size: int = 16
     learning_rate: float = 3e-3
     weight_decay: float = 0.01
     gradient_clip: float = 1.0
     seed: int = 7
+    # How often the loss is looked at to see whether the training still learns.
+    check_every: int = 100
+    # How many checks without progress end the training.
+    patience: int = 8
+    # The training never ends before this many steps.
+    min_steps: int = 400
+    # How much the loss has to improve for it to count as progress.
+    improvement: float = 0.01
+    # How many fixed batches the check reads the loss over.
+    check_batches: int = 10
 
 
 @dataclass(frozen=True)

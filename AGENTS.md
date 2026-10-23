@@ -21,6 +21,15 @@
 - Do not import or add `numpy`.
 - Add a test for every behavior change and bug fix.
 
+## The brain's numbers
+
+- Every number the app shows is measured from real files, models and events.
+  Nothing invented, simulated, or placeholder — see `../CODE_STANDARDS.md`
+  ("Honest measurements", strict rule).
+- Any change that could move how well the model knows its lessons (training
+  loop, writer, heads, request or correction path) is re-measured per
+  `docs/07-model-measurements.md` and gets a row there in the same change.
+
 ## Dependencies and System Overview
 
 When a package or runtime dependency changes, update the System Overview

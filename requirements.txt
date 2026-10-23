@@ -6,6 +6,9 @@ python-multipart==0.0.12
 sqlalchemy==2.0.35
 psycopg2-binary==2.9.9
 chromadb==0.5.5
+# chromadb 0.5.5 calls posthog.capture(positionally), which posthog 6.0.0 removed; the
+# newer versions make every chroma event log "capture() takes 1 positional argument".
+posthog<6
 spacy==3.7.6
 python-docx==1.1.2
 pandas==2.2.3

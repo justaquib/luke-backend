@@ -23,7 +23,7 @@ from app.services.language import instructions as instruction_service
 from app.services.language import runtime
 from app.services.language.lessons import all_lesson_cards
 from app.services.language.runtime import subject_of
-from app.services.language.topics import card_key, topic_index
+from app.services.language.topics import card_key, topic_index, topic_words
 
 # The kinds of material the tenant can give.
 LESSON = "lesson"
@@ -43,6 +43,15 @@ MAX_DOCUMENT_CHUNKS = 500
 
 # How many sentences the model is given at most.
 MAX_SENTENCES = 20000
+
+# How many answers are written again in the model's own words.
+MAX_PARAPHRASES = 200
+
+# How many requests about things that were never taught are given.
+MAX_NEGATIVE_EXAMPLES = 24
+
+# The answer the model gives when it was taught nothing about the request.
+REFUSAL = "I do not know anything about that."
 
 
 @dataclass(frozen=True)
@@ -118,13 +127,19 @@ def gather(tenant_id: int | None, db: Session) -> list[Material]:
     )
 
 
-def training_set(materials: Sequence[Material]) -> TrainingSet:
+def training_set(
+    materials: Sequence[Material],
+    tenant_id: int | None = None,
+) -> TrainingSet:
     """The examples the model learns from, built from every source.
 
     A question and an answer become a request and its answer, in more than one
     wording, so the model answers a request it was never taught instead of
     only repeating the lesson. The material itself is also a sentence, so the
-    words of a document or a correction reach the vocabulary.
+    words of a document or a correction reach the vocabulary. The answers are
+    written again in the model's own words, and the requests about things that
+    were never taught are refused, so the model learns where its material
+    stops.
     """
     cards = [material.as_card() for material in materials if material.kind in ASKABLE_KINDS]
     index = topic_index(cards)
@@ -145,12 +160,53 @@ def training_set(materials: Sequence[Material]) -> TrainingSet:
             instructions.append((instruction, response))
             contexts.append((instruction, f"{material.question}. {answer}", response))
     sentences.extend(_repaired(spoken))
+    sentences.extend(_paraphrased(tenant_id, spoken))
+    instructions.extend(_negative_examples(cards, index))
     return TrainingSet(
         sentences=_unique(sentences)[:MAX_SENTENCES],
         instructions=instructions,
         contexts=contexts,
         materials=list(materials),
     )
+
+
+def _paraphrased(tenant_id: int | None, answers: Sequence[str]) -> list[str]:
+    """The answers written again in the model's own words.
+
+    The model then knows the answer in more than one wording, and it is not
+    left with only the wording the trainer happened to use. A rewrite that
+    says something else is not used: the model must not learn a different
+    answer.
+    """
+    from app.services.language.grammar import paraphrase_answer
+    from app.services.language.paraphrases import is_a_good_rewrite
+
+    variants: list[str] = []
+    for answer in answers[:MAX_PARAPHRASES]:
+        variant = paraphrase_answer(tenant_id, answer)
+        if variant and is_a_good_rewrite(answer, variant):
+            variants.append(variant)
+    return variants
+
+
+def _negative_examples(
+    cards: Sequence[dict[str, Any]],
+    index: dict[str, list[str]],
+) -> list[tuple[str, str]]:
+    """The requests about things that were never taught, and the refusal.
+
+    The model has to learn where its material stops, so it is shown a request
+    about something the trainer never taught and the answer it should give.
+    """
+    taught = {word for topics in index.values() for topic in topics for word in topic.split()}
+    unknown: list[str] = []
+    for card in cards:
+        for word in topic_words(str(card.get("question") or "")):
+            if len(word) > 4 and word not in taught and word not in unknown:
+                unknown.append(word)
+    return [
+        (f"Write a poem about the {word}.", REFUSAL) for word in unknown[:MAX_NEGATIVE_EXAMPLES]
+    ]
 
 
 def _repaired(sentences: list[str]) -> list[str]:

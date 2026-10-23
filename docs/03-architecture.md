@@ -211,6 +211,13 @@ request: the request and the material are read, never scored. The words of a
 request are marked with `<instr>`, the material with `<ctx>`, and the answer
 with `<resp>`, so the model knows which part is which.
 
+The training is measured against the material, not a fixed number: its steps
+grow so that the model makes several passes over the examples, because the
+measured runs showed a tiny model learns to guess in one pass and only starts
+knowing its lessons in the third and fourth. The loss on the brain page is
+read in the model's resting state over a few fixed batches, so it says how
+well the model knows the material and not how one draw of the training went.
+
 Every lesson is asked for in many wordings, so the model learns the subject
 rather than one phrasing of it. A subject belongs to one lesson only: when two
 lessons claim the same subject, the one that asks about it the most directly

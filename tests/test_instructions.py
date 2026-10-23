@@ -138,6 +138,32 @@ def test_nothing_is_found_for_a_topic_that_was_never_taught():
     assert requests.find_material(request, [FACT_CARD, POEM_CARD]) is None
 
 
+def test_a_topic_that_fact_lessons_also_say_still_finds_the_poem():
+    """The kind the request asks for picks the pool: facts can share the word."""
+    star_card = {
+        "id": "fact-star",
+        "question": "GK: What is the closest star to Earth?",
+        "answer": "The Sun is the closest star to Earth.",
+        "subject": "General Knowledge",
+        "subjects": ["General Knowledge"],
+        "grade_id": "lkg",
+    }
+    twinkle_card = {
+        "id": "poem-twinkle",
+        "question": "Poem: Twinkle Twinkle Little Star",
+        "answer": "Twinkle, twinkle, little star,\nHow I wonder what you are.",
+        "subject": "Language, Poems",
+        "subjects": ["Language", "Poems"],
+        "grade_id": "nursery",
+    }
+    request = requests.parse_request("write a poem on star")
+
+    card = requests.find_material(request, [FACT_CARD, star_card, twinkle_card])
+
+    assert card is not None
+    assert card["id"] == "poem-twinkle"
+
+
 # -- answering the request -----------------------------------------------
 
 
@@ -163,6 +189,36 @@ def test_the_taught_answer_is_used_when_the_model_says_something_else():
     assert result is not None
     assert result["source"] == "taught"
     assert result["answer"] == POEM_CARD["answer"]
+
+
+def test_the_taught_answer_is_used_when_the_model_repeats_itself():
+    """Looping words are not an answer: the taught poem is given instead."""
+    writer = FakeWriter("Rain, go away, go away, go away, go away.")
+
+    result = requests.answer_request(
+        "Write a short poem about the rain.", None, [POEM_CARD], writer=writer
+    )
+
+    assert result is not None
+    assert result["source"] == "taught"
+    assert result["answer"] == POEM_CARD["answer"]
+
+
+def test_a_poem_that_says_its_line_again_is_still_the_answer_of_the_model():
+    """The same line twice is a refrain, so the written poem is given away."""
+    writer = FakeWriter(
+        "Rain, rain, go away,"
+        "\nCome again another day."
+        "\nLittle children want to play,"
+        "\nRain, rain, go away."
+    )
+
+    result = requests.answer_request(
+        "Write a short poem about the rain.", None, [POEM_CARD], writer=writer
+    )
+
+    assert result is not None
+    assert result["source"] == "written"
 
 
 def test_a_request_about_something_never_taught_is_refused():

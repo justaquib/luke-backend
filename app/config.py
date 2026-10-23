@@ -19,6 +19,9 @@ class Settings(BaseSettings):
     base_answer_confidence: float = 0.5
     max_answer_confidence: float = 0.95
     confidence_step: float = 0.05
+    # The confidence above which a correction is kept for review instead of
+    # being used at once.
+    correction_review_confidence: float = 0.9
     spacy_model: str = "en_core_web_sm"
     cors_origins: str = "http://localhost:4200"
     upload_dir: str = "./uploads"

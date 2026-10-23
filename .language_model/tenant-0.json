@@ -57,97 +57,6 @@
   "word_cards": [],
   "lesson_cards": [
     {
-      "id": "f390680a2ce64ec98897c7e75eb8c8f4",
-      "question": "Poem: Baa Baa Black Sheep",
-      "answer": "Baa, baa, black sheep,\nHave you any wool?\nYes sir, yes sir,\nThree bags full.",
-      "grade_id": "lkg",
-      "subject": "Language, Poems",
-      "subjects": [
-        "Language",
-        "Poems"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:49:04.610102+00:00"
-    },
-    {
-      "id": "d5328ac561f44f9dac3e809c926172c9",
-      "question": "Poem: Mary Had a Little Lamb",
-      "answer": "Mary had a little lamb,\nIts fleece was white as snow.\nAnd everywhere that Mary went,\nThe lamb was sure to go.",
-      "grade_id": "lkg",
-      "subject": "Language, Poems",
-      "subjects": [
-        "Language",
-        "Poems"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:49:04.610102+00:00"
-    },
-    {
-      "id": "3db36c9c915942bcbb4e3e4b714b316a",
-      "question": "Poem: Row Row Row Your Boat",
-      "answer": "Row, row, row your boat,\nGently down the stream.\nMerrily, merrily, merrily, merrily,\nLife is but a dream.",
-      "grade_id": "lkg",
-      "subject": "Language, Poems",
-      "subjects": [
-        "Language",
-        "Poems"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:49:04.610102+00:00"
-    },
-    {
-      "id": "a0b84c76ed904466b5a8c339f772afaa",
-      "question": "Poem: Little Miss Muffet",
-      "answer": "Little Miss Muffet sat on a tuffet,\nEating her curds and whey.\nAlong came a spider and sat down beside her,\nAnd frightened Miss Muffet away.",
-      "grade_id": "lkg",
-      "subject": "Language, Poems",
-      "subjects": [
-        "Language",
-        "Poems"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:49:04.610102+00:00"
-    },
-    {
-      "id": "cddfb65a631d4865904d7254093c6da6",
-      "question": "Poem: Hey Diddle Diddle",
-      "answer": "Hey diddle diddle, the cat and the fiddle,\nThe cow jumped over the moon.\nThe little dog laughed to see such fun,\nAnd the dish ran away with the spoon.",
-      "grade_id": "lkg",
-      "subject": "Language, Poems",
-      "subjects": [
-        "Language",
-        "Poems"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:49:04.610102+00:00"
-    },
-    {
-      "id": "46a177a137364727b4342b438b8abf88",
-      "question": "Poem: Hickory Dickory Dock",
-      "answer": "Hickory dickory dock,\nThe mouse ran up the clock.\nThe clock struck one,\nThe mouse ran down,\nHickory dickory dock.",
-      "grade_id": "lkg",
-      "subject": "Language, Poems",
-      "subjects": [
-        "Language",
-        "Poems"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:49:04.610102+00:00"
-    },
-    {
-      "id": "c3e84bba461d49858d37d0588992370f",
-      "question": "Poem: London Bridge is Falling Down",
-      "answer": "London Bridge is falling down,\nFalling down, falling down.\nLondon Bridge is falling down,\nMy fair lady.",
-      "grade_id": "lkg",
-      "subject": "Language, Poems",
-      "subjects": [
-        "Language",
-        "Poems"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:49:04.610102+00:00"
-    },
-    {
       "id": "74b1e6d8832f459ca2d262731fdeae21",
       "question": "Poem: The Itsy Bitsy Spider",
       "answer": "The itsy bitsy spider climbed up the water spout.\nDown came the rain and washed the spider out.\nOut came the sun and dried up all the rain,\nAnd the itsy bitsy spider climbed up the spout again.",
@@ -6297,6 +6206,198 @@
       ],
       "confidence": 0.5,
       "created_at": "2026-10-21T17:32:50.767591+00:00"
+    },
+    {
+      "id": "1d440e166e0c40a2b6cb762cf6237687",
+      "question": "Poem: Twinkle Twinkle Little Star",
+      "answer": "Twinkle, twinkle, little star,\nHow I wonder what you are.\nUp above the world so high,\nLike a diamond in the sky.",
+      "grade_id": "lkg",
+      "subject": "Poems",
+      "subjects": [
+        "Poems"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-22T22:24:29.388006+00:00"
+    },
+    {
+      "id": "fb0f8aa9b5ba4fa8958776225f01924c",
+      "question": "Poem: The Wheels on the Bus",
+      "answer": "The wheels on the bus go round and round,\nRound and round, round and round.\nThe wheels on the bus go round and round,\nAll through the town.",
+      "grade_id": "lkg",
+      "subject": "Poems",
+      "subjects": [
+        "Poems"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-22T22:25:17.787931+00:00"
+    },
+    {
+      "id": "efd43feb6e8641fc8961c38c048357c6",
+      "question": "Poem: If You Are Happy",
+      "answer": "If you are happy and you know it, clap your hands.\nIf you are happy and you know it, clap your hands.\nIf you are happy and you know it, then your face will surely show it.\nIf you are happy and you know it, clap your hands.",
+      "grade_id": "lkg",
+      "subject": "Poems",
+      "subjects": [
+        "Poems"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-22T22:25:17.787931+00:00"
+    },
+    {
+      "id": "25a889d9aecf4ee38d93d35915dc7537",
+      "question": "Poem: Head Shoulders Knees and Toes",
+      "answer": "Head, shoulders, knees, and toes,\nKnees and toes.\nHead, shoulders, knees, and toes,\nKnees and toes.\nAnd eyes and ears and mouth and nose,\nHead, shoulders, knees, and toes,\nKnees and toes.",
+      "grade_id": "lkg",
+      "subject": "Poems",
+      "subjects": [
+        "Poems"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-22T22:25:17.787931+00:00"
+    },
+    {
+      "id": "56f02fcd238b4790b77b10042e930e65",
+      "question": "Poem: Old MacDonald Had a Farm",
+      "answer": "Old MacDonald had a farm,\nE I E I O.\nAnd on his farm he had a cow,\nE I E I O.\nWith a moo moo here and a moo moo there,\nHere a moo, there a moo, everywhere a moo moo.\nOld MacDonald had a farm,\nE I E I O.",
+      "grade_id": "lkg",
+      "subject": "Poems",
+      "subjects": [
+        "Poems"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-22T22:25:17.787931+00:00"
+    },
+    {
+      "id": "94ec2609924943e3b07b543ba2c9aaf8",
+      "question": "Poem: Jingle Bells",
+      "answer": "Jingle bells, jingle bells,\nJingle all the way.\nOh what fun it is to ride,\nIn a one-horse open sleigh.",
+      "grade_id": "lkg",
+      "subject": "Poems",
+      "subjects": [
+        "Poems"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-22T22:25:17.787931+00:00"
+    },
+    {
+      "id": "f107ae8d6416474f88b3bf4a7e3d1f84",
+      "question": "Poem: We Wish You a Merry Christmas",
+      "answer": "We wish you a merry Christmas,\nWe wish you a merry Christmas,\nWe wish you a merry Christmas,\nAnd a happy new year.",
+      "grade_id": "lkg",
+      "subject": "Poems",
+      "subjects": [
+        "Poems"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-22T22:25:17.787931+00:00"
+    },
+    {
+      "id": "d1789dc4633e427c987b6ee70bb29a32",
+      "question": "Poem: Ring a Ring o Roses",
+      "answer": "Ring a ring o roses,\nA pocket full of posies.\nA-tishoo, a-tishoo,\nWe all fall down.",
+      "grade_id": "lkg",
+      "subject": "Poems",
+      "subjects": [
+        "Poems"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-22T22:25:17.787931+00:00"
+    },
+    {
+      "id": "e5222f9540a349f2b4d2ab39754aba97",
+      "question": "Poem: Little Bo Peep",
+      "answer": "Little Bo Peep has lost her sheep,\nAnd does not know where to find them.\nLeave them alone and they will come home,\nWagging their tails behind them.",
+      "grade_id": "lkg",
+      "subject": "Poems",
+      "subjects": [
+        "Poems"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-22T22:25:17.787931+00:00"
+    },
+    {
+      "id": "3d4600c1aec84fa4a8404ef574e97bab",
+      "question": "Poem: Simple Simon",
+      "answer": "Simple Simon met a pieman,\nGoing to the fair.\nSaid Simple Simon to the pieman,\nLet me taste your ware.",
+      "grade_id": "lkg",
+      "subject": "Poems",
+      "subjects": [
+        "Poems"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-22T22:25:17.787931+00:00"
+    },
+    {
+      "id": "5b3b4450d84a4446b3f98b5f7b1f1ada",
+      "question": "Poem: Sing a Song of Sixpence",
+      "answer": "Sing a song of sixpence,\nA pocket full of rye.\nFour and twenty blackbirds,\nBaked in a pie.",
+      "grade_id": "lkg",
+      "subject": "Poems",
+      "subjects": [
+        "Poems"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-22T22:25:17.787931+00:00"
+    },
+    {
+      "id": "96664695d27a4ff38d89b903852fea9d",
+      "question": "Poem: Hot Cross Buns",
+      "answer": "Hot cross buns, hot cross buns,\nOne a penny, two a penny,\nHot cross buns.",
+      "grade_id": "lkg",
+      "subject": "Poems",
+      "subjects": [
+        "Poems"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-22T22:25:17.787931+00:00"
+    },
+    {
+      "id": "4b2ce4f9163b454ba5fbecec6acad375",
+      "question": "Poem: Rock a Bye Baby",
+      "answer": "Rock a bye baby on the tree top,\nWhen the wind blows the cradle will rock.\nWhen the bough breaks the cradle will fall,\nAnd down will come baby, cradle and all.",
+      "grade_id": "lkg",
+      "subject": "Poems",
+      "subjects": [
+        "Poems"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-22T22:25:17.787931+00:00"
+    },
+    {
+      "id": "303a645ade1c481ca25170e570394540",
+      "question": "Poem: This Little Piggy",
+      "answer": "This little piggy went to market,\nThis little piggy stayed home.\nThis little piggy had roast beef,\nThis little piggy had none.\nAnd this little piggy cried wee wee wee,\nAll the way home.",
+      "grade_id": "lkg",
+      "subject": "Poems",
+      "subjects": [
+        "Poems"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-22T22:25:17.787931+00:00"
+    },
+    {
+      "id": "a1e957113ee745a88a4e82054c032bed",
+      "question": "Poem: Five Little Monkeys",
+      "answer": "Five little monkeys jumping on the bed,\nOne fell off and bumped his head.\nMama called the doctor and the doctor said,\nNo more monkeys jumping on the bed.",
+      "grade_id": "lkg",
+      "subject": "Poems",
+      "subjects": [
+        "Poems"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-22T22:25:17.787931+00:00"
+    },
+    {
+      "id": "a9db05e90760448fa66e57b60b2692e8",
+      "question": "Poem: Ten in the Bed",
+      "answer": "There were ten in the bed and the little one said,\nRoll over, roll over.\nSo they all rolled over and one fell out.\nThere were nine in the bed and the little one said,\nRoll over, roll over.",
+      "grade_id": "lkg",
+      "subject": "Poems",
+      "subjects": [
+        "Poems"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-22T22:25:17.787931+00:00"
     }
   ],
   "passed_stages": [
@@ -6307,13 +6408,13 @@
     "stage": "lkg",
     "kind": "mock",
     "questions_asked": 6,
-    "answers_passed": 1,
-    "needs_learning": 4,
+    "answers_passed": 2,
+    "needs_learning": 3,
     "awaiting_score": true,
-    "last_question": "Name 5 animals",
-    "last_answer": "Some animals are ant, bear, cat, cow, deer, dog, elephant, fish, giraffe, horse, lion, monkey, owl, rabbit, sheep, tiger, whale, zebra.",
-    "last_source": "learner",
-    "last_source_detail": "Learner curriculum"
+    "last_question": "write a poem on rain",
+    "last_answer": "I haven't learned an answer to that grade's lessons yet.",
+    "last_source": "not_learned",
+    "last_source_detail": ""
   },
   "test_history": [
     {
@@ -6331,6 +6432,36 @@
       "needs_learning": 2,
       "passed": true,
       "created_at": "2026-10-19T15:27:15.689642+00:00"
+    },
+    {
+      "stage": "lkg",
+      "kind": "mock",
+      "questions_asked": 11,
+      "answers_passed": 6,
+      "needs_learning": 5,
+      "pass_rate": 0.55,
+      "passed": false,
+      "created_at": "2026-10-21T19:24:37.583281+00:00"
+    },
+    {
+      "stage": "lkg",
+      "kind": "exam",
+      "questions_asked": 10,
+      "answers_passed": 6,
+      "needs_learning": 4,
+      "pass_rate": 0.6,
+      "passed": false,
+      "created_at": "2026-10-21T19:29:31.312580+00:00"
+    },
+    {
+      "stage": "lkg",
+      "kind": "exam",
+      "questions_asked": 4,
+      "answers_passed": 2,
+      "needs_learning": 2,
+      "pass_rate": 0.5,
+      "passed": false,
+      "created_at": "2026-10-22T22:07:44.812415+00:00"
     }
   ],
   "accepted_duplicates": [

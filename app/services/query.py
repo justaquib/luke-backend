@@ -24,6 +24,20 @@ logger = logging.getLogger(__name__)
 UserLookup = Callable[[str, Session], User]
 DefaultResponse = Callable[..., QueryResponse]
 
+# A match beyond the exact threshold is only a guess, so the answer says so
+# until a trainer confirms it.
+NOT_SURE_NOTE = "I am not sure about the answer to “{0}”. A trainer can check it."
+
+
+def _flag_missing_confidence(answer: str, matched_question: str) -> str:
+    """The loosely matched answer, with a word that it is a guess.
+
+    The answer itself is kept: it is the closest one taught. The note tells
+    the reader that the match was not exact, and who can settle it.
+    """
+    subject = matched_question.strip() or "this question"
+    return f"{answer.rstrip('. ')}. {NOT_SURE_NOTE.format(subject)}"
+
 
 def _record_pending(db: Session, question: str, tenant_id: int | None = None) -> PendingQuestion:
     """Log an unanswered question, counting repeat occurrences."""
@@ -121,10 +135,11 @@ def _loose_intent(req: QueryRequest, tenant_id: int | None) -> dict | None:
 
 
 def _intent_response(req: QueryRequest, entities: list, intent: dict) -> QueryResponse:
+    flagged = _flag_missing_confidence(str(intent["answer"]), str(intent["matched_question"]))
     return QueryResponse(
         question=req.question,
         source="intent",
-        answer=intent["answer"],
+        answer=flagged,
         hits=[
             QueryHit(
                 text=intent["matched_question"],
@@ -294,9 +309,8 @@ def _answer_for_tenant(
         if response is not None:
             response.disabled_external_sources = disabled or None
             return response
-    return (
-        _disabled_response(req, entities, disabled)
-        or default_response(db, req, entities, disabled or None, tenant_id)
+    return _disabled_response(req, entities, disabled) or default_response(
+        db, req, entities, disabled or None, tenant_id
     )
 
 

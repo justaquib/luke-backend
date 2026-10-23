@@ -27,6 +27,7 @@ from typing import Any
 from app.services.language import instructions as instruction_service
 from app.services.language.shapes import REQUEST_SHAPES
 from app.services.language.topics import topic_words
+from app.services.transformer import quality as quality_service
 
 # The words that are never the topic of a request.
 _TOPIC_NOISE = frozenset(
@@ -160,12 +161,14 @@ def find_material(request: Request, cards: list[dict[str, Any]]) -> dict[str, An
     """The lesson the request is about, and nothing else.
 
     The lessons are looked up through the same topic index the model was
-    trained on, so a request finds the lesson the model learned to answer it
-    from. A word that many lessons share does not name any one of them, so it
-    is not in the index: the assistant says it does not know rather than
-    choosing one of many at random.
+    trained on, but the word counts are taken over the lessons of the kind
+    the request asks for: a request for a poem already chose its kind, so a
+    word that eight fact lessons also say ("star") still names the one poem
+    that speaks it. A word that many lessons of the same kind share names
+    none of them, and the request is refused rather than answered at random.
     """
-    lookup = _topic_lookup(cards)
+    pool = [card for card in cards if instruction_service.lesson_kind(card) == request.kind]
+    lookup = _topic_lookup(pool)
     candidates: list[dict[str, Any]] = []
     for word in request.words:
         for card in lookup.get(word, []):
@@ -173,16 +176,7 @@ def find_material(request: Request, cards: list[dict[str, Any]]) -> dict[str, An
                 candidates.append(card)
     if not candidates:
         return None
-    # A request for a poem is answered by a poem, and a request for facts by
-    # facts. A lesson of another kind is never the one that was meant.
-    same_kind = [
-        card for card in candidates if instruction_service.lesson_kind(card) == request.kind
-    ]
-    if not same_kind:
-        return None
-    if len(same_kind) == 1:
-        return same_kind[0]
-    return max(same_kind, key=lambda card: _asked_about(request, card))
+    return max(candidates, key=lambda card: _asked_about(request, card))
 
 
 def _asked_about(request: Request, card: dict[str, Any]) -> tuple[int, int]:
@@ -225,6 +219,22 @@ def _grounded(answer: str, context: str) -> bool:
     return True
 
 
+def _with_uncertainty(answer: str, writer: Any) -> str:
+    """The answer, with a word of it the model was not sure about.
+
+    The model says what it is not sure of, so the reader knows that this word
+    is a guess and not something the trainer taught.
+    """
+    from app.services.transformer import critique as critique_service
+
+    critique = getattr(writer, "last_critique", None)
+    if critique is None:
+        return answer
+    if critique.least_chance >= critique_service.MIN_WORD_CONFIDENCE:
+        return answer
+    return f"{answer} {critique.unsure_about}"
+
+
 def answer_request(
     question: str,
     tenant_id: int | None,
@@ -246,13 +256,14 @@ def answer_request(
     context = context_of(card)
     written = writer.respond(request.text, context=context) if writer is not None else None
     taught = str(card.get("answer") or "").strip()
-    if written and _grounded(written, context):
+    if written and _grounded(written, context) and not quality_service.repeats_itself(written):
         return {
-            "answer": written,
+            "answer": _with_uncertainty(written, writer),
             "source": "written",
             "topic": request.topic,
             "kind": request.kind,
             "confidence": getattr(writer, "last_confidence", 0.0),
+            "uncertain_words": list(getattr(writer, "last_uncertain_words", []) or []),
         }
     if taught:
         return {
@@ -261,5 +272,6 @@ def answer_request(
             "topic": request.topic,
             "kind": request.kind,
             "confidence": 0.0,
+            "uncertain_words": [],
         }
     return None
