@@ -17,8 +17,9 @@ from app.config import settings
 from app.core.files import folder_size
 from app.core.security import get_bearer_user, tenant_id_of
 from app.db.database import Faq, PendingQuestion, User, get_session
-from app.schemas import CorrectionBody, ModelSettingsBody
+from app.schemas import AnswerTraceBody, CorrectionBody, ModelSettingsBody
 from app.services import brain as brain_service
+from app.services import brain_trace as trace_service
 from app.services import documents as documents_service
 from app.services import model_settings
 from app.services import storage as storage_service
@@ -102,6 +103,15 @@ def save_language_model_settings(
 def language_model_brain(user: User = Depends(get_bearer_user)) -> dict[str, Any]:
     """What the brain knows about itself, and the level it has reached."""
     return reporting.brain_state(tenant_id_of(user))
+
+
+@router.post("/trace")
+def trace_language_model_answer(
+    body: AnswerTraceBody,
+    user: User = Depends(get_bearer_user),
+) -> dict[str, Any]:
+    """Trace the writer reading one question, with its real attention and choices."""
+    return trace_service.answer_trace(tenant_id_of(user), body.question)
 
 
 @router.post("/brain/test")

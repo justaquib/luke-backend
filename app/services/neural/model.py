@@ -49,9 +49,24 @@ class Block(nn.Module):
             nn.Dropout(dropout),
         )
 
-    def forward(self, x: torch.Tensor, mask: torch.Tensor) -> torch.Tensor:
+    def forward(
+        self,
+        x: torch.Tensor,
+        mask: torch.Tensor,
+        attention: list[torch.Tensor] | None = None,
+    ) -> torch.Tensor:
         normed = self.norm_attention(x)
-        attended, _ = self.attention(normed, normed, normed, attn_mask=mask, is_causal=True)
+        attended, weights = self.attention(
+            normed,
+            normed,
+            normed,
+            attn_mask=mask,
+            is_causal=True,
+            need_weights=attention is not None,
+            average_attn_weights=False,
+        )
+        if attention is not None and weights is not None:
+            attention.append(weights)
         x = x + attended
         return x + self.feed_forward(self.norm_feed_forward(x))
 
@@ -86,7 +101,11 @@ class TinyTransformer(nn.Module):
         elif isinstance(module, nn.Embedding):
             nn.init.normal_(module.weight, mean=0.0, std=0.02)
 
-    def forward(self, tokens: torch.Tensor) -> torch.Tensor:
+    def forward(
+        self,
+        tokens: torch.Tensor,
+        attention: list[torch.Tensor] | None = None,
+    ) -> torch.Tensor:
         length = tokens.shape[1]
         positions = torch.arange(length, device=tokens.device)
         hidden = self.token_embedding(tokens) + self.position_embedding(positions)
@@ -95,5 +114,5 @@ class TinyTransformer(nn.Module):
             diagonal=1,
         )
         for block in self.blocks:
-            hidden = block(hidden, mask)
+            hidden = block(hidden, mask, attention)
         return self.output(self.norm(hidden))

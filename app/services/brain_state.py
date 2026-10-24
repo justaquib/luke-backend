@@ -37,6 +37,7 @@ from app.services.brain_levels import (
     next_level_entry,
     training_volume_level,
 )
+from app.services.brain_roadmap import ROADMAP
 from app.services.brain_training import is_training
 from app.services.heads import LinearHead
 from app.services.neural import engine_for
@@ -133,10 +134,24 @@ def _instruction_view(instructions: dict[str, Any]) -> dict[str, Any]:
 
 
 def _ladder(model_name: str) -> list[dict[str, Any]]:
-    """The rungs as the page shows them, in the configured name."""
-    return [
-        {**entry, "title": level_title(str(entry["level"]), model_name)} for entry in LUKE_LEVELS
-    ]
+    """The whole road to 1.0.0, with the open levels and the locked ones."""
+    return [{**entry, "title": level_title(str(entry["level"]), model_name)} for entry in ROADMAP]
+
+
+def _next_requirement(
+    level: str,
+    measured: str,
+    following: dict[str, Any] | None,
+    next_detail: str,
+) -> str:
+    """What stands between the displayed level and the next one."""
+    if level_order(measured) > level_order(level):
+        return f"Approve {measured} to make it the displayed level."
+    if following is None:
+        return "It has reached the highest level."
+    if not following.get("open"):
+        return f"{following['level']} is locked. No test has been written for it yet."
+    return next_detail or f"Pass {following['level']} to move up."
 
 
 def _level_view(
@@ -156,16 +171,18 @@ def _level_view(
     level = approved_level(tenant_id)
     current = level_entry(level, model_name)
     following = next_level_entry(
-        measured if level_order(measured) > level_order(level) else level, model_name
+        measured if level_order(measured) > level_order(level) else level,
+        model_name,
+        ROADMAP,
     )
     steps = brain_material.next_steps(
         measured_data["brain_state"], knowledge, rungs, counted, model_name
     )
-    missing = [capability["name"] for capability in capabilities if not capability["ready"]]
     next_detail = next(
         (step["detail"] for step in steps if step["title"].startswith(f"Pass the {model_name}")),
         steps[0]["detail"] if steps else "",
     )
+    top_level = str(ROADMAP[-1]["level"])
     return {
         "level": level,
         "measured_level": measured,
@@ -176,10 +193,10 @@ def _level_view(
         "description": current["description"],
         "reference": current["reference"],
         "next_level": following["title"] if following else None,
-        "next_requirement": next_detail if missing else "It has reached the highest level.",
+        "next_requirement": _next_requirement(level, measured, following, next_detail),
         "capabilities": capabilities,
-        "max_level": LUKE_LEVELS[-1]["level"],
-        "ladder_size": len(LUKE_LEVELS),
+        "max_level": top_level,
+        "ladder_size": len(ROADMAP),
         "levels": _ladder(model_name),
         "training_volume": training_volume_level(knowledge.get("items", 0)),
         "rungs": rungs,
@@ -192,9 +209,7 @@ def _level_view(
         "frontier_level": 6.0,
         "frontier_title": BENCHMARK_TITLE,
         "frontier_note": BENCHMARK_NOTE,
-        "ladder_share": round(
-            level_value(level) / max(level_value(LUKE_LEVELS[-1]["level"]), 1e-9), 4
-        ),
+        "ladder_share": round(level_value(level) / max(level_value(top_level), 1e-9), 4),
         "model_name": model_name,
         "model_start_level": settings.start_level,
     }

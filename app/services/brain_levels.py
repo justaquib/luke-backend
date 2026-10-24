@@ -180,9 +180,14 @@ def level_entry(level: str, model_name: str = "Luke") -> dict[str, Any]:
     return {**LUKE_LEVELS[0], "title": level_title(SEED_LEVEL, model_name)}
 
 
-def next_level_entry(level: str, model_name: str = "Luke") -> dict[str, Any] | None:
+def next_level_entry(
+    level: str,
+    model_name: str = "Luke",
+    entries: list[dict[str, Any]] | None = None,
+) -> dict[str, Any] | None:
+    """The next entry above a level, from the open ladder or a given road."""
     order = level_order(level)
-    for entry in LUKE_LEVELS:
+    for entry in entries or LUKE_LEVELS:
         if level_order(str(entry["level"])) > order:
             return {
                 **entry,

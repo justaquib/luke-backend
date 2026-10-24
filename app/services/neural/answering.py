@@ -33,6 +33,9 @@ from app.services.neural.tokens import (
 # A written answer is at least this long before it may say it is finished.
 MIN_ANSWER_WORDS = 4
 
+# The candidate words a trace reports for every choice the writer made.
+TRACE_CHOICES = 5
+
 # A content word that was already written is less likely to be written again.
 REPEAT_PENALTY = 1.5
 
@@ -116,13 +119,19 @@ def _penalize_repeats(logits: torch.Tensor, written: list[int], writer: Any) -> 
         logits[token_id] -= REPEAT_PENALTY * count
 
 
-def write(writer: Any, tokens: list[int], max_words: int) -> list[int]:
+def write(
+    writer: Any,
+    tokens: list[int],
+    max_words: int,
+    trace: list[dict[str, Any]] | None = None,
+) -> list[int]:
     """The words the model writes after reading what it has read.
 
     The answer ends when the model says it is done, not at the first full
     stop: a poem has a full stop in the middle of it. How sure the model was
     about every word is kept, so the answer can be read again before it is
-    given away.
+    given away. A trace, when asked for, keeps every choice and the scores it
+    was chosen from.
     """
     device = next(writer.model.parameters()).device
     written: list[int] = []
@@ -141,8 +150,11 @@ def write(writer: Any, tokens: list[int], max_words: int) -> list[int]:
             _penalize_repeats(logits, written, writer)
             if finish is not None and len(written) < MIN_ANSWER_WORDS:
                 logits[finish] = -float("inf")
+            probabilities = torch.softmax(logits, dim=-1)
             token_id = int(torch.argmax(logits).item())
-            chance = float(torch.softmax(logits, dim=-1)[token_id].clamp_min(1e-9).item())
+            chance = float(probabilities[token_id].clamp_min(1e-9).item())
+            if trace is not None:
+                trace.append(_traced_choice(writer, probabilities, token_id, chance))
             chances.append(chance)
             tokens.append(token_id)
             written.append(token_id)
@@ -151,6 +163,26 @@ def write(writer: Any, tokens: list[int], max_words: int) -> list[int]:
     skip = {writer.index.get(START), writer.index.get(FINISH), writer.index.get(PAD)}
     _remember(writer, written, chances)
     return [token for token in written if token not in skip]
+
+
+def _traced_choice(
+    writer: Any,
+    probabilities: torch.Tensor,
+    token_id: int,
+    chance: float,
+) -> dict[str, Any]:
+    """The word that was chosen, and the scores it was chosen from."""
+    values, positions = torch.topk(probabilities, min(TRACE_CHOICES, probabilities.numel()))
+    candidates = [
+        {"token": writer.vocabulary[int(position)], "probability": round(float(value), 5)}
+        for value, position in zip(values.tolist(), positions.tolist(), strict=False)
+        if value > 0
+    ]
+    return {
+        "token": writer.vocabulary[token_id],
+        "probability": round(chance, 5),
+        "candidates": candidates,
+    }
 
 
 def _remember(writer: Any, written: list[int], chances: list[float]) -> None:

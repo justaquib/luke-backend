@@ -24,6 +24,7 @@ from app.schemas.parenting import (
 from app.schemas.parenting import (
     ParentingTurnBody as ParentingTurnBody,
 )
+from app.schemas.trace import AnswerTraceBody as AnswerTraceBody
 
 RULE_KINDS = {"instruction", "own_words", "short"}
 

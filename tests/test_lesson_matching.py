@@ -41,6 +41,18 @@ ROOT_CARDS = [
     },
 ]
 
+SHAKESPEARE_CARD = {
+    "question": "Who wrote the play Romeo and Juliet?",
+    "answer": "William Shakespeare wrote the play Romeo and Juliet.",
+    "confidence": 1.0,
+}
+
+EYE_CARD = {
+    "question": "What is the eye?",
+    "answer": "The eye is a body part. It helps us see.",
+    "confidence": 0.5,
+}
+
 
 def test_the_mark_that_names_the_kind_is_not_a_word_of_the_question():
     """The "GK:" in front of a lesson is not part of the question."""
@@ -55,6 +67,25 @@ def test_a_question_asked_in_other_words_still_finds_the_lesson():
 
     assert matched is not None
     assert matched["answer"] == RUDIMENT_CARD["answer"]
+
+
+def test_the_answer_finds_the_lesson_its_title_does_not():
+    matched = _matched_learned_lesson(
+        "We see through which body part?", [SHAKESPEARE_CARD, EYE_CARD]
+    )
+
+    assert matched is not None
+    assert matched["answer"] == EYE_CARD["answer"]
+
+
+def test_an_answer_that_shares_one_word_does_not_cover_the_question():
+    color_card = {
+        "question": "What is a color?",
+        "answer": "A color is what we see when light reflects off an object.",
+        "confidence": 1.0,
+    }
+
+    assert _matched_learned_lesson("We see through which body part?", [color_card]) is None
 
 
 def test_two_lessons_that_share_their_words_are_told_apart():

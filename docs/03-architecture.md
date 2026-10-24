@@ -150,6 +150,14 @@ one the assistant uses when it speaks about itself, and the starting version
 is the floor of the displayed level ladder. The greeting pairs are built from
 the same name, so a rename changes the voice and the training together.
 
+The whole ladder is data, in `app/services/brain_roadmap.py`: 101 rungs from
+`0.0.0` to `1.0.0`, grouped into ten bands and ending with the Generalist. A
+rung is marked `open` only when `LUKE_LEVELS` holds a real test for it, so the
+page can show the full road while measurement stays at the last tested level
+(`0.1.0`). `GET /language-model/brain` returns every rung with its band and
+open state; the page locks every rung that is not the next open one, and the
+displayed level still moves only on the trainer's approval.
+
 Training the brain takes its time, so it runs in its own process: the app
 stays usable while the model learns. The tenant's learner file carries a
 `training-<tenant>.json` marker while that runs, and the page asks the brain
@@ -287,8 +295,10 @@ The system administrator has no tenant of their own: they look after every
 tenant instead of belonging to one. The chat answers them anyway, reading the
 material of the tenant-less bucket (where the lessons they taught themselves
 live) and, with no tenant filter on it, the approved answers and the
-documents of every tenant they look after. A user without a tenant is still
-turned away, because they have no assistant of their own.
+documents of every tenant they look after. Their own uploads and feedback land
+in that tenant-less bucket (`tenant_id NULL`), so the material they add is
+platform-owned rather than filed under a tenant. A user without a tenant is
+still turned away, because they have no assistant of their own.
 
 ### Correcting an answer
 

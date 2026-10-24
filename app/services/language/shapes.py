@@ -18,7 +18,8 @@ REQUEST_SHAPES: tuple[tuple[re.Pattern[str], str], ...] = (
     (
         re.compile(
             r"\b(?:can|could|would|please)\s+you\s+(?:please\s+)?(?:write|compose|make|create|"
-            r"recite|say|give)\s+(?:me\s+)?(?:a\s+|an\s+|the\s+)?(?:short\s+|little\s+|"
+            r"recite|say|give|tell|read|sing)\s+(?:me\s+)?(?:a\s+|an\s+|the\s+)?"
+            r"(?:short\s+|little\s+|"
             r"small\s+|new\s+)?(?P<art>poem|rhyme|song|verse|story|letter|sentence|list)\s+"
             r"(?:about|on|for)\s+(?:the\s+)?(?P<topic>[^.?]+)",
             re.IGNORECASE,
@@ -27,8 +28,8 @@ REQUEST_SHAPES: tuple[tuple[re.Pattern[str], str], ...] = (
     ),
     (
         re.compile(
-            r"\b(?:write|compose|make(?:\s+up)?|create|recite|say|give)\s+(?:me\s+)?"
-            r"(?:a\s+|an\s+|the\s+)?"
+            r"\b(?:write|compose|make(?:\s+up)?|create|recite|say|give|tell|read|sing)\s+"
+            r"(?:me\s+)?(?:a\s+|an\s+|the\s+)?"
             r"(?:short\s+|little\s+|small\s+|new\s+)?"
             r"(?P<art>poem|rhyme|song|verse|story|letter|sentence|list)\s+"
             r"(?:about|on|for)\s+(?:the\s+)?(?P<topic>[^.?]+)",

@@ -49,14 +49,18 @@ every page in every sidebar state. It has three zones:
 Page identity lives in the top bar and the info sidebar, not in the page body.
 `pageInfoForUrl` maps each route to a name, scope, title and description
 (`Assistance brain` / `Neural engine` / `Model builder`, `Chat` / `Chat` /
-`Assistant`). The bar shows the name and scope; the info panel shows the title
-and description. A page with secondary controls registers them through a
-`<ng-template appPageInfoActions>` that the info panel draws at its top, and
-its one primary action through `<ng-template appTopBarActions>`, which the bar
-draws before the frame controls. The panel shows the info, the controls and
-the engine facts; the details control switches to the details the current page
-registered and the info control switches back. A running background task is
-pinned below the active content. The panel starts below the top panel and
+`Assistant`). The bar shows the name, scope and the page's live context title
+(a chat's session title, renamed in place); the info panel shows the title and
+description. A page with secondary controls registers them through a
+`<ng-template appPageInfoActions>` that the info panel draws below the page's
+facts, and its one primary action through `<ng-template appTopBarActions>`,
+which the bar draws before the frame controls. A page's live facts register
+through `<ng-template appPageInfoFacts>` and sit at the top of the panel, so
+the page body keeps only its content. The panel shows the info, the facts, the
+controls and the engine facts; the details control switches to the details the
+current page registered and the info control switches back. A running
+background task is pinned below the active content. The panel starts below the
+top panel and
 closes with the backdrop, the close button or Escape. A running background task
 also shows at the bottom of the open primary sidebar. A page never repeats its
 title, eyebrow, description or actions row in its body.
@@ -65,14 +69,13 @@ title, eyebrow, description or actions row in its body.
 
 ```
 ┌──────────────┬─────────────────────────────────────────────┐
-│ ☰ Luke       │ Chat · ASSISTANT                 [i] [⚙] [▤] │  top panel
+│ ☰ Luke       │ Chat · ASSISTANT · Why is the sky blue  [i][⚙][▤] │  top panel
 ├──────────────┼─────────────────────────────────────────────┤
-│  + New chat  │ Conversation engine       ● Engine online   │
-│              │ ┌ Messages · Answer paths · Started ──────┐ │
-│  • Chat #1   │                                             │
-│  • Chat #2   │  You: What is ChromaDB?                     │
-│              │  Assistant: ChromaDB is a vector database…  │
-│              │  Source: ...          [copy] [👍] [👎]      │
+│  + New chat  │  Assistant: Hello! I am your Luke assistant…│
+│              │                                             │
+│  • Chat #1   │  You: Why is the sky blue?                  │
+│  • Chat #2   │  Assistant: The sky appears blue because…   │
+│              │  Source: Documents     [i] [copy] [👍] [👎] │
 │              │                                             │
 │              ├─────────────────────────────────────────────┤
 │              │ [Type a message…]                     [➤]   │
@@ -81,15 +84,36 @@ title, eyebrow, description or actions row in its body.
 
 ### Components in the chat page
 
-| Area            | What it does                                                        |
-| --------------- | ------------------------------------------------------------------- |
-| Top panel       | Shared frame: brand + navigation, page name + scope, info/settings/details |
-| Sidebar         | Chat sessions, "New chat", the running background task at the bottom |
-| Chat header     | Session title, engine state and the settings shortcut               |
-| Facts strip     | Messages, answer paths and the start time of the conversation       |
-| Messages        | Flat answers with provenance and copy / good / wrong actions         |
-| Composer        | Textarea + send button                                              |
-| Right sidebar   | Page details or engine information, with running tasks pinned below |
+| Area          | What it does                                                                    |
+| ------------- | ------------------------------------------------------------------------------- |
+| Top panel     | Shared frame: brand + navigation, page name + scope + session title, info/settings/details |
+| Sidebar       | Chat sessions, "New chat", the running background task at the bottom             |
+| Messages      | Flat answers; an answer opens its details in the right panel; provenance and copy / good / wrong actions |
+| Composer      | Textarea + send button                                                          |
+| Right sidebar | Page information (the conversation facts for the active session, then the engine facts) or answer details (question, answer, source, match, passages, live link and the measured writer trace with its attention heatmap), with running tasks pinned below |
+
+The conversation facts — message count, distinct answer sources and start time
+— live in the page information panel, not the body. They are read from the
+active session, so the panel shows the session the top bar names; switching
+sessions (with the panel closed, since the panel is modal) and reopening it
+shows that session's measured values.
+
+### The answer trace
+
+An assistant answer's details include "How the model reads this question",
+filled from `POST /language-model/trace`. It is measured, not an illustration:
+the exact tokens the writer read (marks included), an embedding preview with
+each token's norm, the real attention weights for every layer and head (the
+heatmap averages all heads by default and lets the reader choose one), the
+actual next-word candidates with their probabilities, and the writer's own
+greedy choice steps with the produced text, stop reason and elapsed time. An
+untrained writer reports that it has not been trained instead of showing
+numbers.
+
+The panel first states the route that served the answer. A retrieval, taught or
+conversation answer was not generated word by word, so the trace is labelled as
+the writer's measured reading of the same question, never as the path that
+answer took. Only a `written` route is described as the writer's own run.
 
 ### Sessions (chats)
 
@@ -138,8 +162,10 @@ This is the primary path:
 Best for catching patterns you missed:
 
 1. Go to `/dashboard/trainer`.
-2. The **Inbox** tab shows every pending question the bot couldn't answer, sorted by how often it was asked.
+2. The **Inbox** tab lists only the pending questions the bot couldn't answer, sorted by how often it was asked. Answered questions live under **Trained answers**, so the inbox has no resolved filter and no pending/total counter.
 3. Type the answer, click **Save & train** — the same flow as above.
+
+The page's info panel (the `i` control in the top bar) carries the corpus facts — trained answers, pending questions and their sum — read from the loaded lists, so the counts stay off the tab body. It holds no upload or refresh controls: uploading happens from the tile in the Documents tab, and the corpus refreshes after each action.
 
 ### 3. Add a Q↔A from scratch
 
@@ -151,6 +177,25 @@ The brain page (`/dashboard/brain`) trains the neural writer from every source
 above plus the lessons, documents, words and sentences. The Sources panel says
 what it will train from before the run, and the training happens in its own
 process so the rest of the app stays usable.
+
+### The level ladder
+
+The brain page shows the whole road from `0.0.0` to `1.0.0` as a game ladder:
+101 rungs in ten bands, from Foundations to Judgment, ending at the Generalist.
+A rung is marked **passed** when its level was approved, **ahead** when it was
+measured and the approval is waiting, **next** only when it is the rung after
+the approved level and a test for it exists, and **locked** otherwise. A locked
+rung says that no test has been written for it yet and never shows a
+measurement. The displayed level still moves only on the trainer's approval,
+and measurement stops at `0.1.0` until the higher rungs have real tests.
+
+### 5. Upload source documents
+
+The **Documents** tab in `/dashboard/trainer` lists every file the assistant
+answers from. Its first card is the upload tile: click it, or tab to its file
+input and press Enter, to pick a csv, xlsx, docx, doc, pdf or txt file. The
+tile shows the indexing state while `POST /upload` runs, and the refreshed file
+cards follow it with their chunk counts and view, download and remove actions.
 
 ## Settings page
 

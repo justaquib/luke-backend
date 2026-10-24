@@ -14,6 +14,7 @@ from app.services import (
     brain_instruction,
     brain_material,
     brain_paths,
+    brain_roadmap,
     brain_rung_results,
     brain_state,
 )
@@ -59,6 +60,49 @@ def test_the_ladder_climbs_in_hundredths_to_a_tenth() -> None:
     assert ids[1:-1] == [f"0.0.{minor}" for minor in range(1, 10)]
     assert ids[-1] == "0.1.0"
     assert ids == sorted(ids, key=brain.level_order)
+
+
+def test_the_whole_road_is_shown_to_the_generalist() -> None:
+    roadmap = brain_roadmap.ROADMAP
+    ids = [str(entry["level"]) for entry in roadmap]
+
+    assert len(ids) == 101
+    assert ids[:10] == [f"0.0.{index}" for index in range(10)]
+    assert ids[10] == "0.1.0"
+    assert ids[-1] == "1.0.0"
+    assert ids == sorted(ids, key=brain.level_order)
+    assert len(set(ids)) == len(ids)
+    assert all(entry["band"] and entry["band_name"] for entry in roadmap)
+    assert len({str(entry["name"]) for entry in roadmap}) == len(roadmap)
+
+
+def test_only_the_tested_levels_are_open() -> None:
+    roadmap = brain_roadmap.ROADMAP
+    open_ids = [str(entry["level"]) for entry in roadmap if entry["open"]]
+
+    assert open_ids == [str(entry["level"]) for entry in brain.LUKE_LEVELS]
+    assert open_ids == ["0.0.0", *[f"0.0.{minor}" for minor in range(1, 10)], "0.1.0"]
+    assert next(entry for entry in roadmap if entry["level"] == "1.0.0")["open"] is False
+
+
+def test_the_page_reads_the_whole_road_and_locks_the_next_level(monkeypatch, tmp_path) -> None:
+    _patch_the_measurements(monkeypatch)
+    monkeypatch.setattr(brain_paths, "brain_dir", lambda: tmp_path)
+    monkeypatch.setattr(brain_rung_results, "rung_results", lambda *args, **kwargs: _rungs(set()))
+    (tmp_path / "level-7.json").write_text(
+        json.dumps({"approved_level": "0.1.0"}), encoding="utf-8"
+    )
+
+    level = brain.model_level(7)
+
+    assert level["level"] == "0.1.0"
+    assert level["max_level"] == "1.0.0"
+    assert level["ladder_size"] == 101
+    assert len(level["levels"]) == 101
+    assert level["ladder_share"] == 0.1
+    assert level["next_level"] == "Luke 0.1.1 · Recalled"
+    assert "locked" in level["next_requirement"]
+    assert "no test" in level["next_requirement"].lower()
 
 
 def test_the_displayed_level_waits_for_the_trainer(monkeypatch, tmp_path) -> None:

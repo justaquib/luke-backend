@@ -7,7 +7,8 @@ from dataclasses import dataclass
 from typing import Any
 
 from app.services import brain
-from app.services.language import answering
+from app.services.language import answering, matching
+from app.services.language import requests as request_service
 from app.services.parenting import scaffold as scaffold_service
 from app.services.parenting import sessions as session_service
 from app.services.parenting.sessions import CoachingSession
@@ -20,6 +21,10 @@ ESCALATED = "escalated"
 
 COACHING_MAX_WORDS = 48
 MAX_SCAFFOLD_ATTEMPTS = 2
+# The parent's message is a sentence, not a lesson question, so the bar for
+# the card it answers from is a little lower than a lesson lookup. The card
+# still has to share most of its words with the message.
+COACH_CARD_MATCH = 0.4
 
 
 @dataclass(frozen=True)
@@ -90,8 +95,15 @@ def coaching_turn(payload: CoachingTurnInput, *, correction: str = "") -> Coachi
         session.last_correction = ""
         return CoachingTurn(status=ANSWERED, answer=taught, scaffold=None)
 
+    if request_service.parse_request(clean_message) is not None:
+        # The material does not answer this request, so there is nothing to
+        # write from. A card about another subject would invent an answer.
+        session.status = ANSWERED
+        session.last_correction = ""
+        return CoachingTurn(status=ANSWERED, answer=_not_learned_answer(), scaffold=None)
+
     instruction = _instruction(clean_message, session.child_age_band, clean_correction)
-    answer = _coach_answer(instruction, session.topic, payload.cards, writer)
+    answer = _coach_answer(instruction, clean_message, payload.cards, writer)
     is_writer_answer = (
         answer.source == "writer" and writer is not None and bool(getattr(writer, "trained", False))
     )
@@ -133,12 +145,12 @@ def _taught_answer(message: str, tenant_id: int | None) -> CoachingAnswer | None
 
 def _coach_answer(
     instruction: str,
-    topic: str,
+    message: str,
     cards: list[dict[str, Any]],
     writer: Any = None,
 ) -> CoachingAnswer:
     """The coach's answer, written from the taught material, or the taught one."""
-    card = _card_for(topic, cards)
+    card = matching.lesson_covering(message, cards or [], minimum=COACH_CARD_MATCH)
     context = _context_of(card)
     taught = str((card or {}).get("answer") or "").strip()
     text: str | None = None
@@ -161,20 +173,37 @@ def _coach_answer(
             grammar_notes = tuple(
                 str(problem) for problem in (getattr(critique, "problems", None) or [])
             )
+    if text and taught and source == "writer" and (grammar_notes or not grounded):
+        # The writer read its own answer and found it wanting, so the lesson
+        # the coach was given is better than a sentence it cannot stand behind.
+        text = taught.strip()
+        source = "taught"
+        confidence = 1.0
+        grounded = True
+        grammar_notes = ()
     if not text and taught:
         text = taught.strip()
         source = "taught"
         confidence = 1.0
         grounded = True
     if not text:
-        text = answering.NOT_LEARNED
-        source = "not_learned"
+        return _not_learned_answer()
     return CoachingAnswer(
         text=text or "",
         confidence=confidence,
         grounded=grounded,
         source=source,
         grammar_notes=grammar_notes,
+    )
+
+
+def _not_learned_answer() -> CoachingAnswer:
+    """What the coach says when the material holds no answer."""
+    return CoachingAnswer(
+        text=answering.NOT_LEARNED,
+        confidence=0.0,
+        grounded=False,
+        source="not_learned",
     )
 
 
@@ -189,17 +218,6 @@ def _instruction(message: str, age_band: str, correction: str) -> str:
     if (correction or "").strip():
         parts.append(f"The coach should have said this instead: {correction}.")
     return " ".join(parts)
-
-
-def _card_for(topic: str, cards: list[dict[str, Any]]) -> dict[str, Any] | None:
-    """The taught passage the coach answers from."""
-    key = (topic or "General").strip().lower()
-    for card in cards or []:
-        if key in str(card.get("subject") or "").lower():
-            return card
-        if key in f"{card.get('question') or ''} {card.get('answer') or ''}".lower():
-            return card
-    return None
 
 
 def _context_of(card: dict[str, Any] | None) -> str:

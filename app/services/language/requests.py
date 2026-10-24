@@ -129,6 +129,17 @@ def _topic_words(text: str) -> tuple[str, ...]:
     return tuple(seen)
 
 
+def _singular(word: str) -> str:
+    """A simple plural with its ending taken off, so "stars" finds "star"."""
+    if word.endswith(("ches", "shes", "sses", "xes", "zes")):
+        return word[:-2]
+    if len(word) > 4 and word.endswith("ies"):
+        return f"{word[:-3]}y"
+    if len(word) > 3 and word.endswith("s") and not word.endswith(("ss", "us", "is")):
+        return word[:-1]
+    return word
+
+
 def parse_request(question: str) -> Request | None:
     """Read a request as a topic to answer, or None when it is not one."""
     text = (question or "").strip()
@@ -152,9 +163,9 @@ def parse_request(question: str) -> Request | None:
 
 def _overlaps(request: Request, card: dict[str, Any]) -> int:
     """How many of the words of the request the lesson is about."""
-    words = set(topic_words(str(card.get("question") or "")))
-    words.update(topic_words(str(card.get("answer") or "")))
-    return len(set(request.words) & words)
+    words = {_singular(word) for word in topic_words(str(card.get("question") or ""))}
+    words.update(_singular(word) for word in topic_words(str(card.get("answer") or "")))
+    return len({_singular(word) for word in request.words} & words)
 
 
 def find_material(request: Request, cards: list[dict[str, Any]]) -> dict[str, Any] | None:
@@ -171,9 +182,10 @@ def find_material(request: Request, cards: list[dict[str, Any]]) -> dict[str, An
     lookup = _topic_lookup(pool)
     candidates: list[dict[str, Any]] = []
     for word in request.words:
-        for card in lookup.get(word, []):
-            if card not in candidates:
-                candidates.append(card)
+        for topic in dict.fromkeys((word, _singular(word))):
+            for card in lookup.get(topic, []):
+                if card not in candidates:
+                    candidates.append(card)
     if not candidates:
         return None
     return max(candidates, key=lambda card: _asked_about(request, card))
@@ -181,8 +193,8 @@ def find_material(request: Request, cards: list[dict[str, Any]]) -> dict[str, An
 
 def _asked_about(request: Request, card: dict[str, Any]) -> tuple[int, int]:
     """How directly the lesson asks about the topic of the request."""
-    asked = set(topic_words(str(card.get("question") or "")))
-    shared = len(set(request.words) & asked)
+    asked = {_singular(word) for word in topic_words(str(card.get("question") or ""))}
+    shared = len({_singular(word) for word in request.words} & asked)
     return (shared, -len(str(card.get("answer") or "")))
 
 
@@ -194,7 +206,8 @@ def _topic_lookup(cards: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]
         key = str(card.get("id") or card.get("question") or "")
         for topic in index.get(key, []):
             for word in topic.split():
-                lookup.setdefault(word, []).append(card)
+                for lookup_word in {word, _singular(word)}:
+                    lookup.setdefault(lookup_word, []).append(card)
     return lookup
 
 
@@ -210,11 +223,13 @@ def _grounded(answer: str, context: str) -> bool:
 
     This is what keeps the model honest: an answer that uses a word the
     trainer never taught is refused and the taught answer is used instead.
+    The words are compared whole, so "we" is not found inside "wonder".
     """
+    given = set(_words(context))
     for word in _words(answer):
         if len(word) <= 2:
             continue
-        if word not in context.lower():
+        if word not in given:
             return False
     return True
 
@@ -255,8 +270,15 @@ def answer_request(
         return None
     context = context_of(card)
     written = writer.respond(request.text, context=context) if writer is not None else None
+    critique = getattr(writer, "last_critique", None) if writer is not None else None
+    problems = tuple(getattr(critique, "problems", ()) or ()) if critique is not None else ()
     taught = str(card.get("answer") or "").strip()
-    if written and _grounded(written, context) and not quality_service.repeats_itself(written):
+    if (
+        written
+        and not problems
+        and _grounded(written, context)
+        and not quality_service.repeats_itself(written)
+    ):
         return {
             "answer": _with_uncertainty(written, writer),
             "source": "written",

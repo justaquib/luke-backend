@@ -21,9 +21,10 @@ from app.services.ingestion import ingest_text
 from app.services.nlp import chunk_text
 
 
-def _tenant_id(user: User, action: str) -> int:
+def _tenant_id(user: User) -> int | None:
+    """The owner of new material; the system admin's material is platform-wide."""
     if user.is_systemadmin:
-        raise HTTPException(403, f"System admin cannot {action}")
+        return None
     if not user.tenant_id:
         raise HTTPException(403, "User is not assigned to a tenant")
     return user.tenant_id
@@ -31,13 +32,13 @@ def _tenant_id(user: User, action: str) -> int:
 
 def ingest_document(user: User, req: IngestRequest, db: Session) -> IngestResponse:
     """Ingest pasted text for the current tenant."""
-    tenant_id = _tenant_id(user, "ingest documents")
+    tenant_id = _tenant_id(user)
     return ingest_text(db, tenant_id, req.source, req.text)
 
 
 def upload_document(user: User, upload: UploadFile, db: Session) -> dict:
     """Store an uploaded file and index its chunks for the current tenant."""
-    tenant_id = _tenant_id(user, "upload documents")
+    tenant_id = _tenant_id(user)
     filename = Path(upload.filename or "upload").name
     extension = Path(filename).suffix.lower()
     if extension not in ALLOWED_UPLOAD_EXTENSIONS:
@@ -106,7 +107,7 @@ def uploaded_file(filename: str) -> Path:
 
 def create_feedback(user: User, req: FeedbackCreate, db: Session) -> Feedback:
     """Store feedback left by a tenant user."""
-    tenant_id = _tenant_id(user, "create feedback")
+    tenant_id = _tenant_id(user)
     feedback = Feedback(
         message_id=req.message_id,
         question=req.question,

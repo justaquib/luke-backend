@@ -82,6 +82,14 @@ def test_an_unusable_name_or_version_is_refused(brain_dir) -> None:
         model_settings.save(7, "Nova", "9.9.9")
 
 
+def test_a_locked_version_cannot_be_the_starting_version(brain_dir) -> None:
+    with pytest.raises(ValueError):
+        model_settings.save(7, "Nova", "0.2.0")
+
+    assert model_settings.read(7).start_level == "0.0.0"
+    assert len(model_settings.view(7)["levels"]) == len(brain_levels.LUKE_LEVELS)
+
+
 def test_the_conversation_uses_the_configured_name() -> None:
     assert conversation.answer_conversation("Hello!", "Nova") == (
         "Hello! I am Nova. How can I help you today?"

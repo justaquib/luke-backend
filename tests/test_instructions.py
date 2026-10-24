@@ -5,8 +5,18 @@ the step after it: a request worded in words the trainer never used, answered
 from the material the trainer did teach.
 """
 
-from app.services.language import corpus as corpus_service
-from app.services.language import evaluation, instructions, requests, topics
+from app.services.language import (
+    corpus as corpus_service,
+)
+from app.services.language import (
+    evaluation,
+    instructions,
+    preview,
+    requests,
+    runtime,
+    teaching,
+    topics,
+)
 
 POEM_CARD = {
     "id": "poem-1",
@@ -17,9 +27,6 @@ POEM_CARD = {
     "grade_id": "lkg",
 }
 
-# A small model, so the tests that train one stay quick.
-SMALL_MODEL = {"d_model": 32, "layers": 1, "heads": 2, "context": 96}
-
 FACT_CARD = {
     "id": "fact-1",
     "question": "What is a kite?",
@@ -29,18 +36,23 @@ FACT_CARD = {
     "grade_id": "nursery",
 }
 
+STAR_CARD = {
+    "id": "fact-star",
+    "question": "GK: What is the closest star to Earth?",
+    "answer": "The Sun is the closest star to Earth.",
+    "subject": "General Knowledge",
+    "subjects": ["General Knowledge"],
+    "grade_id": "lkg",
+}
 
-class FakeWriter:
-    """A writer that answers with the words it is given."""
-
-    def __init__(self, answer: str = "Rain, rain, go away.") -> None:
-        self.answer = answer
-        self.asked = []
-        self.last_confidence = 0.9
-
-    def respond(self, instruction, context="", max_words=64, reading=None):
-        self.asked.append((instruction, context))
-        return self.answer
+TWINKLE_CARD = {
+    "id": "poem-twinkle",
+    "question": "Poem: Twinkle Twinkle Little Star",
+    "answer": "Twinkle, twinkle, little star,\nHow I wonder what you are.",
+    "subject": "Language, Poems",
+    "subjects": ["Language", "Poems"],
+    "grade_id": "nursery",
+}
 
 
 # -- reading the request ------------------------------------------------
@@ -160,115 +172,53 @@ def test_nothing_is_found_for_a_topic_that_was_never_taught():
 
 def test_a_topic_that_fact_lessons_also_say_still_finds_the_poem():
     """The kind the request asks for picks the pool: facts can share the word."""
-    star_card = {
-        "id": "fact-star",
-        "question": "GK: What is the closest star to Earth?",
-        "answer": "The Sun is the closest star to Earth.",
-        "subject": "General Knowledge",
-        "subjects": ["General Knowledge"],
-        "grade_id": "lkg",
-    }
-    twinkle_card = {
-        "id": "poem-twinkle",
-        "question": "Poem: Twinkle Twinkle Little Star",
-        "answer": "Twinkle, twinkle, little star,\nHow I wonder what you are.",
-        "subject": "Language, Poems",
-        "subjects": ["Language", "Poems"],
-        "grade_id": "nursery",
-    }
     request = requests.parse_request("write a poem on star")
 
-    card = requests.find_material(request, [FACT_CARD, star_card, twinkle_card])
+    card = requests.find_material(request, [FACT_CARD, STAR_CARD, TWINKLE_CARD])
 
     assert card is not None
     assert card["id"] == "poem-twinkle"
 
 
-# -- answering the request -----------------------------------------------
+def test_a_poem_can_be_asked_for_with_tell_me():
+    request = requests.parse_request("Tell me a poem on star.")
+
+    assert request is not None
+    assert request.kind == "poem"
+    assert request.topic == "star"
 
 
-def test_a_request_is_answered_from_the_taught_material():
-    writer = FakeWriter("Rain, rain, go away,\nCome again another day.")
+def test_a_plural_topic_finds_the_singular_lesson():
+    request = requests.parse_request("Write me a poem about stars.")
 
-    result = requests.answer_request(
-        "Write a short poem about the rain.", None, [POEM_CARD], writer=writer
+    card = requests.find_material(request, [FACT_CARD, STAR_CARD, TWINKLE_CARD])
+
+    assert card is not None
+    assert card["id"] == "poem-twinkle"
+
+
+def test_a_request_for_a_poem_is_not_answered_by_a_lesson_about_poems(tmp_path, monkeypatch):
+    monkeypatch.setattr(runtime, "_DATA_DIR", tmp_path)
+    runtime._CACHE.clear()
+    teaching.teach(
+        None,
+        "Q: GK: What is a poem?\nA: A poem is a group of lines that often rhyme.",
+        stage="nursery",
+        subject="General Knowledge",
+    )
+    teaching.teach(
+        None,
+        "Q: Poem: Twinkle Twinkle Little Star\n"
+        "A: Twinkle, twinkle, little star,\nHow I wonder what you are.",
+        stage="nursery",
+        subject="Poems",
     )
 
-    assert result is not None
-    assert result["answer"] == "Rain, rain, go away,\nCome again another day."
-    assert result["source"] == "written"
+    answer = preview.preview_answer("tell me a poem about the star", None)
 
-
-def test_the_taught_answer_is_used_when_the_model_says_something_else():
-    writer = FakeWriter("Purple elephants fly sideways at noon.")
-
-    result = requests.answer_request(
-        "Write a short poem about the rain.", None, [POEM_CARD], writer=writer
-    )
-
-    assert result is not None
-    assert result["source"] == "taught"
-    assert result["answer"] == POEM_CARD["answer"]
-
-
-def test_the_taught_answer_is_used_when_the_model_repeats_itself():
-    """Looping words are not an answer: the taught poem is given instead."""
-    writer = FakeWriter("Rain, go away, go away, go away, go away.")
-
-    result = requests.answer_request(
-        "Write a short poem about the rain.", None, [POEM_CARD], writer=writer
-    )
-
-    assert result is not None
-    assert result["source"] == "taught"
-    assert result["answer"] == POEM_CARD["answer"]
-
-
-def test_a_poem_that_says_its_line_again_is_still_the_answer_of_the_model():
-    """The same line twice is a refrain, so the written poem is given away."""
-    writer = FakeWriter(
-        "Rain, rain, go away,"
-        "\nCome again another day."
-        "\nLittle children want to play,"
-        "\nRain, rain, go away."
-    )
-
-    result = requests.answer_request(
-        "Write a short poem about the rain.", None, [POEM_CARD], writer=writer
-    )
-
-    assert result is not None
-    assert result["source"] == "written"
-
-
-def test_a_request_about_something_never_taught_is_refused():
-    writer = FakeWriter("Rain, rain, go away.")
-
-    result = requests.answer_request(
-        "Write a short poem about volcanoes.", None, [POEM_CARD], writer=writer
-    )
-
-    assert result is None
-
-
-def test_a_request_is_answered_from_the_taught_answer_when_there_is_no_model():
-    result = requests.answer_request(
-        "Write a short poem about the rain.", None, [POEM_CARD], writer=None
-    )
-
-    assert result is not None
-    assert result["source"] == "taught"
-
-
-def test_the_material_given_to_the_model_holds_the_lesson():
-    writer = FakeWriter()
-
-    requests.answer_request("Write a short poem about the rain.", None, [POEM_CARD], writer=writer)
-
-    instruction, context = writer.asked[0]
-    assert "poem about the rain" in instruction.lower()
-    assert "rain" in context.lower()
-    assert "go away" in context.lower()
+    assert answer["source"] == "taught"
+    assert "Twinkle, twinkle" in answer["answer"]
+    runtime._CACHE.clear()
 
 
 # -- the instructions the model learns from ------------------------------

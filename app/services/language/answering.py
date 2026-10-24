@@ -103,7 +103,11 @@ def is_question_or_request(text: str) -> bool:
     if stripped.endswith("?"):
         return True
     first = re.match(r"[A-Za-z']+", stripped)
-    return bool(first and first.group(0).lower() in _QUESTION_STARTS)
+    if first and first.group(0).lower() in _QUESTION_STARTS:
+        return True
+    from app.services.language import requests as request_service
+
+    return request_service.parse_request(stripped) is not None
 
 
 @dataclass(frozen=True)
@@ -302,13 +306,22 @@ def answer_from_state(
 ) -> TaughtAnswer | None:
     """The taught answer to a question, read in the same order everywhere."""
     grade = stage or current_stage(state)
-    steps = (
+    from app.services.language import requests as request_service
+
+    request = request_service.parse_request(question)
+    # A request for a poem or a list is not a question a lesson answers: a
+    # lesson about poems would otherwise answer a request for one.
+    request_first = request is not None and request.kind != "fact"
+    steps = [
         lambda: _quick_answer(question, state, tenant_id),
         lambda: _word_answer(question, state, grade),
-        lambda: _lesson_answer(question, state, grade, include_lessons),
-        lambda: _request_answer(question, tenant_id),
-        lambda: _generated_answer(question, state, grade),
-    )
+    ]
+    if request_first:
+        steps.append(lambda: _request_answer(question, tenant_id))
+    steps.append(lambda: _lesson_answer(question, state, grade, include_lessons))
+    if not request_first:
+        steps.append(lambda: _request_answer(question, tenant_id))
+    steps.append(lambda: _generated_answer(question, state, grade))
     for find_answer in steps:
         answer = find_answer()
         if answer is not None:

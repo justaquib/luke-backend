@@ -1,42 +1,52 @@
 [
   {
-    "at": 1792840721.974719,
+    "at": 1792879277.777153,
     "task": "words",
-    "loss": 0.8307,
-    "validation_loss": 1.811,
+    "loss": 0.8092,
+    "validation_loss": 1.6323,
+    "passes": 4,
+    "stop_reason": "early",
+    "steps": 5600,
+    "seconds": 141.0
+  },
+  {
+    "at": 1792879130.629911,
+    "task": "answer",
+    "loss": 3.1989,
+    "validation_loss": 4.2795,
+    "passes": 1,
+    "stop_reason": "steps",
+    "steps": 2249,
+    "seconds": 154.0
+  },
+  {
+    "at": 1792875125.37805,
+    "task": "words",
+    "loss": 0.8365,
+    "validation_loss": 1.7923,
     "passes": 3,
     "stop_reason": "early",
-    "steps": 4200,
-    "seconds": 183.2
+    "steps": 3900,
+    "seconds": 190.0
   },
   {
-    "at": 1792840533.142595,
+    "at": 1792874926.794694,
     "task": "answer",
-    "loss": 4.0372,
-    "validation_loss": 4.7187,
+    "loss": 2.3719,
+    "validation_loss": 2.9399,
     "passes": 1,
-    "stop_reason": "early",
-    "steps": 1100,
-    "seconds": 46.1
+    "stop_reason": "steps",
+    "steps": 2199,
+    "seconds": 203.3
   },
   {
-    "at": 1792790612.615078,
+    "at": 1792868116.284398,
     "task": "words",
-    "loss": 0.8882,
-    "validation_loss": 1.9315,
-    "passes": 2,
+    "loss": 0.8365,
+    "validation_loss": 1.7923,
+    "passes": 3,
     "stop_reason": "early",
-    "steps": 2400,
-    "seconds": 50.3
-  },
-  {
-    "at": 1792790558.750755,
-    "task": "answer",
-    "loss": 5.2055,
-    "validation_loss": 5.4964,
-    "passes": 0,
-    "stop_reason": "early",
-    "steps": 900,
-    "seconds": 30.4
+    "steps": 3900,
+    "seconds": 94.1
   }
 ]

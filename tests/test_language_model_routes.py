@@ -129,6 +129,23 @@ def test_training_the_brain_starts_it_and_says_so(client: TestClient, monkeypatc
     assert started, "the training was started"
 
 
+def test_a_question_is_traced_and_an_untrained_writer_is_named(client: TestClient, monkeypatch):
+    monkeypatch.setattr("app.services.brain_trace.brain.load_writer", lambda tenant_id: None)
+
+    response = client.post("/language-model/trace", json={"question": "who is your creator?"})
+
+    assert response.status_code == 200
+    trace = response.json()
+    assert trace["trained"] is False
+    assert trace["reason"]
+
+
+def test_a_trace_needs_a_question(client: TestClient):
+    response = client.post("/language-model/trace", json={"question": ""})
+
+    assert response.status_code == 422
+
+
 def test_the_store_reports_the_files_the_numbers_and_the_size(client: TestClient):
     response = client.get("/language-model/store")
 

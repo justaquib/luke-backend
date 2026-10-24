@@ -2,8 +2,8 @@
   "score": 1.0,
   "passed": 12,
   "total": 12,
-  "written": 0,
-  "looked_up": 12,
+  "written": 3,
+  "looked_up": 9,
   "probes": [
     {
       "question": "What is there to know about wind?",
@@ -56,26 +56,26 @@
     {
       "question": "What is there to know about golden?",
       "expected": "A man had a goose.\nThe goose laid one golden egg a day.\nThe man wanted all the gold at once.\nHe cut open the goose.\nThere was no gold inside.\nLesson: Greed destroys what it seeks.",
-      "answered": "A man had a goose.\nThe goose laid one golden egg a day.\nThe man wanted all the gold at once.\nHe cut open the goose.\nThere was no gold inside.\nLesson: Greed destroys what it seeks.",
+      "answered": "a man had a goose.\nthere was no gold inside.\nthere was no gold at once.\nhe cut open the goose laid one golden egg a day.\nlesson greed destroys what it seeks.",
       "correct": true,
       "kind": "fact",
-      "written": false
+      "written": true
     },
     {
       "question": "Tell me about the golden please.",
       "expected": "A man had a goose.\nThe goose laid one golden egg a day.\nThe man wanted all the gold at once.\nHe cut open the goose.\nThere was no gold inside.\nLesson: Greed destroys what it seeks.",
-      "answered": "A man had a goose.\nThe goose laid one golden egg a day.\nThe man wanted all the gold at once.\nHe cut open the goose.\nThere was no gold inside.\nLesson: Greed destroys what it seeks.",
+      "answered": "a day.\nthe goose laid one golden egg a man wanted all the gold at once.\nlesson greed destroys what it seeks.",
       "correct": true,
       "kind": "fact",
-      "written": false
+      "written": true
     },
     {
       "question": "What is there to know about goose?",
       "expected": "A man had a goose.\nThe goose laid one golden egg a day.\nThe man wanted all the gold at once.\nHe cut open the goose.\nThere was no gold inside.\nLesson: Greed destroys what it seeks.",
-      "answered": "A man had a goose.\nThe goose laid one golden egg a day.\nThe man wanted all the gold at once.\nHe cut open the goose.\nThere was no gold inside.\nLesson: Greed destroys what it seeks.",
+      "answered": "a man had a goose.\nthere was no gold inside.\nthere was no gold at once.\nhe cut open the goose laid one golden egg a day.\nlesson greed destroys what it seeks.",
       "correct": true,
       "kind": "fact",
-      "written": false
+      "written": true
     },
     {
       "question": "Tell me about the goose please.",
@@ -106,8 +106,8 @@
     "score": 1.0,
     "passed": 12,
     "total": 12,
-    "written": 0,
-    "looked_up": 12,
+    "written": 3,
+    "looked_up": 9,
     "probes": [
       {
         "question": "What is there to know about wind?",
@@ -160,26 +160,26 @@
       {
         "question": "What is there to know about golden?",
         "expected": "A man had a goose.\nThe goose laid one golden egg a day.\nThe man wanted all the gold at once.\nHe cut open the goose.\nThere was no gold inside.\nLesson: Greed destroys what it seeks.",
-        "answered": "A man had a goose.\nThe goose laid one golden egg a day.\nThe man wanted all the gold at once.\nHe cut open the goose.\nThere was no gold inside.\nLesson: Greed destroys what it seeks.",
+        "answered": "a man had a goose.\nthere was no gold inside.\nthere was no gold at once.\nhe cut open the goose laid one golden egg a day.\nlesson greed destroys what it seeks.",
         "correct": true,
         "kind": "fact",
-        "written": false
+        "written": true
       },
       {
         "question": "Tell me about the golden please.",
         "expected": "A man had a goose.\nThe goose laid one golden egg a day.\nThe man wanted all the gold at once.\nHe cut open the goose.\nThere was no gold inside.\nLesson: Greed destroys what it seeks.",
-        "answered": "A man had a goose.\nThe goose laid one golden egg a day.\nThe man wanted all the gold at once.\nHe cut open the goose.\nThere was no gold inside.\nLesson: Greed destroys what it seeks.",
+        "answered": "a day.\nthe goose laid one golden egg a man wanted all the gold at once.\nlesson greed destroys what it seeks.",
         "correct": true,
         "kind": "fact",
-        "written": false
+        "written": true
       },
       {
         "question": "What is there to know about goose?",
         "expected": "A man had a goose.\nThe goose laid one golden egg a day.\nThe man wanted all the gold at once.\nHe cut open the goose.\nThere was no gold inside.\nLesson: Greed destroys what it seeks.",
-        "answered": "A man had a goose.\nThe goose laid one golden egg a day.\nThe man wanted all the gold at once.\nHe cut open the goose.\nThere was no gold inside.\nLesson: Greed destroys what it seeks.",
+        "answered": "a man had a goose.\nthere was no gold inside.\nthere was no gold at once.\nhe cut open the goose laid one golden egg a day.\nlesson greed destroys what it seeks.",
         "correct": true,
         "kind": "fact",
-        "written": false
+        "written": true
       },
       {
         "question": "Tell me about the goose please.",
@@ -216,56 +216,56 @@
       {
         "question": "Describe the oyster to me.",
         "expected": "I do not know anything about that.",
-        "answered": "a painting is a triangle.",
+        "answered": "a furry a tree is a small animal with a large tree.",
         "correct": true,
         "model_refused": false
       },
       {
         "question": "Write a poem about the panda.",
         "expected": "I do not know anything about that.",
-        "answered": "a lemon is a large fruit with a triangle.",
+        "answered": "the shoulder connects the arm to the upper body.",
         "correct": true,
         "model_refused": false
       },
       {
         "question": "Tell me everything about the panda.",
         "expected": "I do not know anything about that.",
-        "answered": "the coldest is the day.",
+        "answered": "the lion is the first continent.",
         "correct": true,
         "model_refused": false
       },
       {
         "question": "Describe the panda to me.",
         "expected": "I do not know anything about that.",
-        "answered": "a painting is a triangle.",
+        "answered": "the eye helps us see.",
         "correct": true,
         "model_refused": false
       },
       {
         "question": "Write a poem that is not about wind.",
         "expected": "I do not know anything about that.",
-        "answered": "a number to\nthe day.",
+        "answered": "the head is the first leaf.\nthe sun in the world.\nthe asking.\nthe number the lion into the world.\nthe weeks,\nthe lion.\nthe roots and again.\nthe skin.\nthe jungle.\nlesson said the smallest again.",
         "correct": true,
         "model_refused": false
       },
       {
         "question": "Write a poem that is not about stork.",
         "expected": "I do not know anything about that.",
-        "answered": "a number to\nthe day.",
+        "answered": "the ant is the first continent.\nthe hunter's,\nthe ant.\nthe shore safely.\nthe hunter and grow.\nthe pigeon saw the shore tail.\nthe hunter's foot.\nthe hunter.\nthe stream to the pigeon dropped a leaf.\nthe ant was later,\nlesson.\nthe.",
         "correct": true,
         "model_refused": false
       },
       {
         "question": "Write a poem that is not about mouse.",
         "expected": "I do not know anything about that.",
-        "answered": "a number to\nthe day.",
+        "answered": "the ant is the first continent.\nthe opposite part of the world.\nthe head said the united states.\nthe boy turn deserves another.\nthe same trained on the father fell into the weeks.\nthe first day.\nthe number said the fence again.\nthe could never be.\nthe father.",
         "correct": true,
         "model_refused": false
       },
       {
         "question": "Write a poem that is not about golden.",
         "expected": "I do not know anything about that.",
-        "answered": "a number to\nthe day.",
+        "answered": "a man had a goose.\nthe goose laid one golden egg a day.\nthe man wanted all the gold at once.\nhe cut open the gold at\nthere was no gold at\nlesson greed destroys what it seeks.",
         "correct": true,
         "model_refused": false
       }
@@ -336,5 +336,5 @@
     "clean": true
   },
   "measured": true,
-  "measured_at": "2026-10-24T12:54:59.447009+00:00"
+  "measured_at": "2026-10-24T22:08:23.016390+00:00"
 }

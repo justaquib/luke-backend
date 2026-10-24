@@ -83,6 +83,35 @@ What the rows say in one line each:
   model's own name, so it is not a like-for-like comparison with the 4.9207
   row above.
 
+## The answer trace
+
+The answer details panel reads one question through the saved writer and shows
+what the model really did (`POST /language-model/trace`,
+`app/services/neural/tracing.py`). The read runs in the model's resting state
+(`eval`, dropout off, `torch.inference_mode`) and restores the previous
+train/eval mode afterwards; nothing is trained or saved by it.
+
+Measured on 2026-10-24 against tenant None's saved checkpoint
+`transformer-0.pt`, question "who is your creator?":
+
+| What | Measured |
+| --- | --- |
+| Model | 4 layers, 8 heads, width 192, context 256, vocabulary 2,292, 2,709,120 parameters, CPU |
+| Tokens read | 8: `<start> <instr> who is your creator ? <resp>` — 4 words |
+| Embeddings shown | first 8 of 192 dims per token, with the full-vector norm |
+| Attention | 4 layers × 8 heads × 8 × 8; every row sums to 1 (0.999998–1.000002 as stored), and the causal mask is exact — the first token gives 0 weight to every later token |
+| Next-word candidates | `we` 0.16744, `i` 0.05182, `a` 0.02516, `my` 0.02013, `an` 0.01585 |
+| Writer's run | `we have one have with we.` — 8 choices, stopped on the end mark in 0.018 s |
+| Response payload | 20,272 bytes |
+
+What these numbers say: the writer's next choice after the question is "we"
+with only 0.167 of its probability, and its eight chosen words do not answer
+the question. The trace reports that as it is — the real candidates and the
+real run, never a cleaned-up example. The served answer for this question may
+come from another route (conversation, taught material or retrieval), and the
+panel labels the trace as the writer's measured reading of the same question
+rather than the path that answer took.
+
 ## The word model
 
 The word model is the second task of the neural engine. It is measured with
@@ -136,7 +165,8 @@ only overlaps whole sentences, which is why the answerable set goes from 21 to
 
 Measured on the live tenant through `brain.remeasure_instruction` (stored in
 `instruction-0.json`; re-measured after the conversation material was added on
-2026-10-24, with the same result):
+2026-10-24, again after the poem-request fix on 2026-10-24, and again after the
+lesson-matching fix on 2026-10-24, with the same result):
 
 | Measurement | Result | What it means |
 | --- | --- | --- |
@@ -168,6 +198,8 @@ the product can satisfy, so it is never given to the writer.
 | --- | --- | --- |
 | Loop guard (`quality.repeats_itself`, `MAX_PAIR_SAYS = 2`) | "write a poem on rain" → `rain, go away, go away, go away, go away` (grounded, so given away) | the writer's loop is refused; the full taught poem is given instead |
 | Kind-scoped material search (`requests.find_material`) | "write a poem on star" refused even with the poem taught — "star" is said by 8 fact lessons, so the topic index dropped the word | the kind the request asked for picks the pool; the poem is matched and answered |
+| Poem requests in the words parents use (`shapes.py`, `requests.py`, `answering.py`, `parenting/chat_engine.py`) | "tell me a poem on star" was not read as a request and "stars" did not match "star"; the coach wrote from an unrelated card and showed a "Needs a better answer" scaffold | "tell me/read me/recite/sing me" are read as requests, plural topics match their singular lesson, and a request for a poem is answered before a lesson *about* poems; the taught poem is served with no scaffold. The instruction probes re-measured unchanged: 12 of 12 cross-form, written 0, refusals 8 of 8, cross-topic 6 of 6 |
+| Lesson answers and the coach card (`matching.py`, `parenting/chat_engine.py`) | "We see through which body part?" shared no words with the eye lesson's title, so no lesson matched; the coach then used the first card of its session topic ("General") — the Shakespeare card — and reported it as taught with confidence 1 | a lesson's answer can place it when its title cannot: the eye lesson is found through "The eye is a body part. It helps us see.", a title match still wins, and at least two shared words are required. The coach picks the card the message covers, never one that only shares the topic. The instruction probes re-measured unchanged: 12 of 12 cross-form, written 0, refusals 8 of 8, cross-topic 6 of 6 |
 | Truthful checkpoints + one-pass training (`training._check`, `TRAINING_PASSES`) | panel showed a single batch's loss; early stopping decided on that noise; the training saw the material ~1.2 times | panel shows the averaged resting-state read; stopping decides on that; production makes one annealed pass (4.9207 held-out) |
 | Stored instruction measurement (`brain.remeasure_instruction`, `instruction-{tenant}.json`) | the instruction test re-ran on every brain read — a brain page load took ~59 s | a brain page load reads the stored measurement in ~1.5 s; a fresh one is taken when the trainer presses the test button or a training finishes |
 | Level ladder in hundredths with an approval gate (`brain.LUKE_LEVELS`, `approve_level`) | the level auto-advanced to whatever the measurements said and borrowed model-level names for the volume scale | the ladder is 0.0.0 → 0.0.9 → 0.1.0; the measured and displayed levels are separate and the trainer approves a promotion |
