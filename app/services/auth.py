@@ -142,9 +142,7 @@ def systemadmin_login(req: SystemAdminLogin, db: Session) -> TokenResponse:
     user = db.execute(select(User).where(User.is_systemadmin.is_(True))).scalar_one_or_none()
     if user is None:
         raise HTTPException(401, "System admin not configured")
-    if not req.pin or not bcrypt.checkpw(
-        req.pin.encode("utf-8"), user.pin_hash.encode("utf-8")
-    ):
+    if not req.pin or not bcrypt.checkpw(req.pin.encode("utf-8"), user.pin_hash.encode("utf-8")):
         raise HTTPException(401, "Invalid PIN")
     return _token_for(user)
 
@@ -209,9 +207,7 @@ def list_invites(user: User, db: Session) -> list[Invite]:
     tenant_id = require_admin(user, "view invites")
     return list(
         db.execute(
-            select(Invite)
-            .where(Invite.tenant_id == tenant_id)
-            .order_by(Invite.created_at.desc())
+            select(Invite).where(Invite.tenant_id == tenant_id).order_by(Invite.created_at.desc())
         )
         .scalars()
         .all()

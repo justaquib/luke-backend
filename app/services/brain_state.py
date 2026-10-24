@@ -1,0 +1,259 @@
+"""The state of the brain, and the level its measurements reach.
+
+The state reads what is trained; the level reads what the model can do. The
+displayed level never moves on its own: the measured level can run ahead of
+it, and the trainer approves the promotion.
+"""
+
+from __future__ import annotations
+
+import logging
+from typing import Any
+
+from app.services import (
+    brain_instruction,
+    brain_material,
+    brain_paths,
+    brain_rung_results,
+    model_settings,
+    training_progress,
+)
+from app.services.brain_feedback import load_feedback
+from app.services.brain_heads import (
+    answer_confidence,
+    feel,
+    should_ask_back,
+)
+from app.services.brain_levels import (
+    BENCHMARK_NOTE,
+    BENCHMARK_TITLE,
+    LUKE_LEVELS,
+    SEED_LEVEL,
+    approved_level,
+    level_entry,
+    level_order,
+    level_title,
+    level_value,
+    next_level_entry,
+    training_volume_level,
+)
+from app.services.brain_training import is_training
+from app.services.heads import LinearHead
+from app.services.neural import engine_for
+
+LOGGER = logging.getLogger(__name__)
+
+__all__ = [
+    "answer_confidence",
+    "feel",
+    "knowledge_of",
+    "model_level",
+    "should_ask_back",
+    "state",
+    "write_sentence",
+]
+
+
+def knowledge_of(tenant_id: int | None) -> dict[str, Any]:
+    """What the school has taught: lessons, grades and the current one."""
+    knowledge: dict[str, Any] = {"lessons": 0, "passed_grades": 0, "items": 0}
+    try:
+        from app.services import language_logic
+
+        knowledge["lessons"] = len(language_logic.all_lesson_cards(tenant_id))
+        model_state = language_logic.get_state(tenant_id)
+        knowledge["passed_grades"] = len(model_state.get("passed_stages", []))
+        knowledge["items"] = knowledge["lessons"]
+        knowledge["stage"] = model_state.get("current_stage_id")
+    except (OSError, ValueError, RuntimeError) as error:
+        LOGGER.warning("The school state could not be read: %s", error)
+    return knowledge
+
+
+def _measured_level(rungs: list[dict[str, Any]], score: float) -> str:
+    """The level the measurements qualify, before any approval.
+
+    The rungs are taken in order from the seed, so a gap stops the climb,
+    and the top rung answers a question it was never taught: the stretch a
+    model reaches when its own words hold up without being taught.
+    """
+    ladder_ids = [str(entry["level"]) for entry in LUKE_LEVELS]
+    by_id = {str(rung["rung"]): rung for rung in rungs}
+    measured = SEED_LEVEL
+    for level_id in ladder_ids[1:]:
+        rung = by_id.get(level_id)
+        if rung is None or not rung["probes"] or rung["rate"] < 0.6:
+            break
+        measured = level_id
+    if score >= 0.5:
+        measured = ladder_ids[-1]
+    return measured
+
+
+def _measure(tenant_id: int | None, force: bool) -> dict[str, Any]:
+    """Everything the level reads, measured once."""
+    brain_state = state(tenant_id)
+    knowledge = knowledge_of(tenant_id)
+    capabilities = brain_material.model_capabilities(tenant_id, brain_state, knowledge)
+    counted = brain_material.coverage(tenant_id)
+    knowledge["items"] = counted.get("chunks", 0)
+    counted["lessons"] = knowledge.get("lessons", 0)
+    counted["passed_grades"] = knowledge.get("passed_grades", 0)
+    counted["current_stage"] = knowledge.get("stage", "nursery")
+    rungs = brain_rung_results.rung_results(
+        tenant_id, force=force, brain_state=brain_state, knowledge=knowledge
+    )
+    generality = brain_instruction.generality_score(tenant_id)
+    return {
+        "brain_state": brain_state,
+        "knowledge": knowledge,
+        "capabilities": capabilities,
+        "generality": generality,
+        "instructions": brain_instruction.instruction_score(tenant_id),
+        "coverage": counted,
+        "rungs": rungs,
+        "measured": _measured_level(rungs, generality["score"]),
+    }
+
+
+def _instruction_view(instructions: dict[str, Any]) -> dict[str, Any]:
+    """What the instruction test measured, and how its answers were reached."""
+    return {
+        "instruction_following": instructions["score"],
+        "instruction_probes": instructions["probes"],
+        "instruction_total": instructions["total"],
+        "instruction_measured": bool(instructions.get("measured")),
+        "instruction_written": instructions.get("written"),
+        "instruction_looked_up": instructions.get("looked_up"),
+        "instruction_measured_at": instructions.get("measured_at"),
+        "adversarial": instructions.get("adversarial") or {},
+        "cross_topic": instructions.get("cross_topic") or {},
+        "contamination": instructions.get("contamination") or {},
+    }
+
+
+def _ladder(model_name: str) -> list[dict[str, Any]]:
+    """The rungs as the page shows them, in the configured name."""
+    return [
+        {**entry, "title": level_title(str(entry["level"]), model_name)} for entry in LUKE_LEVELS
+    ]
+
+
+def _level_view(
+    tenant_id: int | None,
+    measured: str,
+    measured_data: dict[str, Any],
+) -> dict[str, Any]:
+    """The level the page shows, with what stands in the way of the next one."""
+    capabilities = measured_data["capabilities"]
+    counted = measured_data["coverage"]
+    knowledge = measured_data["knowledge"]
+    generality = measured_data["generality"]
+    instructions = measured_data["instructions"]
+    rungs = measured_data["rungs"]
+    settings = model_settings.read(tenant_id)
+    model_name = settings.name
+    level = approved_level(tenant_id)
+    current = level_entry(level, model_name)
+    following = next_level_entry(
+        measured if level_order(measured) > level_order(level) else level, model_name
+    )
+    steps = brain_material.next_steps(
+        measured_data["brain_state"], knowledge, rungs, counted, model_name
+    )
+    missing = [capability["name"] for capability in capabilities if not capability["ready"]]
+    next_detail = next(
+        (step["detail"] for step in steps if step["title"].startswith(f"Pass the {model_name}")),
+        steps[0]["detail"] if steps else "",
+    )
+    return {
+        "level": level,
+        "measured_level": measured,
+        "approval_ready": level_order(measured) > level_order(level),
+        "level_value": round(level_value(level), 4),
+        "name": current["name"],
+        "title": current["title"],
+        "description": current["description"],
+        "reference": current["reference"],
+        "next_level": following["title"] if following else None,
+        "next_requirement": next_detail if missing else "It has reached the highest level.",
+        "capabilities": capabilities,
+        "max_level": LUKE_LEVELS[-1]["level"],
+        "ladder_size": len(LUKE_LEVELS),
+        "levels": _ladder(model_name),
+        "training_volume": training_volume_level(knowledge.get("items", 0)),
+        "rungs": rungs,
+        "next_steps": steps,
+        "coverage": counted,
+        "generality": generality["score"],
+        "generality_cap": generality["cap"],
+        "generality_probes": generality["probes"],
+        **_instruction_view(instructions),
+        "frontier_level": 6.0,
+        "frontier_title": BENCHMARK_TITLE,
+        "frontier_note": BENCHMARK_NOTE,
+        "ladder_share": round(
+            level_value(level) / max(level_value(LUKE_LEVELS[-1]["level"]), 1e-9), 4
+        ),
+        "model_name": model_name,
+        "model_start_level": settings.start_level,
+    }
+
+
+def model_level(tenant_id: int | None, force: bool = False) -> dict[str, Any]:
+    """The level the brain has reached, measured by what it can do.
+
+    A local model is held to the same scale as a frontier one, and it is
+    capped by how far it can answer on its own: a retriever cannot reach the
+    levels that need real reasoning, however much it was taught. What it
+    measures as and what is displayed are two different numbers: the level
+    only moves when the trainer approves the promotion.
+    """
+    measured_data = _measure(tenant_id, force)
+    return _level_view(tenant_id, measured_data["measured"], measured_data)
+
+
+def state(tenant_id: int | None) -> dict[str, Any]:
+    """What the brain currently knows about itself.
+
+    The vocabulary here is the transformer's: it is the one live token list,
+    so the numbers and the ids always mean the same words.
+    """
+    from app.services import vocabulary as vocabulary_service
+
+    feedback = load_feedback(tenant_id)
+    emotion = LinearHead.load(brain_paths.brain_path(tenant_id, "emotion"))
+    clarify = LinearHead.load(brain_paths.brain_path(tenant_id, "clarify"))
+    correct = LinearHead.load(brain_paths.brain_path(tenant_id, "correct"))
+    intent = LinearHead.load(brain_paths.brain_path(tenant_id, "intent"))
+    canonical = vocabulary_service.canonical(tenant_id)
+    engine = engine_for(tenant_id).state()
+    return {
+        "trained": bool(engine["answer"]["trained"]),
+        "vocabulary": len(canonical),
+        "transformer": engine["answer"],
+        "transformer_ready": bool(engine["answer"]["trained"]),
+        "engine": engine,
+        "backend": engine["words"]["backend"],
+        "backend_reason": engine["words"]["backend_reason"],
+        "training": is_training(tenant_id),
+        "progress": training_progress.read(tenant_id),
+        "emotions": emotion.labels if emotion else [],
+        "emotion_ready": bool(emotion and emotion.fitted),
+        "clarify_ready": bool(clarify and clarify.fitted),
+        "confidence_ready": bool(correct and correct.fitted),
+        "intent_ready": bool(intent and intent.fitted),
+        "intents": intent.labels if intent else [],
+        "feedback_entries": len(feedback),
+        "correct_answers": sum(1 for entry in feedback if entry.get("correct")),
+        "wrong_answers": sum(1 for entry in feedback if not entry.get("correct")),
+        "corrections": sum(1 for entry in feedback if entry.get("correction")),
+        "learned_corrections": sum(1 for entry in feedback if entry.get("learned")),
+    }
+
+
+def write_sentence(tenant_id: int | None, seed_word: str = "") -> str | None:
+    """Let the trained answer model write a sentence after the seed word."""
+    from app.services.brain_training import write_with_transformer
+
+    return write_with_transformer(tenant_id, seed_word)

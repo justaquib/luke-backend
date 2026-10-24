@@ -5,10 +5,10 @@ writer's steps have happened and what is left, and — when the training is
 finished — how long the whole job took.
 """
 
-from app.services import brain, training_progress, transformer
+from app.services import brain, neural, training_progress
 from app.services.language import runtime
 from app.services.language import training_materials as materials_service
-from app.services.transformer.settings import TrainingSettings
+from app.services.neural.settings import TrainingSettings
 
 # A small model, so the tests that train one stay quick.
 SMALL_MODEL = {"d_model": 32, "layers": 1, "heads": 2, "context": 64}
@@ -25,6 +25,7 @@ def test_the_checklist_says_which_parts_are_done(monkeypatch, tmp_path):
 
     assert statuses["writer"] == training_progress.DONE
     assert statuses["emotion"] == training_progress.WORKING
+    assert statuses["words"] == training_progress.WAITING
     assert statuses["intent"] == training_progress.WAITING
     assert statuses["feedback"] == training_progress.WAITING
 
@@ -63,18 +64,20 @@ def test_a_tenant_that_has_not_trained_reads_no_checklist(monkeypatch, tmp_path)
 def test_a_writer_reports_its_steps_while_it_trains(monkeypatch, tmp_path):
     monkeypatch.setattr(runtime, "_DATA_DIR", tmp_path)
     calls: list[tuple[int, int]] = []
-    writer = transformer.TransformerWriter(config=SMALL_MODEL)
+    writer = neural.AnswerTask(config=SMALL_MODEL)
 
     writer.fit(
-        [
-            "The rain falls on the roof and the wind blows.",
-            "The rain falls on the field and the sun shines.",
-            "The kite flies high above the trees and the clouds.",
-            "The kite flies high above the field and the rain.",
-            "The children play beside the sea when the rain stops.",
-        ],
+        neural.AnswerCorpus(
+            [
+                "The rain falls on the roof and the wind blows.",
+                "The rain falls on the field and the sun shines.",
+                "The kite flies high above the trees and the clouds.",
+                "The kite flies high above the field and the rain.",
+                "The children play beside the sea when the rain stops.",
+            ]
+        ),
         settings=TrainingSettings(steps=3, check_every=1),
-        progress=lambda done, total: calls.append((done, total)),
+        progress=lambda done, total, loss: calls.append((done, total)),
     )
 
     assert calls

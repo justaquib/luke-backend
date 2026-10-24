@@ -21,7 +21,9 @@ def test_the_answer_is_written_in_the_models_own_words(monkeypatch, tmp_path):
         "Animals",
     )
 
-    written = language_logic.paraphrase_answer(None, "The cow is animal. It is a farm animal that gives milk.")
+    written = language_logic.paraphrase_answer(
+        None, "The cow is animal. It is a farm animal that gives milk."
+    )
 
     assert written == "The cow is a farm animal."
 
@@ -52,7 +54,7 @@ def test_a_rule_kind_is_kept():
 
 
 def test_the_known_rule_kinds_are_the_three_the_assistant_understands():
-    assert RULE_KINDS == {"instruction", "own_words", "short"}
+    assert {"instruction", "own_words", "short"} == RULE_KINDS
 
 
 def test_a_question_asked_in_other_words_still_finds_the_lesson(monkeypatch, tmp_path):
@@ -101,7 +103,7 @@ def test_a_rare_word_decides_the_lesson(monkeypatch, tmp_path):
     _use_temp_state(monkeypatch, tmp_path)
     language_logic.teach(
         None,
-        "Q: Which animal says \"meow\"?\nA: The cat!",
+        'Q: Which animal says "meow"?\nA: The cat!',
         "nursery",
         "Animals",
     )

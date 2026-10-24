@@ -28,6 +28,11 @@ SOURCES: tuple[tuple[str, str, str], ...] = (
         "The lessons of the school grades the learner has already reached.",
     ),
     (
+        materials_service.CONVERSATION,
+        "Basic conversation",
+        "The greetings, the name and the small talk the assistant answers itself.",
+    ),
+    (
         materials_service.APPROVED,
         "Approved answers",
         "The questions and the answers you approved in the trainer.",

@@ -4,11 +4,13 @@ from __future__ import annotations
 
 import sys
 from types import ModuleType
+from typing import Any
 
 from app.config import settings
 from app.services import dictionary
 from app.services.language import runtime as _runtime
 from app.services.language.alphabet import _answer_alphabet_question
+from app.services.language.answering import answer_letter_question as _answer_letter_question
 from app.services.language.basics import (
     _answer_counting_question,
     _answer_number_sequence_question,
@@ -33,20 +35,12 @@ from app.services.language.curriculum import (
     STAGES,
 )
 from app.services.language.grammar import (
-    _FUNCTION_WORDS,
-    _article_for,
-    _facts_known_about,
-    _fix_article,
     _is_naming_word,
-    _predicates_of,
     _repair_sentence,
     _repair_sentences,
     _repair_with_document,
     _sentence_starts_with,
-    _subject_of,
-    _wording_score,
     apply_requested_count,
-    paraphrase_answer,
 )
 from app.services.language.helpers import (
     _content_terms,
@@ -79,6 +73,13 @@ from app.services.language.matching import (
     _answer_learned_lesson,
     _matched_learned_lesson,
 )
+from app.services.language.paraphrase import (
+    _fix_article,
+    _predicates_of,
+    _subject_of,
+    _wording_score,
+    paraphrase_answer,
+)
 from app.services.language.patterns import (
     _COUNT_REQUEST,
     _COUNT_WORDS,
@@ -97,7 +98,6 @@ from app.services.language.runtime import (
     _public_test,
     _read,
     _save,
-    _stage,
     _tenant_key,
     get_state,
     parse_subjects,
@@ -105,8 +105,6 @@ from app.services.language.runtime import (
     vocabulary_page,
 )
 from app.services.language.stages import (
-    _answer_letter_question,
-    _answer_stage_question,
     add_dictionary_word,
     ask_test_question,
     finish_test,
@@ -134,7 +132,7 @@ from app.services.language.writing import (
     make_sentence_from_words,
     predict_next,
 )
-from app.services.tiny_language_model import TinyLanguageModel, tokenize
+from app.services.tokenizer import tokenize
 
 _RUNTIME_NAMES = {"_DATA_DIR", "_CACHE", "_LOCK"}
 
@@ -147,13 +145,11 @@ __all__ = [
     "STAGES",
     "_COUNT_REQUEST",
     "_COUNT_WORDS",
-    "_FUNCTION_WORDS",
     "_NEXT_NUMBER_REQUEST",
     "_NEXT_WORD_REQUEST",
     "_QUESTION_STOP_WORDS",
     "_SENTENCE_REQUEST",
     "StoryLesson",
-    "TinyLanguageModel",
     "_answer_alphabet_question",
     "_answer_calculation_question",
     "_answer_counting_question",
@@ -162,13 +158,10 @@ __all__ = [
     "_answer_letter_question",
     "_answer_number_sequence_question",
     "_answer_number_spelling_question",
-    "_answer_stage_question",
-    "_article_for",
     "_calculation_result",
     "_clamp_confidence",
     "_content_terms",
     "_existing_lesson_cards",
-    "_facts_known_about",
     "_fix_article",
     "_format_number",
     "_foundation_lesson_id",
@@ -193,7 +186,6 @@ __all__ = [
     "_same_words",
     "_save",
     "_sentence_starts_with",
-    "_stage",
     "_statement_from_lesson",
     "_stem",
     "_subject_of",
@@ -247,12 +239,12 @@ __all__ = [
 
 
 class _LanguageLogicModule(ModuleType):
-    def __getattr__(self, name: str):
+    def __getattr__(self, name: str) -> Any:
         if name in _RUNTIME_NAMES:
             return getattr(_runtime, name)
         raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
-    def __setattr__(self, name: str, value) -> None:
+    def __setattr__(self, name: str, value: Any) -> None:
         if name in _RUNTIME_NAMES:
             setattr(_runtime, name, value)
             return

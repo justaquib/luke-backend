@@ -2,7 +2,7 @@
 
 > For a full tour of the UI (sidebar, train mode, settings, sessions), read `docs/05-frontend-ux.md`.
 
-Step-by-step to wire your Angular app (`assistance_web/ag_frontend`) to the FastAPI backend in `assistance_backend/`.
+Step-by-step to wire your Angular app (`assistance_front/`) to the FastAPI backend in `assistance_back/`.
 
 ## 1. Confirm the backend is reachable
 
@@ -19,11 +19,13 @@ The backend already allows CORS from `http://localhost:4200` (the default Angula
 
 The Angular project already includes the API integration:
 
-- `src/app/core/api.service.ts` — typed wrapper around all endpoints (`/health`, `/query`, `/ingest`, `/stats`, `/faq`, `/faq/inbox`, etc).
+- `src/app/core/api.service.ts` — typed wrapper around the base endpoints (`/health`, `/query`, `/ingest`, `/stats`, `/faq`, `/faq/inbox`, etc); the language-model calls are in `language-model-api.service.ts`.
 - `src/environments/environment.ts` — `apiUrl: 'http://localhost:8000'` (dev).
 - `src/environments/environment.production.ts` — empty `apiUrl` (use a reverse proxy).
-- `src/app/chat-ui/chat-ui.ts` — full chat shell with sidebar, sessions, train-mode toggle, inline ✏ corrections.
-- `src/app/trainer/trainer.ts` — inbox / trained / +New tabs.
+- `src/app/shared/` — the one frame: `app-shell`, `app-sidebar`, `app-top-bar` (brand + navigation, page name + scope, info/settings/details), the content-aware `app-right-sidebar` with its pinned background tasks, and the shared facts and actions bands.
+- `src/app/chat-ui/` — the assistant surface at `/chat` with sessions, train mode and inline corrections.
+- `src/app/trainer/`, `learner/`, `brain/`, `settings/`, `design/` and `tenants/` — the builder pages under `/dashboard`, all inside the shared frame.
+- `src/app/settings/` — Model identity (`GET`/`PUT /language-model/settings`, the model's name and starting version), engine connection, live sources and appearance.
 - `proxy.conf.json` — dev server proxies `/api/*` to `localhost:8000` (wired into `angular.json`).
 
 If you start from a clean checkout, none of this is in the way — re-use or replace as needed.

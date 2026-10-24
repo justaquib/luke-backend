@@ -16,7 +16,7 @@ from app.services.language import runtime
 from app.services.language.curriculum import _GRADE_IDS, _LEGACY_STAGES, STAGES
 from app.services.language.helpers import _normalize_phrase, _parse_lesson_pairs
 from app.services.language.runtime import parse_subjects
-from app.services.tiny_language_model import tokenize
+from app.services.tokenizer import tokenize
 
 # The longest lesson the learner accepts.
 MAX_LESSON_CHARACTERS = 3000

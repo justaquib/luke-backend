@@ -1,0 +1,42 @@
+[
+  {
+    "at": 1792840721.974719,
+    "task": "words",
+    "loss": 0.8307,
+    "validation_loss": 1.811,
+    "passes": 3,
+    "stop_reason": "early",
+    "steps": 4200,
+    "seconds": 183.2
+  },
+  {
+    "at": 1792840533.142595,
+    "task": "answer",
+    "loss": 4.0372,
+    "validation_loss": 4.7187,
+    "passes": 1,
+    "stop_reason": "early",
+    "steps": 1100,
+    "seconds": 46.1
+  },
+  {
+    "at": 1792790612.615078,
+    "task": "words",
+    "loss": 0.8882,
+    "validation_loss": 1.9315,
+    "passes": 2,
+    "stop_reason": "early",
+    "steps": 2400,
+    "seconds": 50.3
+  },
+  {
+    "at": 1792790558.750755,
+    "task": "answer",
+    "loss": 5.2055,
+    "validation_loss": 5.4964,
+    "passes": 0,
+    "stop_reason": "early",
+    "steps": 900,
+    "seconds": 30.4
+  }
+]

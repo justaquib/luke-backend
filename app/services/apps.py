@@ -1,19 +1,34 @@
 import logging
 import re
-from typing import Optional
+
 import httpx
 
 logger = logging.getLogger(__name__)
 
 WEATHER_KEYWORDS = (
-    "weather", "temperature", "forecast", "rain", "snow",
-    "humidity", "wind", "sunny", "cloudy", "storm",
+    "weather",
+    "temperature",
+    "forecast",
+    "rain",
+    "snow",
+    "humidity",
+    "wind",
+    "sunny",
+    "cloudy",
+    "storm",
 )
 
 WIKI_KEYWORDS = (
-    "who is", "who was", "what is", "what was", "what are",
-    "where is", "where was",
-    "tell me about", "define", "definition of",
+    "who is",
+    "who was",
+    "what is",
+    "what was",
+    "what are",
+    "where is",
+    "where was",
+    "tell me about",
+    "define",
+    "definition of",
 )
 
 # The answers that are known well enough to be given without a lookup.
@@ -38,7 +53,7 @@ def detect_intents(question: str) -> list[str]:
     return []
 
 
-def _extract_city(question: str) -> Optional[str]:
+def _extract_city(question: str) -> str | None:
     patterns = [
         r"weather (?:like |in |at |for )?(.+?)(?:\?|$|\.)",
         r"temperature (?:in |at |for )?(.+?)(?:\?|$|\.)",
@@ -59,10 +74,16 @@ def _extract_city(question: str) -> Optional[str]:
     return None
 
 
-def weather_for(question: str, lat: Optional[float] = None, lon: Optional[float] = None, timeout: float = 6.0) -> Optional[dict]:
+def weather_for(
+    question: str, lat: float | None = None, lon: float | None = None, timeout: float = 6.0
+) -> dict | None:
     params: dict = {}
     if lat is not None and lon is not None:
-        params = {"latitude": lat, "longitude": lon, "current": "temperature_2m,wind_speed_10m,relative_humidity_2m,weather_code"}
+        params = {
+            "latitude": lat,
+            "longitude": lon,
+            "current": "temperature_2m,wind_speed_10m,relative_humidity_2m,weather_code",
+        }
     else:
         city = _extract_city(question)
         if not city:
@@ -148,7 +169,7 @@ def _format_weather(cur: dict, code: int | None) -> str:
     return ", ".join(bits) + "."
 
 
-def _extract_topic(question: str) -> Optional[str]:
+def _extract_topic(question: str) -> str | None:
     patterns = [
         r"who (?:is|was) (.+?)(?:\?|$|\.)",
         r"what (?:is|was|are) (.+?)(?:\?|$|\.)",
@@ -288,9 +309,7 @@ def wiki_summary(question: str, timeout: float = 6.0) -> dict | None:
                 if searched is None:
                     return None
                 title = searched
-                response = client.get(
-                    f"https://en.wikipedia.org/api/rest_v1/page/summary/{title}"
-                )
+                response = client.get(f"https://en.wikipedia.org/api/rest_v1/page/summary/{title}")
             response.raise_for_status()
             data = response.json()
     except httpx.HTTPError as error:

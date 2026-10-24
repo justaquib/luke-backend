@@ -27,7 +27,7 @@ from typing import Any
 from app.services.language import instructions as instruction_service
 from app.services.language.shapes import REQUEST_SHAPES
 from app.services.language.topics import topic_words
-from app.services.transformer import quality as quality_service
+from app.services.neural import quality as quality_service
 
 # The words that are never the topic of a request.
 _TOPIC_NOISE = frozenset(
@@ -225,7 +225,7 @@ def _with_uncertainty(answer: str, writer: Any) -> str:
     The model says what it is not sure of, so the reader knows that this word
     is a guess and not something the trainer taught.
     """
-    from app.services.transformer import critique as critique_service
+    from app.services.neural import critique as critique_service
 
     critique = getattr(writer, "last_critique", None)
     if critique is None:

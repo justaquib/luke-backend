@@ -14,22 +14,25 @@ def _format_number(value: float) -> str:
 
 def _calculation_result(operation: str, left: float, right: float) -> str | None:
     try:
-        if operation == "plus":
-            return f"{_format_number(left)} plus {_format_number(right)} is {_format_number(left + right)}."
-        if operation == "minus":
-            return f"{_format_number(left)} minus {_format_number(right)} is {_format_number(left - right)}."
-        if operation == "times":
-            return f"{_format_number(left)} times {_format_number(right)} is {_format_number(left * right)}."
-        if operation == "divided":
-            if right == 0:
-                return "You cannot divide a number by zero."
-            return (
-                f"{_format_number(left)} divided by {_format_number(right)} "
-                f"is {_format_number(left / right)}."
-            )
+        if operation == "divided" and right == 0:
+            return "You cannot divide a number by zero."
+        operations = {
+            "plus": lambda: left + right,
+            "minus": lambda: left - right,
+            "times": lambda: left * right,
+            "divided": lambda: left / right,
+        }
+        chosen = operations.get(operation)
+        if chosen is None:
+            return None
+        label = {"plus": "plus", "minus": "minus", "times": "times", "divided": "divided by"}[
+            operation
+        ]
+        return (
+            f"{_format_number(left)} {label} {_format_number(right)} is {_format_number(chosen())}."
+        )
     except (TypeError, ValueError, ZeroDivisionError):
         return None
-    return None
 
 
 def _calculation_special(text: str) -> str | None:
@@ -77,6 +80,24 @@ def _calculation_symbol(text: str) -> str | None:
     return _calculation_result(operation, float(symbol.group(1)), float(symbol.group(3)))
 
 
+_WORD_OPERATIONS = {
+    "plus": ("plus", False),
+    "add": ("plus", False),
+    "added to": ("plus", False),
+    "addition of": ("plus", False),
+    "minus": ("minus", False),
+    "subtract": ("minus", True),
+    "subtracted from": ("minus", True),
+    "take away": ("minus", True),
+    "times": ("times", False),
+    "multiplied by": ("times", False),
+    "multiply": ("times", False),
+    "divided by": ("divided", False),
+    "divide": ("divided", False),
+    "divided into": ("divided", True),
+}
+
+
 def _calculation_words(text: str) -> str | None:
     words = re.search(
         r"(-?\d+(?:\.\d+)?)\s+(plus|add|added to|addition of|minus|subtract|subtracted from"
@@ -86,20 +107,16 @@ def _calculation_words(text: str) -> str | None:
     )
     if not words:
         return None
-    left, right, operator = float(words.group(1)), float(words.group(3)), words.group(2)
-    if operator in {"plus", "add", "added to", "addition of"}:
-        return _calculation_result("plus", left, right)
-    if operator in {"minus", "subtract", "take away"}:
-        return _calculation_result("minus", right, left) if operator != "minus" else _calculation_result("minus", left, right)
-    if operator == "subtracted from":
-        return _calculation_result("minus", right, left)
-    if operator in {"times", "multiplied by", "multiply"}:
-        return _calculation_result("times", left, right)
-    if operator in {"divided by", "divide"}:
-        return _calculation_result("divided", left, right)
-    if operator == "divided into":
-        return _calculation_result("divided", right, left)
-    return None
+    operation = _WORD_OPERATIONS.get(words.group(2))
+    if operation is None:
+        return None
+    name, swapped = operation
+    left, right = float(words.group(1)), float(words.group(3))
+    return (
+        _calculation_result(name, right, left)
+        if swapped
+        else _calculation_result(name, left, right)
+    )
 
 
 def _calculation_phrases(text: str) -> str | None:
@@ -113,7 +130,11 @@ def _calculation_phrases(text: str) -> str | None:
         match = re.search(pattern, text)
         if match:
             left, right = float(match.group(1)), float(match.group(2))
-            return _calculation_result(operation, right, left) if swapped else _calculation_result(operation, left, right)
+            return (
+                _calculation_result(operation, right, left)
+                if swapped
+                else _calculation_result(operation, left, right)
+            )
     doubled = re.search(r"double\s+(?:of\s+)?(-?\d+(?:\.\d+)?)", text)
     if doubled:
         value = float(doubled.group(1))
@@ -141,4 +162,3 @@ def _answer_calculation_question(question: str) -> str | None:
         _calculation_phrases(text),
     )
     return next((answer for answer in checks if answer), None)
-

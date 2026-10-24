@@ -1,3 +1,6 @@
+from collections.abc import Iterator
+from datetime import datetime
+
 from sqlalchemy import (
     Boolean,
     Column,
@@ -8,12 +11,9 @@ from sqlalchemy import (
     String,
     Text,
     create_engine,
-    inspect,
-    text,
 )
 from sqlalchemy.orm import Session, declarative_base, relationship, sessionmaker
-from collections.abc import Iterator
-from datetime import datetime
+
 from app.config import settings
 
 engine = create_engine(settings.database_url, pool_pre_ping=True)

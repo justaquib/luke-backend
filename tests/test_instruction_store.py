@@ -5,11 +5,12 @@ one that was kept, and a new one is taken only when the trainer asks for it.
 """
 
 import json
+from typing import Any
 
 import pytest
 
-import app.services.language.evaluation as evaluation
-from app.services import brain
+from app.services import brain, brain_paths
+from app.services.language import evaluation
 
 
 def _write_a_measurement(tmp_path, tenant_id=7, score=0.75):
@@ -28,10 +29,10 @@ def _write_a_measurement(tmp_path, tenant_id=7, score=0.75):
 
 
 def test_the_brain_page_reads_the_stored_measurement(monkeypatch, tmp_path):
-    monkeypatch.setattr(brain, "brain_dir", lambda: tmp_path)
+    monkeypatch.setattr(brain_paths, "brain_dir", lambda: tmp_path)
     _write_a_measurement(tmp_path)
 
-    def no_reading(*args, **kwargs):
+    def no_reading(*args: Any, **kwargs: Any) -> None:
         raise AssertionError("the stored measurement must not re-run the test")
 
     monkeypatch.setattr(evaluation, "evaluate", no_reading)
@@ -41,7 +42,7 @@ def test_the_brain_page_reads_the_stored_measurement(monkeypatch, tmp_path):
 
 
 def test_before_the_first_test_the_score_is_a_missing_number(monkeypatch, tmp_path):
-    monkeypatch.setattr(brain, "brain_dir", lambda: tmp_path)
+    monkeypatch.setattr(brain_paths, "brain_dir", lambda: tmp_path)
     score = brain.instruction_score(7)
     assert score["measured"] is False
     assert score["total"] == 0
@@ -49,7 +50,7 @@ def test_before_the_first_test_the_score_is_a_missing_number(monkeypatch, tmp_pa
 
 
 def test_the_trainer_test_runs_it_again_and_keeps_it(monkeypatch, tmp_path):
-    monkeypatch.setattr(brain, "brain_dir", lambda: tmp_path)
+    monkeypatch.setattr(brain_paths, "brain_dir", lambda: tmp_path)
     monkeypatch.setattr(
         evaluation,
         "evaluate",
@@ -64,7 +65,7 @@ def test_the_trainer_test_runs_it_again_and_keeps_it(monkeypatch, tmp_path):
 
 
 def test_a_broken_measurement_file_reads_as_missing(monkeypatch, tmp_path):
-    monkeypatch.setattr(brain, "brain_dir", lambda: tmp_path)
+    monkeypatch.setattr(brain_paths, "brain_dir", lambda: tmp_path)
     (tmp_path / "instruction-7.json").write_text("{broken", encoding="utf-8")
     score = brain.instruction_score(7)
     assert score["measured"] is False
@@ -75,8 +76,6 @@ def test_a_broken_measurement_file_reads_as_missing(monkeypatch, tmp_path):
     [(7, "instruction-7.json"), (None, "instruction-0.json")],
 )
 def test_the_measurement_is_kept_per_tenant(monkeypatch, tmp_path, tenant_id, name):
-    monkeypatch.setattr(brain, "brain_dir", lambda: tmp_path)
-    brain.save_instruction(
-        tenant_id, {"score": 0.5, "passed": 1, "total": 2, "probes": []}
-    )
+    monkeypatch.setattr(brain_paths, "brain_dir", lambda: tmp_path)
+    brain.save_instruction(tenant_id, {"score": 0.5, "passed": 1, "total": 2, "probes": []})
     assert (tmp_path / name).exists()

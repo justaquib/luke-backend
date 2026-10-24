@@ -17,7 +17,12 @@ class PdfFieldAnswerTests(unittest.TestCase):
         document = pymupdf.open()
         page = document.new_page(width=600, height=400)
         # Form headings share a row while their values are aligned beneath them.
-        for x, label in ((40, "CUSTOMER NAME"), (168, "AGENT"), (298, "MOBILE NO."), (426, "EMAIL")):
+        for x, label in (
+            (40, "CUSTOMER NAME"),
+            (168, "AGENT"),
+            (298, "MOBILE NO."),
+            (426, "EMAIL"),
+        ):
             page.insert_text((x, 120), label, fontsize=9)
         page.insert_text((40, 139), customer_name, fontsize=10)
         page.insert_text((40, 151), "Person", fontsize=10)
@@ -70,13 +75,16 @@ class PdfFieldAnswerTests(unittest.TestCase):
 
     def test_agent_question_prefers_agent_and_never_falls_back_to_customer_name(self):
         question = "What is the name of the agent in the confirmation voucher?"
-        with_agent = self.make_hit({"customer_name": "Avery SamplePerson", "agent": "Jordan Helper"})
+        with_agent = self.make_hit(
+            {"customer_name": "Avery SamplePerson", "agent": "Jordan Helper"}
+        )
         without_agent = self.make_hit({"customer_name": "Avery SamplePerson"})
 
         self.assertEqual(answer_from_document(question, [with_agent]), "Agent: Jordan Helper")
         self.assertEqual(
             answer_from_document(question, [without_agent]),
-            "I couldn't reliably identify the agent in this document. Please check the source passage.",
+            "I couldn't reliably identify the agent in this document. Please check "
+            "the source passage.",
         )
 
     def test_faq_matching_rejects_a_different_requested_field(self):
@@ -120,15 +128,19 @@ class PdfFieldAnswerTests(unittest.TestCase):
             ["Voucher text"],
             ["voucher-1"],
             tenant_id=7,
-            page_numbers=[1],
-            pdf_fields=[{"customer_name": "Avery SamplePerson"}],
+            notes=vector_store.ChunkNotes(
+                page_numbers=[1],
+                pdf_fields=[{"customer_name": "Avery SamplePerson"}],
+            ),
         )
 
         metadata = collection.add.call_args.kwargs["metadatas"][0]
         self.assertEqual(metadata["source"], "voucher.pdf")
         self.assertEqual(metadata["tenant_id"], "7")
         self.assertEqual(metadata["page_number"], 1)
-        self.assertEqual(json.loads(metadata["pdf_fields"]), {"customer_name": "Avery SamplePerson"})
+        self.assertEqual(
+            json.loads(metadata["pdf_fields"]), {"customer_name": "Avery SamplePerson"}
+        )
 
     @patch("app.services.vector_store.get_collection")
     def test_chunk_search_reranks_semantic_candidates_with_question_terms(self, get_collection):
@@ -136,14 +148,18 @@ class PdfFieldAnswerTests(unittest.TestCase):
         collection.count.return_value = 2
         collection.get.return_value = {"ids": ["semantic", "lexical"]}
         collection.query.return_value = {
-            "documents": [[
-                "Ferry schedule and island transfer details.",
-                "Confirmation voucher. CUSTOMER NAME: Avery SamplePerson",
-            ]],
-            "metadatas": [[
-                {"source": "travel.pdf", "page_number": 1},
-                {"source": "travel.pdf", "page_number": 2},
-            ]],
+            "documents": [
+                [
+                    "Ferry schedule and island transfer details.",
+                    "Confirmation voucher. CUSTOMER NAME: Avery SamplePerson",
+                ]
+            ],
+            "metadatas": [
+                [
+                    {"source": "travel.pdf", "page_number": 1},
+                    {"source": "travel.pdf", "page_number": 2},
+                ]
+            ],
             "distances": [[0.2, 1.0]],
         }
         get_collection.return_value = collection
@@ -159,17 +175,16 @@ class PdfFieldAnswerTests(unittest.TestCase):
 
     def test_missing_or_conflicting_field_does_not_guess(self):
         missing = self.make_hit({"customer_name": ""}, "CUSTOMER NAME AGENT MOBILE NO EMAIL")
-        unclear = "I couldn't reliably identify the customer name in this document. Please check the source passage."
-        self.assertEqual(
-            answer_from_document("What is the customer name?", [missing]), unclear
+        unclear = (
+            "I couldn't reliably identify the customer name in this document. "
+            "Please check the source passage."
         )
+        self.assertEqual(answer_from_document("What is the customer name?", [missing]), unclear)
         conflicting = [
             self.make_hit({"customer_name": "Avery SamplePerson"}),
             self.make_hit({"customer_name": "Jordan Otherperson"}),
         ]
-        self.assertEqual(
-            answer_from_document("What is the customer name?", conflicting), unclear
-        )
+        self.assertEqual(answer_from_document("What is the customer name?", conflicting), unclear)
         ambiguous_dates = self.make_hit(
             {"booking_date": "17 Sep 2026", "journey_date": "05 Oct 2026"}
         )
@@ -185,9 +200,7 @@ class PdfFieldAnswerTests(unittest.TestCase):
             + "The trip includes a ferry transfer to Havelock Island. "
             + "Additional voucher conditions follow. " * 20
         )
-        answer = answer_from_document(
-            "What does the trip include?", [self.make_hit({}, passage)]
-        )
+        answer = answer_from_document("What does the trip include?", [self.make_hit({}, passage)])
         self.assertIn("ferry transfer to Havelock Island", answer)
         self.assertLessEqual(len(answer), 260)
         self.assertIn("page_number", self.make_hit({}, passage)["metadata"])

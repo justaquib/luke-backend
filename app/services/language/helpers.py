@@ -119,7 +119,9 @@ def _content_terms(text: str, stop_words: set[str]) -> set[str]:
 
 def _foundation_lesson_id(question: str) -> str:
     """A stable id for a starter lesson so it is only embedded once."""
-    digest = hashlib.md5(question.strip().lower().encode("utf-8"), usedforsecurity=False).hexdigest()[:16]
+    digest = hashlib.md5(
+        question.strip().lower().encode("utf-8"), usedforsecurity=False
+    ).hexdigest()[:16]
     return f"foundation-{digest}"
 
 

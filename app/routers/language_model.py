@@ -105,9 +105,12 @@ def check_language_lesson(
 ) -> dict[str, Any]:
     """Report what the learner already knows about this lesson."""
     tenant_id = tenant_id_of(user)
-    report = lesson_service.check_duplicate_lessons(
-        tenant_id, body.lesson, body.stage, body.subject
-    )
+    try:
+        report = lesson_service.check_duplicate_lessons(
+            tenant_id, body.lesson, body.stage, body.subject
+        )
+    except ValueError as error:
+        raise HTTPException(400, str(error)) from error
     report["faqs"] = reporting.candidate_answers(body.lesson, db, tenant_id)
     report["intents"] = reporting.matching_intents(body.lesson, db, tenant_id)
     return report
@@ -126,24 +129,27 @@ def teach_language_model(
     decide what to do with it.
     """
     tenant_id = tenant_id_of(user)
-    if body.kind == "story":
-        return teaching_service.teach_story(
+    try:
+        if body.kind == "story":
+            return teaching_service.teach_story(
+                tenant_id,
+                teaching_service.StoryLesson(
+                    text=body.lesson,
+                    title=body.title,
+                    stage=body.stage,
+                    subject=body.subject,
+                    skip_duplicates=body.skip_duplicates,
+                ),
+            )
+        return teaching_service.teach(
             tenant_id,
-            teaching_service.StoryLesson(
-                text=body.lesson,
-                title=body.title,
-                stage=body.stage,
-                subject=body.subject,
-                skip_duplicates=body.skip_duplicates,
-            ),
+            body.lesson,
+            body.stage,
+            body.subject,
+            body.skip_duplicates,
         )
-    return teaching_service.teach(
-        tenant_id,
-        body.lesson,
-        body.stage,
-        body.subject,
-        body.skip_duplicates,
-    )
+    except ValueError as error:
+        raise HTTPException(400, str(error)) from error
 
 
 @router.put("/lessons/{lesson_id}")
@@ -164,6 +170,8 @@ def update_language_lesson(
         )
     except LookupError as error:
         raise HTTPException(404, str(error)) from error
+    except ValueError as error:
+        raise HTTPException(400, str(error)) from error
 
 
 @router.delete("/lessons/{lesson_id}")
@@ -186,23 +194,26 @@ def preview_language_answer(
 ) -> dict[str, Any]:
     """Answer a question with the learner's own material only."""
     tenant_id = tenant_id_of(user)
-    result = dict(preview_service.preview_answer(body.question, tenant_id))
-    candidates: list[dict[str, Any]] = []
-    if not body.skip_trainer:
-        candidates = reporting.candidate_answers(body.question, db, tenant_id)
-    exact = any(
-        candidate["question"].strip().casefold() == body.question.strip().casefold()
-        for candidate in candidates
+    candidates = (
+        [] if body.skip_trainer else reporting.candidate_answers(body.question, db, tenant_id)
     )
+    exact = reporting.exact_candidate(body.question, candidates)
+    if exact is not None:
+        result = {
+            "answer": str(exact["answer"]),
+            "source": "faq",
+            "matched_question": str(exact["question"]),
+        }
+    else:
+        result = dict(preview_service.preview_answer(body.question, tenant_id))
     result["candidates"] = candidates
-    result["needs_clarification"] = bool(candidates) and not exact
-    if body.skip_trainer:
-        result["answer"] = result.get("answer", "")
+    result["needs_clarification"] = bool(candidates) and exact is None
     reasoning = reasoning_service.explain(
         body.question,
         tenant_id,
         result.get("answer", ""),
         result.get("source", "not_learned"),
+        result.get("matched_question"),
     )
     result["reasoning"] = {
         "steps": [
@@ -220,16 +231,28 @@ def start_language_test(
     user: User = Depends(get_bearer_user),
 ) -> dict[str, Any]:
     """Start a mock test, a final exam, or a trainer led test."""
-    return stage_service.start_test(tenant_id_of(user), body.stage, body.kind)
+    try:
+        return stage_service.start_test(tenant_id_of(user), body.stage, body.kind)
+    except ValueError as error:
+        raise HTTPException(400, str(error)) from error
 
 
 @router.post("/test/question")
 def ask_language_test_question(
     body: TestQuestionBody,
     user: User = Depends(get_bearer_user),
+    db: Session = Depends(get_session),
 ) -> dict[str, Any]:
     """Ask the learner a question during a grade test."""
-    return stage_service.ask_test_question(tenant_id_of(user), body.question)
+    tenant_id = tenant_id_of(user)
+    try:
+        return stage_service.ask_test_question(
+            tenant_id,
+            body.question,
+            reporting.trained_answer(body.question, db, tenant_id),
+        )
+    except ValueError as error:
+        raise HTTPException(400, str(error)) from error
 
 
 @router.post("/test/score")
@@ -238,7 +261,10 @@ def score_language_test_answer(
     user: User = Depends(get_bearer_user),
 ) -> dict[str, Any]:
     """Score the learner's last answer in a grade test."""
-    return stage_service.score_test_answer(tenant_id_of(user), body.passed)
+    try:
+        return stage_service.score_test_answer(tenant_id_of(user), body.passed)
+    except ValueError as error:
+        raise HTTPException(400, str(error)) from error
 
 
 @router.post("/test/finish")
@@ -247,7 +273,10 @@ def finish_language_test(
     user: User = Depends(get_bearer_user),
 ) -> dict[str, Any]:
     """Close the grade test and open the next grade when it is passed."""
-    return stage_service.finish_test(tenant_id_of(user), body.passed)
+    try:
+        return stage_service.finish_test(tenant_id_of(user), body.passed)
+    except ValueError as error:
+        raise HTTPException(400, str(error)) from error
 
 
 @router.get("/dictionary")
@@ -268,9 +297,12 @@ def learn_dictionary_word(
     user: User = Depends(get_bearer_user),
 ) -> dict[str, Any]:
     """Teach the learner a word and the meaning it should remember."""
-    state = stage_service.add_dictionary_word(
-        tenant_id_of(user), body.word, body.meaning, body.stage
-    )
+    try:
+        state = stage_service.add_dictionary_word(
+            tenant_id_of(user), body.word, body.meaning, body.stage
+        )
+    except ValueError as error:
+        raise HTTPException(400, str(error)) from error
     entry = dictionary_service.lookup_word(body.word) or {
         "word": body.word.lower(),
         "part_of_speech": "",

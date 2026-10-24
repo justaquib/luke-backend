@@ -1,7 +1,8 @@
 from sqlalchemy.orm import Session
+
 from app.db.database import Document
-from app.services.nlp import chunk_text
 from app.services import vector_store
+from app.services.nlp import chunk_text
 
 
 def ingest_text(db: Session, source: str, text: str) -> dict:

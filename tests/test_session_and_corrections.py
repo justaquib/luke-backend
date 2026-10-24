@@ -17,7 +17,7 @@ from app.schemas import QueryRequest
 from app.services import brain as brain_service
 from app.services import query as query_service
 from app.services import vector_store
-from app.services.language import runtime
+from app.services.language import answering, runtime, teaching
 
 
 class _FakeResult:
@@ -99,8 +99,36 @@ def test_the_system_admin_can_use_the_chat(no_index):
         _default_response,
     )
 
-    assert response.source == "pending"
+    # The tenant-less bucket holds the built-in lessons, so the shared answer
+    # engine answers this instead of handing the admin an empty pending reply.
+    assert response.source != "pending"
     assert response.answer
+
+
+def test_the_chat_gives_the_same_lesson_answer_as_the_learner(no_index, monkeypatch, tmp_path):
+    """The chat and the learner read the same lesson for the same question."""
+    monkeypatch.setattr(runtime, "_DATA_DIR", tmp_path)
+    runtime._CACHE.clear()
+    teaching.teach(
+        None,
+        "Q: What is a drum?\nA: A drum is something you hit with a stick.",
+        stage="nursery",
+        subject="Music",
+    )
+    shared = answering.answer_from_curriculum("What is a drum?", None)
+
+    response = query_service.answer_question(
+        QueryRequest(question="What is a drum?"),
+        "Bearer token",
+        _FakeSession(),
+        lambda authorization, db: _system_admin(),
+        _default_response,
+    )
+
+    assert shared is not None
+    assert response.source == shared.source == "lesson_cards"
+    assert response.answer == shared.answer
+    runtime._CACHE.clear()
 
 
 def test_a_user_without_a_tenant_is_turned_away(no_index):

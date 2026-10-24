@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import re
 
-from app.services.transformer import grammar
+from app.services.neural import grammar
 
 # The words that never take an article.
 NO_ARTICLE = frozenset(
@@ -62,17 +62,14 @@ def is_a_good_rewrite(original: str, variant: str) -> bool:
     variant = (variant or "").strip()
     if not original or not variant:
         return False
-    if variant.casefold() == original.casefold():
-        return False
-    if not _same_words(original, variant):
-        return False
-    if not variant.endswith("."):
-        return False
-    if not variant[:1].isupper():
-        return False
-    if variant.split()[0] == original.split()[0]:
-        # The subject was written twice.
-        return False
-    if not _articles_are_right(variant):
-        return False
-    return not grammar.problems(variant)
+    # The subject was written twice when the rewrite keeps the same first word.
+    same_subject = variant.split()[0] == original.split()[0]
+    checks = (
+        variant.casefold() != original.casefold(),
+        _same_words(original, variant),
+        variant.endswith("."),
+        variant[:1].isupper(),
+        not same_subject,
+        _articles_are_right(variant),
+    )
+    return all(checks) and not grammar.problems(variant)

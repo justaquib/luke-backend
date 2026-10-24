@@ -106,10 +106,12 @@ def correct(
     faq = _teach_answer(db, tenant_id, clean_question, clean_correction, review=review)
     brain_service.record_feedback(
         tenant_id,
-        clean_question,
-        (wrong_answer or "").strip(),
-        correct=False,
-        correction=clean_correction,
+        brain_service.Feedback(
+            question=clean_question,
+            answer=(wrong_answer or "").strip(),
+            correct=False,
+            correction=clean_correction,
+        ),
     )
     check = brain_service.verify_correction(tenant_id, clean_question, clean_correction)
     if check["learned"]:

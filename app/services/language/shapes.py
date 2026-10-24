@@ -133,6 +133,13 @@ REQUEST_SHAPES: tuple[tuple[re.Pattern[str], str], ...] = (
     ),
     (
         re.compile(
+            r"\bdescribe\s+(?:the\s+)?(?P<topic>[^.?]+)\s+to me\b",
+            re.IGNORECASE,
+        ),
+        "fact",
+    ),
+    (
+        re.compile(
             r"\bi (?:would like to know about|want to hear about|want to learn about)\s+"
             r"(?P<topic>[^.?]+)",
             re.IGNORECASE,

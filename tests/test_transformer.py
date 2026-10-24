@@ -1,7 +1,7 @@
 """Tests for the transformer that is trained from scratch on the tenant's own words."""
 
-from app.services import transformer
-from app.services.transformer.settings import TrainingSettings, WritingSettings
+from app.services import neural
+from app.services.neural.settings import TrainingSettings, WritingSettings
 
 CORPUS = [
     "The cow is an animal.",
@@ -15,7 +15,7 @@ CORPUS = [
 
 
 def test_the_words_of_a_text_are_tokenised():
-    assert transformer.tokenize("The cow is an animal.") == [
+    assert neural.tokenize("The cow is an animal.") == [
         "the",
         "cow",
         "is",
@@ -26,10 +26,10 @@ def test_the_words_of_a_text_are_tokenised():
 
 
 def test_the_model_trains_on_its_own():
-    writer = transformer.TransformerWriter()
+    writer = neural.AnswerTask()
     writer.config = {**writer.config, "d_model": 32, "layers": 1, "heads": 2, "context": 32}
 
-    report = writer.fit(CORPUS, settings=TrainingSettings(steps=30))
+    report = writer.fit(neural.AnswerCorpus(CORPUS), settings=TrainingSettings(steps=30))
 
     assert report["trained"] is True
     assert report["vocabulary"] > 10
@@ -38,18 +38,18 @@ def test_the_model_trains_on_its_own():
 
 
 def test_too_little_to_train_on_is_reported():
-    writer = transformer.TransformerWriter()
+    writer = neural.AnswerTask()
 
-    report = writer.fit(["Hi."], settings=TrainingSettings(steps=5))
+    report = writer.fit(neural.AnswerCorpus(["Hi."]), settings=TrainingSettings(steps=5))
 
     assert report["trained"] is False
     assert writer.trained is False
 
 
 def test_the_model_writes_words_it_knows():
-    writer = transformer.TransformerWriter()
+    writer = neural.AnswerTask()
     writer.config = {**writer.config, "d_model": 32, "layers": 1, "heads": 2, "context": 32}
-    writer.fit(CORPUS, settings=TrainingSettings(steps=40))
+    writer.fit(neural.AnswerCorpus(CORPUS), settings=TrainingSettings(steps=40))
 
     written = writer.generate("The cow", settings=WritingSettings(max_words=12, seed=3))
 
@@ -62,9 +62,9 @@ def test_the_model_writes_words_it_knows():
 
 
 def test_the_model_scores_what_it_has_seen():
-    writer = transformer.TransformerWriter()
+    writer = neural.AnswerTask()
     writer.config = {**writer.config, "d_model": 32, "layers": 1, "heads": 2, "context": 32}
-    writer.fit(CORPUS, settings=TrainingSettings(steps=60))
+    writer.fit(neural.AnswerCorpus(CORPUS), settings=TrainingSettings(steps=60))
 
     known = writer.score("The cow is a farm animal.")
     unknown = writer.score("Purple elephants fly sideways at noon.")
@@ -74,13 +74,13 @@ def test_the_model_scores_what_it_has_seen():
 
 
 def test_a_saved_model_can_be_loaded_again(tmp_path):
-    writer = transformer.TransformerWriter()
+    writer = neural.AnswerTask()
     writer.config = {**writer.config, "d_model": 32, "layers": 1, "heads": 2, "context": 32}
-    writer.fit(CORPUS, settings=TrainingSettings(steps=40))
+    writer.fit(neural.AnswerCorpus(CORPUS), settings=TrainingSettings(steps=40))
     path = tmp_path / "writer.pt"
     writer.save(path)
 
-    loaded = transformer.TransformerWriter.load(path)
+    loaded = neural.AnswerTask.load(path)
 
     assert loaded is not None
     assert loaded.trained is True
@@ -91,7 +91,7 @@ def test_a_saved_model_can_be_loaded_again(tmp_path):
 
 
 def test_a_model_that_was_never_trained_says_nothing():
-    writer = transformer.TransformerWriter()
+    writer = neural.AnswerTask()
 
     assert writer.generate("The cow") is None
     assert writer.score("The cow is an animal.") == 0.0

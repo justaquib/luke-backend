@@ -15,30 +15,16 @@ from app.services.language.grammar import (
     _FUNCTION_WORDS,
     _repair_sentence,
     _sentence_starts_with,
-    _wording_score,
 )
 from app.services.language.helpers import _content_terms, _normalize_phrase, _token_matches
+from app.services.language.lesson_sentences import (
+    _list_statement_for_word,
+    _statement_from_lesson,
+)
 from app.services.language.lessons import all_lesson_cards
+from app.services.language.paraphrase import _wording_score
 from app.services.language.patterns import _NEXT_WORD_REQUEST, _SENTENCE_REQUEST
-from app.services.tiny_language_model import tokenize
-
-_LESSON_QUESTION_STATEMENT = re.compile(
-    r"^(?:what|which|who)\s+is\s+(.+?)\s*\??$",
-    re.IGNORECASE,
-)
-_LESSON_WHICH_SUBJECT = re.compile(
-    r"^which\s+(.+?)\s+(has|have|is|are|was|were|does|do|did|can|could|will|would|should)\s+"
-    r"(.+?)\s*\??$",
-    re.IGNORECASE,
-)
-_LESSON_NAME_REQUEST = re.compile(
-    r"^name\s+(the|a|an)\s+(.+?)\s*\??$",
-    re.IGNORECASE,
-)
-_LESSON_NAME_LIST = re.compile(
-    r"^name\s+(?:some|all|the\s+list\s+of)\s+(.+?)\s*\??$",
-    re.IGNORECASE,
-)
+from app.services.tokenizer import tokenize
 
 
 def _taught_word_meanings(tenant_id: int | None) -> dict[str, str]:
@@ -100,61 +86,6 @@ def _tenant_lesson_answers(tenant_id: int | None) -> list[str]:
     ]
 
 
-def _clean_phrase(text: str) -> str:
-    """A phrase without its end mark."""
-    return (text or "").strip().rstrip(".!?").strip()
-
-
-def _statement_from_lesson(question: str, answer: str) -> str | None:
-    """Turn a lesson question into a statement that holds the answer."""
-    answer = re.sub(r"\s*\([^)]*\)", "", answer or "").strip().rstrip(".!?").strip()
-    if not answer or len(answer.split()) > 5:
-        return None
-    text = (question or "").strip()
-    match = _LESSON_QUESTION_STATEMENT.match(text)
-    if match:
-        rest = _clean_phrase(match.group(1))
-        return f"{answer} is {rest}." if rest else None
-    match = _LESSON_WHICH_SUBJECT.match(text)
-    if match:
-        verb = match.group(2).strip()
-        rest = _clean_phrase(match.group(3))
-        return f"{answer} {verb} {rest}." if rest else None
-    match = _LESSON_NAME_REQUEST.match(text)
-    if match:
-        article = match.group(1).strip()
-        rest = _clean_phrase(match.group(2))
-        return f"{answer} is {article} {rest}." if rest else None
-    return None
-
-
-def _list_statement_for_word(tenant_id: int | None, word: str) -> str | None:
-    """A word taken from a list lesson becomes a sentence of its own."""
-    target = _normalize_phrase(word)
-    if not target:
-        return None
-    try:
-        cards = all_lesson_cards(tenant_id)
-    except Exception:
-        return None
-    for card in cards:
-        match = _LESSON_NAME_LIST.match((card.get("question") or "").strip())
-        if not match:
-            continue
-        category = _clean_phrase(match.group(1))
-        answer = card.get("answer") or ""
-        parts = re.split(r"\bare\b", answer, maxsplit=1)
-        items_text = parts[1] if len(parts) > 1 else answer
-        items = [item.strip(" .!") for item in items_text.split(",")]
-        if not any(_normalize_phrase(item) == target for item in items):
-            continue
-        singular = (
-            category[:-1] if category.endswith("s") and not category.endswith("ss") else category
-        )
-        return f"{word.strip().capitalize()} is a {singular}."
-    return None
-
-
 def _lesson_statement_for_word(tenant_id: int | None, word: str) -> str | None:
     """The sentence the learner's lesson makes for this word."""
     target = _normalize_phrase(word)
@@ -175,7 +106,11 @@ def _lesson_statement_for_word(tenant_id: int | None, word: str) -> str | None:
 
 
 def _meaning_sentence(
-    cleaned: list[str], meanings: dict[str, str], describing: list[str], nouns: list[str], others: list[str]
+    cleaned: list[str],
+    meanings: dict[str, str],
+    describing: list[str],
+    nouns: list[str],
+    others: list[str],
 ) -> str | None:
     if not nouns:
         return None
@@ -238,26 +173,35 @@ def _best_matching_sentence(
     return _repair_sentence(best)
 
 
-def make_sentence_from_words(
-    tenant_id: int | None, words: list[str], strict: bool = False
-) -> str | None:
-    """Build a simple grammatical sentence from the given words."""
-    cleaned = []
+def _clean_words(words: list[str]) -> list[str]:
+    """The words as they are written in a sentence, without marks or case."""
+    cleaned: list[str] = []
     for word in words:
         for part in str(word).replace(",", " ").split():
             cleaned.append(part.strip().lower().strip("?.!"))
-    cleaned = [word for word in cleaned if word and word not in {".", "!", "?"}]
-    if not cleaned:
-        return None
-    content = [word for word in cleaned if word not in _FUNCTION_WORDS]
-    if not content:
-        content = cleaned
-    meanings = _taught_word_meanings(tenant_id)
+    return [word for word in cleaned if word and word not in {".", "!", "?"}]
+
+
+def _word_roles(
+    cleaned: list[str], meanings: dict[str, str]
+) -> tuple[list[str], list[str], list[str]]:
+    """The describing words, the naming words, and the words still unknown."""
     describing = [
         word for word in cleaned if word in meanings and _is_describing_word(meanings[word])
     ]
     nouns = [word for word in cleaned if word in meanings and word not in describing]
     others = [word for word in cleaned if word not in meanings and word not in _FUNCTION_WORDS]
+    return describing, nouns, others
+
+
+def _known_sentence(
+    tenant_id: int | None,
+    cleaned: list[str],
+    content: list[str],
+    meanings: dict[str, str],
+) -> str | None:
+    """A sentence from the taught meanings, the corpus or a learned lesson."""
+    describing, nouns, others = _word_roles(cleaned, meanings)
     sentence = _meaning_sentence(cleaned, meanings, describing, nouns, others)
     if sentence:
         return sentence
@@ -269,18 +213,40 @@ def make_sentence_from_words(
         statement = _lesson_statement_for_word(tenant_id, content[0])
         if statement:
             return statement
-    sentence = _best_matching_sentence(tenant_id, content, corpus)
+    return _best_matching_sentence(tenant_id, content, corpus)
+
+
+def _sentence_from_known(
+    tenant_id: int | None, cleaned: list[str], content: list[str], strict: bool
+) -> str | None:
+    """A sentence built from what the learner has taught, or nothing."""
+    meanings = _taught_word_meanings(tenant_id)
+    sentence = _known_sentence(tenant_id, cleaned, content, meanings)
     if sentence:
         return sentence
     if len(content) == 1:
         statement = _list_statement_for_word(tenant_id, content[0])
         if statement:
             return statement
+    others = (
+        []
+        if strict
+        else [word for word in cleaned if word not in meanings and word not in _FUNCTION_WORDS]
+    )
     if others:
-        if strict:
-            return None
         return f"The {' '.join(others)} is a word I am still learning."
     return None
+
+
+def make_sentence_from_words(
+    tenant_id: int | None, words: list[str], strict: bool = False
+) -> str | None:
+    """Build a simple grammatical sentence from the given words."""
+    cleaned = _clean_words(words)
+    if not cleaned:
+        return None
+    content = [word for word in cleaned if word not in _FUNCTION_WORDS] or cleaned
+    return _sentence_from_known(tenant_id, cleaned, content, strict)
 
 
 def make_sentence(tenant_id: int | None, seed: str | None = None) -> str | None:

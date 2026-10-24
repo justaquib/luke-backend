@@ -4,7 +4,7 @@ from app.services import dictionary
 
 
 class FakeLemma:
-    def __init__(self, name: str, antonyms: list["FakeLemma"] | None = None):
+    def __init__(self, name: str, antonyms: list["FakeLemma"] | None = None) -> None:
         self._name = name
         self._antonyms = antonyms or []
 
@@ -16,7 +16,9 @@ class FakeLemma:
 
 
 class FakeSynset:
-    def __init__(self, pos: str, definition: str, names: list[str], antonym: str | None = None):
+    def __init__(
+        self, pos: str, definition: str, names: list[str], antonym: str | None = None
+    ) -> None:
         opposite = [FakeLemma(antonym)] if antonym else []
         self._lemmas = [FakeLemma(name, opposite) for name in names]
         self._pos = pos
@@ -69,23 +71,38 @@ def test_definition_returns_multiple_senses(monkeypatch):
 def test_synonyms_and_antonyms(monkeypatch):
     synset = FakeSynset("a", "having a pleasant taste", ["sweet", "sugary"], "bitter")
     monkeypatch.setattr(dictionary, "_unique_synsets", lambda word: [synset])
-    assert dictionary.answer_dictionary_question("Synonyms of sweet") == "Synonyms of sweet: sugary."
-    assert dictionary.answer_dictionary_question("Give me some synonyms for sweet") == "Synonyms of sweet: sugary."
-    assert dictionary.answer_dictionary_question("Antonyms of sweet") == "Antonyms of sweet: bitter."
-    assert dictionary.answer_dictionary_question("What is the opposite of sweet") == "Antonyms of sweet: bitter."
+    assert (
+        dictionary.answer_dictionary_question("Synonyms of sweet") == "Synonyms of sweet: sugary."
+    )
+    assert (
+        dictionary.answer_dictionary_question("Give me some synonyms for sweet")
+        == "Synonyms of sweet: sugary."
+    )
+    assert (
+        dictionary.answer_dictionary_question("Antonyms of sweet") == "Antonyms of sweet: bitter."
+    )
+    assert (
+        dictionary.answer_dictionary_question("What is the opposite of sweet")
+        == "Antonyms of sweet: bitter."
+    )
 
 
 def test_part_of_speech_and_missing_relations(monkeypatch):
     monkeypatch.setattr(
         dictionary,
         "_unique_synsets",
-        lambda word: [FakeSynset("n", "a fruit", ["apple"]), FakeSynset("v", "to apple-polish", ["apple"])],
+        lambda word: [
+            FakeSynset("n", "a fruit", ["apple"]),
+            FakeSynset("v", "to apple-polish", ["apple"]),
+        ],
     )
     assert dictionary.answer_dictionary_question("What part of speech is apple?") == (
         '"apple" can be used as a noun or verb.'
     )
 
-    monkeypatch.setattr(dictionary, "_unique_synsets", lambda word: [FakeSynset("n", "a fruit", ["apple"])])
+    monkeypatch.setattr(
+        dictionary, "_unique_synsets", lambda word: [FakeSynset("n", "a fruit", ["apple"])]
+    )
     assert dictionary.answer_dictionary_question("Antonyms of apple") == (
         'I couldn\'t find antonyms for "apple" in the offline English dictionary.'
     )
@@ -93,5 +110,7 @@ def test_part_of_speech_and_missing_relations(monkeypatch):
 
 def test_unsupported_question_falls_through(monkeypatch):
     monkeypatch.setattr(dictionary, "_unique_synsets", lambda word: [SimpleNamespace()])
-    assert dictionary.answer_dictionary_question("What is the customer name in this voucher?") is None
+    assert (
+        dictionary.answer_dictionary_question("What is the customer name in this voucher?") is None
+    )
     assert dictionary.answer_dictionary_question("What is the capital of France?") is None

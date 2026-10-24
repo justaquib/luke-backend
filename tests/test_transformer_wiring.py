@@ -1,9 +1,9 @@
 """Tests for the transformer that writes in the trainer's words and proposes answers."""
 
-from app.services import brain, language_logic, transformer
+from app.services import brain, language_logic, neural
 from app.services import query as query_service
 from app.services.language import runtime
-from app.services.transformer.settings import TrainingSettings
+from app.services.neural.settings import TrainingSettings
 
 
 def test_the_corpus_holds_what_the_trainer_taught(monkeypatch, tmp_path):
@@ -52,25 +52,27 @@ def test_without_a_model_there_is_no_proposal(monkeypatch):
 
 def test_the_writer_is_kept_for_the_tenant(tmp_path, monkeypatch):
     monkeypatch.setattr(runtime, "_DATA_DIR", tmp_path)
-    brain._WRITER_CACHE.clear()
-    writer = transformer.TransformerWriter()
+    neural.forget(None)
+    writer = neural.AnswerTask()
     writer.config = {**writer.config, "d_model": 32, "layers": 1, "heads": 2, "context": 32}
     writer.fit(
-        [
-            "The cow is an animal.",
-            "A cow gives milk.",
-            "The cow is a farm animal that gives milk.",
-            "Milk is the white liquid that comes from a cow.",
-            "The night sky is black.",
-            "The moon shines at night.",
-        ],
+        neural.AnswerCorpus(
+            [
+                "The cow is an animal.",
+                "A cow gives milk.",
+                "The cow is a farm animal that gives milk.",
+                "Milk is the white liquid that comes from a cow.",
+                "The night sky is black.",
+                "The moon shines at night.",
+            ]
+        ),
         settings=TrainingSettings(steps=20),
     )
     writer.save(brain.writer_path(None))
-    brain._WRITER_CACHE.clear()
+    neural.forget(None)
 
     loaded = brain.load_writer(None)
 
     assert loaded is not None
     assert loaded.trained is True
-    brain._WRITER_CACHE.clear()
+    neural.forget(None)

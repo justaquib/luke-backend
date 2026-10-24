@@ -1,0 +1,340 @@
+{
+  "score": 1.0,
+  "passed": 12,
+  "total": 12,
+  "written": 0,
+  "looked_up": 12,
+  "probes": [
+    {
+      "question": "What is there to know about wind?",
+      "expected": "The sun and the wind argued about who was stronger.\nThey saw a man walking in a coat.\nThe wind tried to blow the coat off.\nThe wind blew harder but the man held on.\nThe sun shone warmly.\nThe man took off his coat.\nLesson: Gentleness can be stronger than force.",
+      "answered": "The sun and the wind argued about who was stronger.\nThey saw a man walking in a coat.\nThe wind tried to blow the coat off.\nThe wind blew harder but the man held on.\nThe sun shone warmly.\nThe man took off his coat.\nLesson: Gentleness can be stronger than force.",
+      "correct": true,
+      "kind": "fact",
+      "written": false
+    },
+    {
+      "question": "Tell me about the wind please.",
+      "expected": "The sun and the wind argued about who was stronger.\nThey saw a man walking in a coat.\nThe wind tried to blow the coat off.\nThe wind blew harder but the man held on.\nThe sun shone warmly.\nThe man took off his coat.\nLesson: Gentleness can be stronger than force.",
+      "answered": "The sun and the wind argued about who was stronger.\nThey saw a man walking in a coat.\nThe wind tried to blow the coat off.\nThe wind blew harder but the man held on.\nThe sun shone warmly.\nThe man took off his coat.\nLesson: Gentleness can be stronger than force.",
+      "correct": true,
+      "kind": "fact",
+      "written": false
+    },
+    {
+      "question": "What is there to know about stork?",
+      "expected": "A fox invited a stork to dinner.\nThe fox served soup in a flat dish.\nThe stork could not eat with its long beak.\nThe stork invited the fox to dinner.\nThe stork served soup in a tall jar.\nThe fox could not eat with its short mouth.\nLesson: Treat others as you want to be treated.",
+      "answered": "A fox invited a stork to dinner.\nThe fox served soup in a flat dish.\nThe stork could not eat with its long beak.\nThe stork invited the fox to dinner.\nThe stork served soup in a tall jar.\nThe fox could not eat with its short mouth.\nLesson: Treat others as you want to be treated.",
+      "correct": true,
+      "kind": "fact",
+      "written": false
+    },
+    {
+      "question": "Tell me about the stork please.",
+      "expected": "A fox invited a stork to dinner.\nThe fox served soup in a flat dish.\nThe stork could not eat with its long beak.\nThe stork invited the fox to dinner.\nThe stork served soup in a tall jar.\nThe fox could not eat with its short mouth.\nLesson: Treat others as you want to be treated.",
+      "answered": "A fox invited a stork to dinner.\nThe fox served soup in a flat dish.\nThe stork could not eat with its long beak.\nThe stork invited the fox to dinner.\nThe stork served soup in a tall jar.\nThe fox could not eat with its short mouth.\nLesson: Treat others as you want to be treated.",
+      "correct": true,
+      "kind": "fact",
+      "written": false
+    },
+    {
+      "question": "What is there to know about mouse?",
+      "expected": "A mouse ran across a sleeping lion.\nThe lion woke and caught the mouse.\nThe mouse begged to be set free.\nThe lion laughed and let it go.\nLater the lion was caught in a net.\nThe mouse chewed the net and set the lion free.\nLesson: Even the smallest friend can help.",
+      "answered": "A mouse ran across a sleeping lion.\nThe lion woke and caught the mouse.\nThe mouse begged to be set free.\nThe lion laughed and let it go.\nLater the lion was caught in a net.\nThe mouse chewed the net and set the lion free.\nLesson: Even the smallest friend can help.",
+      "correct": true,
+      "kind": "fact",
+      "written": false
+    },
+    {
+      "question": "Tell me about the mouse please.",
+      "expected": "A mouse ran across a sleeping lion.\nThe lion woke and caught the mouse.\nThe mouse begged to be set free.\nThe lion laughed and let it go.\nLater the lion was caught in a net.\nThe mouse chewed the net and set the lion free.\nLesson: Even the smallest friend can help.",
+      "answered": "A mouse ran across a sleeping lion.\nThe lion woke and caught the mouse.\nThe mouse begged to be set free.\nThe lion laughed and let it go.\nLater the lion was caught in a net.\nThe mouse chewed the net and set the lion free.\nLesson: Even the smallest friend can help.",
+      "correct": true,
+      "kind": "fact",
+      "written": false
+    },
+    {
+      "question": "What is there to know about golden?",
+      "expected": "A man had a goose.\nThe goose laid one golden egg a day.\nThe man wanted all the gold at once.\nHe cut open the goose.\nThere was no gold inside.\nLesson: Greed destroys what it seeks.",
+      "answered": "A man had a goose.\nThe goose laid one golden egg a day.\nThe man wanted all the gold at once.\nHe cut open the goose.\nThere was no gold inside.\nLesson: Greed destroys what it seeks.",
+      "correct": true,
+      "kind": "fact",
+      "written": false
+    },
+    {
+      "question": "Tell me about the golden please.",
+      "expected": "A man had a goose.\nThe goose laid one golden egg a day.\nThe man wanted all the gold at once.\nHe cut open the goose.\nThere was no gold inside.\nLesson: Greed destroys what it seeks.",
+      "answered": "A man had a goose.\nThe goose laid one golden egg a day.\nThe man wanted all the gold at once.\nHe cut open the goose.\nThere was no gold inside.\nLesson: Greed destroys what it seeks.",
+      "correct": true,
+      "kind": "fact",
+      "written": false
+    },
+    {
+      "question": "What is there to know about goose?",
+      "expected": "A man had a goose.\nThe goose laid one golden egg a day.\nThe man wanted all the gold at once.\nHe cut open the goose.\nThere was no gold inside.\nLesson: Greed destroys what it seeks.",
+      "answered": "A man had a goose.\nThe goose laid one golden egg a day.\nThe man wanted all the gold at once.\nHe cut open the goose.\nThere was no gold inside.\nLesson: Greed destroys what it seeks.",
+      "correct": true,
+      "kind": "fact",
+      "written": false
+    },
+    {
+      "question": "Tell me about the goose please.",
+      "expected": "A man had a goose.\nThe goose laid one golden egg a day.\nThe man wanted all the gold at once.\nHe cut open the goose.\nThere was no gold inside.\nLesson: Greed destroys what it seeks.",
+      "answered": "A man had a goose.\nThe goose laid one golden egg a day.\nThe man wanted all the gold at once.\nHe cut open the goose.\nThere was no gold inside.\nLesson: Greed destroys what it seeks.",
+      "correct": true,
+      "kind": "fact",
+      "written": false
+    },
+    {
+      "question": "What is there to know about crow?",
+      "expected": "A crow lived in a tree.\nA snake lived in a hole below.\nThe snake ate the crow's eggs.\nThe crow was very sad.\nThe crow asked the king for help.\nThe king ordered the snake removed.\nLesson: Ask for help when you need it.",
+      "answered": "A crow lived in a tree.\nA snake lived in a hole below.\nThe snake ate the crow's eggs.\nThe crow was very sad.\nThe crow asked the king for help.\nThe king ordered the snake removed.\nLesson: Ask for help when you need it.",
+      "correct": true,
+      "kind": "fact",
+      "written": false
+    },
+    {
+      "question": "Tell me about the crow please.",
+      "expected": "A crow lived in a tree.\nA snake lived in a hole below.\nThe snake ate the crow's eggs.\nThe crow was very sad.\nThe crow asked the king for help.\nThe king ordered the snake removed.\nLesson: Ask for help when you need it.",
+      "answered": "A crow lived in a tree.\nA snake lived in a hole below.\nThe snake ate the crow's eggs.\nThe crow was very sad.\nThe crow asked the king for help.\nThe king ordered the snake removed.\nLesson: Ask for help when you need it.",
+      "correct": true,
+      "kind": "fact",
+      "written": false
+    }
+  ],
+  "cross_form": {
+    "score": 1.0,
+    "passed": 12,
+    "total": 12,
+    "written": 0,
+    "looked_up": 12,
+    "probes": [
+      {
+        "question": "What is there to know about wind?",
+        "expected": "The sun and the wind argued about who was stronger.\nThey saw a man walking in a coat.\nThe wind tried to blow the coat off.\nThe wind blew harder but the man held on.\nThe sun shone warmly.\nThe man took off his coat.\nLesson: Gentleness can be stronger than force.",
+        "answered": "The sun and the wind argued about who was stronger.\nThey saw a man walking in a coat.\nThe wind tried to blow the coat off.\nThe wind blew harder but the man held on.\nThe sun shone warmly.\nThe man took off his coat.\nLesson: Gentleness can be stronger than force.",
+        "correct": true,
+        "kind": "fact",
+        "written": false
+      },
+      {
+        "question": "Tell me about the wind please.",
+        "expected": "The sun and the wind argued about who was stronger.\nThey saw a man walking in a coat.\nThe wind tried to blow the coat off.\nThe wind blew harder but the man held on.\nThe sun shone warmly.\nThe man took off his coat.\nLesson: Gentleness can be stronger than force.",
+        "answered": "The sun and the wind argued about who was stronger.\nThey saw a man walking in a coat.\nThe wind tried to blow the coat off.\nThe wind blew harder but the man held on.\nThe sun shone warmly.\nThe man took off his coat.\nLesson: Gentleness can be stronger than force.",
+        "correct": true,
+        "kind": "fact",
+        "written": false
+      },
+      {
+        "question": "What is there to know about stork?",
+        "expected": "A fox invited a stork to dinner.\nThe fox served soup in a flat dish.\nThe stork could not eat with its long beak.\nThe stork invited the fox to dinner.\nThe stork served soup in a tall jar.\nThe fox could not eat with its short mouth.\nLesson: Treat others as you want to be treated.",
+        "answered": "A fox invited a stork to dinner.\nThe fox served soup in a flat dish.\nThe stork could not eat with its long beak.\nThe stork invited the fox to dinner.\nThe stork served soup in a tall jar.\nThe fox could not eat with its short mouth.\nLesson: Treat others as you want to be treated.",
+        "correct": true,
+        "kind": "fact",
+        "written": false
+      },
+      {
+        "question": "Tell me about the stork please.",
+        "expected": "A fox invited a stork to dinner.\nThe fox served soup in a flat dish.\nThe stork could not eat with its long beak.\nThe stork invited the fox to dinner.\nThe stork served soup in a tall jar.\nThe fox could not eat with its short mouth.\nLesson: Treat others as you want to be treated.",
+        "answered": "A fox invited a stork to dinner.\nThe fox served soup in a flat dish.\nThe stork could not eat with its long beak.\nThe stork invited the fox to dinner.\nThe stork served soup in a tall jar.\nThe fox could not eat with its short mouth.\nLesson: Treat others as you want to be treated.",
+        "correct": true,
+        "kind": "fact",
+        "written": false
+      },
+      {
+        "question": "What is there to know about mouse?",
+        "expected": "A mouse ran across a sleeping lion.\nThe lion woke and caught the mouse.\nThe mouse begged to be set free.\nThe lion laughed and let it go.\nLater the lion was caught in a net.\nThe mouse chewed the net and set the lion free.\nLesson: Even the smallest friend can help.",
+        "answered": "A mouse ran across a sleeping lion.\nThe lion woke and caught the mouse.\nThe mouse begged to be set free.\nThe lion laughed and let it go.\nLater the lion was caught in a net.\nThe mouse chewed the net and set the lion free.\nLesson: Even the smallest friend can help.",
+        "correct": true,
+        "kind": "fact",
+        "written": false
+      },
+      {
+        "question": "Tell me about the mouse please.",
+        "expected": "A mouse ran across a sleeping lion.\nThe lion woke and caught the mouse.\nThe mouse begged to be set free.\nThe lion laughed and let it go.\nLater the lion was caught in a net.\nThe mouse chewed the net and set the lion free.\nLesson: Even the smallest friend can help.",
+        "answered": "A mouse ran across a sleeping lion.\nThe lion woke and caught the mouse.\nThe mouse begged to be set free.\nThe lion laughed and let it go.\nLater the lion was caught in a net.\nThe mouse chewed the net and set the lion free.\nLesson: Even the smallest friend can help.",
+        "correct": true,
+        "kind": "fact",
+        "written": false
+      },
+      {
+        "question": "What is there to know about golden?",
+        "expected": "A man had a goose.\nThe goose laid one golden egg a day.\nThe man wanted all the gold at once.\nHe cut open the goose.\nThere was no gold inside.\nLesson: Greed destroys what it seeks.",
+        "answered": "A man had a goose.\nThe goose laid one golden egg a day.\nThe man wanted all the gold at once.\nHe cut open the goose.\nThere was no gold inside.\nLesson: Greed destroys what it seeks.",
+        "correct": true,
+        "kind": "fact",
+        "written": false
+      },
+      {
+        "question": "Tell me about the golden please.",
+        "expected": "A man had a goose.\nThe goose laid one golden egg a day.\nThe man wanted all the gold at once.\nHe cut open the goose.\nThere was no gold inside.\nLesson: Greed destroys what it seeks.",
+        "answered": "A man had a goose.\nThe goose laid one golden egg a day.\nThe man wanted all the gold at once.\nHe cut open the goose.\nThere was no gold inside.\nLesson: Greed destroys what it seeks.",
+        "correct": true,
+        "kind": "fact",
+        "written": false
+      },
+      {
+        "question": "What is there to know about goose?",
+        "expected": "A man had a goose.\nThe goose laid one golden egg a day.\nThe man wanted all the gold at once.\nHe cut open the goose.\nThere was no gold inside.\nLesson: Greed destroys what it seeks.",
+        "answered": "A man had a goose.\nThe goose laid one golden egg a day.\nThe man wanted all the gold at once.\nHe cut open the goose.\nThere was no gold inside.\nLesson: Greed destroys what it seeks.",
+        "correct": true,
+        "kind": "fact",
+        "written": false
+      },
+      {
+        "question": "Tell me about the goose please.",
+        "expected": "A man had a goose.\nThe goose laid one golden egg a day.\nThe man wanted all the gold at once.\nHe cut open the goose.\nThere was no gold inside.\nLesson: Greed destroys what it seeks.",
+        "answered": "A man had a goose.\nThe goose laid one golden egg a day.\nThe man wanted all the gold at once.\nHe cut open the goose.\nThere was no gold inside.\nLesson: Greed destroys what it seeks.",
+        "correct": true,
+        "kind": "fact",
+        "written": false
+      },
+      {
+        "question": "What is there to know about crow?",
+        "expected": "A crow lived in a tree.\nA snake lived in a hole below.\nThe snake ate the crow's eggs.\nThe crow was very sad.\nThe crow asked the king for help.\nThe king ordered the snake removed.\nLesson: Ask for help when you need it.",
+        "answered": "A crow lived in a tree.\nA snake lived in a hole below.\nThe snake ate the crow's eggs.\nThe crow was very sad.\nThe crow asked the king for help.\nThe king ordered the snake removed.\nLesson: Ask for help when you need it.",
+        "correct": true,
+        "kind": "fact",
+        "written": false
+      },
+      {
+        "question": "Tell me about the crow please.",
+        "expected": "A crow lived in a tree.\nA snake lived in a hole below.\nThe snake ate the crow's eggs.\nThe crow was very sad.\nThe crow asked the king for help.\nThe king ordered the snake removed.\nLesson: Ask for help when you need it.",
+        "answered": "A crow lived in a tree.\nA snake lived in a hole below.\nThe snake ate the crow's eggs.\nThe crow was very sad.\nThe crow asked the king for help.\nThe king ordered the snake removed.\nLesson: Ask for help when you need it.",
+        "correct": true,
+        "kind": "fact",
+        "written": false
+      }
+    ]
+  },
+  "adversarial": {
+    "score": 1.0,
+    "passed": 8,
+    "total": 8,
+    "model": 0,
+    "probes": [
+      {
+        "question": "Describe the oyster to me.",
+        "expected": "I do not know anything about that.",
+        "answered": "a painting is a triangle.",
+        "correct": true,
+        "model_refused": false
+      },
+      {
+        "question": "Write a poem about the panda.",
+        "expected": "I do not know anything about that.",
+        "answered": "a lemon is a large fruit with a triangle.",
+        "correct": true,
+        "model_refused": false
+      },
+      {
+        "question": "Tell me everything about the panda.",
+        "expected": "I do not know anything about that.",
+        "answered": "the coldest is the day.",
+        "correct": true,
+        "model_refused": false
+      },
+      {
+        "question": "Describe the panda to me.",
+        "expected": "I do not know anything about that.",
+        "answered": "a painting is a triangle.",
+        "correct": true,
+        "model_refused": false
+      },
+      {
+        "question": "Write a poem that is not about wind.",
+        "expected": "I do not know anything about that.",
+        "answered": "a number to\nthe day.",
+        "correct": true,
+        "model_refused": false
+      },
+      {
+        "question": "Write a poem that is not about stork.",
+        "expected": "I do not know anything about that.",
+        "answered": "a number to\nthe day.",
+        "correct": true,
+        "model_refused": false
+      },
+      {
+        "question": "Write a poem that is not about mouse.",
+        "expected": "I do not know anything about that.",
+        "answered": "a number to\nthe day.",
+        "correct": true,
+        "model_refused": false
+      },
+      {
+        "question": "Write a poem that is not about golden.",
+        "expected": "I do not know anything about that.",
+        "answered": "a number to\nthe day.",
+        "correct": true,
+        "model_refused": false
+      }
+    ]
+  },
+  "cross_topic": {
+    "subject": "General Knowledge",
+    "score": 1.0,
+    "passed": 6,
+    "total": 6,
+    "written": 0,
+    "looked_up": 6,
+    "probes": [
+      {
+        "question": "What is there to know about juliet?",
+        "expected": "William Shakespeare wrote the play Romeo and Juliet.",
+        "answered": "William Shakespeare wrote the play Romeo and Juliet.",
+        "correct": true,
+        "kind": "fact",
+        "written": false
+      },
+      {
+        "question": "Tell me about the juliet please.",
+        "expected": "William Shakespeare wrote the play Romeo and Juliet.",
+        "answered": "William Shakespeare wrote the play Romeo and Juliet.",
+        "correct": true,
+        "kind": "fact",
+        "written": false
+      },
+      {
+        "question": "What is there to know about romeo?",
+        "expected": "William Shakespeare wrote the play Romeo and Juliet.",
+        "answered": "William Shakespeare wrote the play Romeo and Juliet.",
+        "correct": true,
+        "kind": "fact",
+        "written": false
+      },
+      {
+        "question": "Tell me about the romeo please.",
+        "expected": "William Shakespeare wrote the play Romeo and Juliet.",
+        "answered": "William Shakespeare wrote the play Romeo and Juliet.",
+        "correct": true,
+        "kind": "fact",
+        "written": false
+      },
+      {
+        "question": "What is there to know about play?",
+        "expected": "William Shakespeare wrote the play Hamlet.",
+        "answered": "William Shakespeare wrote the play Hamlet.",
+        "correct": true,
+        "kind": "fact",
+        "written": false
+      },
+      {
+        "question": "Tell me about the play please.",
+        "expected": "William Shakespeare wrote the play Hamlet.",
+        "answered": "William Shakespeare wrote the play Hamlet.",
+        "correct": true,
+        "kind": "fact",
+        "written": false
+      }
+    ]
+  },
+  "contamination": {
+    "checked": 12,
+    "overlaps": 0,
+    "examples": [],
+    "clean": true
+  },
+  "measured": true,
+  "measured_at": "2026-10-24T12:54:59.447009+00:00"
+}

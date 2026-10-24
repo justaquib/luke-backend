@@ -6,18 +6,54 @@ import re
 from functools import lru_cache
 from typing import Any
 
-
 _WORD = r"[A-Za-z][A-Za-z'’-]*(?:\s+[A-Za-z][A-Za-z'’-]*){0,3}"
 _SEARCH_STOP_WORDS = {
-    "what", "who", "where", "when", "which", "is", "are", "was", "were",
-    "do", "does", "did", "the", "a", "an", "of", "for", "please", "tell",
-    "me", "give", "show", "find", "in", "on", "from", "about", "to", "with",
-    "name", "number", "no", "date", "email", "phone", "mobile", "contact", "address", "code", "id", "s",
+    "what",
+    "who",
+    "where",
+    "when",
+    "which",
+    "is",
+    "are",
+    "was",
+    "were",
+    "do",
+    "does",
+    "did",
+    "the",
+    "a",
+    "an",
+    "of",
+    "for",
+    "please",
+    "tell",
+    "me",
+    "give",
+    "show",
+    "find",
+    "in",
+    "on",
+    "from",
+    "about",
+    "to",
+    "with",
+    "name",
+    "number",
+    "no",
+    "date",
+    "email",
+    "phone",
+    "mobile",
+    "contact",
+    "address",
+    "code",
+    "id",
+    "s",
 }
 
 
 @lru_cache(maxsize=1)
-def _wordnet():
+def _wordnet() -> Any:
     # Import lazily so the rest of the API can start even before the corpus is
     # installed. Setup instructions download the data for offline use.
     from nltk.corpus import wordnet
@@ -88,28 +124,30 @@ def lookup_word(word: str) -> dict[str, Any] | None:
     }
 
 
+def _add_expansions(term: str, expansions: list[str], per_word: int, max_terms: int) -> None:
+    """Add up to ``per_word`` synonyms of a term, stopping at ``max_terms``."""
+    synsets = _unique_synsets(term)
+    if not synsets:
+        return
+    added = 0
+    for synset in synsets[:3]:
+        for lemma in synset.lemmas():
+            candidate = lemma.name().replace("_", " ").lower()
+            if candidate != term and candidate not in expansions:
+                expansions.append(candidate)
+                added += 1
+                if len(expansions) >= max_terms or added >= per_word:
+                    return
+
+
 def search_expansions(text: str, per_word: int = 2, max_terms: int = 8) -> list[str]:
     """Return a few common-sense synonyms to help local retrieval match wording."""
-    terms = re.findall(r"[a-z]+", text.lower())
     expansions: list[str] = []
     try:
-        for term in terms:
+        for term in re.findall(r"[a-z]+", text.lower()):
             if term in _SEARCH_STOP_WORDS:
                 continue
-            synsets = _unique_synsets(term)
-            if not synsets:
-                continue
-            added_for_word = 0
-            for synset in synsets[:3]:
-                for lemma in synset.lemmas():
-                    candidate = lemma.name().replace("_", " ").lower()
-                    if candidate != term and candidate not in expansions:
-                        expansions.append(candidate)
-                        added_for_word += 1
-                        if len(expansions) >= max_terms or added_for_word >= per_word:
-                            break
-                if len(expansions) >= max_terms or added_for_word >= per_word:
-                    break
+            _add_expansions(term, expansions, per_word, max_terms)
             if len(expansions) >= max_terms:
                 break
     except (ImportError, LookupError):
@@ -153,14 +191,20 @@ def _parse_request(question: str) -> tuple[str, str] | None:
         ("definition", rf"what\s+does\s+({_WORD})\s+mean"),
         ("definition", rf"(?:define|meaning\s+of)\s+({_WORD})"),
         ("definition", rf"what\s+is\s+(?:the\s+)?(?:definition|meaning)\s+of\s+({_WORD})"),
-        ("definition", rf"what\s+is\s+(?:(?:a|an|the)\s+)?([A-Za-z][A-Za-z'’-]*)"),
+        ("definition", r"what\s+is\s+(?:(?:a|an|the)\s+)?([A-Za-z][A-Za-z'’-]*)"),
         ("synonym", rf"(?:what\s+are\s+)?(?:the\s+)?synonyms?\s+(?:of|for)\s+({_WORD})"),
         ("synonym", rf"what\s+is\s+(?:a\s+|the\s+)?synonym\s+(?:of|for)\s+({_WORD})"),
-        ("synonym", rf"(?:give|show|list|tell)\s+me\s+(?:some\s+)?synonyms?\s+(?:of|for)\s+({_WORD})"),
+        (
+            "synonym",
+            rf"(?:give|show|list|tell)\s+me\s+(?:some\s+)?synonyms?\s+(?:of|for)\s+({_WORD})",
+        ),
         ("synonym", rf"what\s+are\s+some\s+synonyms?\s+(?:of|for)\s+({_WORD})"),
         ("antonym", rf"(?:what\s+are\s+)?(?:the\s+)?antonyms?\s+(?:of|for)\s+({_WORD})"),
         ("antonym", rf"what\s+is\s+(?:an?\s+|the\s+)?antonym\s+(?:of|for)\s+({_WORD})"),
-        ("antonym", rf"(?:give|show|list|tell)\s+me\s+(?:some\s+)?antonyms?\s+(?:of|for)\s+({_WORD})"),
+        (
+            "antonym",
+            rf"(?:give|show|list|tell)\s+me\s+(?:some\s+)?antonyms?\s+(?:of|for)\s+({_WORD})",
+        ),
         ("antonym", rf"what\s+is\s+the\s+opposite\s+of\s+({_WORD})"),
         ("part_of_speech", rf"what\s+part\s+of\s+speech\s+is\s+({_WORD})"),
     ]
@@ -189,6 +233,84 @@ def _answer_alphabet_sequence(question: str) -> str | None:
     return None
 
 
+def _letter_answer(word: str) -> str | None:
+    """The first letter of a word, when it has one."""
+    first = next((char for char in word if char.isalpha()), None)
+    return f"{word.capitalize()} starts with the letter {first.upper()}." if first else None
+
+
+def _definition_answer(word: str, synsets: list[Any]) -> str:
+    """Up to two distinct concise senses, so no common meaning is hidden."""
+    definitions: list[str] = []
+    for synset in synsets:
+        definition = synset.definition().strip()
+        if definition and definition.casefold() not in {d.casefold() for d in definitions}:
+            definitions.append(definition)
+        if len(definitions) == 2:
+            break
+    if not definitions:
+        return f'I couldn\'t find a definition for "{word}" in the offline English dictionary.'
+    if len(definitions) == 1:
+        return f"{word.capitalize()} ({_pos_label(synsets[0].pos())}): {definitions[0]}"
+    return (
+        f"{word.capitalize()} has multiple meanings. "
+        f"For example: {definitions[0]}; it can also mean {definitions[1]}"
+    )
+
+
+def _pos_answer(word: str, synsets: list[Any]) -> str:
+    """The parts of speech a word is used as."""
+    labels = list(dict.fromkeys(_pos_label(synset.pos()) for synset in synsets))
+    return (
+        f'"{word}" can be used as a {", ".join(labels[:-1])} or {labels[-1]}.'
+        if len(labels) > 1
+        else f'"{word}" is used as a {labels[0]}.'
+    )
+
+
+def _related_answer(word: str, synsets: list[Any], kind: str) -> str:
+    """Up to five synonyms or antonyms of a word."""
+    related: list[str] = []
+    for synset in synsets[:3]:
+        lemmas = synset.lemmas()
+        for lemma in lemmas:
+            candidates = lemma.antonyms() if kind == "antonym" else lemmas
+            for candidate in candidates:
+                value = candidate.name().replace("_", " ")
+                if value.casefold() != word.casefold() and value.casefold() not in {
+                    item.casefold() for item in related
+                }:
+                    related.append(value)
+                    if len(related) >= 5:
+                        break
+            if len(related) >= 5:
+                break
+        if len(related) >= 5:
+            break
+    if not related:
+        label = "antonyms" if kind == "antonym" else "synonyms"
+        return f'I couldn\'t find {label} for "{word}" in the offline English dictionary.'
+    label = "Antonyms" if kind == "antonym" else "Synonyms"
+    return f"{label} of {word}: {', '.join(related)}."
+
+
+def _answer_for(kind: str, word: str) -> str | None:
+    """The answer to a parsed request, or nothing when the word is unknown."""
+    if kind == "letter":
+        return _letter_answer(word)
+    try:
+        synsets = _unique_synsets(word)
+    except (ImportError, LookupError):
+        return None
+    if not synsets:
+        return f'I couldn\'t find "{word}" in the offline English dictionary.'
+    if kind == "definition":
+        return _definition_answer(word, synsets)
+    if kind == "part_of_speech":
+        return _pos_answer(word, synsets)
+    return _related_answer(word, synsets, kind)
+
+
 def answer_dictionary_question(question: str) -> str | None:
     """Return a concise offline lexical answer, or None if unsupported/unavailable."""
     alphabet_answer = _answer_alphabet_sequence(question)
@@ -199,58 +321,7 @@ def answer_dictionary_question(question: str) -> str | None:
     if not parsed:
         return None
     kind, word = parsed
-
-    if kind == "letter":
-        first = next((char for char in word if char.isalpha()), None)
-        return f"{word.capitalize()} starts with the letter {first.upper()}." if first else None
-
-    try:
-        synsets = _unique_synsets(word)
-    except (ImportError, LookupError):
-        return None
-    if not synsets:
-        return f"I couldn't find \"{word}\" in the offline English dictionary."
-
-    if kind == "definition":
-        # WordNet orders senses by frequency; show up to two distinct concise
-        # definitions to avoid silently choosing among common meanings.
-        definitions: list[str] = []
-        for synset in synsets:
-            definition = synset.definition().strip()
-            if definition and definition.casefold() not in {d.casefold() for d in definitions}:
-                definitions.append(definition)
-            if len(definitions) == 2:
-                break
-        if not definitions:
-            return f"I couldn't find a definition for \"{word}\" in the offline English dictionary."
-        if len(definitions) == 1:
-            return f"{word.capitalize()} ({_pos_label(synsets[0].pos())}): {definitions[0]}"
-        return f"{word.capitalize()} has multiple meanings. For example: {definitions[0]}; it can also mean {definitions[1]}"
-
-    if kind == "part_of_speech":
-        labels = list(dict.fromkeys(_pos_label(synset.pos()) for synset in synsets))
-        return f"\"{word}\" can be used as a {', '.join(labels[:-1])} or {labels[-1]}." if len(labels) > 1 else f"\"{word}\" is used as a {labels[0]}."
-
-    related: list[str] = []
-    for synset in synsets[:3]:
-        lemmas = synset.lemmas()
-        for lemma in lemmas:
-            candidates = lemma.antonyms() if kind == "antonym" else lemmas
-            for candidate in candidates:
-                value = candidate.name().replace("_", " ")
-                if value.casefold() != word.casefold() and value.casefold() not in {item.casefold() for item in related}:
-                    related.append(value)
-                    if len(related) >= 5:
-                        break
-            if len(related) >= 5:
-                break
-        if len(related) >= 5:
-            break
-    if not related:
-        label = "antonyms" if kind == "antonym" else "synonyms"
-        return f"I couldn't find {label} for \"{word}\" in the offline English dictionary."
-    label = "Antonyms" if kind == "antonym" else "Synonyms"
-    return f"{label} of {word}: {', '.join(related)}."
+    return _answer_for(kind, word)
 
 
 def is_dictionary_question(question: str) -> bool:

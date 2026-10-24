@@ -16,7 +16,11 @@ training:
   the model has to refuse them instead of answering with something else.
 
 The score is the honest one. The requests used here are kept out of the
-training, so a model that only memorises scores nothing.
+training, so a model that only memorises scores nothing. The adversarial
+score is the refusal the user gets from the product: the request is read, the
+material is looked up, and nothing is answered when the topic was never
+taught. The writer's own refusal is counted beside it, because the boundary
+is what keeps the chat honest and the model does not learn that on its own.
 """
 
 from __future__ import annotations
@@ -25,6 +29,7 @@ from typing import Any
 
 from app.services.language import instructions as instruction_service
 from app.services.language import requests as request_service
+from app.services.language.negatives import REFUSAL, build_held_out_negatives
 from app.services.language.topics import topic_words
 
 # The number of held-out requests the model is measured on.
@@ -41,9 +46,6 @@ PROBE_MODEL = {"d_model": 64, "layers": 2, "heads": 4, "context": 128, "dropout"
 
 # The steps the cross-topic probe is trained for.
 PROBE_STEPS = 400
-
-# The answer the model gives when it was taught nothing about the request.
-REFUSAL = "I do not know anything about that."
 
 
 def _words(text: str) -> set[str]:
@@ -64,8 +66,14 @@ def _probes(
     tenant_id: int | None,
     cards: list[dict[str, Any]],
     items: list[Any],
+    writer: Any = None,
 ) -> list[dict[str, Any]]:
-    """The score of the model on the requests it was given."""
+    """The score of the model on the requests it was given.
+
+    The writer is threaded through the same path the chat uses, so the score
+    is the score of the model writing an answer and not of the lookup alone.
+    Every probe says whether the answer was written or looked up.
+    """
     probes: list[dict[str, Any]] = []
     passed = 0
     for item in items:
@@ -75,9 +83,7 @@ def _probes(
         card = request_service.find_material(request, cards)
         if card is None:
             continue
-        # The answer comes from the same path the chat uses, so the score is
-        # the score of the assistant and not of the model alone.
-        result = request_service.answer_request(item.instruction, tenant_id, cards)
+        result = request_service.answer_request(item.instruction, tenant_id, cards, writer=writer)
         answer = result["answer"] if result else ""
         correct = _matches(answer, item.response)
         passed += 1 if correct else 0
@@ -88,16 +94,40 @@ def _probes(
                 "answered": answer,
                 "correct": correct,
                 "kind": item.kind,
+                "written": bool(result and result.get("source") == "written"),
             }
         )
     return [{"passed": passed, "total": len(probes), "probes": probes}]
 
 
-def _cross_form(tenant_id: int | None, cards: list[dict[str, Any]]) -> dict[str, Any]:
+def _cross_form(
+    tenant_id: int | None,
+    cards: list[dict[str, Any]],
+    writer: Any = None,
+    held_out: list[Any] | None = None,
+) -> dict[str, Any]:
     """The score on the requests the model was never worded for."""
-    held_out = instruction_service.held_out_requests(cards, limit=EVALUATION_SIZE)
-    result = _probes(tenant_id, cards, held_out)
+    if held_out is None:
+        held_out = instruction_service.held_out_requests(cards, limit=EVALUATION_SIZE)
+    result = _probes(tenant_id, cards, held_out, writer)
     return _score(result[0])
+
+
+def _contamination(cards: list[dict[str, Any]], held_out: list[Any]) -> dict[str, Any]:
+    """Whether a held-out request was also part of the training wording."""
+    trained = {
+        item.instruction.strip().casefold()
+        for item in instruction_service.training_instructions(cards)
+    }
+    overlaps = [
+        item.instruction for item in held_out if item.instruction.strip().casefold() in trained
+    ]
+    return {
+        "checked": len(held_out),
+        "overlaps": len(overlaps),
+        "examples": overlaps[:3],
+        "clean": not overlaps,
+    }
 
 
 def _score(result: dict[str, Any]) -> dict[str, Any]:
@@ -108,21 +138,31 @@ def _score(result: dict[str, Any]) -> dict[str, Any]:
         "score": round(passed / total, 2) if total else 0.0,
         "passed": passed,
         "total": total,
+        "written": sum(1 for probe in result["probes"] if probe.get("written")),
+        "looked_up": sum(1 for probe in result["probes"] if not probe.get("written")),
         "probes": result["probes"],
     }
 
 
+def _taught_topics(cards: list[dict[str, Any]], limit: int) -> list[str]:
+    """Distinct topics the lessons are about, taken across the cards."""
+    seen: list[str] = []
+    for topics in instruction_service.topic_index(cards).values():
+        for topic in topics:
+            if topic and topic not in seen:
+                seen.append(topic)
+            if len(seen) >= limit:
+                return seen
+    return seen
+
+
 def _adversarial(cards: list[dict[str, Any]]) -> list[tuple[str, str]]:
     """The requests about things that were never taught, and the negation."""
-    from app.services.language.training_materials import _negative_examples
-
-    index = instruction_service.topic_index(cards)
-    negatives = _negative_examples(cards, index)
-    topics = next(iter(index.values()), [])
+    half = ADVERSARIAL_SIZE // 2
+    negatives = build_held_out_negatives(cards, half)
     negated = [
         (f"Write a poem that is not about {topic}.", REFUSAL)
-        for topic in topics[:ADVERSARIAL_SIZE]
-        if topic
+        for topic in _taught_topics(cards, half)
     ]
     return (negatives + negated)[:ADVERSARIAL_SIZE]
 
@@ -162,15 +202,15 @@ def _cross_topic(cards: list[dict[str, Any]]) -> dict[str, Any]:
             card, index.get(str(card.get("id") or card.get("question") or ""), [])
         )
     ][:EVALUATION_SIZE]
-    result = _probes(None, held, items)
+    result = _probes(None, held, items, writer)
     return {"subject": subject, **_score(result[0])}
 
 
 def _probe_writer(cards: list[dict[str, Any]]) -> Any:
     """A small model trained on the cards it is given."""
-    from app.services import transformer
+    from app.services import neural
     from app.services.language import training_materials as materials_service
-    from app.services.transformer.settings import TrainingSettings
+    from app.services.neural.settings import TrainingSettings
 
     materials = [
         materials_service.Material(
@@ -182,13 +222,9 @@ def _probe_writer(cards: list[dict[str, Any]]) -> Any:
         for card in cards
     ]
     training = materials_service.training_set(materials)
-    writer = transformer.TransformerWriter(config=PROBE_MODEL)
-    report = writer.fit(
-        training.sentences,
-        instructions=training.instructions,
-        contexts=training.contexts,
-        settings=TrainingSettings(steps=PROBE_STEPS),
-    )
+    writer = neural.AnswerTask(PROBE_MODEL)
+    corpus = neural.AnswerCorpus(training.sentences, training.instructions, training.contexts)
+    report = writer.fit(corpus, settings=TrainingSettings(steps=PROBE_STEPS))
     return writer if report.get("trained") else None
 
 
@@ -200,35 +236,59 @@ def evaluate(tenant_id: int | None, cards: list[dict[str, Any]], writer: Any) ->
     """
     if writer is None:
         return {"score": 0.0, "passed": 0, "total": 0, "probes": []}
-    cross_form = _cross_form(tenant_id, cards)
+    held_out = instruction_service.held_out_requests(cards, limit=EVALUATION_SIZE)
+    cross_form = _cross_form(tenant_id, cards, writer, held_out)
     adversarial = _adversarial(cards)
     return {
         **cross_form,
         "cross_form": cross_form,
-        "adversarial": _refusals(writer, adversarial),
+        "adversarial": _refusals(tenant_id, cards, writer, adversarial),
         "cross_topic": _cross_topic(cards),
+        "contamination": _contamination(cards, held_out),
     }
 
 
-def _refusals(writer: Any, requests: list[tuple[str, str]]) -> dict[str, Any]:
-    """How often the model refuses what it was never taught."""
+def _says_refusal(answer: str) -> bool:
+    """Whether the writer itself said it does not know."""
+    return not answer.strip() or REFUSAL.strip().casefold() in answer.casefold()
+
+
+def _refusals(
+    tenant_id: int | None,
+    cards: list[dict[str, Any]],
+    writer: Any,
+    requests: list[tuple[str, str]],
+) -> dict[str, Any]:
+    """How often the product refuses what it was never taught.
+
+    The score is the refusal the user gets: no answer is produced when the
+    request names a topic that was never taught. ``model`` is how often the
+    writer refused on its own, which is a different and much weaker number:
+    the material boundary is the guard, and the writer is never asked to
+    invent outside it.
+    """
     probes: list[dict[str, Any]] = []
-    passed = 0
-    for request, expected in requests:
-        answer = writer.respond(request) or ""
-        refused = REFUSAL.strip().casefold() in answer.casefold() or not answer.strip()
-        passed += 1 if refused else 0
+    refused = 0
+    model_refused = 0
+    for question, expected in requests:
+        result = request_service.answer_request(question, tenant_id, cards, writer=writer)
+        raw = writer.respond(question) or ""
+        says_no = _says_refusal(raw)
+        refused += 1 if result is None else 0
+        model_refused += 1 if says_no else 0
         probes.append(
             {
-                "question": request,
+                "question": question,
                 "expected": expected,
-                "answered": answer,
-                "correct": refused,
+                "answered": result["answer"] if result else raw,
+                "correct": result is None,
+                "model_refused": says_no,
             }
         )
     return {
-        "score": round(passed / len(requests), 2) if requests else 0.0,
-        "passed": passed,
+        "score": round(refused / len(requests), 2) if requests else 0.0,
+        "passed": refused,
         "total": len(requests),
+        "model": model_refused,
         "probes": probes,
     }

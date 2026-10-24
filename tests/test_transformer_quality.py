@@ -4,14 +4,12 @@ way it reads its own answer before it is given away.
 
 from __future__ import annotations
 
-import torch
-
-from app.services import transformer
-from app.services.transformer import critique as critique_service
-from app.services.transformer import difficulty, grammar, quality
-from app.services.transformer import examples as example_service
-from app.services.transformer import training as training_service
-from app.services.transformer.settings import TrainingSettings
+from app.services import neural
+from app.services.neural import critique as critique_service
+from app.services.neural import difficulty, grammar, quality
+from app.services.neural import examples as example_service
+from app.services.neural import measurement as measurement_service
+from app.services.neural.settings import TrainingSettings
 
 SMALL_MODEL = {"d_model": 32, "layers": 1, "heads": 2, "context": 64}
 
@@ -25,10 +23,13 @@ SENTENCES = [
 
 def _writer(steps: int = 60):
     """A small model trained on a handful of lessons."""
-    writer = transformer.TransformerWriter(config=SMALL_MODEL)
+    writer = neural.AnswerTask(config=SMALL_MODEL)
     writer.fit(
-        SENTENCES,
-        instructions=[("Write a short poem about the rain.", "Rain, rain, go away.")],
+        neural.AnswerCorpus(
+            SENTENCES,
+            [("Write a short poem about the rain.", "Rain, rain, go away.")],
+            [],
+        ),
         settings=TrainingSettings(steps=steps),
     )
     return writer
@@ -59,7 +60,7 @@ def test_a_sentence_with_words_the_model_never_sees_is_left_out():
 
 def test_the_examples_are_learned_from_the_easy_ones_to_the_hard_ones():
     """The training is a curriculum: the simple sentences come first."""
-    writer = transformer.TransformerWriter(config=SMALL_MODEL)
+    writer = neural.AnswerTask(config=SMALL_MODEL)
     writer._build_vocabulary(
         [
             "a",
@@ -77,7 +78,7 @@ def test_the_examples_are_learned_from_the_easy_ones_to_the_hard_ones():
             ".",
         ]
     )
-    built = transformer.examples.build(
+    built = example_service.build(
         writer,
         [
             "The cat sat because it was tired.",
@@ -86,7 +87,7 @@ def test_the_examples_are_learned_from_the_easy_ones_to_the_hard_ones():
         [],
         [],
     )
-    words = [writer.vocabulary[token] for token in built[0][0]]
+    words = [writer.vocabulary[token] for token in built[0].sequence]
 
     assert words[1] == "a"
     assert len(built) == 2
@@ -103,8 +104,11 @@ def test_the_training_says_how_it_went():
     """The training reports the loss, the steps and the curve of the loss."""
     writer = _writer(steps=40)
     report = writer.fit(
-        SENTENCES,
-        instructions=[("Write a short poem about the rain.", "Rain, rain, go away.")],
+        neural.AnswerCorpus(
+            SENTENCES,
+            [("Write a short poem about the rain.", "Rain, rain, go away.")],
+            [],
+        ),
         settings=TrainingSettings(steps=40, check_every=10),
     )
 
@@ -117,9 +121,12 @@ def test_the_training_says_how_it_went():
 
 def test_the_training_stops_when_the_loss_stops_going_down():
     """The training ends early when it has stopped learning."""
-    report = transformer.TransformerWriter(config=SMALL_MODEL).fit(
-        SENTENCES,
-        instructions=[("Write a short poem about the rain.", "Rain, rain, go away.")],
+    report = neural.AnswerTask(config=SMALL_MODEL).fit(
+        neural.AnswerCorpus(
+            SENTENCES,
+            [("Write a short poem about the rain.", "Rain, rain, go away.")],
+            [],
+        ),
         settings=TrainingSettings(steps=2000, check_every=10, patience=2, min_steps=20),
     )
 
@@ -129,30 +136,37 @@ def test_the_training_stops_when_the_loss_stops_going_down():
 
 def test_the_steps_the_training_asked_for_meet_the_material():
     """Steps of zero mean the passes over the material decide how long."""
-    one = [([1, 2, 3], 1)]
-    many = [([1, 2, 3], 1)] * 40000
+    one = [example_service.Example([1, 2, 3], 1, "one")]
+    many = [example_service.Example([1, 2, 3], 1, "one")] * 40000
 
-    assert training_service._steps_for(one, TrainingSettings()) == 400
-    asked = training_service._steps_for(many, TrainingSettings())
-    assert 400 < asked <= training_service.MAX_STEPS
-    assert training_service._steps_for(many, TrainingSettings(steps=60)) == 60
+    assert neural.training._steps_for(one, TrainingSettings()) == 400
+    asked = neural.training._steps_for(many, TrainingSettings())
+    assert asked == 2500
+    assert neural.training._steps_for(many, TrainingSettings(steps=60)) == 60
+
+
+def test_the_word_model_keeps_its_own_horizon():
+    """The answer model anneals one pass; the smaller word model takes eight."""
+    assert neural.words._paced(TrainingSettings()).passes == neural.words.WORD_PASSES
+    assert neural.words._paced(TrainingSettings(passes=2)).passes == 2
+    assert neural.words._paced(TrainingSettings(steps=50)).passes is None
 
 
 def test_the_loss_shown_is_the_knowledge_of_the_model_not_one_batch():
     """The reported loss is the average the model is left knowing."""
-    writer = transformer.TransformerWriter(config=SMALL_MODEL)
+    writer = neural.AnswerTask(config=SMALL_MODEL)
     instruction = ("Write a short poem about the rain.", "Rain, rain, go away.")
     words = example_service.all_words(SENTENCES, [instruction], ())
     writer._build_vocabulary(words)
     kept = quality.keep(SENTENCES)
     examples = example_service.build(writer, kept, [instruction], ())
     config = {**writer.config, "pad_id": writer.index.get("<pad>", 0)}
-    model, report, _ = training_service.train_model(
+    model, report, _ = neural.training.train_model(
         len(writer.vocabulary), examples, config, settings=TrainingSettings(steps=2)
     )
-    read_again = training_service._check(
-        model, examples, config, TrainingSettings(), torch.Generator().manual_seed(7)
-    )
+    seed = TrainingSettings().seed + 1
+    batches = measurement_service.fixed_batches(examples, config, TrainingSettings(), seed)
+    read_again = measurement_service.read_loss(model, batches, config["pad_id"])
 
     assert report.loss > 0
     assert abs(report.loss - read_again) <= 1e-4

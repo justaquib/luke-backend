@@ -9,7 +9,6 @@ from sqlalchemy.orm import Session
 from app.config import settings
 from app.core.files import convert_for_preview, extract_text_from_file
 from app.core.pdf_fields import (
-    _extract_pdf_field_values,
     answer_from_document,
     faq_field_subjects_compatible,
 )
@@ -20,7 +19,6 @@ from app.core.security import (
     hash_pin,
 )
 from app.core.startup import on_startup
-from app.schemas import QueryRequest, QueryResponse
 from app.routers import (
     auth,
     documents,
@@ -28,14 +26,16 @@ from app.routers import (
     intents,
     language_brain,
     language_model,
-    query as query_router,
+    parenting,
     system,
 )
-from app.services import apps, nlp, vector_store
+from app.routers import (
+    query as query_router,
+)
+from app.schemas import QueryRequest, QueryResponse
 from app.services.documents import resync_approved_faqs
 from app.services.query import (
     _default_response,
-    _record_pending,
     answer_question,
     confirm_existing_answer,
     faq_confidence_rank,
@@ -63,6 +63,7 @@ def create_app() -> FastAPI:
         intents.router,
         language_model.router,
         language_brain.router,
+        parenting.router,
     ):
         application.include_router(router)
     return application
@@ -71,9 +72,7 @@ def create_app() -> FastAPI:
 app = create_app()
 
 
-def query(
-    req: QueryRequest, authorization: str = "", db: Session | None = None
-) -> QueryResponse:
+def query(req: QueryRequest, authorization: str = "", db: Session | None = None) -> QueryResponse:
     """Compatibility wrapper used by callers that import from app.main."""
     return answer_question(req, authorization, db, _get_bearer_user, _default_response)
 
@@ -85,7 +84,6 @@ _get_bearer_user = get_bearer_user
 _extract_text_from_file = extract_text_from_file
 _convert_for_preview = convert_for_preview
 _resync_approved_faqs_to_chroma = resync_approved_faqs
-_extract_pdf_field_values = _extract_pdf_field_values
 _answer_from_document = answer_from_document
 _faq_field_subjects_compatible = faq_field_subjects_compatible
 _confirm_existing_answer = confirm_existing_answer

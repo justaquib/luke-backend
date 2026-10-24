@@ -4,10 +4,10 @@ The model is trained from scratch on the tenant's own lessons, and it is
 measured on the requests it was never worded for.
 """
 
-from app.services import brain, transformer
+from app.services import brain, neural
 from app.services.language import lessons, requests, runtime, teaching
 from app.services.language import training_materials as materials_service
-from app.services.transformer.settings import TrainingSettings
+from app.services.neural.settings import TrainingSettings
 
 POEM_CARD = {
     "id": "poem-1",
@@ -33,7 +33,7 @@ SMALL_MODEL = {"d_model": 32, "layers": 1, "heads": 2, "context": 96}
 
 def _trained_writer():
     """A small model trained on a handful of lessons."""
-    writer = transformer.TransformerWriter()
+    writer = neural.AnswerTask()
     writer.config = {**writer.config, "d_model": 32, "layers": 1, "heads": 2, "context": 64}
     sentences = [
         "Rain, rain, go away.",
@@ -53,16 +53,14 @@ def _trained_writer():
         )
     ]
     writer.fit(
-        sentences,
-        instructions=instructions_,
-        contexts=contexts,
-        settings=TrainingSettings(steps=60),
+        neural.AnswerCorpus(sentences, instructions_, contexts),
+        settings=TrainingSettings(steps=200),
     )
     return writer
 
 
 def test_a_model_that_was_never_trained_says_nothing():
-    writer = transformer.TransformerWriter()
+    writer = neural.AnswerTask()
 
     assert writer.respond("Write a short poem about the rain.") is None
 

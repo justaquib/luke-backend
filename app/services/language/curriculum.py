@@ -7,10 +7,46 @@ from datetime import date
 from pathlib import Path
 
 from app.services import dictionary
-from app.services.tiny_language_model import tokenize
+from app.services.language import stage_catalog
+from app.services.tokenizer import tokenize
+
+__all__ = ["STAGES", "_GRADE_IDS", "_LEGACY_STAGES"]
 
 _CURRICULUM_PATH = Path(__file__).resolve().parents[2] / "data" / "learner_curriculum.json"
 ASSISTANT_BIRTHDAY = date(2026, 10, 19)
+
+
+def _checked_grade(grade_id: str, grade: object) -> dict:
+    """A grade that holds the three lists the lessons are built from."""
+    if not isinstance(grade, dict):
+        raise ValueError(f"the {grade_id} grade is missing")
+    for field in ("sentences", "words", "lessons"):
+        if not isinstance(grade.get(field), list):
+            raise ValueError(f"{grade_id}.{field} must be a list")
+    return grade
+
+
+def _check_sentences(grade_id: str, sentences: list) -> None:
+    for sentence in sentences:
+        if not isinstance(sentence, str) or len(tokenize(sentence)) < 2:
+            raise ValueError(f"every {grade_id} sentence needs at least two words")
+
+
+def _check_words(grade_id: str, words: list) -> None:
+    for word in words:
+        if not isinstance(word, dict) or not word.get("word") or not word.get("meaning"):
+            raise ValueError(f"every {grade_id} vocabulary entry needs a word and meaning")
+
+
+def _check_lessons(grade_id: str, lessons: list) -> None:
+    for lesson in lessons:
+        if (
+            not isinstance(lesson, dict)
+            or not lesson.get("question")
+            or not lesson.get("answer")
+            or not lesson.get("subject")
+        ):
+            raise ValueError(f"every {grade_id} lesson needs a question, answer, and subject")
 
 
 def _load_curriculum() -> dict:
@@ -20,28 +56,10 @@ def _load_curriculum() -> dict:
         if not isinstance(grades, dict):
             raise ValueError("the dataset must contain a grades object")
         for grade_id in ("nursery", "lkg", "ukg"):
-            grade = grades.get(grade_id)
-            if not isinstance(grade, dict):
-                raise ValueError(f"the {grade_id} grade is missing")
-            for field in ("sentences", "words", "lessons"):
-                if not isinstance(grade.get(field), list):
-                    raise ValueError(f"{grade_id}.{field} must be a list")
-            for sentence in grade["sentences"]:
-                if not isinstance(sentence, str) or len(tokenize(sentence)) < 2:
-                    raise ValueError(f"every {grade_id} sentence needs at least two words")
-            for word in grade["words"]:
-                if not isinstance(word, dict) or not word.get("word") or not word.get("meaning"):
-                    raise ValueError(f"every {grade_id} vocabulary entry needs a word and meaning")
-            for lesson in grade["lessons"]:
-                if (
-                    not isinstance(lesson, dict)
-                    or not lesson.get("question")
-                    or not lesson.get("answer")
-                    or not lesson.get("subject")
-                ):
-                    raise ValueError(
-                        f"every {grade_id} lesson needs a question, answer, and subject"
-                    )
+            grade = _checked_grade(grade_id, grades.get(grade_id))
+            _check_sentences(grade_id, grade["sentences"])
+            _check_words(grade_id, grade["words"])
+            _check_lessons(grade_id, grade["lessons"])
         return grades
     except (OSError, json.JSONDecodeError, ValueError) as error:
         raise RuntimeError(
@@ -146,16 +164,19 @@ def _body_lessons(lessons: list[dict], body_parts: list[dict]) -> None:
         _add(lessons, "Body", f"What does the {name} do?", function_answer)
 
 
+_CATEGORY_LESSONS = (
+    ("animals", "Animals", "Name some animals.", "Some animals are "),
+    ("fruits", "Fruits", "Name some fruits.", "Some fruits are "),
+    ("vegetables", "Vegetables", "Name some vegetables.", "Some vegetables are "),
+)
+
+
 def _category_lessons(
-    lessons: list[dict],
-    key: str,
-    subject: str,
-    question: str,
-    answer_prefix: str,
-    entries: list[dict],
+    lessons: list[dict], category: tuple[str, str, str, str], entries: list[dict]
 ) -> None:
     if not entries:
         return
+    key, subject, question, answer_prefix = category
     names = [item["name"] for item in entries]
     _add(lessons, subject, question, answer_prefix + ", ".join(names) + ".")
     label = {"animals": "animal", "fruits": "fruit", "vegetables": "vegetable"}[key]
@@ -221,7 +242,12 @@ def _calendar_lessons(lessons: list[dict], calendar: dict) -> None:
         for index, day in enumerate(days):
             after = days[(index + 1) % len(days)]
             before = days[(index - 1) % len(days)]
-            _add(lessons, "Date & Time", f"What day comes after {day}?", f"{after} comes after {day}.")
+            _add(
+                lessons,
+                "Date & Time",
+                f"What day comes after {day}?",
+                f"{after} comes after {day}.",
+            )
             _add(
                 lessons,
                 "Date & Time",
@@ -259,12 +285,8 @@ def _knowledge_topic_lessons() -> list[dict]:
     lessons: list[dict] = []
     _alphabet_lessons(lessons)
     _body_lessons(lessons, topics.get("body_parts", []))
-    for key, subject, question, prefix in (
-        ("animals", "Animals", "Name some animals.", "Some animals are "),
-        ("fruits", "Fruits", "Name some fruits.", "Some fruits are "),
-        ("vegetables", "Vegetables", "Name some vegetables.", "Some vegetables are "),
-    ):
-        _category_lessons(lessons, key, subject, question, prefix, topics.get(key, []))
+    for category in _CATEGORY_LESSONS:
+        _category_lessons(lessons, category, topics.get(category[0], []))
     _shape_lessons(lessons, topics.get("shapes", []))
     _color_lessons(lessons, topics.get("colors", []))
     _calendar_lessons(lessons, topics.get("date_time", {}))
@@ -287,71 +309,9 @@ FOUNDATION_LESSON_CARDS = _unique_lessons([*_BASE_FOUNDATION_LESSONS, *_knowledg
 _FOUNDATION_QUESTIONS = {
     (lesson["question"] or "").strip().lower() for lesson in FOUNDATION_LESSON_CARDS
 }
-STAGES = [
-    {
-        "id": "nursery",
-        "title": "Nursery",
-        "description": "First ideas: letters, numbers, colors, shapes, feelings, greetings, and the world around us.",
-        "subjects": [
-            "Language",
-            "Numbers",
-            "Shapes",
-            "Colors",
-            "Feelings & expressions",
-            "My World",
-            "Punctuation",
-        ],
-    },
-    {
-        "id": "lkg",
-        "title": "Lower Kindergarten (LKG)",
-        "description": "Build early reading, counting, drawing, and everyday knowledge.",
-        "subjects": [
-            "Language",
-            "Math",
-            "Shapes",
-            "Nature",
-            "Daily Life",
-            "English Grammar",
-            "Sentence Making",
-            "Tenses",
-            "Calculation",
-        ],
-    },
-    {
-        "id": "ukg",
-        "title": "Upper Kindergarten (UKG)",
-        "description": "Practise simple reading, number operations, patterns, and observation.",
-        "subjects": [
-            "Language",
-            "Math",
-            "Patterns",
-            "Science",
-            "Social Skills",
-            "English Grammar",
-            "Sentence Making",
-            "Calculation",
-            "Numbers",
-        ],
-    },
-    *[
-        {
-            "id": f"class_{grade}",
-            "title": f"Class {grade}",
-            "description": f"Build school knowledge and lessons for Class {grade}.",
-            "subjects": ["Language", "Math", "Science", "Social Studies", "Arts"],
-        }
-        for grade in range(1, 13)
-    ],
-    {
-        "id": "graduation",
-        "title": "Graduation",
-        "description": "Add undergraduate-level lessons by subject and course.",
-        "subjects": ["Course", "Subject", "Research", "Professional Skills"],
-    },
-]
-_GRADE_IDS = {item["id"] for item in STAGES}
-_LEGACY_STAGES = {"letters", "words", "sentences", "lessons"}
+STAGES = stage_catalog.STAGES
+_GRADE_IDS = stage_catalog.GRADE_IDS
+_LEGACY_STAGES = stage_catalog.LEGACY_STAGES
 _DUPLICATE_QUESTION_THRESHOLD = 0.6
 _EXAM_PASS_RATE = 0.8
 

@@ -8,13 +8,12 @@ from sqlalchemy.orm import Session
 
 from app.config import settings
 from app.core.security import require_tenant_user
-from app.db.database import Faq, Intent, PendingQuestion, User
+from app.db.database import Faq, PendingQuestion, User
 from app.schemas import (
     FaqCreate,
     FaqMergePreview,
     FaqMergeRequest,
     FaqMergeResult,
-    FaqOut,
     FaqStatusUpdate,
     FaqSuggestion,
     FaqUpdate,
@@ -23,7 +22,6 @@ from app.schemas import (
     MergePreview,
     MergeRequest,
     MergeResult,
-    PendingOut,
     PendingSuggestion,
 )
 from app.services import vector_store
@@ -37,7 +35,7 @@ def _tenant(user: User, action: str) -> int:
 
 def _faq_for(user: User, faq_id: int, db: Session, missing: str = "FAQ not found") -> Faq:
     faq = db.get(Faq, faq_id)
-    if faq is None or faq.tenant_id != user.tenant_id:
+    if faq is None or (not user.is_systemadmin and faq.tenant_id != user.tenant_id):
         raise HTTPException(404, missing)
     return faq
 
@@ -150,10 +148,10 @@ def answer_pending(user: User, pending_id: int, req: FaqUpdate, db: Session) -> 
 
 def log_question(user: User, question: str, db: Session) -> PendingQuestion:
     """Log a question manually from the trainer."""
-    from app.services.query import _record_pending
+    from app.services.pending_questions import record_pending
 
     tenant_id = _tenant(user, "log questions")
-    return _record_pending(db, question, tenant_id)
+    return record_pending(db, question, tenant_id)
 
 
 def delete_pending(user: User, pending_id: int, db: Session) -> dict:
@@ -211,7 +209,9 @@ def merge_preview(user: User, pending_id: int, db: Session) -> MergePreview:
     )
 
 
-def _merge_targets(user: User, req: MergeRequest, canonical: PendingQuestion, db: Session):
+def _merge_targets(
+    user: User, req: MergeRequest, canonical: PendingQuestion, db: Session
+) -> list[PendingQuestion]:
     targets: list[PendingQuestion] = []
     for pending_id in req.pending_ids:
         target = db.get(PendingQuestion, pending_id)
@@ -244,9 +244,7 @@ def merge_pending(user: User, pending_id: int, req: MergeRequest, db: Session) -
     canonical.resolved = True
     vector_store.delete_pending_index(canonical.id)
     db.commit()
-    return MergeResult(
-        canonical_faq_id=faq.id, created=created + 1, resolved=len(targets) + 1
-    )
+    return MergeResult(canonical_faq_id=faq.id, created=created + 1, resolved=len(targets) + 1)
 
 
 def _create_aliases(
@@ -306,12 +304,10 @@ def faq_merge_preview(user: User, faq_id: int, db: Session) -> FaqMergePreview:
     """Suggest FAQs that duplicate the selected FAQ."""
     tenant_id = _tenant(user, "view FAQ merge preview")
     canonical = _faq_for(user, faq_id, db)
-    other_ids = [
-        faq.id
-        for faq in db.execute(
-            select(Faq).where(Faq.id != canonical.id, Faq.tenant_id == tenant_id)
-        ).scalars()
-    ]
+    conditions = [Faq.id != canonical.id]
+    if not user.is_systemadmin:
+        conditions.append(Faq.tenant_id == tenant_id)
+    other_ids = [faq.id for faq in db.execute(select(Faq).where(*conditions)).scalars()]
     if not other_ids:
         return FaqMergePreview(
             canonical_id=canonical.id,
@@ -331,8 +327,7 @@ def faq_merge_preview(user: User, faq_id: int, db: Session) -> FaqMergePreview:
             distance=hit["distance"],
         )
         for hit in hits
-        if hit.get("distance") is not None
-        and hit["distance"] <= settings.intent_merge_threshold
+        if hit.get("distance") is not None and hit["distance"] <= settings.intent_merge_threshold
     ]
     matches.sort(key=lambda match: match.distance)
     return FaqMergePreview(
@@ -348,7 +343,7 @@ def faq_merge(user: User, faq_id: int, req: FaqMergeRequest, db: Session) -> Faq
     tenant_id = _tenant(user, "merge FAQs")
     canonical = _faq_for(user, faq_id, db)
     target = db.get(Faq, req.target_id or canonical.id)
-    if target is None or target.tenant_id != tenant_id:
+    if target is None or (not user.is_systemadmin and target.tenant_id != tenant_id):
         raise HTTPException(404, "Target FAQ not found")
     _apply_merge_answer(canonical, target, req.answer)
     db.flush()
@@ -389,13 +384,9 @@ def _absorb_faqs(user: User, target: Faq, faq_ids: list[int], db: Session) -> li
     return questions
 
 
-def _recreate_aliases(
-    questions: list[str], answer: str, tenant_id: int, db: Session
-) -> int:
+def _recreate_aliases(questions: list[str], answer: str, tenant_id: int, db: Session) -> int:
     for question in questions:
-        alias = Faq(
-            question=question.strip(), answer=answer, status="pending", tenant_id=tenant_id
-        )
+        alias = Faq(question=question.strip(), answer=answer, status="pending", tenant_id=tenant_id)
         db.add(alias)
         db.flush()
         vector_store.upsert_faq(alias.id, alias.question, alias.answer, alias.status)

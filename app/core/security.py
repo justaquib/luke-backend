@@ -44,23 +44,17 @@ def ensure_systemadmin() -> None:
 def create_access_token(data: dict[str, Any]) -> str:
     """Encode a signed access token containing the given claims."""
     to_encode = data.copy()
-    to_encode.update(
-        {"exp": datetime.now(UTC).timestamp() + settings.jwt_expire_minutes * 60}
-    )
+    to_encode.update({"exp": datetime.now(UTC).timestamp() + settings.jwt_expire_minutes * 60})
     return jwt.encode(to_encode, settings.jwt_secret_key, algorithm=settings.jwt_algorithm)
 
 
-def get_bearer_user(
-    authorization: str = Header(""), db: Session = Depends(get_session)
-) -> User:
+def get_bearer_user(authorization: str = Header(""), db: Session = Depends(get_session)) -> User:
     """Resolve the signed-in user from an Authorization header."""
     if not authorization.startswith("Bearer "):
         raise HTTPException(401, "Missing bearer token")
     token = authorization.split(" ", 1)[1]
     try:
-        payload = jwt.decode(
-            token, settings.jwt_secret_key, algorithms=[settings.jwt_algorithm]
-        )
+        payload = jwt.decode(token, settings.jwt_secret_key, algorithms=[settings.jwt_algorithm])
         user_id = int(payload.get("sub"))
     except (JWTError, ValueError, TypeError) as error:
         raise HTTPException(401, "Invalid token") from error
@@ -78,7 +72,9 @@ def tenant_id_of(user: User) -> int | None:
 def require_tenant_user(user: User, action: str) -> int:
     """Return the tenant id or fail when the user cannot perform the action."""
     if user.is_systemadmin:
-        raise HTTPException(403, f"System admin cannot {action}")
+        # The system administrator has no tenant of their own and looks after
+        # every tenant, so they may perform cross-tenant governance actions.
+        return user.tenant_id or 0
     if not user.tenant_id:
         raise HTTPException(403, "User is not assigned to a tenant")
     return user.tenant_id

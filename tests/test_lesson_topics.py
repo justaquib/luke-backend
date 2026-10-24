@@ -37,7 +37,7 @@ def test_a_lesson_can_belong_to_several_topics():
 
 def test_the_topics_of_a_lesson_can_be_changed():
     result = _teach("Q: What is a poem?\nA: A poem is a short song.", "Language")
-    lesson = [card for card in result["lesson_cards"] if card.get("kind") == "trainer"][0]
+    lesson = next(card for card in result["lesson_cards"] if card.get("kind") == "trainer")
 
     updated = language_logic.update_lesson_answer(
         None,
@@ -48,18 +48,18 @@ def test_the_topics_of_a_lesson_can_be_changed():
         "Poems, Rhymes",
     )
 
-    taught = [card for card in updated["lesson_cards"] if card.get("id") == lesson["id"]][0]
+    taught = next(card for card in updated["lesson_cards"] if card.get("id") == lesson["id"])
     assert taught["subjects"] == ["Poems", "Rhymes"]
     assert taught["subject"] == "Poems, Rhymes"
 
 
 def test_a_lesson_keeps_its_topics_when_only_the_answer_changes():
     result = _teach("Q: What is a poem?\nA: A poem is a short song.", "Language,Poems")
-    lesson = [card for card in result["lesson_cards"] if card.get("kind") == "trainer"][0]
+    lesson = next(card for card in result["lesson_cards"] if card.get("kind") == "trainer")
 
     updated = language_logic.update_lesson_answer(None, lesson["id"], "A poem is words that rhyme.")
 
-    taught = [card for card in updated["lesson_cards"] if card.get("id") == lesson["id"]][0]
+    taught = next(card for card in updated["lesson_cards"] if card.get("id") == lesson["id"])
     assert taught["subjects"] == ["Language", "Poems"]
 
 
@@ -78,5 +78,5 @@ def test_a_lesson_taught_before_topics_still_has_its_subject():
     language_logic._CACHE.clear()
 
     result = language_logic.get_state(None)
-    taught = [card for card in result["lesson_cards"] if card.get("id") == "old-1"][0]
+    taught = next(card for card in result["lesson_cards"] if card.get("id") == "old-1")
     assert taught["subjects"] == ["Poems"]

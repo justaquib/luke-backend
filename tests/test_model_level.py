@@ -9,25 +9,32 @@ import json
 
 import pytest
 
-from app.services import brain
+from app.services import (
+    brain,
+    brain_instruction,
+    brain_material,
+    brain_paths,
+    brain_rung_results,
+    brain_state,
+)
 
 
 def _patch_the_measurements(monkeypatch) -> None:
     """Make the level cheap to compute, without touching the real probes."""
-    monkeypatch.setattr(brain, "state", lambda tenant_id: {})
-    monkeypatch.setattr(brain, "model_capabilities", lambda *args, **kwargs: [])
+    monkeypatch.setattr(brain_state, "state", lambda tenant_id: {})
+    monkeypatch.setattr(brain_material, "model_capabilities", lambda *args, **kwargs: [])
     monkeypatch.setattr(
-        brain,
+        brain_instruction,
         "generality_score",
         lambda tenant_id: {"score": 0.0, "cap": None, "probes": []},
     )
     monkeypatch.setattr(
-        brain,
+        brain_instruction,
         "instruction_score",
         lambda tenant_id: {"score": 0.0, "probes": 0, "total": 0},
     )
-    monkeypatch.setattr(brain, "_coverage", lambda tenant_id: {})
-    monkeypatch.setattr(brain, "next_steps", lambda *args, **kwargs: [])
+    monkeypatch.setattr(brain_material, "coverage", lambda tenant_id: {})
+    monkeypatch.setattr(brain_material, "next_steps", lambda *args, **kwargs: [])
 
 
 def _rungs(passed_ids: set[str]) -> list[dict[str, object]]:
@@ -56,9 +63,9 @@ def test_the_ladder_climbs_in_hundredths_to_a_tenth() -> None:
 
 def test_the_displayed_level_waits_for_the_trainer(monkeypatch, tmp_path) -> None:
     _patch_the_measurements(monkeypatch)
-    monkeypatch.setattr(brain, "brain_dir", lambda: tmp_path)
+    monkeypatch.setattr(brain_paths, "brain_dir", lambda: tmp_path)
     monkeypatch.setattr(
-        brain,
+        brain_rung_results,
         "rung_results",
         lambda *args, **kwargs: _rungs({"0.0.1", "0.0.2"}),
     )
@@ -70,9 +77,9 @@ def test_the_displayed_level_waits_for_the_trainer(monkeypatch, tmp_path) -> Non
 
 def test_the_trainer_promotes_to_the_measured_level(monkeypatch, tmp_path) -> None:
     _patch_the_measurements(monkeypatch)
-    monkeypatch.setattr(brain, "brain_dir", lambda: tmp_path)
+    monkeypatch.setattr(brain_paths, "brain_dir", lambda: tmp_path)
     monkeypatch.setattr(
-        brain,
+        brain_rung_results,
         "rung_results",
         lambda *args, **kwargs: _rungs({"0.0.1", "0.0.2"}),
     )
@@ -88,17 +95,17 @@ def test_the_trainer_promotes_to_the_measured_level(monkeypatch, tmp_path) -> No
 
 def test_the_trainer_cannot_promote_without_a_higher_measurement(monkeypatch, tmp_path) -> None:
     _patch_the_measurements(monkeypatch)
-    monkeypatch.setattr(brain, "brain_dir", lambda: tmp_path)
-    monkeypatch.setattr(brain, "rung_results", lambda *args, **kwargs: _rungs(set()))
+    monkeypatch.setattr(brain_paths, "brain_dir", lambda: tmp_path)
+    monkeypatch.setattr(brain_rung_results, "rung_results", lambda *args, **kwargs: _rungs(set()))
     with pytest.raises(ValueError):
         brain.approve_level(7)
 
 
 def test_a_gap_in_the_rungs_stops_the_measured_climb(monkeypatch, tmp_path) -> None:
     _patch_the_measurements(monkeypatch)
-    monkeypatch.setattr(brain, "brain_dir", lambda: tmp_path)
+    monkeypatch.setattr(brain_paths, "brain_dir", lambda: tmp_path)
     monkeypatch.setattr(
-        brain,
+        brain_rung_results,
         "rung_results",
         lambda *args, **kwargs: _rungs({"0.0.2"}),
     )
@@ -112,8 +119,8 @@ def test_the_stretch_reaches_the_tenth(monkeypatch, tmp_path) -> None:
     def with_a_stretch(tenant_id):
         return {"score": 0.5, "cap": None, "probes": []}
 
-    monkeypatch.setattr(brain, "generality_score", with_a_stretch)
-    monkeypatch.setattr(brain, "rung_results", lambda *args, **kwargs: _rungs(set()))
+    monkeypatch.setattr(brain_instruction, "generality_score", with_a_stretch)
+    monkeypatch.setattr(brain_rung_results, "rung_results", lambda *args, **kwargs: _rungs(set()))
     level = brain.model_level(7)
     assert level["measured_level"] == "0.1.0"
     assert level["approval_ready"] is True

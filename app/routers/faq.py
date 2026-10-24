@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends, Header
 from sqlalchemy.orm import Session
 
 from app.core.security import get_bearer_user
-from app.db.database import get_session
+from app.db.database import User, get_session
 from app.schemas import (
     FaqCreate,
     FaqMergePreview,
@@ -27,7 +27,7 @@ from app.services import faq
 router = APIRouter(tags=["faq"])
 
 
-def _user(authorization: str, db: Session):
+def _user(authorization: str, db: Session) -> User:
     return get_bearer_user(authorization, db)
 
 

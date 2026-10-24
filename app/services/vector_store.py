@@ -5,15 +5,25 @@ from __future__ import annotations
 import json
 import logging
 import os
+from dataclasses import dataclass
 from typing import Any
 
 import chromadb
 from chromadb.config import Settings as ChromaSettings
 
 from app.config import settings
+from app.services.retrieval import rerank_hits, terms
 
 logger = logging.getLogger(__name__)
 _CLIENTS: list[chromadb.PersistentClient] = []
+
+
+@dataclass(frozen=True)
+class ChunkNotes:
+    """The per-chunk facts stored beside the text: pages and PDF fields."""
+
+    page_numbers: list[int] | None = None
+    pdf_fields: list[dict[str, str]] | None = None
 
 
 def get_client() -> chromadb.PersistentClient:
@@ -29,15 +39,15 @@ def get_client() -> chromadb.PersistentClient:
     return _CLIENTS[0]
 
 
-def get_collection():
+def get_collection() -> chromadb.Collection:
     return get_client().get_or_create_collection(name=settings.chroma_collection)
 
 
-def get_faq_collection():
+def get_faq_collection() -> chromadb.Collection:
     return get_client().get_or_create_collection(name=settings.chroma_faq_collection)
 
 
-def get_intents_collection():
+def get_intents_collection() -> chromadb.Collection:
     return get_client().get_or_create_collection(name=settings.chroma_intents_collection)
 
 
@@ -50,10 +60,12 @@ def add_chunks(
     chunks: list[str],
     ids: list[str],
     tenant_id: int | None = None,
-    page_numbers: list[int] | None = None,
-    pdf_fields: list[dict[str, str]] | None = None,
+    notes: ChunkNotes | None = None,
 ) -> int:
     """Store document chunks with source, tenant, page, and field metadata."""
+    notes = notes or ChunkNotes()
+    page_numbers = notes.page_numbers
+    pdf_fields = notes.pdf_fields
     metadatas = [
         {
             "source": source,
@@ -84,34 +96,13 @@ def _where(conditions: dict[str, Any], tenant_id: int | None) -> dict[str, Any] 
     return {"$and": [{key: value} for key, value in combined.items()]}
 
 
-def _terms(text: str) -> set[str]:
-    return {
-        token
-        for token in "".join(character if character.isalnum() else " " for character in text.lower()).split()
-        if len(token) > 2
-    }
-
-
-def _rerank(question: str, hits: list[dict]) -> list[dict]:
-    wanted = _terms(question)
-    return sorted(
-        hits,
-        key=lambda hit: (
-            -len(wanted & _terms(str(hit.get("text", "")))),
-            float(hit.get("distance") or 1.0),
-        ),
-    )
-
-
 def query(question: str, n_results: int = 4, tenant_id: int | None = None) -> list[dict]:
     """Search document chunks and rerank semantic candidates by question terms."""
     collection = get_collection()
     if collection.count() == 0:
         return []
     fetch = max(n_results * 2, 2)
-    result = collection.query(
-        query_texts=[question], n_results=fetch, where=_where({}, tenant_id)
-    )
+    result = collection.query(query_texts=[question], n_results=fetch, where=_where({}, tenant_id))
     documents = result.get("documents") or [[]]
     metadatas = result.get("metadatas") or [[]]
     distances = result.get("distances") or [[]]
@@ -123,7 +114,7 @@ def query(question: str, n_results: int = 4, tenant_id: int | None = None) -> li
         }
         for index in range(len(documents[0]))
     ]
-    return _rerank(question, hits)[:n_results]
+    return rerank_hits(question, hits)[:n_results]
 
 
 def collection_size() -> int:
@@ -152,7 +143,7 @@ def upsert_faq(
     )
 
 
-def _delete(collection, ids: list[str]) -> None:
+def _delete(collection: chromadb.Collection, ids: list[str]) -> None:
     try:
         stored = set(collection.get(ids=ids).get("ids") or [])
         missing = [id_ for id_ in ids if id_ not in stored]
@@ -179,9 +170,7 @@ def delete_chunks_by_source(source: str) -> None:
         logger.warning("Could not delete the chunks of %s: %s", source, error)
 
 
-def search_lessons(
-    question: str, n_results: int = 3, tenant_id: int | None = None
-) -> list[dict]:
+def search_lessons(question: str, n_results: int = 3, tenant_id: int | None = None) -> list[dict]:
     """The learned lessons that look like the question that was asked.
 
     The lessons live in the tenant's own learner file, so they are matched on
@@ -194,13 +183,13 @@ def search_lessons(
     except (OSError, ValueError) as error:
         logger.warning("Could not read the lessons of tenant %s: %s", tenant_id, error)
         return []
-    wanted = _terms(question)
+    wanted = terms(question)
     hits: list[dict] = []
     for card in cards:
-        terms = _terms(str(card.get("question", "")))
-        if not terms or not wanted:
+        card_terms = terms(str(card.get("question", "")))
+        if not card_terms or not wanted:
             continue
-        overlap = len(wanted & terms) / len(wanted | terms)
+        overlap = len(wanted & card_terms) / len(wanted | card_terms)
         if overlap <= 0:
             continue
         hits.append(
@@ -234,9 +223,7 @@ def _faq_hits(result: dict, include_status: bool) -> list[dict]:
     return hits
 
 
-def search_faq(
-    question: str, n_results: int = 1, tenant_id: int | None = None
-) -> list[dict]:
+def search_faq(question: str, n_results: int = 1, tenant_id: int | None = None) -> list[dict]:
     """Search approved FAQs for the closest answer."""
     collection = get_faq_collection()
     if collection.count() == 0:
@@ -249,9 +236,7 @@ def search_faq(
     return _faq_hits(result, include_status=False)
 
 
-def search_faq_loose(
-    question: str, n_results: int = 5, tenant_id: int | None = None
-) -> list[dict]:
+def search_faq_loose(question: str, n_results: int = 5, tenant_id: int | None = None) -> list[dict]:
     """Search every FAQ regardless of status."""
     collection = get_faq_collection()
     if collection.count() == 0:
@@ -270,9 +255,7 @@ def search_faq_in(
     if collection.count() == 0 or not faq_ids:
         return []
     where = _where({"faq_id": {"$in": [int(faq_id) for faq_id in faq_ids]}}, tenant_id)
-    result = collection.query(
-        query_texts=[question], n_results=n_results, where=where
-    )
+    result = collection.query(query_texts=[question], n_results=n_results, where=where)
     return _faq_hits(result, include_status=True)
 
 
@@ -291,11 +274,7 @@ def search_pending(
         n_results=n_results,
         where=_where({"kind": "pending"}, tenant_id),
     )
-    return [
-        hit
-        for hit in _pending_hits(result)
-        if hit["question"] in candidates
-    ]
+    return [hit for hit in _pending_hits(result) if hit["question"] in candidates]
 
 
 def _pending_hits(result: dict) -> list[dict]:
@@ -332,9 +311,7 @@ def index_pending(pending_id: int, question: str, tenant_id: int | None = None) 
     get_intents_collection().upsert(
         ids=[f"pending-{pending_id}"],
         documents=[question],
-        metadatas=[
-            {"kind": "pending", "pending_id": pending_id, **_tenant_metadata(tenant_id)}
-        ],
+        metadatas=[{"kind": "pending", "pending_id": pending_id, **_tenant_metadata(tenant_id)}],
     )
 
 
@@ -358,16 +335,16 @@ def upsert_intent(
     }
     if faq_id is not None:
         metadata["faq_id"] = faq_id
-    get_intents_collection().upsert(ids=[f"intent-{intent_id}"], documents=[name], metadatas=[metadata])
+    get_intents_collection().upsert(
+        ids=[f"intent-{intent_id}"], documents=[name], metadatas=[metadata]
+    )
 
 
 def delete_intent(intent_id: int) -> None:
     _delete(get_intents_collection(), [f"intent-{intent_id}"])
 
 
-def search_intents(
-    question: str, n_results: int = 1, tenant_id: int | None = None
-) -> list[dict]:
+def search_intents(question: str, n_results: int = 1, tenant_id: int | None = None) -> list[dict]:
     """Search named intents."""
     collection = get_intents_collection()
     if collection.count() == 0:

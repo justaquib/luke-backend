@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import re
-from collections import defaultdict
 from typing import Any
 
 _FIELD_KEYS = {
@@ -70,8 +69,8 @@ def _group_lines(words: list[tuple[Any, ...]]) -> list[list[tuple[Any, ...]]]:
 
 def _join_wrapped(lines: list[str]) -> str:
     result = ""
-    for line in lines:
-        line = line.strip()
+    for raw in lines:
+        line = raw.strip()
         if not line:
             continue
         if result.endswith("-"):
@@ -134,9 +133,7 @@ def _extract_pdf_field_values(page: Any, page_text: str = "") -> dict[str, str]:
     for line in lines:
         heading_spans = _heading_spans(line)
         for index, (key, start_x, heading_y) in enumerate(heading_spans):
-            end_x = (
-                heading_spans[index + 1][1] if index + 1 < len(heading_spans) else 10_000.0
-            )
+            end_x = heading_spans[index + 1][1] if index + 1 < len(heading_spans) else 10_000.0
             value = _column_value(lines, start_x, end_x, heading_y)
             if value:
                 fields[key] = value

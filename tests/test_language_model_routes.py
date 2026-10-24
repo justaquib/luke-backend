@@ -3,55 +3,13 @@
 from __future__ import annotations
 
 import pytest
-from fastapi import FastAPI
 from fastapi.testclient import TestClient
-
-from app.core.security import get_bearer_user
-from app.db.database import User, get_session
-from app.routers import language_brain, language_model
-from app.services.language import runtime
-
-
-class _EmptyResult:
-    """A query result with no rows, so the test needs no database."""
-
-    def scalars(self) -> _EmptyResult:
-        return self
-
-    def all(self) -> list:
-        return []
-
-    def scalar_one(self) -> int:
-        return 0
-
-
-class _EmptySession:
-    """A session that answers every query with nothing."""
-
-    def execute(self, statement) -> _EmptyResult:
-        return _EmptyResult()
 
 
 @pytest.fixture()
-def client(monkeypatch, tmp_path) -> TestClient:
-    """A client for the language model routes with an empty tenant."""
-    monkeypatch.setattr(runtime, "_DATA_DIR", tmp_path)
-    runtime._CACHE.clear()
-
-    app = FastAPI()
-    app.include_router(language_model.router)
-    app.include_router(language_brain.router)
-    app.dependency_overrides[get_bearer_user] = lambda: User(
-        id=1,
-        email="trainer@example.com",
-        name="Trainer",
-        is_systemadmin=False,
-        tenant_id=None,
-    )
-    app.dependency_overrides[get_session] = lambda: _EmptySession()
-    with TestClient(app) as test_client:
-        yield test_client
-    runtime._CACHE.clear()
+def client(language_client: TestClient) -> TestClient:
+    """The shared language route client under the name this module uses."""
+    return language_client
 
 
 def test_the_state_lists_the_grades_and_the_approved_answers(client: TestClient):
@@ -149,15 +107,14 @@ def test_training_the_brain_starts_it_and_says_so(client: TestClient, monkeypatc
         return {"writer": {"trained": True}}
 
     class _FakeProcess:
-        def __init__(self, target, args, daemon):
+        def __init__(self, target, args, daemon) -> None:
             self._target, self._args = target, args
 
-        def start(self):
+        def start(self) -> None:
             self._target(*self._args)
 
     class _FakeContext:
-        def Process(self, target, args, daemon):
-            return _FakeProcess(target, args, daemon)
+        Process = _FakeProcess
 
     monkeypatch.setattr("app.services.brain.train", fake_train)
     monkeypatch.setattr("app.services.brain.mark_training", lambda tenant_id, value: None)
@@ -286,25 +243,6 @@ def test_a_request_about_something_never_taught_is_not_answered(client: TestClie
 
     assert preview.status_code == 200
     assert preview.json()["source"] == "not_learned"
-
-
-def test_a_grade_test_is_scored_and_finished(client: TestClient):
-    started = client.post("/language-model/test/start", json={"stage": "nursery", "kind": "mock"})
-
-    assert started.status_code == 200
-    assert started.json()["state"]["active_test"]["stage"] == "nursery"
-
-    asked = client.post("/language-model/test/question", json={"question": "What is a drum?"})
-    assert asked.status_code == 200
-
-    scored = client.post("/language-model/test/score", json={"passed": True})
-    assert scored.status_code == 200
-
-    finished = client.post("/language-model/test/finish", json={"passed": True})
-    assert finished.status_code == 200
-    result = finished.json()["result"]
-    assert result["passed"] is False, "a mock test never advances the grade"
-    assert result["answers_passed"] == 1
 
 
 def test_a_lesson_can_be_edited_and_removed(client: TestClient):

@@ -2,7 +2,7 @@
 
 import json
 
-from app.services import brain
+from app.services import brain, brain_rung_results, brain_state
 from app.services.language import runtime
 
 
@@ -19,11 +19,18 @@ def test_a_correction_is_kept_when_luke_answers_it_back(monkeypatch, tmp_path):
         brain.vector_store,
         "search_faq",
         lambda question, n_results=1, tenant_id=None: [
-            {"question": question, "answer": "The ocean is deep blue.", "distance": 0.02, "faq_id": 1}
+            {
+                "question": question,
+                "answer": "The ocean is deep blue.",
+                "distance": 0.02,
+                "faq_id": 1,
+            }
         ],
     )
 
-    result = brain.verify_correction(None, "what is the color of the ocean?", "The ocean is deep blue.")
+    result = brain.verify_correction(
+        None, "what is the color of the ocean?", "The ocean is deep blue."
+    )
 
     assert result["learned"] is True
     assert result["answer"] == "The ocean is deep blue."
@@ -39,7 +46,9 @@ def test_a_correction_is_not_kept_when_the_answer_stays_wrong(monkeypatch, tmp_p
         ],
     )
 
-    result = brain.verify_correction(None, "what is the color of the ocean?", "The ocean is deep blue.")
+    result = brain.verify_correction(
+        None, "what is the color of the ocean?", "The ocean is deep blue."
+    )
 
     assert result["learned"] is False
 
@@ -47,9 +56,9 @@ def test_a_correction_is_not_kept_when_the_answer_stays_wrong(monkeypatch, tmp_p
 def test_the_feedback_log_counts_only_the_kept_corrections(monkeypatch, tmp_path):
     path = _use_temp_feedback(monkeypatch, tmp_path)
 
-    brain.record_feedback(None, "q1", "a1", False, "right one", learned=True)
-    brain.record_feedback(None, "q2", "a2", False, "right two", learned=False)
-    brain.record_feedback(None, "q3", "a3", True, "", learned=None)
+    brain.record_feedback(None, brain.Feedback("q1", "a1", False, "right one", learned=True))
+    brain.record_feedback(None, brain.Feedback("q2", "a2", False, "right two", learned=False))
+    brain.record_feedback(None, brain.Feedback("q3", "a3", True))
 
     entries = json.loads(path.read_text(encoding="utf-8"))
 
@@ -60,9 +69,13 @@ def test_the_feedback_log_counts_only_the_kept_corrections(monkeypatch, tmp_path
 
 def test_the_corrected_rung_needs_five_kept_corrections(monkeypatch, tmp_path):
     _use_temp_feedback(monkeypatch, tmp_path)
-    monkeypatch.setattr(brain, "rung_probes", lambda tenant_id: {})
-    monkeypatch.setattr(brain, "state", lambda tenant_id: {"trained": True, "corrections": 5, "learned_corrections": 4})
-    monkeypatch.setattr(brain, "_subject_coverage", lambda tenant_id: {})
+    monkeypatch.setattr(brain_rung_results, "rung_probes", lambda tenant_id: {})
+    monkeypatch.setattr(
+        brain_state,
+        "state",
+        lambda tenant_id: {"trained": True, "corrections": 5, "learned_corrections": 4},
+    )
+    monkeypatch.setattr(brain_rung_results, "subject_coverage", lambda tenant_id: {})
 
     rungs = brain.rung_results(None, force=True)
     corrected = next(rung for rung in rungs if rung["rung"] == "0.0.6")
@@ -75,9 +88,13 @@ def test_the_corrected_rung_needs_five_kept_corrections(monkeypatch, tmp_path):
 
 def test_the_corrected_rung_passes_with_five_kept_corrections(monkeypatch, tmp_path):
     _use_temp_feedback(monkeypatch, tmp_path)
-    monkeypatch.setattr(brain, "rung_probes", lambda tenant_id: {})
-    monkeypatch.setattr(brain, "state", lambda tenant_id: {"trained": True, "corrections": 5, "learned_corrections": 5})
-    monkeypatch.setattr(brain, "_subject_coverage", lambda tenant_id: {})
+    monkeypatch.setattr(brain_rung_results, "rung_probes", lambda tenant_id: {})
+    monkeypatch.setattr(
+        brain_state,
+        "state",
+        lambda tenant_id: {"trained": True, "corrections": 5, "learned_corrections": 5},
+    )
+    monkeypatch.setattr(brain_rung_results, "subject_coverage", lambda tenant_id: {})
 
     rungs = brain.rung_results(None, force=True)
     corrected = next(rung for rung in rungs if rung["rung"] == "0.0.6")

@@ -95,6 +95,26 @@ def test_a_fact_request_finds_the_lesson_about_the_topic():
     assert card["id"] == "fact-1"
 
 
+def test_a_describe_request_is_a_fact_request():
+    volcano = {
+        "id": "volcano-1",
+        "question": "What is a volcano?",
+        "answer": "A volcano is a mountain that erupts.",
+        "subject": "Science",
+        "grade_id": "nursery",
+    }
+
+    request = requests.parse_request("Describe the volcano to me.")
+
+    assert request is not None
+    assert request.kind == "fact"
+    assert requests.find_material(request, [volcano])["id"] == "volcano-1"
+
+    unknown = requests.parse_request("Describe the oyster to me.")
+    assert unknown is not None
+    assert requests.find_material(unknown, [volcano]) is None
+
+
 def test_a_list_request_finds_the_list_lesson():
     list_card = {
         "id": "list-1",

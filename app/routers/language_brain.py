@@ -17,9 +17,10 @@ from app.config import settings
 from app.core.files import folder_size
 from app.core.security import get_bearer_user, tenant_id_of
 from app.db.database import Faq, PendingQuestion, User, get_session
-from app.schemas import CorrectionBody
+from app.schemas import CorrectionBody, ModelSettingsBody
 from app.services import brain as brain_service
 from app.services import documents as documents_service
+from app.services import model_settings
 from app.services import storage as storage_service
 from app.services.language import corrections as correction_service
 from app.services.language import lessons as lesson_service
@@ -75,6 +76,26 @@ def language_model_store(
             "uploads_bytes": folder_size(settings.upload_dir),
         },
     }
+
+
+@router.get("/settings")
+def language_model_settings(user: User = Depends(get_bearer_user)) -> dict[str, Any]:
+    """The model name, the version it starts from and the ladder to choose from."""
+    return model_settings.view(tenant_id_of(user))
+
+
+@router.put("/settings")
+def save_language_model_settings(
+    body: ModelSettingsBody,
+    user: User = Depends(get_bearer_user),
+) -> dict[str, Any]:
+    """Rename the model and choose the version it starts from."""
+    tenant_id = tenant_id_of(user)
+    try:
+        model_settings.save(tenant_id, body.name, body.start_level)
+    except ValueError as error:
+        raise HTTPException(400, str(error)) from error
+    return model_settings.view(tenant_id)
 
 
 @router.get("/brain")

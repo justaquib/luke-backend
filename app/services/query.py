@@ -4,21 +4,22 @@ from __future__ import annotations
 
 import logging
 from collections.abc import Callable
-from datetime import UTC, datetime
 
 from fastapi import HTTPException
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from app.config import settings
-from app.db.database import Faq, PendingQuestion, User
+from app.db.database import Faq, User
 from app.schemas import (
     QueryHit,
     QueryRequest,
     QueryResponse,
 )
 from app.services import apps, brain, language_logic, nlp, vector_store
-from app.services.transformer.settings import WritingSettings
+from app.services.language import answering
+from app.services.neural.settings import WritingSettings
+from app.services.pending_questions import record_pending
 
 logger = logging.getLogger(__name__)
 UserLookup = Callable[[str, Session], User]
@@ -39,30 +40,6 @@ def _flag_missing_confidence(answer: str, matched_question: str) -> str:
     return f"{answer.rstrip('. ')}. {NOT_SURE_NOTE.format(subject)}"
 
 
-def _record_pending(db: Session, question: str, tenant_id: int | None = None) -> PendingQuestion:
-    """Log an unanswered question, counting repeat occurrences."""
-    normalized = question.strip()
-    existing = db.execute(
-        select(PendingQuestion).where(
-            PendingQuestion.question == normalized,
-            PendingQuestion.resolved.is_(False),
-        )
-    ).scalar_one_or_none()
-    if existing is not None:
-        existing.occurrences += 1
-        existing.last_seen_at = datetime.now(UTC).replace(tzinfo=None)
-        db.commit()
-        db.refresh(existing)
-        vector_store.index_pending(existing.id, existing.question, tenant_id)
-        return existing
-    pending = PendingQuestion(question=normalized, tenant_id=tenant_id)
-    db.add(pending)
-    db.commit()
-    db.refresh(pending)
-    vector_store.index_pending(pending.id, pending.question, tenant_id)
-    return pending
-
-
 def _default_response(
     db: Session,
     req: QueryRequest,
@@ -71,11 +48,11 @@ def _default_response(
     tenant_id: int | None = None,
 ) -> QueryResponse:
     """Return the trainer-notified response for an unanswered question."""
-    pending = _record_pending(db, req.question, tenant_id)
+    pending = record_pending(db, req.question, tenant_id)
     return QueryResponse(
         question=req.question,
         source="pending",
-        answer="I don't have an answer for that yet. A trainer has been notified.",
+        answer=answering.NOT_LEARNED,
         hits=[],
         entities=entities,
         pending_id=pending.id,
@@ -215,32 +192,38 @@ def _docs_response(
     )
 
 
-def _request_response(
+def _taught_response(
     req: QueryRequest, entities: list, tenant_id: int | None
 ) -> QueryResponse | None:
-    """Answer a request for something to be written, from the taught material.
+    """Answer from the material every other page of the app answers from.
 
-    A request is not a question, so it is not looked up in the trained
-    answers. The lesson about the topic is found instead, and the trained
-    model writes the answer from it.
+    The chat used to keep its own request and lesson path. That is how the
+    same question could be answered one way here and another way in the
+    learner page, so the chat now reads the shared answer order.
     """
-    from app.services.language import requests as request_service
-    from app.services.language.lessons import all_lesson_cards
-
     try:
-        cards = all_lesson_cards(tenant_id)
-    except (OSError, ValueError):
+        taught = answering.answer_from_curriculum(req.question, tenant_id)
+    except (OSError, ValueError, RuntimeError) as error:
+        logger.warning("The taught answer failed: %s", error)
         return None
-    result = request_service.answer_request(
-        req.question, tenant_id, cards, writer=brain.load_writer(tenant_id)
+    if taught is None:
+        return None
+    hits = (
+        [
+            QueryHit(
+                text=taught.matched_question,
+                metadata={"source": taught.source},
+                distance=None,
+            )
+        ]
+        if taught.matched_question
+        else []
     )
-    if result is None:
-        return None
     return QueryResponse(
         question=req.question,
-        source="written",
-        answer=result["answer"],
-        hits=[],
+        source=taught.source,
+        answer=taught.answer,
+        hits=hits,
         entities=entities,
     )
 
@@ -300,7 +283,7 @@ def _answer_for_tenant(
     for find_answer in (
         lambda: _faq_hit(req, entities, tenant_id),
         lambda: _loose_intent_response(req, entities, tenant_id),
-        lambda: _request_response(req, entities, tenant_id),
+        lambda: _taught_response(req, entities, tenant_id),
         lambda: _weather_response(req, entities, app_settings, location, detected),
         lambda: _wiki_response(req, entities, app_settings, detected),
         lambda: _docs_response(req, entities, tenant_id),

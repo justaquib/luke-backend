@@ -67,9 +67,11 @@ def upload_document(user: User, upload: UploadFile, db: Session) -> dict:
 
 def list_documents(user: User, db: Session) -> list[dict]:
     """List indexed sources and their chunk counts."""
-    statement = select(
-        Document.source, func.count(Document.id), func.min(Document.created_at)
-    ).group_by(Document.source).order_by(Document.source)
+    statement = (
+        select(Document.source, func.count(Document.id), func.min(Document.created_at))
+        .group_by(Document.source)
+        .order_by(Document.source)
+    )
     if not user.is_systemadmin:
         statement = statement.where(Document.tenant_id == user.tenant_id)
     return [
@@ -121,7 +123,7 @@ def create_feedback(user: User, req: FeedbackCreate, db: Session) -> Feedback:
 
 def resync_approved_faqs() -> None:
     """Rebuild the FAQ and intent indexes from the database on startup."""
-    from app.db.database import SessionLocal, Intent
+    from app.db.database import Intent, SessionLocal
 
     with SessionLocal() as db:
         for faq in db.execute(select(Faq).where(Faq.status == "approved")).scalars():

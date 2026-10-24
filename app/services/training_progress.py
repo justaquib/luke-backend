@@ -21,11 +21,12 @@ from app.services.brain_paths import brain_dir, tenant_key
 logger = logging.getLogger(__name__)
 
 # The parts of a training, in the order they happen.
-STAGES: tuple[str, ...] = ("writer", "emotion", "intent", "feedback")
+STAGES: tuple[str, ...] = ("writer", "words", "emotion", "intent", "feedback")
 
 # What each part does, in plain words.
 LABELS: dict[str, str] = {
-    "writer": "Read the material and trained the writer",
+    "writer": "Read the material and trained the answer model",
+    "words": "Trained the neural word model",
     "emotion": "Taught the emotion head",
     "intent": "Taught the intent head",
     "feedback": "Checked the answers it was told were wrong",
@@ -65,16 +66,24 @@ def stage(tenant_id: int | None, key: str, status: str) -> None:
         _write(tenant_id, record)
 
 
-def steps(tenant_id: int | None, done: int, total: int, eta_seconds: float | None) -> None:
-    """Note how many of the writer's steps have happened, and what is left."""
+def steps(
+    tenant_id: int | None,
+    done: int,
+    total: int,
+    eta_seconds: float | None,
+    loss: float | None = None,
+) -> None:
+    """Note how many of the model's steps have happened, and what is left."""
     record = _read_raw(tenant_id)
     record["steps_done"] = int(done)
     record["steps_total"] = int(total)
     record["eta_seconds"] = round(eta_seconds, 1) if eta_seconds is not None else None
+    if loss is not None:
+        record["loss"] = loss
     _write(tenant_id, record)
 
 
-def finish(tenant_id: int | None) -> float:
+def finish(tenant_id: int | None, stop_reason: str | None = None) -> float:
     """Close the checklist and return how long the training took, in seconds."""
     record = _read_raw(tenant_id)
     started = float(record.get("started") or 0)
@@ -82,6 +91,8 @@ def finish(tenant_id: int | None) -> float:
     record["finished"] = time.time()
     record["seconds"] = round(seconds, 1)
     record["eta_seconds"] = None
+    if stop_reason:
+        record["stop_reason"] = stop_reason
     _write(tenant_id, record)
     return seconds
 
@@ -103,6 +114,8 @@ def read(tenant_id: int | None) -> dict[str, Any]:
         "eta_seconds": record.get("eta_seconds"),
         "steps_done": int(record.get("steps_done") or 0),
         "steps_total": int(record.get("steps_total") or 0),
+        "loss": record.get("loss"),
+        "stop_reason": record.get("stop_reason"),
         "stages": [
             {
                 "key": key,

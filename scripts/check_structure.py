@@ -48,21 +48,26 @@ def node_lines(node: ast.AST) -> int:
     return end - start + 1
 
 
+def decorator_name(decorator: ast.expr) -> str:
+    """The name a route decorator uses, such as ``post``."""
+    target = decorator.func if isinstance(decorator, ast.Call) else decorator
+    if isinstance(target, ast.Attribute):
+        return target.attr
+    if isinstance(target, ast.Name):
+        return target.id
+    return ""
+
+
 def route_handlers(tree: ast.AST) -> list[ast.FunctionDef | ast.AsyncFunctionDef]:
     handlers: list[ast.FunctionDef | ast.AsyncFunctionDef] = []
     for node in ast.walk(tree):
         if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
             continue
-        for decorator in node.decorator_list:
-            target = decorator.func if isinstance(decorator, ast.Call) else decorator
-            name = ""
-            if isinstance(target, ast.Attribute):
-                name = target.attr
-            elif isinstance(target, ast.Name):
-                name = target.id
-            if name in {"get", "post", "put", "patch", "delete"}:
-                handlers.append(node)
-                break
+        if any(
+            decorator_name(decorator) in {"get", "post", "put", "patch", "delete"}
+            for decorator in node.decorator_list
+        ):
+            handlers.append(node)
     return handlers
 
 
@@ -87,37 +92,34 @@ def silent_excepts(tree: ast.AST) -> list[ast.ExceptHandler]:
     return found
 
 
-def check_file(path: Path) -> list[str]:
+def _size_problems(relative: Path, lines: list[str]) -> list[str]:
     problems: list[str] = []
-    source = path.read_text(encoding="utf-8")
-    lines = source.splitlines()
-    relative = path.relative_to(ROOT)
     if len(lines) > MAX_FILE_LINES:
         problems.append(f"{relative}:1 file has {len(lines)} lines (max {MAX_FILE_LINES})")
-
-    try:
-        tree = ast.parse(source)
-    except SyntaxError as error:
-        return [f"{relative}:{error.lineno} syntax error: {error.msg}"]
-
     if relative == Path("app/main.py") and len(lines) > MAX_MAIN_LINES:
         problems.append(f"{relative}:1 app/main.py has {len(lines)} lines (max {MAX_MAIN_LINES})")
-    if relative == Path("app/main.py"):
-        for node in ast.walk(tree):
-            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
-                for decorator in node.decorator_list:
-                    target = decorator.func if isinstance(decorator, ast.Call) else decorator
-                    if isinstance(target, ast.Attribute) and target.attr in {
-                        "get",
-                        "post",
-                        "put",
-                        "patch",
-                        "delete",
-                    }:
-                        problems.append(
-                            f"{relative}:{node.lineno} route '{node.name}' belongs in app/routers"
-                        )
+    return problems
 
+
+def _main_problems(relative: Path, tree: ast.AST) -> list[str]:
+    """app/main.py holds no route of its own; routes live in app/routers."""
+    if relative != Path("app/main.py"):
+        return []
+    problems: list[str] = []
+    for node in ast.walk(tree):
+        if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            continue
+        if any(
+            decorator_name(decorator) in {"get", "post", "put", "patch", "delete"}
+            for decorator in node.decorator_list
+        ):
+            problems.append(f"{relative}:{node.lineno} route '{node.name}' belongs in app/routers")
+    return problems
+
+
+def _definition_problems(relative: Path, tree: ast.AST) -> list[str]:
+    """Functions, classes and routes all fit their line budgets."""
+    problems: list[str] = []
     for node in ast.walk(tree):
         if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
             length = node_lines(node)
@@ -133,7 +135,6 @@ def check_file(path: Path) -> list[str]:
                     f"{relative}:{node.lineno} class '{node.name}' has {length} lines "
                     f"(max {MAX_CLASS_LINES})"
                 )
-
     for handler in route_handlers(tree):
         length = node_lines(handler)
         if length > MAX_FUNCTION_LINES:
@@ -141,17 +142,34 @@ def check_file(path: Path) -> list[str]:
                 f"{relative}:{handler.lineno} route '{handler.name}' has {length} lines "
                 f"(max {MAX_FUNCTION_LINES})"
             )
+    return problems
 
+
+def _import_problems(relative: Path, tree: ast.AST) -> list[str]:
+    """No banned packages, and services never import the web layer."""
+    problems: list[str] = []
     for module in imported_modules(tree):
         if module in BANNED_IMPORTS:
             problems.append(f"{relative}:1 banned import '{module}'")
+    if relative.parts[:2] != ("app", "services"):
+        return problems
+    for node in ast.walk(tree):
+        if (
+            isinstance(node, ast.ImportFrom)
+            and node.module
+            and node.module.startswith(("app.routers", "app.main"))
+        ):
+            problems.append(f"{relative}:{node.lineno} services must not import routers or main")
+    return problems
 
+
+def _hygiene_problems(relative: Path, tree: ast.AST, source: str) -> list[str]:
+    """Silent failures, prints, eval/exec and open TODOs are all problems."""
+    problems: list[str] = []
     for handler in silent_excepts(tree):
         problems.append(f"{relative}:{handler.lineno} silent exception handler")
-
     if relative.parts[0] == "app" and "print(" in source:
         problems.append(f"{relative}:1 use logging, not print()")
-
     if relative.parts[0] == "app":
         for node in ast.walk(tree):
             if (
@@ -160,18 +178,24 @@ def check_file(path: Path) -> list[str]:
                 and node.func.id in {"eval", "exec"}
             ):
                 problems.append(f"{relative}:{node.lineno} eval/exec is forbidden")
-
-    if relative.parts[:2] == ("app", "services"):
-        for node in ast.walk(tree):
-            if isinstance(node, ast.ImportFrom) and node.module:
-                if node.module.startswith(("app.routers", "app.main")):
-                    problems.append(
-                        f"{relative}:{node.lineno} services must not import routers or main"
-                    )
-
     if "TODO" in source or "FIXME" in source:
         problems.append(f"{relative}:1 remove TODO/FIXME or link an issue")
+    return problems
 
+
+def check_file(path: Path) -> list[str]:
+    source = path.read_text(encoding="utf-8")
+    lines = source.splitlines()
+    relative = path.relative_to(ROOT)
+    try:
+        tree = ast.parse(source)
+    except SyntaxError as error:
+        return [f"{relative}:{error.lineno} syntax error: {error.msg}"]
+    problems = _size_problems(relative, lines)
+    problems += _main_problems(relative, tree)
+    problems += _definition_problems(relative, tree)
+    problems += _import_problems(relative, tree)
+    problems += _hygiene_problems(relative, tree, source)
     return problems
 
 

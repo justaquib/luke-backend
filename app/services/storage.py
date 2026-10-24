@@ -7,15 +7,18 @@ of them, and the files that hold the model itself.
 
 from __future__ import annotations
 
+import logging
 import os
 from pathlib import Path
 from typing import Any
 
-from sqlalchemy import inspect, text
+from sqlalchemy import MetaData, Table, func, inspect, select, text
 
 from app.config import settings
 from app.db.database import engine
 from app.services import brain, language_logic, vector_store
+
+LOGGER = logging.getLogger(__name__)
 
 
 def _directory_bytes(path: Path) -> tuple[int, int]:
@@ -50,16 +53,24 @@ def _database_report() -> dict[str, Any]:
     except Exception:
         names = []
     with engine.connect() as connection:
+        metadata = MetaData()
         for name in names:
             try:
-                rows = int(connection.execute(text(f'SELECT COUNT(*) FROM "{name}"')).scalar() or 0)
-            except Exception:
+                table = Table(name, metadata, autoload_with=connection)
+                rows = int(
+                    connection.execute(select(func.count()).select_from(table)).scalar() or 0
+                )
+            except Exception as error:
+                LOGGER.warning("the table %s could not be counted: %s", name, error)
                 continue
             total_rows += rows
             tables.append({"name": name, "rows": rows})
         size_bytes = 0
         try:
-            size_bytes = int(connection.execute(text("SELECT pg_database_size(current_database())")).scalar() or 0)
+            size_bytes = int(
+                connection.execute(text("SELECT pg_database_size(current_database())")).scalar()
+                or 0
+            )
         except Exception:
             # Not a PostgreSQL server, so the size is not read this way.
             size_bytes = 0
@@ -141,14 +152,20 @@ def _chunks_report(tenant_id: int | None) -> dict[str, Any]:
                 rows = int(result[0] or 0)
                 characters = int(result[1] or 0)
             pages = int(
-                connection.execute(text("SELECT COUNT(DISTINCT page_number) FROM documents")).scalar() or 0
+                connection.execute(
+                    text("SELECT COUNT(DISTINCT page_number) FROM documents")
+                ).scalar()
+                or 0
             )
     except Exception:
         rows = 0
     sources = 0
     try:
         with engine.connect() as connection:
-            sources = int(connection.execute(text("SELECT COUNT(DISTINCT source) FROM documents")).scalar() or 0)
+            sources = int(
+                connection.execute(text("SELECT COUNT(DISTINCT source) FROM documents")).scalar()
+                or 0
+            )
     except Exception:
         sources = 0
     return {
@@ -210,10 +227,7 @@ def storage_report(tenant_id: int | None = None) -> dict[str, Any]:
     model = _model_report(tenant_id)
 
     total_bytes = (
-        database["size_bytes"]
-        + vector["size_bytes"]
-        + files["size_bytes"]
-        + model["size_bytes"]
+        database["size_bytes"] + vector["size_bytes"] + files["size_bytes"] + model["size_bytes"]
     )
     return {
         "database": database,

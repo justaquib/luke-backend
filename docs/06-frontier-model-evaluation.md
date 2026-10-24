@@ -34,8 +34,8 @@ perplexity numbers over the same text and neither is wrong.
 The golden rule: the loss that matters is measured on data the model never
 trained on, in `eval` mode (dropout off), averaged over many batches. A
 falling training loss with a flat or rising eval loss is overfitting.
-This app's checkpoint read (`transformer/training.py::_check`) is exactly
-this shape: fixed batches, resting state, averaged.
+This app's checkpoint read (`neural/training.py::_check`) is exactly
+this shape: a group split by response, fixed batches, resting state, averaged.
 
 ### Scaling laws
 Labs publish how loss falls with model size, data and compute (Kaplan et al.

@@ -1,64 +1,10 @@
-"""Tests that the model writes proper sentences instead of looping."""
+"""Tests that the language services write proper sentences instead of looping.
+
+The word model that writes them is tested in ``test_word_model``; these tests
+keep the language services honest about the sentences they build and repair.
+"""
 
 from app.services import brain, language_logic
-from app.services.tiny_language_model import TinyLanguageModel
-
-
-def _looping_model() -> TinyLanguageModel:
-    """A model that keeps asking for the same pair of words again."""
-    return TinyLanguageModel([
-        "The night sky is dark.",
-        "The night sky is dark.",
-        "The night sky is dark.",
-    ])
-
-
-def test_a_sentence_never_repeats_a_naming_word():
-    model = _looping_model()
-
-    sentence = model.generate_sentence(seed="night")
-
-    assert sentence is not None
-    words = sentence.rstrip(".").lower().split()
-    naming = [word for word in words if word not in {"the", "a", "an", "is", "of"}]
-    assert len(naming) == len(set(naming)), f"the sentence loops: {sentence}"
-
-
-def test_a_sentence_ends_instead_of_looping():
-    model = _looping_model()
-
-    sentence = model.generate_sentence(seed="night")
-
-    assert sentence is not None
-    assert len(sentence.rstrip(".").split()) <= 8
-
-
-def test_a_taught_sentence_is_written():
-    model = TinyLanguageModel(["The cat sleeps on the mat."])
-
-    sentence = model.generate_sentence(seed="cat")
-
-    assert sentence == "The cat sleeps on the mat."
-
-
-def test_the_model_uses_the_last_three_words():
-    model = TinyLanguageModel([
-        "The red apple is sweet.",
-        "The green apple is sour.",
-        "A red car is fast.",
-    ])
-
-    # The two words before the next one decide what follows.
-    counts = model.transitions.get(("the", "green", "apple"))
-
-    assert counts is not None
-    assert counts["is"] == 1
-
-
-def test_a_sentence_that_was_taught_is_used_for_its_word():
-    model = TinyLanguageModel(["The moon shines at night.", "The moon is round."])
-
-    assert model.generate_sentence(seed="night") == "The moon shines at night."
 
 
 def test_a_word_that_was_a_lesson_answer_becomes_a_sentence(monkeypatch, tmp_path):
@@ -87,7 +33,9 @@ def test_a_lesson_question_becomes_a_statement_for_its_answer():
 
 def test_a_question_that_cannot_be_a_statement_is_left_alone():
     assert language_logic._statement_from_lesson("Where is the school?", "Main road.") is None
-    assert language_logic._statement_from_lesson("Who wrote this book?", "A long name here.") is None
+    assert (
+        language_logic._statement_from_lesson("Who wrote this book?", "A long name here.") is None
+    )
 
 
 def test_a_which_question_about_a_subject_becomes_a_statement():
@@ -100,7 +48,9 @@ def test_a_which_question_about_a_subject_becomes_a_statement():
 
 
 def test_a_which_question_about_a_famous_feature_becomes_a_statement():
-    statement = language_logic._statement_from_lesson("Which planet is famous for its rings?", "Saturn.")
+    statement = language_logic._statement_from_lesson(
+        "Which planet is famous for its rings?", "Saturn."
+    )
 
     assert statement == "Saturn is famous for its rings."
 
@@ -112,10 +62,14 @@ def test_a_name_request_becomes_a_statement():
 
 
 def test_a_long_answer_is_not_turned_into_a_statement():
-    assert language_logic._statement_from_lesson(
-        "Name some shapes",
-        "Some shapes are circle, triangle, square, rectangle, oval, diamond, star, heart, pentagon, hexagon.",
-    ) is None
+    assert (
+        language_logic._statement_from_lesson(
+            "Name some shapes",
+            "Some shapes are circle, triangle, square, rectangle, oval, diamond, "
+            "star, heart, pentagon, hexagon.",
+        )
+        is None
+    )
 
 
 def test_a_word_from_a_list_becomes_a_sentence_of_its_own(monkeypatch, tmp_path):
@@ -155,7 +109,9 @@ def test_the_shortest_taught_sentence_is_used(monkeypatch, tmp_path):
 
 
 def test_a_name_request_keeps_its_article():
-    statement = language_logic._statement_from_lesson("Name a fruit that is sour and yellow.", "Lemon!")
+    statement = language_logic._statement_from_lesson(
+        "Name a fruit that is sour and yellow.", "Lemon!"
+    )
 
     assert statement == "Lemon is a fruit that is sour and yellow."
 
@@ -172,7 +128,9 @@ def test_the_plural_is_written_when_a_possessive_is_typed():
 
 def test_a_real_possessive_is_left_alone():
     assert language_logic._repair_sentence("The dog's tail wags.") == "The dog's tail wags."
-    assert language_logic._repair_sentence("My mother's house is big.") == "My mother's house is big."
+    assert (
+        language_logic._repair_sentence("My mother's house is big.") == "My mother's house is big."
+    )
 
 
 def test_a_sentence_that_begins_with_the_word_is_used(monkeypatch, tmp_path):
@@ -180,7 +138,8 @@ def test_a_sentence_that_begins_with_the_word_is_used(monkeypatch, tmp_path):
     language_logic._CACHE.clear()
     language_logic.teach(
         None,
-        "Q: What is a liquid?\nA: A liquid is a state of matter that has a fixed volume but no fixed shape.",
+        "Q: What is a liquid?\nA: A liquid is a state of matter that has a fixed "
+        "volume but no fixed shape.",
         "nursery",
         "Science",
     )
@@ -234,7 +193,10 @@ def test_a_list_is_not_cut_into_its_first_item(monkeypatch, tmp_path):
 def test_the_number_that_was_asked_for_is_given():
     answer = "Some animals are ant, bear, cat, cow, deer, dog, elephant, fish."
 
-    assert language_logic.apply_requested_count("name 3 animals", answer) == "Some animals are ant, bear, cat."
+    assert (
+        language_logic.apply_requested_count("name 3 animals", answer)
+        == "Some animals are ant, bear, cat."
+    )
     assert language_logic.apply_requested_count("name some animals", answer) == answer
 
 
@@ -245,14 +207,26 @@ def test_a_list_is_never_put_into_other_words():
 
 
 def test_a_number_after_any_number_is_worked_out():
-    assert language_logic._answer_number_sequence_question("what comes after 20") == "The number after 20 is 21."
-    assert language_logic._answer_number_sequence_question("what comes before 20") == "The number before 20 is 19."
+    assert (
+        language_logic._answer_number_sequence_question("what comes after 20")
+        == "The number after 20 is 21."
+    )
+    assert (
+        language_logic._answer_number_sequence_question("what comes before 20")
+        == "The number before 20 is 19."
+    )
     assert language_logic._answer_number_sequence_question("what comes after b") is None
 
 
 def test_the_count_is_honoured_wherever_it_is_asked():
     answer = "Some fruits are apple, banana, blueberry, cherry, grape, guava."
 
-    assert language_logic.apply_requested_count("write 5 fruits name", answer) == "Some fruits are apple, banana, blueberry, cherry, grape."
-    assert language_logic.apply_requested_count("name five fruits", answer) == "Some fruits are apple, banana, blueberry, cherry, grape."
+    assert (
+        language_logic.apply_requested_count("write 5 fruits name", answer)
+        == "Some fruits are apple, banana, blueberry, cherry, grape."
+    )
+    assert (
+        language_logic.apply_requested_count("name five fruits", answer)
+        == "Some fruits are apple, banana, blueberry, cherry, grape."
+    )
     assert language_logic.apply_requested_count("how many fruits", answer) == answer

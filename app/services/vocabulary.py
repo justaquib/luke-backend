@@ -13,11 +13,14 @@ tensor bound for the transformer.
 from __future__ import annotations
 
 import json
+import logging
 from collections.abc import Iterable
 from pathlib import Path
 
 CANONICAL_OWNER = "transformer"
 LEGACY_DIRECTORY = Path(__file__).resolve().parent.parent / "legacy"
+
+LOGGER = logging.getLogger(__name__)
 
 
 class VocabularyError(RuntimeError):
@@ -68,7 +71,7 @@ class Vocabulary:
             raise VocabularyError(
                 f"the '{self.owner}' vocabulary is retired and must not produce ids"
             )
-        from app.services.transformer import tokenize
+        from app.services.neural.tokens import tokenize
 
         unknown = self._index.get("<unk>")
         return [
@@ -102,7 +105,8 @@ def retired_size(name: str) -> int:
     """How many words a frozen artefact holds."""
     try:
         return len(retired(name).tokens)
-    except Exception:
+    except (OSError, ValueError, VocabularyError) as error:
+        LOGGER.warning("the retired vocabulary '%s' could not be read: %s", name, error)
         return 0
 
 
@@ -129,40 +133,42 @@ def guard_tensor_ids(
         value = int(token_id)
         if value < 0 or value >= len(vocab):
             raise VocabularyError(
-                f"{source} sent id {value}, which is outside the canonical vocabulary of {len(vocab)}"
+                f"{source} sent id {value}, which is outside "
+                f"the canonical vocabulary of {len(vocab)}"
             )
         checked.append(value)
     return checked
 
 
-def assert_single_vocabulary(tenant_id: int | None = None) -> dict:
-    """Check that only the transformer's mapping can reach the answering model.
-
-    This runs at startup, so a mistake stops the app instead of quietly
-    answering with the wrong words.
-    """
+def _identity_problems(vocab: Vocabulary) -> list[str]:
+    """The live mapping must be the canonical one, and hold no token twice."""
     problems: list[str] = []
-    vocab = canonical(tenant_id)
-
     if vocab.owner != CANONICAL_OWNER:
         problems.append(f"the live vocabulary is '{vocab.owner}', not '{CANONICAL_OWNER}'")
-
-    # The ids must be exactly the places of the tokens, with nothing twice.
     if len(vocab.index) != len(vocab):
         problems.append("the canonical vocabulary holds the same token more than once")
+    return problems
 
-    # A retired mapping must not be able to produce ids.
+
+def _produces_ids(vocab: Vocabulary) -> bool:
+    """Whether a mapping can still turn text into ids."""
+    try:
+        vocab.encode("the cow is an animal")
+    except VocabularyError:
+        return False
+    return True
+
+
+def _retired_problems(vocab: Vocabulary) -> list[str]:
+    """A retired mapping must refuse ids, and must not share the live ids."""
+    problems: list[str] = []
     for name in retired_names():
         try:
             old = retired(name)
-        except Exception as error:  # pragma: no cover - a broken artefact
+        except (OSError, ValueError, VocabularyError) as error:
             problems.append(f"the retired vocabulary '{name}' could not be read: {error}")
             continue
-        try:
-            old.encode("the cow is an animal")
-        except VocabularyError:
-            pass
-        else:
+        if _produces_ids(old):
             problems.append(f"the retired vocabulary '{name}' can still produce ids")
         # The old ids overlap the new ones, so a mixed id would look valid.
         # The guard is what stops it, and the guard has to be reached.
@@ -173,6 +179,35 @@ def assert_single_vocabulary(tenant_id: int | None = None) -> dict:
                 problems.append(
                     f"the retired vocabulary '{name}' has the same ids as the canonical one"
                 )
+    return problems
+
+
+def _boundary_problems() -> list[str]:
+    """An id from a retired mapping must be refused at the tensor boundary."""
+    problems: list[str] = []
+    for name in retired_names():
+        try:
+            old = retired(name)
+        except (OSError, ValueError, VocabularyError):
+            continue
+        legacy_ids = list(range(len(old.tokens)))
+        try:
+            guard_tensor_ids(legacy_ids, f"the retired mapping '{name}'", old)
+        except VocabularyError:
+            continue
+        problems.append(f"the retired mapping '{name}' was accepted at the tensor boundary")
+    return problems
+
+
+def assert_single_vocabulary(tenant_id: int | None = None) -> dict:
+    """Check that only the transformer's mapping can reach the answering model.
+
+    This runs at startup, so a mistake stops the app instead of quietly
+    answering with the wrong words.
+    """
+    vocab = canonical(tenant_id)
+    problems = _identity_problems(vocab)
+    problems += _retired_problems(vocab)
 
     # The answering model must be able to read its own ids.
     if len(vocab):
@@ -184,17 +219,7 @@ def assert_single_vocabulary(tenant_id: int | None = None) -> dict:
     # An id from a retired mapping must be refused at the tensor boundary.
     # The two id spaces overlap, so a number alone cannot be told apart: the
     # guard refuses the retired mapping itself, and that is what stops it.
-    for name in retired_names():
-        try:
-            old = retired(name)
-        except Exception:
-            continue
-        legacy_ids = [position for position in range(len(old.tokens))]
-        try:
-            guard_tensor_ids(legacy_ids, f"the retired mapping '{name}'", old)
-        except VocabularyError:
-            continue
-        problems.append(f"the retired mapping '{name}' was accepted at the tensor boundary")
+    problems += _boundary_problems()
 
     if problems:
         raise VocabularyError(

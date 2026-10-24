@@ -1,8 +1,10 @@
 from types import SimpleNamespace
+from typing import Any
 
 from app import main as api
 from app.schemas import QueryRequest, QueryResponse
 from app.services import apps
+from app.services import query as query_service
 
 
 def test_weather_question_is_not_also_classified_as_wikipedia():
@@ -30,16 +32,16 @@ def test_wiki_answers_father_of_computer_question(monkeypatch):
             }
 
     class Client:
-        def __init__(self, **kwargs):
+        def __init__(self, **kwargs: Any) -> None:
             pass
 
-        def __enter__(self):
+        def __enter__(self) -> "Client":
             return self
 
-        def __exit__(self, *args):
+        def __exit__(self, *args: Any) -> None:
             pass
 
-        def get(self, url, **kwargs):
+        def get(self, url: str, **kwargs: Any) -> Response:
             assert url.endswith("/Charles_Babbage")
             return Response()
 
@@ -64,27 +66,27 @@ def test_where_question_is_routed_to_wikipedia_and_extracts_topic():
 
 def test_wiki_summary_returns_none_when_search_has_no_results(monkeypatch):
     class Response:
-        def __init__(self, status_code, data):
+        def __init__(self, status_code: int, data: Any) -> None:
             self.status_code = status_code
             self._data = data
 
-        def raise_for_status(self):
+        def raise_for_status(self) -> None:
             pass
 
-        def json(self):
+        def json(self) -> Any:
             return self._data
 
     class Client:
-        def __init__(self, **kwargs):
+        def __init__(self, **kwargs: Any) -> None:
             pass
 
-        def __enter__(self):
+        def __enter__(self) -> "Client":
             return self
 
-        def __exit__(self, *args):
+        def __exit__(self, *args: Any) -> None:
             pass
 
-        def get(self, url, **kwargs):
+        def get(self, url: str, **kwargs: Any) -> Response:
             if "/api/rest_v1/" in url:
                 return Response(404, {})
             return Response(200, ["capital of France", [], [], []])
@@ -100,11 +102,11 @@ def test_weather_integration_precedes_irrelevant_document_matches(monkeypatch):
         "_get_bearer_user",
         lambda authorization, db: SimpleNamespace(is_systemadmin=False, tenant_id=1),
     )
-    monkeypatch.setattr(api.nlp, "extract_entities", lambda question: [])
-    monkeypatch.setattr(api.vector_store, "search_faq", lambda *args, **kwargs: [])
-    monkeypatch.setattr(api.vector_store, "search_faq_loose", lambda *args, **kwargs: [])
+    monkeypatch.setattr(query_service.nlp, "extract_entities", lambda question: [])
+    monkeypatch.setattr(query_service.vector_store, "search_faq", lambda *args, **kwargs: [])
+    monkeypatch.setattr(query_service.vector_store, "search_faq_loose", lambda *args, **kwargs: [])
     monkeypatch.setattr(
-        api.vector_store,
+        query_service.vector_store,
         "query",
         lambda *args, **kwargs: [{"distance": 1.0}],
     )
@@ -120,7 +122,7 @@ def test_weather_integration_precedes_irrelevant_document_matches(monkeypatch):
         ),
     )
     monkeypatch.setattr(
-        api.apps,
+        query_service.apps,
         "weather_for",
         lambda question, lat=None, lon=None: {
             "answer": "Currently clear sky, 30°C.",
@@ -147,18 +149,18 @@ def test_wiki_integration_precedes_document_matches(monkeypatch):
         "_get_bearer_user",
         lambda authorization, db: SimpleNamespace(is_systemadmin=False, tenant_id=1),
     )
-    monkeypatch.setattr(api.nlp, "extract_entities", lambda question: [])
-    monkeypatch.setattr(api.vector_store, "search_faq", lambda *args, **kwargs: [])
-    monkeypatch.setattr(api.vector_store, "search_faq_loose", lambda *args, **kwargs: [])
+    monkeypatch.setattr(query_service.nlp, "extract_entities", lambda question: [])
+    monkeypatch.setattr(query_service.vector_store, "search_faq", lambda *args, **kwargs: [])
+    monkeypatch.setattr(query_service.vector_store, "search_faq_loose", lambda *args, **kwargs: [])
     document_search = SimpleNamespace(called=False)
 
-    def query_documents(*args, **kwargs):
+    def query_documents(*args: Any, **kwargs: Any) -> list[dict[str, float]]:
         document_search.called = True
         return [{"distance": 0.1}]
 
-    monkeypatch.setattr(api.vector_store, "query", query_documents)
+    monkeypatch.setattr(query_service.vector_store, "query", query_documents)
     monkeypatch.setattr(
-        api.apps,
+        query_service.apps,
         "wiki_summary",
         lambda question: {
             "answer": "Paris is the capital of France.",

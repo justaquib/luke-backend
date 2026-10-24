@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import logging
 import threading
 from pathlib import Path
 from uuid import uuid4
@@ -20,11 +21,15 @@ from app.services.language.curriculum import (
     _grammar_lessons,
     _tenant_words_for_stage,
 )
-from app.services.tiny_language_model import TinyLanguageModel
+from app.services.neural import engine_for
+from app.services.neural.serving import ServingWord
+from app.services.neural.tokens import is_a_word, tokenize
 
 _DATA_DIR = Path(__file__).resolve().parents[3] / ".language_model"
 _LOCK = threading.RLock()
 _CACHE: dict[int, dict] = {}
+
+LOGGER = logging.getLogger(__name__)
 
 
 def data_dir() -> Path:
@@ -66,20 +71,10 @@ def _path(tenant_id: int | None) -> Path:
     return _DATA_DIR / f"tenant-{_tenant_key(tenant_id)}.json"
 
 
-def _read(tenant_id: int | None) -> dict:
-    key = _tenant_key(tenant_id)
-    if key in _CACHE:
-        return _CACHE[key]
-    path = _path(tenant_id)
-    lessons: list[dict] = []
-    if path.is_file():
-        try:
-            stored = json.loads(path.read_text(encoding="utf-8"))
-            lessons = stored.get("lessons", []) if isinstance(stored, dict) else []
-        except (OSError, json.JSONDecodeError):
-            lessons = []
-    state = {
-        "lessons": lessons,
+def _empty_state(key: int) -> dict:
+    return {
+        "tenant_id": key,
+        "lessons": [],
         "letters": "abcdefghijklmnopqrstuvwxyz",
         "word_cards": [],
         "lesson_cards": [],
@@ -88,36 +83,61 @@ def _read(tenant_id: int | None) -> dict:
         "test_history": [],
         "accepted_duplicates": [],
     }
-    if path.is_file():
-        try:
-            stored = json.loads(path.read_text(encoding="utf-8"))
-            if isinstance(stored, dict):
-                for name in (
-                    "letters",
-                    "word_cards",
-                    "lesson_cards",
-                    "passed_stages",
-                    "active_test",
-                    "test_history",
-                    "accepted_duplicates",
-                ):
-                    if name in stored:
-                        state[name] = stored[name]
-        except (OSError, json.JSONDecodeError):
-            pass
-    _CACHE[key] = state
-    assigned_lesson_ids = False
-    for lesson in state["lesson_cards"]:
+
+
+def _stored_state(path: Path, key: int) -> dict | None:
+    """The saved state of a tenant, or nothing when there is none to read."""
+    if not path.is_file():
+        return None
+    try:
+        stored = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as error:
+        LOGGER.warning("the learner state of tenant %s could not be read: %s", key, error)
+        return None
+    return stored if isinstance(stored, dict) else None
+
+
+def _merge_state(state: dict, stored: dict) -> None:
+    state["lessons"] = stored.get("lessons", [])
+    for name in (
+        "letters",
+        "word_cards",
+        "lesson_cards",
+        "passed_stages",
+        "active_test",
+        "test_history",
+        "accepted_duplicates",
+    ):
+        if name in stored:
+            state[name] = stored[name]
+
+
+def _repair_lessons(lesson_cards: list[dict]) -> bool:
+    """Give every lesson an id and topics, and say whether anything changed."""
+    changed = False
+    for lesson in lesson_cards:
         if not lesson.get("id"):
             lesson["id"] = uuid4().hex
-            assigned_lesson_ids = True
+            changed = True
         topics = lesson.get("subjects")
         if not isinstance(topics, list) or not topics:
             # A lesson taught before topics were split keeps the subject it had.
             lesson["subjects"] = parse_subjects(lesson.get("subject"))
             lesson["subject"] = ", ".join(lesson["subjects"])
-            assigned_lesson_ids = True
-    if assigned_lesson_ids:
+            changed = True
+    return changed
+
+
+def _read(tenant_id: int | None) -> dict:
+    key = _tenant_key(tenant_id)
+    if key in _CACHE:
+        return _CACHE[key]
+    state = _empty_state(key)
+    stored = _stored_state(_path(tenant_id), key)
+    if stored is not None:
+        _merge_state(state, stored)
+    _CACHE[key] = state
+    if _repair_lessons(state["lesson_cards"]):
         _save(tenant_id, state)
     active_test = state.get("active_test")
     if active_test and active_test.get("stage") not in _GRADE_IDS:
@@ -133,7 +153,15 @@ def _save(tenant_id: int | None, state: dict) -> None:
     temporary.replace(path)
 
 
-def _model(state: dict, stage_id: str | None = None) -> TinyLanguageModel:
+def _model(state: dict, stage_id: str | None = None) -> ServingWord:
+    """The neural word model, scoped to the words the current stage knows."""
+    examples = _examples(state, stage_id)
+    allowed = {token for sentence in examples for token in tokenize(sentence) if is_a_word(token)}
+    return engine_for(state.get("tenant_id")).word_serving(allowed)
+
+
+def _examples(state: dict, stage_id: str | None = None) -> list[str]:
+    """Every sentence the word model of a stage is built from."""
     if stage_id is None:
         stage_id = next(
             (stage["id"] for stage in STAGES if stage["id"] not in state["passed_stages"]),
@@ -163,7 +191,7 @@ def _model(state: dict, stage_id: str | None = None) -> TinyLanguageModel:
         if item.get("answer")
     ]
     sentences = _foundation_sentences_for_stage(stage_id)
-    examples = [
+    return [
         " ".join(state["letters"]),
         *sentences,
         *answer_sentences,
@@ -177,17 +205,11 @@ def _model(state: dict, stage_id: str | None = None) -> TinyLanguageModel:
         *(lesson["text"] for lesson in state["lessons"]),
         *lesson_sentences,
     ]
-    return TinyLanguageModel(examples)
 
 
-def _stage(user_lesson_count: int, model: TinyLanguageModel) -> str:
-    if user_lesson_count == 0:
-        return "sentence patterns"
-    if len(model.vocabulary) < 30:
-        return "growing vocabulary"
-    if user_lesson_count < 20:
-        return "learning sentence patterns"
-    return "practising sentence generation"
+def learning_examples(tenant_id: int | None, stage_id: str | None = None) -> list[str]:
+    """Every sentence the learner's word model is built from, for the trainer."""
+    return _examples(_read(tenant_id), stage_id)
 
 
 def _public_test(test: dict | None) -> dict | None:
@@ -197,6 +219,7 @@ def _public_test(test: dict | None) -> dict | None:
         key: test.get(key)
         for key in (
             "stage",
+            "kind",
             "questions_asked",
             "answers_passed",
             "needs_learning",
@@ -272,12 +295,10 @@ def get_state(tenant_id: int | None, prefix: str = "") -> dict:
         stage_counts = _stage_counts(state)
         attempt_counts, pass_counts = _test_counts(state)
         return {
-            "model_name": "Tiny Word Trigram",
-            "description": (
-                "A small from-scratch learner with Nursery, LKG, and UKG starter lessons, "
-                "sentence examples, and a curated vocabulary seeded from the local dictionary. "
-                "The trainer decides when it is ready to advance."
-            ),
+            "model_name": _model_name(model),
+            "description": _model_description(model),
+            "backend": model.backend,
+            "backend_reason": model.backend_reason,
             "stage": next(
                 (item["title"] for item in STAGES if item["id"] == current_stage),
                 "All stages passed",
@@ -304,11 +325,30 @@ def get_state(tenant_id: int | None, prefix: str = "") -> dict:
             "sentence_count": model.sentence_count,
             "token_count": model.token_count,
             "vocabulary_size": len(vocabulary_service.canonical(tenant_id)),
+            "word_vocabulary_size": len(model.vocabulary),
+            "example_count": getattr(model, "example_count", model.sentence_count),
             "transition_count": model.transition_count,
             "next_words": model.predict_next(prefix) if prefix.strip() else [],
             "examples": lessons[:80],
+            "example_total": len(lessons),
             "generated_example": model.generate_sentence(),
         }
+
+
+def _model_name(model: ServingWord) -> str:
+    return "Neural Word Model" if model.backend == "neural" else "No word model yet"
+
+
+def _model_description(model: ServingWord) -> str:
+    if model.backend == "neural":
+        return (
+            "A from-scratch transformer trained on this learner's own words. It predicts the "
+            "next word from the words before it, and it was measured on held-out sentences."
+        )
+    return (
+        "This learner's word model is trained from their own lessons and sentences. "
+        f"{model.backend_reason.capitalize()}."
+    )
 
 
 def vocabulary_page(tenant_id: int | None, offset: int = 0, limit: int = 100) -> dict:

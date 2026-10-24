@@ -1,1 +1,1 @@
-{"started": 1792708111.565571, "stages": {"writer": "done", "emotion": "done", "intent": "done", "feedback": "done"}, "steps_done": 2300, "steps_total": 3000, "eta_seconds": null, "finished": 1792708780.7606988, "seconds": 669.2}
+{"started": 1792840453.18542, "stages": {"writer": "done", "words": "done", "emotion": "done", "intent": "done", "feedback": "done"}, "steps_done": 4188, "steps_total": 9736, "eta_seconds": null, "loss": 0.5879, "finished": 1792840860.0850198, "seconds": 406.9, "stop_reason": "early"}

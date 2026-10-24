@@ -9,12 +9,17 @@ def test_the_same_words_are_the_same_question():
 
 
 def test_one_different_word_is_a_different_question():
-    assert language_logic._same_words("What is the opposite of in?", "What is the opposite of loud?") is False
+    assert (
+        language_logic._same_words("What is the opposite of in?", "What is the opposite of loud?")
+        is False
+    )
     assert language_logic._same_words("Who is Daraksha?", "Who is Aquib Shahbaz's wife?") is False
 
 
 def test_a_question_with_another_word_is_not_reported_as_similar():
-    score = language_logic._word_by_word_similarity("What is the opposite of in?", "What is the opposite of loud?")
+    score = language_logic._word_by_word_similarity(
+        "What is the opposite of in?", "What is the opposite of loud?"
+    )
 
     assert score == 0.0
 

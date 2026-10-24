@@ -79,6 +79,29 @@ def candidate_answers(question: str, db: Session, tenant_id: int | None) -> list
     return candidates[:MAX_CANDIDATES]
 
 
+def exact_candidate(question: str, candidates: list[dict[str, Any]]) -> dict[str, Any] | None:
+    """The approved answer taught with this exact question, if there is one."""
+    key = question.strip().casefold()
+    return next(
+        (
+            candidate
+            for candidate in candidates
+            if str(candidate.get("question") or "").strip().casefold() == key
+        ),
+        None,
+    )
+
+
+def trained_answer(
+    question: str, db: Session, tenant_id: int | None
+) -> tuple[str, str, str] | None:
+    """The exact approved answer, as the grade test reports it."""
+    exact = exact_candidate(question, candidate_answers(question, db, tenant_id))
+    if exact is None:
+        return None
+    return str(exact["answer"]), "faq", "Trainer-approved answer"
+
+
 def matching_intents(question: str, db: Session, tenant_id: int | None) -> list[dict[str, Any]]:
     """The saved intents that already cover this question."""
     statement = select(Intent)

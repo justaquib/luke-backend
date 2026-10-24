@@ -1,4 +1,5 @@
 {
+  "tenant_id": 0,
   "lessons": [
     {
       "text": "The color of the sky during the day is blue.",
@@ -54,253 +55,15 @@
     }
   ],
   "letters": "abcdefghijklmnopqrstuvwxyz",
-  "word_cards": [],
+  "word_cards": [
+    {
+      "word": "pineapple",
+      "meaning": "large sweet fleshy tropical fruit with a terminal tuft of stiff leaves; widely cultivated",
+      "grade_id": "ukg",
+      "created_at": "2026-10-24T11:35:10.645291+00:00"
+    }
+  ],
   "lesson_cards": [
-    {
-      "id": "74b1e6d8832f459ca2d262731fdeae21",
-      "question": "Poem: The Itsy Bitsy Spider",
-      "answer": "The itsy bitsy spider climbed up the water spout.\nDown came the rain and washed the spider out.\nOut came the sun and dried up all the rain,\nAnd the itsy bitsy spider climbed up the spout again.",
-      "grade_id": "lkg",
-      "subject": "Language, Poems",
-      "subjects": [
-        "Language",
-        "Poems"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:49:04.610102+00:00"
-    },
-    {
-      "id": "5b671229b8ef4b08ae9eb1b217b5a502",
-      "question": "Poem: Pat a Cake",
-      "answer": "Pat a cake, pat a cake, baker's man,\nBake me a cake as fast as you can.\nPat it and prick it and mark it with B,\nAnd put it in the oven for baby and me.",
-      "grade_id": "lkg",
-      "subject": "Language, Poems",
-      "subjects": [
-        "Language",
-        "Poems"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:49:04.610102+00:00"
-    },
-    {
-      "id": "fb22041872cd40849124c3da9e42a1e8",
-      "question": "Poem: Rain Rain Go Away",
-      "answer": "Rain, rain, go away,\nCome again another day.\nLittle children want to play,\nRain, rain, go away.",
-      "grade_id": "lkg",
-      "subject": "Language, Poems",
-      "subjects": [
-        "Language",
-        "Poems"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:49:04.610102+00:00"
-    },
-    {
-      "id": "ad10e6618b35472799ed1a2fe6b269da",
-      "question": "Poem: One Two Buckle My Shoe",
-      "answer": "One, two, buckle my shoe.\nThree, four, knock at the door.\nFive, six, pick up sticks.\nSeven, eight, lay them straight.",
-      "grade_id": "lkg",
-      "subject": "Language, Poems",
-      "subjects": [
-        "Language",
-        "Poems"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:49:04.610102+00:00"
-    },
-    {
-      "id": "36c6cb1f781f49c2b2e06a2bf0e28099",
-      "question": "Poem: Five Little Ducks",
-      "answer": "Five little ducks went out one day,\nOver the hills and far away.\nMother duck said quack, quack, quack, quack,\nBut only four little ducks came back.",
-      "grade_id": "lkg",
-      "subject": "Language, Poems",
-      "subjects": [
-        "Language",
-        "Poems"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T14:49:04.610102+00:00"
-    },
-    {
-      "id": "f7d9371e5bd549eaa3e25a20e58704bc",
-      "question": "Grammar: What is a news?",
-      "answer": "News is information about recent events.",
-      "grade_id": "lkg",
-      "subject": "English Grammar",
-      "subjects": [
-        "English Grammar"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T15:02:37.155645+00:00"
-    },
-    {
-      "id": "7eabcfe79fb34de3a5b2de9dec152503",
-      "question": "Story: The Fox and the Crow",
-      "answer": "A crow found a piece of cheese.\nThe crow sat in a tree to eat it.\nA fox saw the cheese and wanted it.\nThe fox said the crow sang beautifully.\nThe crow opened its mouth to sing.\nThe cheese fell down.\nThe fox ate the cheese.\nLesson: Do not trust flattery.",
-      "grade_id": "lkg",
-      "subject": "Language",
-      "subjects": [
-        "Language"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T15:07:13.491343+00:00"
-    },
-    {
-      "id": "86c910f9d6d34b98b152a8d0d71f7d78",
-      "question": "Story: The Dog and the Bone",
-      "answer": "A dog carried a bone in its mouth.\nThe dog saw its reflection in the water.\nIt thought another dog had a bigger bone.\nThe dog opened its mouth to grab it.\nIts own bone fell into the water.\nLesson: Do not be greedy for what others have.",
-      "grade_id": "lkg",
-      "subject": "Language",
-      "subjects": [
-        "Language"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T15:07:13.491343+00:00"
-    },
-    {
-      "id": "c9b04fd9d75f4053b53d90f826f21100",
-      "question": "Story: The Crow and the Pitcher",
-      "answer": "A crow was very thirsty.\nIt found a pitcher with a little water.\nThe water was too low to reach.\nThe crow dropped pebbles into the pitcher.\nThe water rose to the top.\nThe crow drank and flew away.\nLesson: Little by little, big problems are solved.",
-      "grade_id": "lkg",
-      "subject": "Language",
-      "subjects": [
-        "Language"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T15:07:13.491343+00:00"
-    },
-    {
-      "id": "b46f86b1e1bb40bdbaa7fd726f3be776",
-      "question": "Story: The Wolf and the Lamb",
-      "answer": "A wolf saw a lamb drinking from a stream.\nThe wolf wanted to eat the lamb.\nThe wolf said the lamb made the water dirty.\nThe lamb said it stood downstream.\nThe wolf did not listen.\nThe wolf ate the lamb.\nLesson: A cruel person finds any excuse to hurt.",
-      "grade_id": "lkg",
-      "subject": "Language",
-      "subjects": [
-        "Language"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T15:07:13.491343+00:00"
-    },
-    {
-      "id": "0884b5c1c3d149eba73a374b67959249",
-      "question": "Story: The Oak and the Reed",
-      "answer": "A big oak tree laughed at a thin reed.\nThe oak said it was strong and the reed was weak.\nA strong wind blew.\nThe oak stood firm and broke.\nThe reed bent with the wind and survived.\nLesson: It is better to bend than to break.",
-      "grade_id": "lkg",
-      "subject": "Language",
-      "subjects": [
-        "Language"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T15:07:13.491343+00:00"
-    },
-    {
-      "id": "3e9cab70f212401d9828405ff7df3f95",
-      "question": "Story: The Bundle of Sticks",
-      "answer": "A father gave his sons a bundle of sticks.\nHe asked them to break the bundle.\nEach son tried and failed.\nThe father untied the bundle.\nEach stick broke easily.\nLesson: Together we are strong.",
-      "grade_id": "lkg",
-      "subject": "Language",
-      "subjects": [
-        "Language"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T15:07:13.491343+00:00"
-    },
-    {
-      "id": "aa792a02c85d4b5c9c7f9e4cd04df160",
-      "question": "Story: The Milkmaid and Her Pail",
-      "answer": "A milkmaid carried a pail of milk on her head.\nShe dreamed of selling the milk.\nShe planned to buy eggs and chickens.\nShe dreamed of buying a new dress.\nShe tossed her head in joy.\nThe milk spilled on the ground.\nLesson: Do not count your chickens before they hatch.",
-      "grade_id": "lkg",
-      "subject": "Language",
-      "subjects": [
-        "Language"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T15:07:13.491343+00:00"
-    },
-    {
-      "id": "b1f6f9776dc14878a1e6813f3e8d488b",
-      "question": "Story: The Ant and the Dove",
-      "answer": "An ant fell into a stream.\nA dove saw the ant and dropped a leaf.\nThe ant climbed on the leaf and was saved.\nLater a hunter aimed at the dove.\nThe ant bit the hunter's foot.\nThe hunter missed the dove.\nLesson: One good turn deserves another.",
-      "grade_id": "lkg",
-      "subject": "Language",
-      "subjects": [
-        "Language"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T15:07:13.491343+00:00"
-    },
-    {
-      "id": "7b83f7348e8143f3bc2d33b30a0a9cf6",
-      "question": "Story: The Lion and the Boar",
-      "answer": "A lion and a boar fought over water.\nThey were both tired and thirsty.\nThe lion saw vultures waiting for them.\nThe lion said they should stop fighting.\nThe boar agreed.\nThey drank together in peace.\nLesson: It is wiser to make peace than to fight.",
-      "grade_id": "lkg",
-      "subject": "Language",
-      "subjects": [
-        "Language"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T15:07:13.491343+00:00"
-    },
-    {
-      "id": "38519bf7e8654c6b93c5addad8362286",
-      "question": "Story: The Two Pots",
-      "answer": "A clay pot and a brass pot floated in a river.\nThe brass pot asked the clay pot to stay close.\nThe clay pot said no.\nThe clay pot said it would break if they touched.\nThe brass pot floated away.\nLesson: Choose friends who are like you.",
-      "grade_id": "lkg",
-      "subject": "Language",
-      "subjects": [
-        "Language"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T15:07:13.491343+00:00"
-    },
-    {
-      "id": "3e2213bc660c401e82a086f825facd0c",
-      "question": "Story: The Fisherman and the Fish",
-      "answer": "A fisherman caught a small fish.\nThe fish begged to be set free.\nThe fish said it would grow big and be worth more.\nThe fisherman said a small fish today is better than a big fish tomorrow.\nThe fisherman kept the fish.\nLesson: A small gain today is better than a big hope tomorrow.",
-      "grade_id": "lkg",
-      "subject": "Language",
-      "subjects": [
-        "Language"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T15:07:39.040869+00:00"
-    },
-    {
-      "id": "131f33a1889f40f6bf63f33c2a0250ce",
-      "question": "Story: The Fox and the Goat",
-      "answer": "A fox fell into a well.\nA goat came to the well to drink.\nThe fox said the water was sweet.\nThe goat jumped in.\nThe fox climbed on the goat's back and jumped out.\nThe goat was left in the well.\nLesson: Look before you leap.",
-      "grade_id": "lkg",
-      "subject": "Language",
-      "subjects": [
-        "Language"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T15:07:39.040869+00:00"
-    },
-    {
-      "id": "529d5e4af47f43a1993d5b94325d27e8",
-      "question": "Story: The Town Mouse and the Country Mouse",
-      "answer": "A country mouse invited a town mouse to dinner.\nThe town mouse ate simple food.\nThe town mouse invited the country mouse to the town.\nThe country mouse ate rich food.\nA cat came and chased them.\nThe country mouse ran home.\nLesson: Simple peace is better than rich danger.",
-      "grade_id": "lkg",
-      "subject": "Language",
-      "subjects": [
-        "Language"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T15:07:39.040869+00:00"
-    },
-    {
-      "id": "b689a5a9b707482ab98f3a5e1b81fa1b",
-      "question": "Story: The Farmer and His Sons",
-      "answer": "A farmer was very old.\nHe called his sons to his side.\nHe told them there was treasure in the field.\nThe sons dug the field looking for treasure.\nThey found no treasure.\nBut the field was ready for planting.\nThe harvest was rich.\nLesson: Hard work is the real treasure.",
-      "grade_id": "lkg",
-      "subject": "Language",
-      "subjects": [
-        "Language"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T15:07:39.040869+00:00"
-    },
     {
       "id": "cec6caeb68cb4a14b4b11786bc644537",
       "question": "Story: The Sun and the Wind",
@@ -6398,23 +6161,251 @@
       ],
       "confidence": 0.5,
       "created_at": "2026-10-22T22:25:17.787931+00:00"
+    },
+    {
+      "id": "3166bc6cc452430f962d06b130bd39d9",
+      "question": "Story: The Clever Jackal and the Lion",
+      "answer": "A lion lived in a forest and hunted every day.\nThe animals were afraid of the lion.\nA clever jackal had a plan.\nThe jackal told the lion about a stronger lion in a well.\nThe lion looked into the well and saw his own reflection.\nThe lion jumped into the well to fight.\nThe lion got stuck in the water.\nThe animals were safe at last.\nLesson: Cleverness can defeat strength.",
+      "grade_id": "ukg",
+      "subject": "Language",
+      "subjects": [
+        "Language"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-23T14:52:47.836698+00:00"
+    },
+    {
+      "id": "f4f3df0d4a5b443b8c11593aa84b6514",
+      "question": "Story: The Honest Woodcutter",
+      "answer": "A woodcutter was cutting a tree near a river.\nHis axe fell into the water.\nThe woodcutter sat down and cried.\nA fairy appeared and asked what was wrong.\nThe fairy brought a golden axe from the river.\nThe woodcutter said it was not his axe.\nThe fairy brought a silver axe.\nThe woodcutter said it was not his axe either.\nThe fairy brought his old iron axe.\nThe woodcutter smiled and said yes.\nThe fairy gave him all three axes as a reward.\nLesson: Honesty is always rewarded.",
+      "grade_id": "ukg",
+      "subject": "Language",
+      "subjects": [
+        "Language"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-23T14:52:47.836698+00:00"
+    },
+    {
+      "id": "b1524396906b42a58e237dcc4c3cc543",
+      "question": "Story: The Boy and the Nails",
+      "answer": "A boy had a bad temper.\nHis father gave him a bag of nails.\nThe father told him to hammer a nail into the fence each time he lost his temper.\nOn the first day, the boy hammered 37 nails.\nOver the weeks, the number grew smaller.\nThe boy learned to control his anger.\nThe father told him to pull out one nail for each day he stayed calm.\nSoon all the nails were gone.\nThe father showed him the holes in the fence.\nThe fence could never be the same again.\nLesson: Words said in anger leave scars.",
+      "grade_id": "ukg",
+      "subject": "Language",
+      "subjects": [
+        "Language"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-23T14:52:47.836698+00:00"
+    },
+    {
+      "id": "afe2d7e0ad5d4932b3690ea8488c3bfb",
+      "question": "Story: The Crow and the Peacock",
+      "answer": "A crow lived in a forest and was happy.\nOne day the crow saw a peacock with beautiful feathers.\nThe crow felt sad about its black feathers.\nThe crow picked up fallen peacock feathers and stuck them on.\nThe crow walked proudly among the peacocks.\nThe peacocks saw the fake feathers and laughed.\nThey pulled off the fake feathers and chased the crow away.\nThe crow returned to its own family.\nThe other crows did not recognize him at first.\nThe crow learned to be happy as himself.\nLesson: Be happy with who you are.",
+      "grade_id": "ukg",
+      "subject": "Language",
+      "subjects": [
+        "Language"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-23T14:52:47.836698+00:00"
+    },
+    {
+      "id": "9c644bf08fb54293abe57b80dcf0337f",
+      "question": "Story: The Two Frogs in the Milk",
+      "answer": "Two frogs were hopping in a field.\nThey fell into a pot of milk.\nThe first frog said we cannot escape.\nThe first frog gave up and sank.\nThe second frog did not give up.\nThe second frog kicked and kicked.\nThe milk turned into butter under its feet.\nThe second frog jumped out and was safe.\nLesson: Never give up.",
+      "grade_id": "ukg",
+      "subject": "Language",
+      "subjects": [
+        "Language"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-23T14:52:47.836698+00:00"
+    },
+    {
+      "id": "6ddee1d915ad4f618d90f6c657795a59",
+      "question": "Story: The Farmer and the Snake",
+      "answer": "A farmer found a snake in the cold snow.\nThe snake was frozen and still.\nThe farmer felt sorry for the snake.\nThe farmer put the snake under his coat.\nThe snake warmed up and became alive.\nThe snake bit the farmer.\nThe farmer was very sad.\nLesson: A bad person does not change.",
+      "grade_id": "ukg",
+      "subject": "Language",
+      "subjects": [
+        "Language"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-23T14:52:47.836698+00:00"
+    },
+    {
+      "id": "85c1521a2c2b427d88dcf4e13320a680",
+      "question": "Story: The Fox and the Leopard",
+      "answer": "A leopard showed off its spots to a fox.\nThe leopard said its skin was the most beautiful.\nThe fox smiled and said nothing.\nThe leopard asked the fox why it was quiet.\nThe fox said my beauty is inside my mind.\nMy spots are in my cleverness, not my skin.\nLesson: Cleverness is better",
+      "grade_id": "ukg",
+      "subject": "Language",
+      "subjects": [
+        "Language"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-23T14:52:47.836698+00:00"
+    },
+    {
+      "id": "2acb08060edb422e82526db86ae49963",
+      "question": "Story: The Bundle of Sticks (Long)",
+      "answer": "An old father had four sons.\nThe sons fought with each other every day.\nThe father called them together.\nHe gave each son one stick and asked them to break it.\nEach son broke the stick easily.\nThe father tied four sticks into a bundle.\nHe asked each son to break the bundle.\nNo son could break it.\nThe father said you are strong when you are together.\nThe sons understood and stopped fighting.\nLesson: Unity gives strength.",
+      "grade_id": "ukg",
+      "subject": "Language",
+      "subjects": [
+        "Language"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-23T14:53:17.096786+00:00"
+    },
+    {
+      "id": "379312386dbf424997955a4e6b77ca4c",
+      "question": "Story: The Brahmin and the Goat",
+      "answer": "A Brahmin bought a goat to give as a gift.\nThree robbers saw the goat and wanted it.\nThe first robber said the goat was a dog.\nThe second robber said the goat was a dog.\nThe third robber said the goat was a dog.\nThe Brahmin began to doubt his own eyes.\nThe Brahmin left the goat and walked away.\nThe robbers took the goat.\nLesson: Do not believe a lie just because many say it.",
+      "grade_id": "ukg",
+      "subject": "Language",
+      "subjects": [
+        "Language"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-23T14:53:17.096786+00:00"
+    },
+    {
+      "id": "c352165956314a42be5d0e03bfe7f0ec",
+      "question": "Story: The King and the Spider",
+      "answer": "A king lost a battle and hid in a cave.\nHe felt sad and wanted to give up.\nHe saw a spider climbing up a wall.\nThe spider fell down.\nThe spider tried again and fell.\nThe spider tried six times and fell.\nOn the seventh try, the spider reached the top.\nThe king felt brave again.\nHe gathered his army and won the battle.\nLesson: Try, try again until you succeed.",
+      "grade_id": "ukg",
+      "subject": "Language",
+      "subjects": [
+        "Language"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-23T14:53:17.096786+00:00"
+    },
+    {
+      "id": "b4b5d266eb5045e189d4b670799e676b",
+      "question": "Story: The Dog and the Shadow",
+      "answer": "A dog carried a piece of meat in its mouth.\nThe dog crossed a bridge over a stream.\nThe dog looked down and saw its reflection.\nThe dog thought another dog had a bigger piece.\nThe dog opened its mouth to bark.\nIts own meat fell into the water.\nThe dog lost both pieces.\nLesson: Do not lose what you have for what you see.",
+      "grade_id": "ukg",
+      "subject": "Language",
+      "subjects": [
+        "Language"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-23T14:53:17.096786+00:00"
+    },
+    {
+      "id": "51a6a42ce0a34e9995cb7afd96a934c3",
+      "question": "Story: The Squirrel and the Fox",
+      "answer": "A squirrel lived in a big tree.\nA fox came every day and asked for nuts.\nThe squirrel shared its nuts.\nThe fox asked for more and more.\nThe squirrel gave all its nuts away.\nWinter came and the squirrel had no food.\nThe fox did not come back.\nThe squirrel learned a lesson.\nLesson: Do not give away everything you need.",
+      "grade_id": "ukg",
+      "subject": "Language",
+      "subjects": [
+        "Language"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-23T14:53:17.096786+00:00"
+    },
+    {
+      "id": "30b2926cab384e08989b5dd51c6e8644",
+      "question": "Story: The Two Goats on the Bridge",
+      "answer": "Two goats walked on a narrow bridge.\nThe bridge was over a river.\nThe goats met in the middle.\nThe bridge was too narrow for both.\nOne goat said move back.\nThe other goat said move back.\nThey began to push each other.\nBoth goats fell into the river.\nLesson: It is better to give way than to fight.",
+      "grade_id": "ukg",
+      "subject": "Language",
+      "subjects": [
+        "Language"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-23T14:53:17.096786+00:00"
+    },
+    {
+      "id": "4ea1a210617846ccb80350d9881518bf",
+      "question": "Story: The Golden Touch",
+      "answer": "A king loved gold more than anything.\nHe prayed for a golden touch.\nHis wish was granted.\nEverything he touched turned to gold.\nThe king was very happy at first.\nThen his food turned to gold.\nHis water turned to gold.\nHis daughter turned to gold when he hugged her.\nThe king began to cry.\nThe wish was taken back.\nLesson: Be careful what you wish for.",
+      "grade_id": "ukg",
+      "subject": "Language",
+      "subjects": [
+        "Language"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-23T14:53:40.381596+00:00"
+    },
+    {
+      "id": "0d3afbcf453f47ae850385c4695b5527",
+      "question": "Story: The Wolf in Sheep's Clothing",
+      "answer": "A wolf wanted to catch sheep.\nThe wolf found a sheep's skin.\nThe wolf wore the skin and walked into the flock.\nThe shepherd did not notice.\nThe wolf was ready to attack.\nThe shepherd took a sheep for dinner.\nThe shepherd chose the wolf by mistake.\nLesson: Looks can be deceiving.",
+      "grade_id": "ukg",
+      "subject": "Language",
+      "subjects": [
+        "Language"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-23T14:53:40.381596+00:00"
+    },
+    {
+      "id": "0b9dd7e7547a481e9293b0c25df70ff5",
+      "question": "Story: The Ant and the Pigeon",
+      "answer": "An ant was very thirsty.\nThe ant went to a stream to drink.\nThe ant fell into the water.\nA pigeon saw the ant.\nThe pigeon dropped a leaf into the stream.\nThe ant climbed on the leaf.\nThe ant reached the shore safely.\nLater, the ant saw a hunter.\nThe hunter aimed at the pigeon.\nThe ant bit the hunter's foot.\nThe hunter missed.\nThe pigeon flew away.\nLesson: One good turn deserves another.",
+      "grade_id": "ukg",
+      "subject": "Language",
+      "subjects": [
+        "Language"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-23T14:53:40.381596+00:00"
+    },
+    {
+      "id": "ba7ad0ed4afb4b509fd698387a609a29",
+      "question": "Story: The Magic Pot",
+      "answer": "A poor man found an old pot.\nThe pot said put something inside me.\nThe man put a coin in the pot.\nTwo coins appeared in the pot.\nThe man put more coins in the pot.\nMore coins appeared.\nThe man became rich.\nThe man became greedy.\nHe put a big bag of coins in the pot.\nThe pot broke into pieces.\nLesson: Greed destroys what it creates.",
+      "grade_id": "ukg",
+      "subject": "Language",
+      "subjects": [
+        "Language"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-23T14:53:40.381596+00:00"
+    },
+    {
+      "id": "2b8c68f543fc4e438de9536ba291ad85",
+      "question": "Story: The Clever Fox and the Farmer",
+      "answer": "A fox ate a farmer's chickens.\nThe farmer set a trap.\nThe fox was caught in the trap.\nThe fox said please let me go.\nThe farmer said no, you ate my chickens.\nThe fox said I will guard your chickens for one year.\nThe farmer agreed and set the fox free.\nThe fox guarded the chickens well.\nOne year later, the fox asked to be free.\nThe farmer said you kept your promise, go free.\nLesson: A promise kept is worth more than a quick win.",
+      "grade_id": "ukg",
+      "subject": "Language",
+      "subjects": [
+        "Language"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-23T14:53:40.381596+00:00"
+    },
+    {
+      "id": "256fa01fe8e84d19bf75cb4f9763f412",
+      "question": "Story: The Two Seeds",
+      "answer": "Two seeds lay in the soil.\nThe first seed said I want to grow.\nThe first seed pushed through the soil.\nIt became a small plant.\nThe second seed said I am afraid.\nThe second seed stayed in the soil.\nA hen came looking for food.\nThe hen ate the second seed.\nThe first seed grew into a big tree.\nLesson: Be brave and grow.",
+      "grade_id": "ukg",
+      "subject": "Language",
+      "subjects": [
+        "Language"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-23T14:53:40.381596+00:00"
     }
   ],
   "passed_stages": [
     "letters",
-    "nursery"
+    "nursery",
+    "lkg"
   ],
   "active_test": {
-    "stage": "lkg",
+    "stage": "ukg",
     "kind": "mock",
-    "questions_asked": 6,
-    "answers_passed": 2,
-    "needs_learning": 3,
-    "awaiting_score": true,
-    "last_question": "write a poem on rain",
-    "last_answer": "I haven't learned an answer to that grade's lessons yet.",
-    "last_source": "not_learned",
-    "last_source_detail": ""
+    "questions_asked": 0,
+    "answers_passed": 0,
+    "needs_learning": 0,
+    "awaiting_score": false,
+    "last_question": "",
+    "last_answer": "",
+    "last_source": ""
   },
   "test_history": [
     {
@@ -6462,6 +6453,26 @@
       "pass_rate": 0.5,
       "passed": false,
       "created_at": "2026-10-22T22:07:44.812415+00:00"
+    },
+    {
+      "stage": "lkg",
+      "kind": "mock",
+      "questions_asked": 6,
+      "answers_passed": 2,
+      "needs_learning": 4,
+      "pass_rate": 0.33,
+      "passed": false,
+      "created_at": "2026-10-23T14:48:41.769967+00:00"
+    },
+    {
+      "stage": "lkg",
+      "kind": "exam",
+      "questions_asked": 1,
+      "answers_passed": 1,
+      "needs_learning": 0,
+      "pass_rate": 1.0,
+      "passed": true,
+      "created_at": "2026-10-23T14:49:16.766607+00:00"
     }
   ],
   "accepted_duplicates": [

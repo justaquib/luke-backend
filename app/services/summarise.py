@@ -9,7 +9,6 @@ from __future__ import annotations
 
 import re
 
-
 _ELABORATION_HINTS = re.compile(
     r"\b(explain|elaborate|more\s+detail|in\s+detail|tell\s+me\s+more|go\s+deeper|"
     r"expand|longer\s+answer|full\s+answer|walk\s+me\s+through|why\s+(?:is|are|do|does|did)|"
@@ -18,10 +17,54 @@ _ELABORATION_HINTS = re.compile(
 )
 
 _QUESTION_WORDS = {
-    "what", "who", "where", "when", "which", "why", "how", "is", "are", "was", "were", "do",
-    "does", "did", "the", "a", "an", "of", "for", "in", "on", "at", "to", "with", "and", "or",
-    "please", "tell", "me", "it", "its", "this", "that", "these", "those", "can", "could", "would",
-    "should", "will", "color", "colour", "mean", "means", "called", "known", "there", "here",
+    "what",
+    "who",
+    "where",
+    "when",
+    "which",
+    "why",
+    "how",
+    "is",
+    "are",
+    "was",
+    "were",
+    "do",
+    "does",
+    "did",
+    "the",
+    "a",
+    "an",
+    "of",
+    "for",
+    "in",
+    "on",
+    "at",
+    "to",
+    "with",
+    "and",
+    "or",
+    "please",
+    "tell",
+    "me",
+    "it",
+    "its",
+    "this",
+    "that",
+    "these",
+    "those",
+    "can",
+    "could",
+    "would",
+    "should",
+    "will",
+    "color",
+    "colour",
+    "mean",
+    "means",
+    "called",
+    "known",
+    "there",
+    "here",
 }
 
 
@@ -37,7 +80,8 @@ def _sentences(text: str) -> list[str]:
 
 def _terms(question: str) -> set[str]:
     return {
-        word for word in re.findall(r"[a-z]+", (question or "").lower())
+        word
+        for word in re.findall(r"[a-z]+", (question or "").lower())
         if len(word) > 2 and word not in _QUESTION_WORDS
     }
 
@@ -60,11 +104,8 @@ def shorten(text: str, question: str, limit: int = 180) -> str:
         scored.append((score, index, sentence))
 
     scored.sort(key=lambda item: (-item[0], item[1]))
-    if not scored or scored[0][0] <= 0:
-        # Nothing matched the question, so use the opening of the source.
-        best = _sentences(cleaned)[0]
-    else:
-        best = scored[0][2]
+    # Nothing matched the question, so the opening of the source is used.
+    best = _sentences(cleaned)[0] if not scored or scored[0][0] <= 0 else scored[0][2]
 
     picked = [best]
     if len(best) < 110:
@@ -75,7 +116,10 @@ def shorten(text: str, question: str, limit: int = 180) -> str:
             break
 
     # Keep the sentences in the order they appear in the source.
-    ordered = sorted(_sentences(cleaned), key=lambda sentence: picked.index(sentence) if sentence in picked else 99)
+    ordered = sorted(
+        _sentences(cleaned),
+        key=lambda sentence: picked.index(sentence) if sentence in picked else 99,
+    )
     summary = " ".join(ordered).strip()
     if len(summary) > limit:
         summary = summary[:limit].rsplit(" ", 1)[0] + "…"

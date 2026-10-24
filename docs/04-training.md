@@ -1,6 +1,6 @@
 # Training Guide — FAQ Learning Flow
 
-The assistant can be trained in three ways, all from the **Trainer** page (`/trainer` in Angular) or via the REST API.
+The assistant can be trained through the **Training room** page (`/dashboard/trainer` in Angular), the brain page (`/dashboard/brain`), or the REST API.
 
 ## Flow overview
 
@@ -18,11 +18,21 @@ user asks question
         │           → return that FAQ's answer (source: "intent")
         │        └─ otherwise
         ▼
-  3. search "docs" Chroma collection
+  3. answer from the taught material (conversation, lessons, learner facts)
+        │        └─ a greeting, the model's name, thanks or a goodbye
+        │           → return the conversation answer (source: "assistant_profile")
+        │        └─ otherwise the learner's own answer (source: its lesson kind)
+        │        └─ otherwise
+        ▼
+  4. live sources: weather, then Wikipedia (when enabled for the tenant)
+        │        └─ if an enabled source answers → return it
+        │        └─ otherwise
+        ▼
+  5. search the "docs" Chroma collection
         │        └─ if hits → return top chunk
         │        └─ otherwise
         ▼
-  4. log to pending_questions, return "A trainer has been notified"
+  6. log to pending_questions, return "A trainer has been notified"
 ```
 
 **Auto-intent** lets the AI match paraphrased questions (e.g. "what's the leave policy?" → "How many vacation days do employees get?") to an existing FAQ without retraining. The matched canonical question and distance are surfaced in `QueryResponse.intent` and the chat UI shows them as an `Intent match` source tag.
@@ -40,7 +50,7 @@ The implementation is staged:
 The most common loop:
 
 1. Users ask questions. Some have no trained answer and land in `pending_questions`.
-2. Open `/trainer` in the frontend.
+2. Open `/dashboard/trainer` in the frontend.
 3. The **Inbox** tab shows every unresolved question, sorted by how often it was asked.
 4. Type the correct answer next to each one and click **Save & train**.
 5. The Q↔A is moved into the `faqs` table, the same question is upserted into the `faq` Chroma collection, and the next time anyone asks it, the trained answer is returned.
@@ -99,6 +109,7 @@ everything the tenant has given, not only from the lessons in the learner:
 | Source | What it is |
 | --- | --- |
 | Lessons | The question and the answer of every lesson, and the starter lessons of the grades the tenant reached. |
+| Conversations | The greetings, the model's name, thanks, goodbyes and small talk; the pairs are built from the name saved in Settings, and the chat answers from the same pairs directly. |
 | Approved answers | The questions and the answers that were approved in the Trainer. |
 | Corrections | The answers the trainer corrected. |
 | Documents | The chunks of every uploaded document. |
@@ -111,11 +122,22 @@ worded for. The questions of the approved answers are learned that way too,
 so the trainer's own answers are written in the model's words and not only
 looked up.
 
-Training takes about a minute and runs in its own process, so the app stays
-usable while the brain learns. The brain page asks the brain again until the
-training is done, and the small info button beside **Train the brain** opens
-a panel that says what the brain has trained from and what the training does
-with it.
+The model's name and starting version are set once, under **Model identity** in
+`/dashboard/settings` (`GET`/`PUT /language-model/settings`). The name is not
+only a label: it is used in the conversation pairs, so renaming the model
+changes how it greets and introduces itself, and the next training learns the
+new name. The starting version is the floor of the level ladder the brain page
+shows.
+
+Training runs in its own process, so the app stays usable while the brain
+learns. How long it takes is measured, not fixed. The answer model makes one
+annealed pass over the examples, capped at 20,000 steps and a wall-clock
+budget; the word model keeps its eight passes. The run is read on its held-out
+set, not on a single batch, and stops at the end of its pass or when the
+held-out read stops improving. The brain page asks again until the
+training is done and shows the checklist, the steps and the time left; the
+small info button beside **Train** opens a panel that says what the brain has
+trained from and what the training does with it.
 
 ```bash
 # start the training

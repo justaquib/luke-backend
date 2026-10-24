@@ -71,7 +71,7 @@ def test_the_confidence_never_passes_the_maximum(monkeypatch, tmp_path):
 
 def test_a_confirmed_lesson_answer_is_not_copied_to_the_trained_answers(monkeypatch, tmp_path, db):
     _use_temp_state(monkeypatch, tmp_path)
-    monkeypatch.setattr(api.vector_store, "upsert_faq", lambda *args, **kwargs: None)
+    monkeypatch.setattr(query_service.vector_store, "upsert_faq", lambda *args, **kwargs: None)
     language_logic.teach(
         None,
         "Q: What is a kite?\nA: A kite is a light frame with a tail.",
@@ -94,7 +94,7 @@ def test_a_confirmed_lesson_answer_is_not_copied_to_the_trained_answers(monkeypa
 
 def test_a_confirmed_new_answer_becomes_a_trained_answer(monkeypatch, tmp_path, db):
     _use_temp_state(monkeypatch, tmp_path)
-    monkeypatch.setattr(api.vector_store, "upsert_faq", lambda *args, **kwargs: None)
+    monkeypatch.setattr(query_service.vector_store, "upsert_faq", lambda *args, **kwargs: None)
 
     result = query_service.confirm_existing_answer(
         None,
@@ -111,7 +111,7 @@ def test_a_confirmed_new_answer_becomes_a_trained_answer(monkeypatch, tmp_path, 
 
 def test_a_confirmed_trained_answer_becomes_more_trusted_without_a_copy(monkeypatch, tmp_path, db):
     _use_temp_state(monkeypatch, tmp_path)
-    monkeypatch.setattr(api.vector_store, "upsert_faq", lambda *args, **kwargs: None)
+    monkeypatch.setattr(query_service.vector_store, "upsert_faq", lambda *args, **kwargs: None)
     db.add(
         Faq(
             question="What is a kite?",
