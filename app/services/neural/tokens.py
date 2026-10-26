@@ -1,9 +1,8 @@
-"""The words the neural models read, and the marks that separate the parts.
+"""The words the neural models read, and the marks that hold a text's shape.
 
-A training example has three parts: the request, the material it may use, and
-the answer. The marks tell the model where each part starts, so the loss can
-be taken over the answer alone and the model learns to answer a request
-instead of continuing a text.
+A sentence is scored from its first word to its last, so the marks only say
+where it starts, where it ends, what an unknown word is, and where a line
+break falls.
 """
 
 from __future__ import annotations
@@ -21,12 +20,6 @@ FINISH = "<end>"
 UNKNOWN = "<unk>"
 # The mark used to line the sentences up in a batch. It is never a word.
 PAD = "<pad>"
-# The mark that opens a request.
-INSTRUCTION = "<instr>"
-# The mark that opens the material the answer is written from.
-CONTEXT = "<ctx>"
-# The mark that opens the answer.
-RESPONSE = "<resp>"
 # The mark that stands for a line break inside a poem.
 LINE_BREAK = "<br>"
 
@@ -35,9 +28,6 @@ SPECIAL_TOKENS = (
     FINISH,
     UNKNOWN,
     PAD,
-    INSTRUCTION,
-    CONTEXT,
-    RESPONSE,
     LINE_BREAK,
 )
 

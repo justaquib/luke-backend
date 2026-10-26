@@ -17,9 +17,8 @@ from app.config import settings
 from app.core.files import folder_size
 from app.core.security import get_bearer_user, tenant_id_of
 from app.db.database import Faq, PendingQuestion, User, get_session
-from app.schemas import AnswerTraceBody, CorrectionBody, ModelSettingsBody
+from app.schemas import CorrectionBody, ModelSettingsBody
 from app.services import brain as brain_service
-from app.services import brain_trace as trace_service
 from app.services import documents as documents_service
 from app.services import model_settings
 from app.services import storage as storage_service
@@ -64,10 +63,10 @@ def language_model_store(
             "level": brain.get("model_level", {}).get("level", "0.0.0"),
             "title": brain.get("model_level", {}).get("title", ""),
             "vocabulary": int(brain.get("vocabulary", 0)),
-            "parameters": int((brain.get("transformer") or {}).get("parameters", 0)),
-            "trained": bool(brain.get("transformer_ready")),
-            "steps": int((brain.get("transformer") or {}).get("steps", 0)),
-            "loss": (brain.get("transformer") or {}).get("loss"),
+            "parameters": int(model_report["model"]["words"]["parameters"]),
+            "trained": bool(model_report["model"]["words"]["trained"]),
+            "steps": int(model_report["model"]["words"]["steps"]),
+            "loss": model_report["model"]["words"]["loss"],
             "corpus_sentences": int(model_report["model"]["corpus"]["sentences"]),
             "corpus_tokens": int(model_report["model"]["corpus"]["tokens"]),
         },
@@ -100,36 +99,12 @@ def save_language_model_settings(
 
 
 @router.get("/brain")
-def language_model_brain(user: User = Depends(get_bearer_user)) -> dict[str, Any]:
+def language_model_brain(
+    force: bool = False,
+    user: User = Depends(get_bearer_user),
+) -> dict[str, Any]:
     """What the brain knows about itself, and the level it has reached."""
-    return reporting.brain_state(tenant_id_of(user))
-
-
-@router.post("/trace")
-def trace_language_model_answer(
-    body: AnswerTraceBody,
-    user: User = Depends(get_bearer_user),
-) -> dict[str, Any]:
-    """Trace the writer reading one question, with its real attention and choices."""
-    return trace_service.answer_trace(tenant_id_of(user), body.question)
-
-
-@router.post("/brain/test")
-def test_language_model_level(
-    user: User = Depends(get_bearer_user),
-) -> dict[str, Any]:
-    """Run the level tests again and report how the model did on each rung."""
-    tenant_id = tenant_id_of(user)
-    instruction = brain_service.remeasure_instruction(tenant_id)
-    rungs = brain_service.rung_results(tenant_id, force=True)
-    passed = sum(1 for rung in rungs if float(rung.get("rate", 0)) >= 0.6)
-    return {
-        "state": reporting.brain_state(tenant_id, force=True),
-        "rungs": rungs,
-        "instruction": instruction,
-        "passed": passed,
-        "total": len(rungs),
-    }
+    return reporting.brain_state(tenant_id_of(user), force=force)
 
 
 @router.post("/brain/level/approve")
@@ -166,7 +141,6 @@ def train_language_model_brain(
     process.start()
     return {
         "state": reporting.brain_state(tenant_id),
-        "sentence": None,
         "training": True,
     }
 
@@ -178,8 +152,8 @@ def language_model_brain_sources(
 ) -> dict[str, Any]:
     """What the brain has trained from, and how the training works."""
     tenant_id = tenant_id_of(user)
-    writer = brain_service.writer_state(tenant_id)
-    return training_report_service.tenant_report(tenant_id, db, writer)
+    words = brain_service.word_state(tenant_id)
+    return training_report_service.tenant_report(tenant_id, db, words)
 
 
 @router.post("/brain/correction")

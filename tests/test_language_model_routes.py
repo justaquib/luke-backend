@@ -34,16 +34,6 @@ def test_the_brain_reads_its_numbers_with_the_level_it_reached(client: TestClien
     assert "generality_probes" in brain["model_level"]
 
 
-def test_the_level_test_runs_the_rungs_again(client: TestClient):
-    response = client.post("/language-model/brain/test")
-
-    assert response.status_code == 200
-    result = response.json()
-    assert result["total"] == len(result["rungs"])
-    assert result["passed"] <= result["total"]
-    assert "model_level" in result["state"], "the level is measured again with the rungs"
-
-
 def test_a_duplicate_lesson_is_kept_and_reported(client: TestClient):
     lesson = "Q: What is a kite?\nA: A kite is a light frame with a tail."
 
@@ -104,7 +94,7 @@ def test_training_the_brain_starts_it_and_says_so(client: TestClient, monkeypatc
 
     def fake_train(tenant_id, materials, config=None, steps=3000):
         started.append(materials)
-        return {"writer": {"trained": True}}
+        return {"words": {"trained": True}}
 
     class _FakeProcess:
         def __init__(self, target, args, daemon) -> None:
@@ -127,23 +117,6 @@ def test_training_the_brain_starts_it_and_says_so(client: TestClient, monkeypatc
     assert response.status_code == 200
     assert response.json()["training"] is True
     assert started, "the training was started"
-
-
-def test_a_question_is_traced_and_an_untrained_writer_is_named(client: TestClient, monkeypatch):
-    monkeypatch.setattr("app.services.brain_trace.brain.load_writer", lambda tenant_id: None)
-
-    response = client.post("/language-model/trace", json={"question": "who is your creator?"})
-
-    assert response.status_code == 200
-    trace = response.json()
-    assert trace["trained"] is False
-    assert trace["reason"]
-
-
-def test_a_trace_needs_a_question(client: TestClient):
-    response = client.post("/language-model/trace", json={"question": ""})
-
-    assert response.status_code == 422
 
 
 def test_the_store_reports_the_files_the_numbers_and_the_size(client: TestClient):
@@ -240,7 +213,7 @@ def test_a_request_for_a_poem_is_answered_from_the_taught_poem(client: TestClien
     assert preview.status_code == 200
     answer = preview.json()
     assert "rain" in answer["answer"].lower()
-    assert answer["source"] in {"taught", "written"}
+    assert answer["source"] == "taught"
 
 
 def test_a_request_about_something_never_taught_is_not_answered(client: TestClient):

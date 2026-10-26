@@ -62,17 +62,14 @@ def group_split(
     return train, held
 
 
-def _trim(example: Example, context: int) -> tuple[list[int], int] | None:
-    """An example that fits the context, keeping the part that is scored."""
+def _trim(example: Example, context: int) -> list[int] | None:
+    """An example that fits the context, keeping the words that are scored."""
     sequence = example.sequence
-    start = example.answer_start
     if len(sequence) > context:
-        cut = len(sequence) - context
-        sequence = sequence[cut:]
-        start = max(start - cut, 0)
-    if start >= len(sequence) or len(sequence) < 2:
+        sequence = sequence[-context:]
+    if len(sequence) < 2:
         return None
-    return sequence, start
+    return sequence
 
 
 def build_batch(rows: list[Example], pad_id: int, context: int) -> Batch | None:
@@ -80,12 +77,12 @@ def build_batch(rows: list[Example], pad_id: int, context: int) -> Batch | None:
     trimmed = [row for example in rows if (row := _trim(example, context)) is not None]
     if not trimmed:
         return None
-    width = max(len(sequence) for sequence, _ in trimmed)
+    width = max(len(sequence) for sequence in trimmed)
     inputs = torch.full((len(trimmed), width), pad_id, dtype=torch.long)
     scored = torch.zeros((len(trimmed), width), dtype=torch.bool)
-    for index, (sequence, start) in enumerate(trimmed):
+    for index, sequence in enumerate(trimmed):
         inputs[index, : len(sequence)] = torch.tensor(sequence, dtype=torch.long)
-        scored[index, max(start - 1, 0) : len(sequence)] = True
+        scored[index, : len(sequence)] = True
     return Batch(inputs, scored)
 
 

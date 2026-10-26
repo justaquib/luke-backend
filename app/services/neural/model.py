@@ -7,15 +7,7 @@ from typing import Any
 import torch
 from torch import nn
 
-MODEL_CONFIG: dict[str, Any] = {
-    "d_model": 192,
-    "layers": 4,
-    "heads": 8,
-    "context": 256,
-    "dropout": 0.1,
-}
-
-# The word model is smaller: it reads a few words of prefix, not a request.
+# The word model reads a few words of prefix and predicts the next one.
 WORD_MODEL_CONFIG: dict[str, Any] = {
     "d_model": 128,
     "layers": 2,
@@ -76,7 +68,7 @@ class TinyTransformer(nn.Module):
 
     def __init__(self, vocabulary_size: int, config: dict[str, Any] | None = None) -> None:
         super().__init__()
-        settings = {**MODEL_CONFIG, **(config or {})}
+        settings = {**WORD_MODEL_CONFIG, **(config or {})}
         self.config = settings
         d_model = int(settings["d_model"])
         self.vocabulary_size = vocabulary_size

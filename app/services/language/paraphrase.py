@@ -102,29 +102,12 @@ def _fix_article(sentence: str) -> str:
     return _add_missing_articles(sentence)
 
 
-def _wording_score(
-    tenant_id: int | None,
-    model: Any,
-    sentence: str,
-    allow_writer: bool = True,
-) -> float:
-    """How well the model knows a wording.
+def _wording_score(model: Any, sentence: str) -> float:
+    """How well the word model knows a wording.
 
-    The writer is left out while the training corpus is built: a corpus that
-    depends on the model being trained cannot be compared across runs. With
-    neither a writer nor a word model, every wording scores the same and the
+    Without a trained word model every wording scores the same and the
     shortest one is chosen.
     """
-    writer = None
-    if allow_writer:
-        try:
-            from app.services import brain
-
-            writer = brain.load_writer(tenant_id)
-        except (OSError, RuntimeError, ValueError):
-            writer = None
-    if writer is not None:
-        return writer.score(sentence)
     if model is not None:
         return model.score_words(sentence.rstrip(".").split())
     return 0.0
@@ -134,7 +117,6 @@ def paraphrase_answer(
     tenant_id: int | None,
     answer: str,
     subject: str | None = None,
-    allow_writer: bool = True,
 ) -> str | None:
     """Write the answer in the model's own words, from what it has learned."""
     answer = (answer or "").strip()
@@ -151,7 +133,7 @@ def paraphrase_answer(
     scored: list[tuple[float, str]] = []
     for fact in facts:
         sentence = _fix_article(f"{subject} {fact}.")
-        scored.append((_wording_score(tenant_id, model, sentence, allow_writer), sentence))
+        scored.append((_wording_score(model, sentence), sentence))
     scored.sort(key=lambda item: -item[0])
     original_words = {_stem(word) for word in _content_terms(answer, _QUESTION_STOP_WORDS)}
     for _, sentence in scored:

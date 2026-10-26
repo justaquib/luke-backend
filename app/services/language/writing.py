@@ -166,7 +166,7 @@ def _best_matching_sentence(
     best = max(
         matches,
         key=lambda sentence: (
-            _wording_score(tenant_id, model, sentence),
+            _wording_score(model, sentence),
             -len(sentence.split()),
         ),
     )
@@ -273,6 +273,28 @@ def answer_sentence_request(question: str, tenant_id: int | None) -> str | None:
         f"I haven't learned a sentence pattern for “{requested}” yet. Add a few example "
         "sentences with that word in Trainer → Language learner, then ask me again."
     )
+
+
+def write_pattern_answer(question: str, state: dict, stage: str) -> tuple[str, str] | None:
+    """The next word or sentence the word model writes, with its connection detail."""
+    next_match = _NEXT_WORD_REQUEST.search(question.strip())
+    if next_match:
+        prefix = (next_match.group(1) or next_match.group(2) or "").strip(" \t\r\n'\".,?!")
+        options = runtime._model(state, stage).predict_next(prefix)
+        if options:
+            return (
+                f"From my sentence lessons, after “{prefix}” I predict “{options[0]['word']}”.",
+                "The word model predicts the next word from the learner's sentences.",
+            )
+    sentence_match = _SENTENCE_REQUEST.search(question.strip())
+    if sentence_match:
+        requested = re.sub(r"[^A-Za-z'’-].*$", "", sentence_match.group(1)).strip(" '’-")
+        answer = (
+            runtime._model(state, stage).generate_sentence(seed=requested) if requested else None
+        )
+        if answer:
+            return answer, "The word model wrote this from the learner's sentences."
+    return None
 
 
 def answer_next_word_request(question: str, tenant_id: int | None) -> str | None:

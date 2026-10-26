@@ -9,8 +9,7 @@ from app.services.neural.settings import TrainingSettings
 
 def _examples(groups: int, per_group: int) -> list[Example]:
     return [
-        Example([1, 2, 3, index], 1, f"group-{index % groups}")
-        for index in range(groups * per_group)
+        Example([1, 2, 3, index], f"group-{index % groups}") for index in range(groups * per_group)
     ]
 
 

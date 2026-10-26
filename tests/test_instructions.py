@@ -6,10 +6,6 @@ from the material the trainer did teach.
 """
 
 from app.services.language import (
-    corpus as corpus_service,
-)
-from app.services.language import (
-    evaluation,
     instructions,
     preview,
     requests,
@@ -283,67 +279,3 @@ def test_a_topic_shared_by_many_lessons_is_not_offered():
 
 def test_the_words_of_a_text_keep_their_meaning():
     assert topics.topic_words("The rain is wet") == ["rain", "wet"]
-
-
-# -- the measurement of the model ----------------------------------------
-
-
-def test_a_model_that_was_never_trained_scores_nothing():
-    result = evaluation.evaluate(None, [POEM_CARD], None)
-
-    assert result["score"] == 0.0
-    assert result["total"] == 0
-
-
-def test_a_model_that_answers_everything_scores_full_marks():
-    class PerfectWriter:
-        def respond(self, instruction, context="", max_words=64, reading=None):
-            return POEM_CARD["answer"]
-
-    result = evaluation.evaluate(None, [POEM_CARD], PerfectWriter())
-
-    assert result["total"] > 0
-    assert result["score"] == 1.0
-
-
-def test_a_model_that_says_nothing_falls_back_to_the_taught_answer():
-    class QuietWriter:
-        def respond(self, instruction, context="", max_words=64, reading=None):
-            return ""
-
-    result = evaluation.evaluate(None, [POEM_CARD], QuietWriter())
-
-    # The model wrote nothing, so the taught answer is given instead. The
-    # answer is still right, so the request is answered.
-    assert result["score"] == 1.0
-    assert all(probe["answered"] == POEM_CARD["answer"] for probe in result["probes"])
-
-
-def test_a_model_that_writes_something_else_is_not_grounded():
-    class WrongWriter:
-        def respond(self, instruction, context="", max_words=64, reading=None):
-            return "Purple elephants fly sideways at noon."
-
-    result = evaluation.evaluate(None, [POEM_CARD], WrongWriter())
-
-    # The words are not the trainer's, so the taught answer is used instead.
-    assert all(probe["answered"] == POEM_CARD["answer"] for probe in result["probes"])
-
-
-# -- the training data ---------------------------------------------------
-
-
-def test_the_training_data_holds_a_request_for_every_lesson():
-    pairs = corpus_service.instruction_pairs(None)
-
-    assert pairs
-    assert all(instruction and response for instruction, response in pairs)
-
-
-def test_the_grounded_training_data_holds_the_material_too():
-    pairs = corpus_service.grounded_pairs(None)
-
-    assert pairs
-    for instruction, context, response in pairs:
-        assert instruction and context and response
-        assert response in context

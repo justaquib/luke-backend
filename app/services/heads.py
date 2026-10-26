@@ -2,8 +2,8 @@
 
 The heads are the small learned parts of the brain: the feeling in a message,
 the kind of question that was asked, whether the answer is likely to be right.
-They all run on PyTorch, the same library the writer uses, so the app needs
-one library for its models and not two.
+They all run on PyTorch, the same library the word model uses, so the app
+needs one library for its models and not two.
 """
 
 from __future__ import annotations

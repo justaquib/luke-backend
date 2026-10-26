@@ -27,13 +27,25 @@
   Nothing invented, simulated, or placeholder — see `../CODE_STANDARDS.md`
   ("Honest measurements", strict rule).
 - Any change that could move how well the model knows its lessons (training
-  loop, writer, heads, request or correction path) is re-measured per
+  loop, word model, heads, request or correction path) is re-measured per
   `docs/07-model-measurements.md` and gets a row there in the same change.
+
+## The neural engine
+
+- The only served model is the word model (`app/services/neural/words.py`):
+  next-word prediction over the tenant's sentences, used by the learner's
+  sentence feature. It has no part in writing a chat answer.
+- The chat answers from the trainer's material: a taught lesson, an approved
+  answer, a document, a dictionary entry or a conversation pair. Do not add a
+  model that writes an answer over the taught text.
+- The checkpoint is written in its own process and reloaded when the file
+  changes. The boundary catch in `brain_training` logs the failure and records
+  the stop reason, so a failed run is reported rather than swallowed.
 
 ## Dependencies and System Overview
 
 When a package or runtime dependency changes, update the System Overview
-package list in `assistance_front/src/app/tenants/tenants.component.ts` in the
-same change. Include the package name and a plain-language description.
+package list in `assistance_front/src/app/tenants/system-overview.data.ts` in
+the same change. Include the package name and a plain-language description.
 
 Development-only tools such as Ruff must be listed too.

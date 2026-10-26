@@ -1,0 +1,1 @@
+{"model_id": "HuggingFaceTB/SmolLM2-135M", "started": 1792916199.352631, "finished": 1792917508.576282, "stages": {"download": "done", "tune": "done", "teach": "done", "luke": "done"}, "steps_done": 200, "steps_total": 200, "eta_seconds": null, "error": null, "loss": 0.75, "seconds": 1309.2}

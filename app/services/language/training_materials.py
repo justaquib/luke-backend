@@ -76,7 +76,6 @@ class TrainingSet:
 
     sentences: list[str] = field(default_factory=list)
     instructions: list[tuple[str, str]] = field(default_factory=list)
-    contexts: list[tuple[str, str, str]] = field(default_factory=list)
     materials: list[Material] = field(default_factory=list)
 
 
@@ -143,7 +142,6 @@ def training_set(
     sentences: list[str] = []
     spoken: list[str] = []
     instructions: list[tuple[str, str]] = []
-    contexts: list[tuple[str, str, str]] = []
     for material in materials:
         answer = material.answer.strip()
         if not answer:
@@ -155,14 +153,12 @@ def training_set(
             sentences.append(answer)
         for instruction, response in _instructions_for(material, index):
             instructions.append((instruction, response))
-            contexts.append((instruction, f"{material.question}. {answer}", response))
     sentences.extend(_repaired(spoken))
     sentences.extend(_paraphrased(tenant_id, spoken))
     instructions.extend(build_negatives(cards))
     return TrainingSet(
         sentences=_unique(sentences)[:MAX_SENTENCES],
         instructions=instructions,
-        contexts=contexts,
         materials=list(materials),
     )
 
@@ -180,7 +176,7 @@ def _paraphrased(tenant_id: int | None, answers: Sequence[str]) -> list[str]:
 
     variants: list[str] = []
     for answer in answers[:MAX_PARAPHRASES]:
-        variant = paraphrase_answer(tenant_id, answer, allow_writer=False)
+        variant = paraphrase_answer(tenant_id, answer)
         if variant and is_a_good_rewrite(answer, variant):
             variants.append(variant)
     return variants

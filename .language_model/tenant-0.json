@@ -65,174 +65,6 @@
   ],
   "lesson_cards": [
     {
-      "id": "cec6caeb68cb4a14b4b11786bc644537",
-      "question": "Story: The Sun and the Wind",
-      "answer": "The sun and the wind argued about who was stronger.\nThey saw a man walking in a coat.\nThe wind tried to blow the coat off.\nThe wind blew harder but the man held on.\nThe sun shone warmly.\nThe man took off his coat.\nLesson: Gentleness can be stronger than force.",
-      "grade_id": "lkg",
-      "subject": "Language",
-      "subjects": [
-        "Language"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T15:07:39.040869+00:00"
-    },
-    {
-      "id": "15c12af5b063442da69437efde7eebe7",
-      "question": "Story: The Fox and the Stork",
-      "answer": "A fox invited a stork to dinner.\nThe fox served soup in a flat dish.\nThe stork could not eat with its long beak.\nThe stork invited the fox to dinner.\nThe stork served soup in a tall jar.\nThe fox could not eat with its short mouth.\nLesson: Treat others as you want to be treated.",
-      "grade_id": "lkg",
-      "subject": "Language",
-      "subjects": [
-        "Language"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T15:07:39.040869+00:00"
-    },
-    {
-      "id": "6f9a866d68264030b1db8d1bcf43919a",
-      "question": "Story: The Mouse and the Lion",
-      "answer": "A mouse ran across a sleeping lion.\nThe lion woke and caught the mouse.\nThe mouse begged to be set free.\nThe lion laughed and let it go.\nLater the lion was caught in a net.\nThe mouse chewed the net and set the lion free.\nLesson: Even the smallest friend can help.",
-      "grade_id": "lkg",
-      "subject": "Language",
-      "subjects": [
-        "Language"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T15:07:39.040869+00:00"
-    },
-    {
-      "id": "69014afc767c40d598a707d780f42b7f",
-      "question": "Story: The Goose and the Golden Eggs",
-      "answer": "A man had a goose.\nThe goose laid one golden egg a day.\nThe man wanted all the gold at once.\nHe cut open the goose.\nThere was no gold inside.\nLesson: Greed destroys what it seeks.",
-      "grade_id": "lkg",
-      "subject": "Language",
-      "subjects": [
-        "Language"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T15:07:39.040869+00:00"
-    },
-    {
-      "id": "279aaf21d5d24d8ca1cf8e3a4e0a564e",
-      "question": "Story: The Crow and the Snake",
-      "answer": "A crow lived in a tree.\nA snake lived in a hole below.\nThe snake ate the crow's eggs.\nThe crow was very sad.\nThe crow asked the king for help.\nThe king ordered the snake removed.\nLesson: Ask for help when you need it.",
-      "grade_id": "lkg",
-      "subject": "Language",
-      "subjects": [
-        "Language"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T15:07:39.040869+00:00"
-    },
-    {
-      "id": "c3884f6c52c44cf6abc4a0c05eb2e6c9",
-      "question": "Story: The Two Travellers and the Bear",
-      "answer": "Two travellers walked through a forest.\nA bear came toward them.\nOne traveller climbed a tree.\nThe other lay still on the ground.\nThe bear sniffed him and walked away.\nThe traveller in the tree came down.\nThe other said the bear warned him about false friends.\nLesson: A true friend stays with you in danger.",
-      "grade_id": "lkg",
-      "subject": "Language",
-      "subjects": [
-        "Language"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T15:07:39.040869+00:00"
-    },
-    {
-      "id": "1ba8de97283d4aa09d3f5f22943c6102",
-      "question": "GK: Who wrote the play Romeo and Juliet?",
-      "answer": "William Shakespeare wrote the play Romeo and Juliet.",
-      "grade_id": "lkg",
-      "subject": "General Knowledge",
-      "subjects": [
-        "General Knowledge"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T15:13:39.774824+00:00"
-    },
-    {
-      "id": "89e98a084fa94fa89c171f339d19f466",
-      "question": "GK: Who wrote the play Hamlet?",
-      "answer": "William Shakespeare wrote the play Hamlet.",
-      "grade_id": "lkg",
-      "subject": "General Knowledge",
-      "subjects": [
-        "General Knowledge"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T15:13:39.774824+00:00"
-    },
-    {
-      "id": "de8434331cca408e8de2b5ea26f5ec6a",
-      "question": "GK: Who wrote the play Macbeth?",
-      "answer": "William Shakespeare wrote the play Macbeth.",
-      "grade_id": "lkg",
-      "subject": "General Knowledge",
-      "subjects": [
-        "General Knowledge"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T15:13:39.774824+00:00"
-    },
-    {
-      "id": "b5ba86d604254f2cb34ab49ff6ed7e45",
-      "question": "GK: Who wrote the book Oliver Twist?",
-      "answer": "Charles Dickens wrote the book Oliver Twist.",
-      "grade_id": "lkg",
-      "subject": "General Knowledge",
-      "subjects": [
-        "General Knowledge"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T15:13:39.774824+00:00"
-    },
-    {
-      "id": "12715163801e4ff7bd569ecc17d4a3d7",
-      "question": "GK: Who wrote the book Pride and Prejudice?",
-      "answer": "Jane Austen wrote the book Pride and Prejudice.",
-      "grade_id": "lkg",
-      "subject": "General Knowledge",
-      "subjects": [
-        "General Knowledge"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T15:13:39.774824+00:00"
-    },
-    {
-      "id": "c98b85874a584690a72394c2b7a14e41",
-      "question": "GK: Who wrote the book The Jungle Book?",
-      "answer": "Rudyard Kipling wrote the book The Jungle Book.",
-      "grade_id": "lkg",
-      "subject": "General Knowledge",
-      "subjects": [
-        "General Knowledge"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T15:13:39.774824+00:00"
-    },
-    {
-      "id": "ffad036f1d9542549a0fb53a3126789c",
-      "question": "GK: Who wrote the book Alice in Wonderland?",
-      "answer": "Lewis Carroll wrote the book Alice in Wonderland.",
-      "grade_id": "lkg",
-      "subject": "General Knowledge",
-      "subjects": [
-        "General Knowledge"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T15:13:39.774824+00:00"
-    },
-    {
-      "id": "00e11a0bbc594ebf8a95d680e3c94de2",
-      "question": "GK: Who wrote the book Harry Potter?",
-      "answer": "J.K. Rowling wrote the book Harry Potter.",
-      "grade_id": "lkg",
-      "subject": "General Knowledge",
-      "subjects": [
-        "General Knowledge"
-      ],
-      "confidence": 0.5,
-      "created_at": "2026-10-21T15:13:39.774824+00:00"
-    },
-    {
       "id": "89d76d7591624b02beba1b3c3318f959",
       "question": "GK: Who wrote the book The Lord of the Rings?",
       "answer": "J.R.R. Tolkien wrote the book The Lord of the Rings.",
@@ -6389,6 +6221,186 @@
       ],
       "confidence": 0.5,
       "created_at": "2026-10-23T14:53:40.381596+00:00"
+    },
+    {
+      "id": "37236422fa46445bae9e28e2b90ca859",
+      "question": "Poem: Rain Rain Go Away",
+      "answer": "Rain, rain, go away,\nCome again another day.\nLittle children want to play,\nRain, rain, go away.",
+      "grade_id": "ukg",
+      "subject": "Language",
+      "subjects": [
+        "Language"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-25T19:43:37.956485+00:00"
+    },
+    {
+      "id": "53852ee6555742ca939c67ed49fb7ed1",
+      "question": "Poem: Rain on the Green Grass",
+      "answer": "Rain on the green grass,\nRain on the tree,\nRain on the housetop,\nBut not on me.",
+      "grade_id": "ukg",
+      "subject": "Language",
+      "subjects": [
+        "Language"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-25T19:43:37.956485+00:00"
+    },
+    {
+      "id": "017bc6afd0374ba69ee5c0470ee168ca",
+      "question": "Poem: It's Raining It's Pouring",
+      "answer": "It's raining, it's pouring,\nThe old man is snoring.\nHe went to bed and bumped his head,\nAnd couldn't get up in the morning.",
+      "grade_id": "ukg",
+      "subject": "Language",
+      "subjects": [
+        "Language"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-25T19:43:37.956485+00:00"
+    },
+    {
+      "id": "a1094da033b44e4e8d45e946e96dbd62",
+      "question": "Poem: Pitter Patter Rain",
+      "answer": "Pitter patter, pitter patter,\nListen to the rain.\nPitter patter, pitter patter,\nOn the window pane.",
+      "grade_id": "ukg",
+      "subject": "Language",
+      "subjects": [
+        "Language"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-25T19:43:37.956485+00:00"
+    },
+    {
+      "id": "ffba3d3ad0ac4f1797d9617735149c2c",
+      "question": "Poem: Little Raindrops",
+      "answer": "Little raindrops falling down,\nFalling on the dusty ground.\nLittle raindrops, soft and sweet,\nMaking puddles at our feet.",
+      "grade_id": "ukg",
+      "subject": "Language",
+      "subjects": [
+        "Language"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-25T19:43:37.956485+00:00"
+    },
+    {
+      "id": "8eab99bd8bd7466bbace7715bc63311f",
+      "question": "Poem: The Rain Is Falling",
+      "answer": "The rain is falling all around,\nOn the rooftops, on the ground.\nThe rain is falling on the trees,\nAnd on the flowers and the bees.",
+      "grade_id": "ukg",
+      "subject": "Language",
+      "subjects": [
+        "Language"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-25T19:43:37.956485+00:00"
+    },
+    {
+      "id": "c3729cf2f2df46e79de9c90eae38391c",
+      "question": "Poem: Drip Drop Rain",
+      "answer": "Drip drop, drip drop,\nHear the raindrops fall.\nDrip drop, drip drop,\nOn the garden wall.",
+      "grade_id": "ukg",
+      "subject": "Language",
+      "subjects": [
+        "Language"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-25T19:43:37.956485+00:00"
+    },
+    {
+      "id": "932321a4031748c6874f05dc54a05a7b",
+      "question": "Poem: Rain and Sun",
+      "answer": "Rain and sun, rain and sun,\nPlaying hide and seek.\nRain and sun, rain and sun,\nPeeping at the peak.",
+      "grade_id": "ukg",
+      "subject": "Language",
+      "subjects": [
+        "Language"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-25T19:43:37.956485+00:00"
+    },
+    {
+      "id": "51f614d3c6e746f8864b3a164b1431ab",
+      "question": "Poem: After the Rain",
+      "answer": "After the rain the sun comes out,\nThe birds begin to sing and shout.\nThe flowers raise their heads so high,\nAnd colors dance across the sky.",
+      "grade_id": "ukg",
+      "subject": "Language",
+      "subjects": [
+        "Language"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-25T19:43:37.956485+00:00"
+    },
+    {
+      "id": "16724e7beefb4cda8697d0dbe0f2f264",
+      "question": "Poem: Rainy Day",
+      "answer": "Rainy day, rainy day,\nTime to stay inside and play.\nRainy day, rainy day,\nPuddles splash along the way.",
+      "grade_id": "ukg",
+      "subject": "Language",
+      "subjects": [
+        "Language"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-25T19:43:37.956485+00:00"
+    },
+    {
+      "id": "adf02b904aed478399304a5ef0e93666",
+      "question": "Poem: The Little Cloud",
+      "answer": "A little cloud floated in the sky,\nIt saw the flowers getting dry.\nThe cloud grew big and dark and gray,\nAnd sent the raindrops down to play.",
+      "grade_id": "ukg",
+      "subject": "Language",
+      "subjects": [
+        "Language"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-25T19:43:37.956485+00:00"
+    },
+    {
+      "id": "cae33949285e461a9d0b390028e0470d",
+      "question": "Poem: Raindrops on the Window",
+      "answer": "Raindrops on the window,\nSliding down the glass.\nRaindrops on the window,\nWatching as they pass.",
+      "grade_id": "ukg",
+      "subject": "Language",
+      "subjects": [
+        "Language"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-25T19:43:37.956485+00:00"
+    },
+    {
+      "id": "81a0632133944c73953e63b601088a91",
+      "question": "Poem: Splash in the Puddle",
+      "answer": "Splash in the puddle,\nJump in the rain.\nSplash in the puddle,\nAgain and again.",
+      "grade_id": "ukg",
+      "subject": "Language",
+      "subjects": [
+        "Language"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-25T19:43:37.956485+00:00"
+    },
+    {
+      "id": "8da85a122ecd47e59ea328242e510c78",
+      "question": "Poem: Rainbow After Rain",
+      "answer": "Rainbow, rainbow in the sky,\nColors shining way up high.\nRed and orange, yellow, green,\nBlue and purple, bright and clean.",
+      "grade_id": "ukg",
+      "subject": "Language",
+      "subjects": [
+        "Language"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-25T19:43:37.956485+00:00"
+    },
+    {
+      "id": "451826d8edda40caa0e8afb5db98be75",
+      "question": "Poem: The Rain Song",
+      "answer": "Rain, rain, falling down,\nWatering the trees and ground.\nRain, rain, soft and slow,\nHelping all the flowers grow.",
+      "grade_id": "ukg",
+      "subject": "Language",
+      "subjects": [
+        "Language"
+      ],
+      "confidence": 0.5,
+      "created_at": "2026-10-25T19:43:37.956485+00:00"
     }
   ],
   "passed_stages": [

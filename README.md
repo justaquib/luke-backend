@@ -37,7 +37,38 @@ docker compose up -d
 
 ## Run
 
+From this folder:
+
 ```bash
+./start engine
+```
+
+The word after the launcher is free-form: `./start engine`, `./start luke` or
+any other name starts the same backend. The file can be renamed too, for
+example `mv start launcher` and then `./launcher engine`.
+
+The command uses `.venv` (creating it when it is missing), installs
+`requirements.txt` only when the file changed, checks the spaCy model, starts
+Postgres with Docker Compose (opening Docker Desktop when needed), waits for
+the database, then runs uvicorn with reload on http://localhost:8000.
+
+To type it from any folder, link it once in a folder on your `PATH`:
+
+```bash
+ln -s "$PWD/start" ~/.local/bin/start
+start engine
+```
+
+After renaming the launcher, point the link at the new name:
+
+```bash
+ln -sf "$PWD/launcher" ~/.local/bin/start
+```
+
+The manual route still works:
+
+```bash
+source .venv/bin/activate
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 

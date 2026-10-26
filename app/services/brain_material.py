@@ -16,7 +16,7 @@ from app.services.brain_rungs import CORRECTION_LIMIT
 
 LOGGER = logging.getLogger(__name__)
 
-# The ladder is measured against the transformer's vocabulary, the one live
+# The ladder is measured against the word model's vocabulary, the one live
 # token list. The threshold counts the words the model writes with.
 CANONICAL_VOCABULARY_FLOOR = 400
 
@@ -154,8 +154,8 @@ def model_capabilities(
     The level follows the capabilities, not the size of the data set: a large
     collection of documents does not make a model reason.
 
-    Every vocabulary check here reads the transformer's vocabulary, so the
-    words it counts are the words the answering model actually uses.
+    Every vocabulary check here reads the word model's vocabulary, so the
+    words it counts are the words the model actually uses.
     """
     from app.services import vocabulary as vocabulary_service
 
@@ -230,7 +230,6 @@ def _rung_step(rungs: list[dict[str, Any]], kept: int) -> list[dict[str, Any]]:
             "them when the question is reworded."
         ),
         "0.0.3": "Teach the topic rather than the exact question, and add a few phrasings of it.",
-        "0.0.4": "Train the brain so its writing model learns the style of your lessons.",
         "0.0.5": "Teach the reason as well as the answer, so it can explain it when asked.",
         "0.0.6": (
             "Mark an answer wrong in the chat and give the right one. "
@@ -381,7 +380,7 @@ def next_steps(
             "action": "train_brain",
             "title": "Train the brain",
             "detail": (
-                "Training rebuilds the writing model and the emotion head from "
+                "Training rebuilds the word model and the heads from "
                 "everything Luke has been taught, then tests the level again."
             ),
             "link": "",

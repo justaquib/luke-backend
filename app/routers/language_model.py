@@ -10,6 +10,7 @@ from __future__ import annotations
 from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 
 from app.core.security import get_bearer_user, tenant_id_of
@@ -25,6 +26,7 @@ from app.schemas import (
     TestScoreBody,
     TestStartBody,
 )
+from app.services import answer_streams, streaming
 from app.services import dictionary as dictionary_service
 from app.services import reasoning as reasoning_service
 from app.services.language import duplicates as duplicates_service
@@ -193,36 +195,25 @@ def preview_language_answer(
     db: Session = Depends(get_session),
 ) -> dict[str, Any]:
     """Answer a question with the learner's own material only."""
-    tenant_id = tenant_id_of(user)
-    candidates = (
-        [] if body.skip_trainer else reporting.candidate_answers(body.question, db, tenant_id)
+    result = preview_service.preview_payload(
+        body.question, tenant_id_of(user), db, body.skip_trainer
     )
-    exact = reporting.exact_candidate(body.question, candidates)
-    if exact is not None:
-        result = {
-            "answer": str(exact["answer"]),
-            "source": "faq",
-            "matched_question": str(exact["question"]),
-        }
-    else:
-        result = dict(preview_service.preview_answer(body.question, tenant_id))
-    result["candidates"] = candidates
-    result["needs_clarification"] = bool(candidates) and exact is None
-    reasoning = reasoning_service.explain(
-        body.question,
-        tenant_id,
-        result.get("answer", ""),
-        result.get("source", "not_learned"),
-        result.get("matched_question"),
+    return result.payload
+
+
+@router.post("/preview/stream")
+def preview_language_answer_stream(
+    body: PreviewBody,
+    user: User = Depends(get_bearer_user),
+) -> StreamingResponse:
+    """The learner preview as server-sent events, one real stage at a time."""
+    return StreamingResponse(
+        streaming.frames(
+            answer_streams.preview_stream(body.question, tenant_id_of(user), body.skip_trainer)
+        ),
+        media_type="text/event-stream",
+        headers=streaming.SSE_HEADERS,
     )
-    result["reasoning"] = {
-        "steps": [
-            {"label": step.get("label", ""), "detail": step.get("detail", "")}
-            for step in reasoning.get("steps", [])
-        ],
-        "confidence": reasoning.get("confidence", 0),
-    }
-    return result
 
 
 @router.post("/test/start")

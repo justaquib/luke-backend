@@ -45,7 +45,7 @@ Chinchilla regime). The practical technique: hold small probe runs, fit the
 curve, and predict the loss of the big run before paying for it. Several
 passes over the data were long thought wasteful past ~4 epochs; small models
 trained many epochs on curricula still keep improving — the measured behaviour
-of this app's writer agrees with the small-model findings.
+of this app's word model agrees with the small-model findings.
 
 ## 2. Benchmark suites (automatic, fixed-answer)
 
@@ -168,13 +168,13 @@ Card, Gemma/Llama release evals) is expected to contain:
 | Frontier technique | Luke's small version |
 | --- | --- |
 | Held-out, averaged, eval-mode loss | `training._check` — fixed batches in resting state; shown on the brain page |
-| Perplexity | the answer-token loss; lower knows your lessons better (see the brain panel) |
-| Sample / best-of-k | the writer's critique-guided rewrite (`respond` writes again and keeps the better answer) |
-| Repetition / IFEval-style rule checks | `quality.repeats_itself` blocks the loop answers; the grammar check refuses verb-less text |
-| Grounding / attributability | `_grounded` — every word of the answer must come from the taught material, else the taught answer is used |
-| Calibration ("I am not sure …") | token-confidence critique, the unsure-word note, and the loose-match flag on the chat path |
-| Refusal correctness | refusing a request about something never taught instead of inventing (Area 3B refusal examples in training) |
-| Contamination-free measurement | the instruction probe set is held out of training on purpose (`evaluation.py`) |
+| Perplexity | the word model's held-out next-word loss; lower knows your lessons better (see the brain panel) |
+| Sample / best-of-k | none — retired with the answer writer on 2026-10-25 |
+| Repetition / IFEval-style rule checks | `quality.keep` drops a training sentence that loops or is too short or too long; it filters material, never an answer |
+| Grounding / attributability | a taught answer is served as the trainer wrote it, so there is nothing to ground |
+| Calibration ("I am not sure …") | the loose-match flag and the pending inbox on the chat path |
+| Refusal correctness | the material boundary refuses a request about something never taught instead of inventing |
+| Contamination-free measurement | the generality probes are held out of training on purpose (`brain_generality.py`) |
 | Fixed harness, published numbers | the brain page and the training report are this app's release table |
 
 The differences are inherent: a beam of GPUs versus one Mac. A frontier model

@@ -103,7 +103,7 @@ If your trained answers are not being matched, raise the threshold (e.g. `0.7`).
 
 ## Training the brain
 
-The brain is the writing model behind the assistant. It is trained from
+The brain is the word model behind the learner's sentences. It is trained from
 everything the tenant has given, not only from the lessons in the learner:
 
 | Source | What it is |
@@ -116,11 +116,11 @@ everything the tenant has given, not only from the lessons in the learner:
 | Words | The words and the meanings that were taught with the dictionary. |
 | Sentences | The sentences that were taught on their own. |
 
-Every source becomes a sentence, so its words reach the vocabulary, and a
-request with its answer, so the model learns to answer a request it was never
-worded for. The questions of the approved answers are learned that way too,
-so the trainer's own answers are written in the model's words and not only
-looked up.
+Every source becomes a sentence, so its words reach the vocabulary. The
+answers of the lessons, approvals, corrections and conversations are collected
+in the wordings they can be asked for, so the words a trainer would use for a
+subject are in the corpus too. The chat itself answers from the material as it
+was taught; the word model does not write the chat answer.
 
 The model's name and starting version are set once, under **Model identity** in
 `/dashboard/settings` (`GET`/`PUT /language-model/settings`). The name is not
@@ -130,11 +130,10 @@ new name. The starting version is the floor of the level ladder the brain page
 shows.
 
 Training runs in its own process, so the app stays usable while the brain
-learns. How long it takes is measured, not fixed. The answer model makes one
-annealed pass over the examples, capped at 20,000 steps and a wall-clock
-budget; the word model keeps its eight passes. The run is read on its held-out
-set, not on a single batch, and stops at the end of its pass or when the
-held-out read stops improving. The brain page asks again until the
+learns. How long it takes is measured, not fixed: the word model makes eight
+passes over the examples, capped by a wall-clock budget. The run is read on its
+held-out set, not on a single batch, and stops at the end of its pass or when
+the held-out read stops improving. The brain page asks again until the
 training is done and shows the checklist, the steps and the time left; the
 small info button beside **Train** opens a panel that says what the brain has
 trained from and what the training does with it.
@@ -149,6 +148,25 @@ curl http://localhost:8000/language-model/brain/sources \
   -H "Authorization: Bearer $TOKEN"
 ```
 
+## Retired: the Hugging Face base-model teacher
+
+The **Base model** tab used to fine-tune a Hugging Face causal language model
+and let it write teacher answers, which then joined Luke's material. It was
+retired on 2026-10-25 together with the from-scratch answer writer: the
+served answer is the trainer's material, and the teacher added a second model
+without improving an answer (the writer won 0 of the measured probes; see
+`07-model-measurements.md`).
+
+The files it left on disk are user data, so the app leaves them untouched and
+simply stops reading them:
+
+- `transformer-<tenant>.pt`, `instruction-<tenant>.json` and
+  `hf-progress-<tenant>.json` in the learner's folder,
+- `.language_model/huggingface/tenant-<id>/` with each saved teacher.
+
+To reclaim the space, stop the app and delete those files by hand. Nothing in
+the app reads them again, and training the word model does not need them.
+
 ## Correcting an answer that was wrong
 
 Mark an answer wrong in the chat and write the answer that should have been
@@ -156,8 +174,7 @@ given. The correction is taught straight away:
 
 - the right answer is stored as a trained answer, so the assistant answers
   the question correctly from then on,
-- the correction is kept in the brain's memory, so the writing model learns
-  the wording and the heads learn from it,
+- the correction is kept in the brain's memory, so the heads learn from it,
 - the question is asked again to check that the assistant keeps it.
 
 ```bash

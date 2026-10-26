@@ -7,16 +7,10 @@ from app.schemas.parenting import (
     CoachingAnswerOut as CoachingAnswerOut,
 )
 from app.schemas.parenting import (
-    CoachingScaffoldOut as CoachingScaffoldOut,
-)
-from app.schemas.parenting import (
     CoachingSessionOut as CoachingSessionOut,
 )
 from app.schemas.parenting import (
     CoachingTurnOut as CoachingTurnOut,
-)
-from app.schemas.parenting import (
-    ParentingCorrection as ParentingCorrection,
 )
 from app.schemas.parenting import (
     ParentingSessionCreate as ParentingSessionCreate,
@@ -24,7 +18,15 @@ from app.schemas.parenting import (
 from app.schemas.parenting import (
     ParentingTurnBody as ParentingTurnBody,
 )
-from app.schemas.trace import AnswerTraceBody as AnswerTraceBody
+from app.schemas.understanding import (
+    ConnectionOut as ConnectionOut,
+)
+from app.schemas.understanding import (
+    QuestionUnderstandingOut as QuestionUnderstandingOut,
+)
+from app.schemas.understanding import (
+    WordReadingOut as WordReadingOut,
+)
 
 RULE_KINDS = {"instruction", "own_words", "short"}
 
@@ -63,6 +65,7 @@ class QueryResponse(BaseModel):
     intent: dict | None = None
     app: dict | None = None
     disabled_external_sources: list[str] | None = None
+    understanding: QuestionUnderstandingOut | None = None
 
 
 class StatsResponse(BaseModel):

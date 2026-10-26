@@ -2,7 +2,7 @@
   "owner": "numpy-sentence-model",
   "size": 514,
   "retired": true,
-  "note": "Retired. This is the old numpy writer's token list, kept for the record only. It is NOT used at inference and must never be turned into ids: the answering model uses the transformer's vocabulary in app/services/vocabulary.py.",
+  "note": "Retired. This is the old numpy writer's token list, kept for the record only. It is NOT used at inference and must never be turned into ids: the live token list is the word model's vocabulary in app/services/vocabulary.py.",
   "tokens": [
     "!",
     ",",

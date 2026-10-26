@@ -11,7 +11,7 @@ import pytest
 
 from app.services import (
     brain,
-    brain_instruction,
+    brain_generality,
     brain_material,
     brain_paths,
     brain_roadmap,
@@ -25,14 +25,9 @@ def _patch_the_measurements(monkeypatch) -> None:
     monkeypatch.setattr(brain_state, "state", lambda tenant_id: {})
     monkeypatch.setattr(brain_material, "model_capabilities", lambda *args, **kwargs: [])
     monkeypatch.setattr(
-        brain_instruction,
+        brain_generality,
         "generality_score",
         lambda tenant_id: {"score": 0.0, "cap": None, "probes": []},
-    )
-    monkeypatch.setattr(
-        brain_instruction,
-        "instruction_score",
-        lambda tenant_id: {"score": 0.0, "probes": 0, "total": 0},
     )
     monkeypatch.setattr(brain_material, "coverage", lambda tenant_id: {})
     monkeypatch.setattr(brain_material, "next_steps", lambda *args, **kwargs: [])
@@ -163,7 +158,7 @@ def test_the_stretch_reaches_the_tenth(monkeypatch, tmp_path) -> None:
     def with_a_stretch(tenant_id):
         return {"score": 0.5, "cap": None, "probes": []}
 
-    monkeypatch.setattr(brain_instruction, "generality_score", with_a_stretch)
+    monkeypatch.setattr(brain_generality, "generality_score", with_a_stretch)
     monkeypatch.setattr(brain_rung_results, "rung_results", lambda *args, **kwargs: _rungs(set()))
     level = brain.model_level(7)
     assert level["measured_level"] == "0.1.0"

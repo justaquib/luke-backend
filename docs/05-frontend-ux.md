@@ -90,7 +90,7 @@ title, eyebrow, description or actions row in its body.
 | Sidebar       | Chat sessions, "New chat", the running background task at the bottom             |
 | Messages      | Flat answers; an answer opens its details in the right panel; provenance and copy / good / wrong actions |
 | Composer      | Textarea + send button                                                          |
-| Right sidebar | Page information (the conversation facts for the active session, then the engine facts) or answer details (question, answer, source, match, passages, live link and the measured writer trace with its attention heatmap), with running tasks pinned below |
+| Right sidebar | Page information (the conversation facts for the active session, then the engine facts) or answer details (question, answer, source, match, passages, "How this answer was found" and the live link), with running tasks pinned below |
 
 The conversation facts — message count, distinct answer sources and start time
 — live in the page information panel, not the body. They are read from the
@@ -98,22 +98,26 @@ active session, so the panel shows the session the top bar names; switching
 sessions (with the panel closed, since the panel is modal) and reopening it
 shows that session's measured values.
 
-### The answer trace
+### The live answer trace
 
-An assistant answer's details include "How the model reads this question",
-filled from `POST /language-model/trace`. It is measured, not an illustration:
-the exact tokens the writer read (marks included), an embedding preview with
-each token's norm, the real attention weights for every layer and head (the
-heatmap averages all heads by default and lets the reader choose one), the
-actual next-word candidates with their probabilities, and the writer's own
-greedy choice steps with the produced text, stop reason and elapsed time. An
-untrained writer reports that it has not been trained instead of showing
-numbers.
+An answer is streamed from `POST /query/stream`, and the page draws only the
+stages the backend actually produced:
 
-The panel first states the route that served the answer. A retrieval, taught or
-conversation answer was not generated word by word, so the trace is labelled as
-the writer's measured reading of the same question, never as the path that
-answer took. Only a `written` route is described as the writer's own run.
+1. **Reading** — each word of the question with its lemma, part of speech,
+   meaning and synonyms from the offline dictionary.
+2. **Thinking** — the question type, the key words and the plan of sources.
+3. **Connecting dots** — one row per source as it is consulted, with the real
+   outcome: a match with its distance, evidence or matched question, a miss, or
+   that the source is not enabled.
+4. **The answer** — shown word by word once it has fully arrived. The reveal
+   presents an answer that is already complete; it never invents a stage or a
+   word. Under reduced motion the answer appears at once, and the full text is
+   in the DOM for screen readers while the visible part grows.
+
+The trace is stored with the message and shown in the answer details under
+**How this answer was found**. A stored trace is shown in full when the panel
+opens; it does not replay the word-by-word reveal. A failed stream clears the
+live trace and adds no answer.
 
 ### Sessions (chats)
 
@@ -126,23 +130,34 @@ answer took. Only a `written` route is described as the writer's own run.
 
 The coaching chat is the place where the coach that talks the parents lives:
 
-- The parent sends a turn (`POST /parenting/chat/session/{id}/turn`) and the
-  coach answers from the material the tenant taught, through the same writer
-  the answering model uses, so the words, the grammar and the sentences come
-  from the lessons instead of a rule.
-- The answer is read with the writer's own eyes: its confidence, the words it
-  was unsure about, the grammar and the loop. When the answer is not good
-  enough, the turn ends in a scaffold (`status: needs_correction`) with the
-  two coaching phrasings the parent can pick from, and the coach retries with
-  the chosen correction (`POST /parenting/chat/session/{id}/correction`).
-- After the retry passes the gate the answer is kept for the brain, so the
-  coaching is itself training material.
-- Repeated scaffolds escalate the session (`status: escalated`) and hand the
-  parent to a human trainer.
+- The parent sends a turn (`POST /parenting/chat/session/{id}/turn/stream`) and
+  the coach answers from the material the tenant taught, with the words, the
+  grammar and the sentences of the lessons instead of a rule.
+- The turn streams the same live trace as the chat: Reading, Thinking and
+  Connecting dots, then the coach answer word by word. The trace carries the
+  understanding the backend measured; nothing is invented by the page.
+- A session is open while the conversation runs and answered once the coach
+  has answered; the coach status chip says which. There is no correction,
+  scaffold or "Needs a better answer" block: the coach serves taught answers,
+  and a parent who wants a better answer teaches it in the Training room.
+- A failed stream clears the live trace and leaves the session open, so the
+  parent can send the turn again.
 
 The page is `/dashboard/parenting`, it reuses the frame (top panel, right
-sidebar, scroll, composer) and adds the coach bubble, the scaffold panel and
-the coach status.
+sidebar, scroll, composer) and adds the coach bubble and the coach status.
+
+## The learner page (`/dashboard/learner`)
+
+The learner page teaches and quizzes the learner, and its **Try a question
+with the learner** card is a preview of the same answer path the chat uses.
+The preview streams from `POST /language-model/preview/stream`: the live trace
+shows Reading, Thinking and Connecting dots, then the answer is revealed word
+by word. When the learner's material matches more than one Trainer question,
+the preview keeps its match prompt so the trainer can choose the intended
+answer; the chosen answer keeps the trace above the existing **How I thought
+about it** reasoning block. Trainer-approved answers are checked first, then
+the learner's own starter material, words, sentences and lessons — uploaded
+documents and web sources are not consulted.
 
 ## Training — ways to teach the assistant
 
@@ -171,12 +186,13 @@ The page's info panel (the `i` control in the top bar) carries the corpus facts 
 
 In `/dashboard/trainer`, the **+ New** tab. Use it when you know the Q↔A ahead of time.
 
-### 4. Train the writing model
+### 4. Train the word model
 
-The brain page (`/dashboard/brain`) trains the neural writer from every source
-above plus the lessons, documents, words and sentences. The Sources panel says
-what it will train from before the run, and the training happens in its own
-process so the rest of the app stays usable.
+The brain page (`/dashboard/brain`) trains the word model from every source
+above plus the lessons, documents, words and sentences. It is what the
+learner's sentence feature uses. The Sources panel says what it will train
+from before the run, and the training happens in its own process so the rest
+of the app stays usable.
 
 ### The level ladder
 
@@ -242,4 +258,4 @@ replaces the page details or the engine information.
 - **Per-session backend override** — store `apiUrl` per session, swap the `ApiService` base via DI.
 - **Export / import sessions** — read/write the `localStorage` keys.
 - **A new builder page** — add it below the guarded `/dashboard` route, add its name and scope to `shared/page-title.ts`, and give it the frame rather than its own header.
-- **Streaming answers** — switch to `HttpClient.stream` and use Server-Sent Events from FastAPI.
+- **Streaming answers** — stream through the existing `AnswerStreamService` and render the shared `app-answer-pipeline` and `app-answer-reveal`; a stage is drawn only when the backend sent it.

@@ -64,17 +64,13 @@ STEPS: tuple[tuple[str, str], ...] = (
     ("Collect", "Every source above is gathered into one list of material."),
     ("Clean", "The wording is repaired, so the model does not learn a slip of the pen."),
     (
-        "Turn into requests",
-        "Every question and answer becomes a request and its answer, in more than one wording.",
-    ),
-    (
         "Build the vocabulary",
         "Every word of every source becomes a token the model can write with.",
     ),
-    ("Train", "The transformer reads the request and is scored on the answer alone."),
+    ("Train", "The word model reads every sentence and learns to predict the next word."),
     (
         "Measure",
-        "The level tests ask it for things it never trained on, so the score is honest.",
+        "The word model is measured on held-out sentences, so the score is honest.",
     ),
 )
 
@@ -82,7 +78,7 @@ STEPS: tuple[tuple[str, str], ...] = (
 def source_report(
     materials: Sequence[Material],
     training: TrainingSet | None = None,
-    writer: dict[str, Any] | None = None,
+    words: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """What the brain has trained from, and how the training works."""
     counts = _counts(materials)
@@ -103,16 +99,15 @@ def source_report(
             "items": sum(entry["items"] for entry in sources),
             "words": sum(entry["words"] for entry in sources),
             "sentences": len(training.sentences) if training else 0,
-            "requests": len(training.instructions) if training else 0,
         },
-        "model": writer or {},
+        "model": words or {},
     }
 
 
 def tenant_report(
     tenant_id: int | None,
     db: Session,
-    writer: dict[str, Any] | None = None,
+    words: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """What this tenant's brain has trained from, and how the training works.
 
@@ -121,7 +116,7 @@ def tenant_report(
     """
     materials = materials_service.gather(tenant_id, db)
     training = materials_service.training_set(materials, tenant_id)
-    return source_report(materials, training, writer)
+    return source_report(materials, training, words)
 
 
 def _counts(materials: Sequence[Material]) -> dict[str, dict[str, int]]:

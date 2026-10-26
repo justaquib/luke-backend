@@ -39,7 +39,6 @@ from app.services.query import (
     answer_question,
     confirm_existing_answer,
     faq_confidence_rank,
-    propose_answer,
 )
 
 
@@ -87,5 +86,4 @@ _resync_approved_faqs_to_chroma = resync_approved_faqs
 _answer_from_document = answer_from_document
 _faq_field_subjects_compatible = faq_field_subjects_compatible
 _confirm_existing_answer = confirm_existing_answer
-_propose_answer = propose_answer
 _faq_confidence_rank = faq_confidence_rank

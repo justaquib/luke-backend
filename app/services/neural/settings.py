@@ -54,25 +54,4 @@ class TrainingSettings:
     warmup_steps: int = 100
 
 
-@dataclass(frozen=True)
-class WritingSettings:
-    """How the model writes when it is answering or writing freely."""
-
-    max_words: int = 64
-    temperature: float = 0.3
-    top_k: int = 5
-    seed: int | None = None
-    include_prompt: bool = False
-
-
-@dataclass(frozen=True)
-class ReadingSettings:
-    """How much of the request and the material the model reads."""
-
-    instruction_words: int = 24
-    material_words: int = 96
-
-
-DEFAULT_READING = ReadingSettings()
 DEFAULT_TRAINING = TrainingSettings()
-DEFAULT_WRITING = WritingSettings()

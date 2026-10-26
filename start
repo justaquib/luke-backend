@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SOURCE="${BASH_SOURCE[0]}"
+NAME="$(basename "$SOURCE")"
+while [ -L "$SOURCE" ]; do
+  DIRECTORY="$(cd -P "$(dirname "$SOURCE")" >/dev/null 2>&1 && pwd)"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ "$SOURCE" != /* ]] && SOURCE="$DIRECTORY/$SOURCE"
+done
+ROOT="$(cd -P "$(dirname "$SOURCE")" >/dev/null 2>&1 && pwd)"
+
+if [[ $# -ne 1 ]]; then
+  echo "usage: $NAME <command>" >&2
+  exit 2
+fi
+
+cd "$ROOT"
+exec python3 "$ROOT/scripts/start_engine.py"

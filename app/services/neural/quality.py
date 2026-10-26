@@ -31,7 +31,7 @@ MAX_REPETITION = 0.6
 # How many sentences there must be before the share of unknown words counts.
 MIN_CORPUS = 20
 
-# How many times a pair of words may be said in one written answer.
+# How many times a pair of words may be said in one sentence.
 # A poem says the same pair again on purpose, but never three times: a pair
 # said more than twice is the model stuck in a loop, not a poem.
 MAX_PAIR_SAYS = 2
@@ -66,19 +66,6 @@ def repetition(words: list[str]) -> float:
         seen[pair] += 1
     repeated = sum(count - 1 for count in seen.values() if count > 1)
     return repeated / len(pairs)
-
-
-def repeats_itself(text: str) -> bool:
-    """Whether the answer says the same short pair again and again.
-
-    "Rain, rain, go away" says a pair twice on purpose, and a poem may end
-    with its line again, so two are allowed. "go away, go away, go away,
-    go away" is the model stuck in its track, so an answer that says a pair
-    more times than that is not worth giving away.
-    """
-    words = _rows([text])[0]
-    counts: Counter[tuple[str, str]] = Counter(pairwise(words))
-    return any(count > MAX_PAIR_SAYS for count in counts.values())
 
 
 def _is_worth(words: list[str], unknown: set[str], use_unknown_rule: bool) -> bool:

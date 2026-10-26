@@ -1,8 +1,7 @@
 """The grammar of a written sentence, read with the language model of the app.
 
-The writer reads the sentence it wrote before it is given away. A text that
-is not a sentence at all is a problem, and a sentence whose verb does not
-agree with its subject is a note.
+A text that is not a sentence at all is a problem, and a sentence whose verb
+does not agree with its subject is a note.
 """
 
 from __future__ import annotations

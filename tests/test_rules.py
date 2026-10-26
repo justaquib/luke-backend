@@ -1,7 +1,7 @@
 """Tests for the rules the trainer keeps and how they change the answer."""
 
 from app.schemas import RULE_KINDS, RuleCreate
-from app.services import brain, language_logic
+from app.services import language_logic
 
 
 def _use_temp_state(monkeypatch, tmp_path):
@@ -11,9 +11,8 @@ def _use_temp_state(monkeypatch, tmp_path):
 
 def test_the_answer_is_written_in_the_models_own_words(monkeypatch, tmp_path):
     _use_temp_state(monkeypatch, tmp_path)
-    # The wording is chosen by the count of the words when there is no
-    # transformer trained yet.
-    monkeypatch.setattr(brain, "load_writer", lambda tenant_id: None)
+    # The wording is chosen by the count of the words when there is no word
+    # model trained yet.
     language_logic.teach(
         None,
         "Q: What is a cow?\nA: The cow is animal. It is a farm animal that gives milk.",

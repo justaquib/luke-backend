@@ -51,7 +51,6 @@ ban-relative-imports = "parents"
 [tool.ruff.lint.flake8-tidy-imports.banned-api]
 "numpy" = { msg = "Do not import numpy directly; use the standard library or torch." }
 "scikit-learn" = { msg = "Do not add scikit-learn; it depends on numpy." }
-"transformers" = { msg = "No pretrained transformer packages." }
 
 [tool.ruff.lint.per-file-ignores]
 "tests/**/*.py" = ["ANN001", "ANN201", "ANN202", "PLR2004", "S101", "SLF001"]

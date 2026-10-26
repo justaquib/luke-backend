@@ -1,16 +1,8 @@
 """The training loop of the neural engine.
 
-The model learns from three kinds of example, and the loss is taken over the
-answer alone in every one of them:
-
-* a plain sentence, so the model keeps writing in the trainer's style,
-* a request and its answer, so the model answers what it is asked,
-* a request, the material it may use, and the answer, so the model answers
-  from what the trainer taught rather than from what it half-remembers.
-
-The word model passes ``answer_start=0``, so the same loop scores every word
-and learns to predict the next one. Sentences go simplest first; a held-out
-number is read from unseen groups after the best state is restored.
+The model learns from the tenant's sentences and scores every word, so it
+learns to predict the next one. Sentences go simplest first; a held-out number
+is read from unseen groups after the best state is restored.
 """
 
 from __future__ import annotations
@@ -46,8 +38,9 @@ _GPU_LOCK = threading.Lock()
 # The share of the examples the training starts with.
 MIN_POOL_SHARE = 0.25
 
-# One pass is the measured answer horizon: an annealed one-pass schedule
-# reached 3.90 held-out, where eight passes never annealed and stopped at 4.92.
+# The horizon when a caller does not ask for one. The word model asks for its
+# own eight passes, because its material is small enough that one pass would
+# stop at the minimum step count.
 TRAINING_PASSES = 1
 
 # The steps the training never goes past, so a huge material cannot keep

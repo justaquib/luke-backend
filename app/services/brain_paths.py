@@ -25,8 +25,3 @@ def tenant_key(tenant_id: int | None) -> int:
 def brain_path(tenant_id: int | None, name: str) -> Path:
     """Where a trained head is kept. The old numpy files are not read."""
     return brain_dir() / f"brain-{tenant_key(tenant_id)}-{name}.pt"
-
-
-def writer_path(tenant_id: int | None) -> Path:
-    """Where the transformer that writes in the trainer's words is kept."""
-    return brain_dir() / f"transformer-{tenant_key(tenant_id)}.pt"

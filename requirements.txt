@@ -4,12 +4,12 @@ pydantic==2.9.2
 pydantic-settings==2.5.2
 python-multipart==0.0.12
 sqlalchemy==2.0.35
-psycopg2-binary==2.9.9
+psycopg2-binary==2.9.13
 chromadb==0.5.5
 # chromadb 0.5.5 calls posthog.capture(positionally), which posthog 6.0.0 removed; the
 # newer versions make every chroma event log "capture() takes 1 positional argument".
 posthog<6
-spacy==3.7.6
+spacy==3.8.16
 python-docx==1.1.2
 pandas==2.2.3
 openpyxl==3.1.5
@@ -18,4 +18,9 @@ pypdf==5.1.0
 google-auth==2.35.0
 python-jose[cryptography]==3.3.0
 email-validator==2.3.0
-torch==2.4.0
+# The word model the learner's sentence feature serves. Approved on 2026-10-25
+# in CODE_QUALITY_PLAN.md.
+torch==2.14.1
+# Offline English dictionary: WordNet senses, parts of speech and synonyms.
+# Approved on 2026-10-25 in CODE_QUALITY_PLAN.md.
+nltk==3.10.3

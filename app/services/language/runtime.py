@@ -352,9 +352,9 @@ def _model_description(model: ServingWord) -> str:
 
 
 def vocabulary_page(tenant_id: int | None, offset: int = 0, limit: int = 100) -> dict:
-    """The words the answering model can write with, one page at a time.
+    """The words the word model knows, one page at a time.
 
-    This is the transformer's vocabulary: the one live token list. A long
+    This is the word model's vocabulary: the one live token list. A long
     list is not sent all at once, so it can be scrolled and the next words
     arrive when they are needed.
     """

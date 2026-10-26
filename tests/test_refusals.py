@@ -1,6 +1,6 @@
 """The refusal probes are held out of the requests the training refuses."""
 
-from app.services.language import evaluation, negatives
+from app.services.language import negatives
 
 
 def _cards() -> list[dict[str, str]]:
@@ -41,21 +41,11 @@ def test_negatives_never_name_a_taught_topic() -> None:
     assert all(any(topic in request for topic in unknown) for request, _ in held)
 
 
-def test_every_adversarial_probe_is_kept_out_of_training() -> None:
+def test_every_unknown_topic_is_asked_in_every_wording() -> None:
     cards = _cards()
 
-    trained = {request for request, _ in negatives.build_negatives(cards)}
-    probes = [request for request, _ in evaluation._adversarial(cards)]
+    requests = [request for request, _ in negatives._all_negatives(cards)]
 
-    assert probes
-    assert all(request not in trained for request in probes)
-
-
-def test_the_adversarial_set_is_filled_from_every_card() -> None:
-    cards = _cards()
-
-    probes = [request for request, _ in evaluation._adversarial(cards)]
-
-    assert len(probes) == evaluation.ADVERSARIAL_SIZE
-    assert any("wind" in request for request in probes)
-    assert any("rain" in request for request in probes)
+    assert any("accordion" in request for request in requests)
+    assert any("wind" in request for request in requests) is False
+    assert len(requests) == len(negatives.unknown_topics(cards)) * len(negatives.PHRASINGS)

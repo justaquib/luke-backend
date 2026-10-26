@@ -5,14 +5,14 @@ from app.services.neural.measurement import build_batch, fixed_batches
 from app.services.neural.settings import TrainingSettings
 
 
-def _example(sequence: list[int], start: int, group: str = "g") -> Example:
-    return Example(sequence, start, group)
+def _example(sequence: list[int], group: str = "g") -> Example:
+    return Example(sequence, group)
 
 
-def test_a_row_whose_answer_is_cut_off_is_dropped():
+def test_a_row_with_no_next_word_to_predict_is_dropped():
     rows = [
-        _example([1, 2, 3, 4], 10),
-        _example([2, 3, 4, 5], 2),
+        _example([1]),
+        _example([2, 3, 4, 5]),
     ]
 
     batch = build_batch(rows, pad_id=0, context=8)
@@ -22,17 +22,17 @@ def test_a_row_whose_answer_is_cut_off_is_dropped():
     assert batch.inputs[0].tolist() == [2, 3, 4, 5]
 
 
-def test_a_long_row_keeps_the_answer_start_inside_the_window():
-    batch = build_batch([_example([1, 2, 3, 4, 5, 6, 7, 8], 4)], pad_id=0, context=6)
+def test_a_long_row_keeps_its_last_words_inside_the_window():
+    batch = build_batch([_example(list(range(1, 9)))], pad_id=0, context=6)
 
     assert batch is not None
     assert batch.inputs[0].tolist() == [3, 4, 5, 6, 7, 8]
-    assert batch.scored[0].tolist() == [False, True, True, True, True, True]
+    assert batch.scored[0].tolist() == [True] * 6
 
 
 def test_padding_is_never_scored():
     batch = build_batch(
-        [_example([1, 2, 3], 1), _example([1, 2, 3, 4, 5], 1)],
+        [_example([1, 2, 3]), _example([1, 2, 3, 4, 5])],
         pad_id=0,
         context=8,
     )
@@ -43,7 +43,7 @@ def test_padding_is_never_scored():
 
 
 def test_the_same_seed_reads_the_same_batches():
-    examples = [_example([1, 2, 3, i], 1, f"group-{i}") for i in range(10)]
+    examples = [_example([1, 2, 3, i], f"group-{i}") for i in range(10)]
     settings = TrainingSettings(batch_size=2, check_batches=2)
     config = {"pad_id": 0, "context": 8}
 

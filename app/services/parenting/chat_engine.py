@@ -1,26 +1,18 @@
-"""The coaching turn of the parenting chat: the coach learns from the lessons."""
+"""The coaching turn of the parenting chat: the coach answers from the lessons."""
 
 from __future__ import annotations
 
-import logging
 from dataclasses import dataclass
 from typing import Any
 
-from app.services import brain
-from app.services.language import answering, matching
+from app.services.connections import Connection
+from app.services.language import answering, finishing, matching
 from app.services.language import requests as request_service
-from app.services.parenting import scaffold as scaffold_service
 from app.services.parenting import sessions as session_service
 from app.services.parenting.sessions import CoachingSession
 
-logger = logging.getLogger(__name__)
-
 ANSWERED = "answered"
-NEEDS_CORRECTION = "needs_correction"
-ESCALATED = "escalated"
 
-COACHING_MAX_WORDS = 48
-MAX_SCAFFOLD_ATTEMPTS = 2
 # The parent's message is a sentence, not a lesson question, so the bar for
 # the card it answers from is a little lower than a lesson lookup. The card
 # still has to share most of its words with the message.
@@ -35,7 +27,7 @@ class CoachingAnswer:
     confidence: float
     grounded: bool
     source: str
-    grammar_notes: tuple[str, ...] = ()
+    evidence: tuple[Connection, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -46,7 +38,6 @@ class CoachingTurnInput:
     session: CoachingSession
     message: str
     cards: list[dict[str, Any]]
-    writer: Any = None
 
 
 @dataclass(frozen=True)
@@ -55,7 +46,6 @@ class CoachingTurn:
 
     status: str
     answer: CoachingAnswer | None
-    scaffold: scaffold_service.CoachingScaffold | None = None
 
 
 def start_coaching(topic: str = "General", child_age_band: str = "") -> CoachingSession:
@@ -68,64 +58,34 @@ def get_coaching(session_id: str) -> CoachingSession | None:
     return session_service.coaching_store().get(session_id)
 
 
-def coaching_turn(payload: CoachingTurnInput, *, correction: str = "") -> CoachingTurn:
-    """Answer one turn of the parenting chat, and let the coach correct itself.
+def coaching_turn(payload: CoachingTurnInput) -> CoachingTurn:
+    """Answer one turn of the parenting chat from the material the tenant taught.
 
-    The coach answers from the material the tenant taught, and the answer is
-    read with the same eyes the writer wrote it with: its own confidence, the
-    words it was unsure about, the grammar and the loop. When the answer is not
-    good enough, the turn ends in a scaffold the parent can coach from, and the
-    retry after a correction is re-read the same way.
+    The coach never writes an answer of its own: it gives back the lesson that
+    covers the parent's message, or says that the lesson was not taught.
     """
-    tenant_id = payload.tenant_id
     session = payload.session
     clean_message = (payload.message or "").strip()
-    clean_correction = (correction or "").strip()
     session.last_message = clean_message
     session.turns += 1
     session_service.coaching_store().save(session)
-    if clean_correction:
-        session.last_correction = clean_correction
-        session.corrections_used += 1
 
-    writer = payload.writer if payload.writer is not None else brain.load_writer(payload.tenant_id)
     taught = _taught_answer(clean_message, payload.tenant_id)
     if taught is not None:
         session.status = ANSWERED
-        session.last_correction = ""
-        return CoachingTurn(status=ANSWERED, answer=taught, scaffold=None)
+        return CoachingTurn(status=ANSWERED, answer=taught)
 
     if request_service.parse_request(clean_message) is not None:
         # The material does not answer this request, so there is nothing to
-        # write from. A card about another subject would invent an answer.
+        # answer from. A card about another subject would invent an answer.
         session.status = ANSWERED
-        session.last_correction = ""
-        return CoachingTurn(status=ANSWERED, answer=_not_learned_answer(), scaffold=None)
+        return CoachingTurn(status=ANSWERED, answer=_not_learned_answer())
 
-    instruction = _instruction(clean_message, session.child_age_band, clean_correction)
-    answer = _coach_answer(instruction, clean_message, payload.cards, writer)
-    is_writer_answer = (
-        answer.source == "writer" and writer is not None and bool(getattr(writer, "trained", False))
+    session.status = ANSWERED
+    return CoachingTurn(
+        status=ANSWERED,
+        answer=_coach_answer(clean_message, payload.cards),
     )
-    if is_writer_answer:
-        critique = writer.last_critique
-        problems = [str(problem) for problem in (getattr(critique, "problems", None) or [])]
-        if problems:
-            scaffold = scaffold_service.build(answer.text, problems)
-            session.scaffold_failures += 1
-            status = (
-                ESCALATED
-                if session.scaffold_failures >= MAX_SCAFFOLD_ATTEMPTS
-                else NEEDS_CORRECTION
-            )
-            session.status = status
-            return CoachingTurn(status=status, answer=answer, scaffold=scaffold)
-
-    if answer.text:
-        session.status = ANSWERED
-        session.last_correction = ""
-        _record_accepted(tenant_id, session.topic, answer)
-    return CoachingTurn(status=session.status, answer=answer, scaffold=None)
 
 
 def _taught_answer(message: str, tenant_id: int | None) -> CoachingAnswer | None:
@@ -135,65 +95,41 @@ def _taught_answer(message: str, tenant_id: int | None) -> CoachingAnswer | None
     taught = answering.answer_from_curriculum(message, tenant_id)
     if taught is None:
         return None
+    evidence = taught.evidence or (
+        Connection(
+            taught.source,
+            "match",
+            f"{taught.detail} answers this.",
+            taught.matched_question,
+        ),
+    )
     return CoachingAnswer(
         text=taught.answer,
         confidence=1.0,
         grounded=True,
         source=taught.source,
+        evidence=evidence,
     )
 
 
-def _coach_answer(
-    instruction: str,
-    message: str,
-    cards: list[dict[str, Any]],
-    writer: Any = None,
-) -> CoachingAnswer:
-    """The coach's answer, written from the taught material, or the taught one."""
+def _coach_answer(message: str, cards: list[dict[str, Any]]) -> CoachingAnswer:
+    """The coached lesson that covers the message, or the not-learned answer."""
     card = matching.lesson_covering(message, cards or [], minimum=COACH_CARD_MATCH)
-    context = _context_of(card)
     taught = str((card or {}).get("answer") or "").strip()
-    text: str | None = None
-    source = "none"
-    confidence = 0.0
-    grounded = False
-    grammar_notes: tuple[str, ...] = ()
-    if writer is not None and bool(getattr(writer, "trained", False)) and writer.model is not None:
-        try:
-            written = writer.respond(instruction, context=context, max_words=COACHING_MAX_WORDS)
-        except (RuntimeError, ValueError, TypeError) as error:
-            logger.warning("The coaching answer failed: %s", error)
-            written = None
-        if written and written.strip():
-            text = written.strip()
-            source = "writer"
-            confidence = float(getattr(writer, "last_confidence", 0.0) or 0.0)
-            critique = writer.last_critique
-            grounded = bool(getattr(critique, "grounded", False))
-            grammar_notes = tuple(
-                str(problem) for problem in (getattr(critique, "problems", None) or [])
-            )
-    if text and taught and source == "writer" and (grammar_notes or not grounded):
-        # The writer read its own answer and found it wanting, so the lesson
-        # the coach was given is better than a sentence it cannot stand behind.
-        text = taught.strip()
-        source = "taught"
-        confidence = 1.0
-        grounded = True
-        grammar_notes = ()
-    if not text and taught:
-        text = taught.strip()
-        source = "taught"
-        confidence = 1.0
-        grounded = True
-    if not text:
+    if not taught:
         return _not_learned_answer()
+    matched_question = str((card or {}).get("question") or "")
+    detail = (
+        f"Lesson “{matched_question}” covers the message."
+        if matched_question
+        else "A taught lesson covers the message."
+    )
     return CoachingAnswer(
-        text=text or "",
-        confidence=confidence,
-        grounded=grounded,
-        source=source,
-        grammar_notes=grammar_notes,
+        text=finishing.finish(taught),
+        confidence=1.0,
+        grounded=True,
+        source="taught",
+        evidence=(Connection("taught", "match", detail, matched_question),),
     )
 
 
@@ -204,40 +140,15 @@ def _not_learned_answer() -> CoachingAnswer:
         confidence=0.0,
         grounded=False,
         source="not_learned",
+        evidence=(Connection("taught", "miss", "No taught lesson covers the message."),),
     )
 
 
-def _instruction(message: str, age_band: str, correction: str) -> str:
-    """The coaching request the writer answers from."""
-    parts = [
-        "You are the coach of a parenting chat. Answer the parent warmly and clearly.",
-        f"The parent said: {message}.",
-    ]
-    if (age_band or "").strip():
-        parts.append(f"The child is about {age_band}.")
-    if (correction or "").strip():
-        parts.append(f"The coach should have said this instead: {correction}.")
-    return " ".join(parts)
-
-
-def _context_of(card: dict[str, Any] | None) -> str:
-    """The material the coach is given to answer from."""
-    if card is None:
-        return ""
-    question = str(card.get("question") or "").strip()
-    answer = str(card.get("answer") or "").strip()
-    return f"{question}. {answer}" if question else answer
-
-
-def _record_accepted(tenant_id: int | None, topic: str, answer: CoachingAnswer) -> None:
-    """Keep the coaching answer the coach gave when it passed its own gate."""
-    if answer.source != "writer" or not answer.text:
-        return
-    brain.record_feedback(
-        tenant_id,
-        brain.Feedback(
-            question=f"parenting:{topic}",
-            answer=answer.text,
-            correct=True,
-        ),
+def _not_learned_answer() -> CoachingAnswer:
+    """What the coach says when the material holds no answer."""
+    return CoachingAnswer(
+        text=answering.NOT_LEARNED,
+        confidence=0.0,
+        grounded=False,
+        source="not_learned",
     )

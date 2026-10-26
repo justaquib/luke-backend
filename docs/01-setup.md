@@ -49,14 +49,22 @@ This installs:
 - `sqlalchemy` + `psycopg2-binary` — Postgres ORM + driver
 - `chromadb` — local vector database
 - `spacy` — NLP pipeline
+- `nltk` — offline WordNet dictionary the reader consults
 
-## 4. Download the spaCy English model
+## 4. Download the spaCy English model and the WordNet data
 
 ```bash
 python -m spacy download en_core_web_sm
+python -m nltk.downloader wordnet omw-1.4
 ```
 
-The `_sm` model is small/fast. For better accuracy later you can switch to `_md` or `_lg` in `.env` (`SPACY_MODEL=en_core_web_md`).
+The `_sm` model is small/fast. For better accuracy later you can switch to `_md` or `_lg` in `.env` (`SPACY_MODEL=en_core_web_md`). The WordNet data is read locally; no answer needs a network call.
+
+If the downloader leaves `wordnet.zip` and `omw-1.4.zip` in `~/nltk_data/corpora/`
+instead of unzipping them (this happens on some NLTK versions), unzip both
+folders in place. The reader treats a missing dictionary as an empty reading,
+so the app still runs — it just cannot show meanings or reach lessons through
+synonyms until the data is unpacked.
 
 ## 5. Configure environment variables
 
@@ -98,7 +106,25 @@ docker exec -it assistance-pg psql -U postgres -c "CREATE DATABASE assistance;"
 
 ## 7. Run the API
 
+From `assistance_back/`, the one command is:
+
 ```bash
+./start engine
+```
+
+The word after the launcher is free-form (`./start luke` works the same), and
+the launcher can be renamed. It uses `.venv` (creating it when missing),
+installs `requirements.txt` only when the file changed, downloads the spaCy
+model when it is missing, starts Postgres with Docker Compose (opening Docker
+Desktop when needed), waits for the database on port 5433, and runs uvicorn on
+http://localhost:8000. The one-command route binds to `127.0.0.1`; use the
+manual command below with `--host 0.0.0.0` when another device must reach the
+API.
+
+The manual route is:
+
+```bash
+source .venv/bin/activate
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 

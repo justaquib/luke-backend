@@ -4,8 +4,7 @@ A correction does three things:
 
 * it is stored as a trained answer, so the assistant answers the question
   correctly from then on,
-* it is kept in the brain's own memory, so the writing model learns the right
-  wording and the heads learn from it,
+* it is kept in the brain's own memory, so the heads learn from it,
 * it is checked straight away, so the trainer can see whether the assistant
   really keeps it.
 

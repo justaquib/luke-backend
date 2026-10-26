@@ -1,13 +1,13 @@
 """The one vocabulary.
 
-The transformer's token list is the only live token→id mapping in the app.
+The word model's token list is the only live token→id mapping in the app.
 Anything that reads a vocabulary reads this one, through :func:`canonical`.
 
 The mappings that came before it are kept as read-only artefacts in
 ``app/legacy``. They are frozen for the record: they are never used at
 inference, and they are never loaded by the running app. The startup guard
 (:func:`assert_single_vocabulary`) fails loudly if one of them reaches a
-tensor bound for the transformer.
+tensor bound for the word model.
 """
 
 from __future__ import annotations
@@ -17,7 +17,7 @@ import logging
 from collections.abc import Iterable
 from pathlib import Path
 
-CANONICAL_OWNER = "transformer"
+CANONICAL_OWNER = "word-model"
 LEGACY_DIRECTORY = Path(__file__).resolve().parent.parent / "legacy"
 
 LOGGER = logging.getLogger(__name__)
@@ -30,7 +30,7 @@ class VocabularyError(RuntimeError):
 class Vocabulary:
     """A token list and its ids.
 
-    Only one of these is live: the transformer's. A retired one can still be
+    Only one of these is live: the word model's. A retired one can still be
     read, for the record, but it cannot turn text into ids, because ids from
     an old mapping would silently mean different words in the new model.
     """
@@ -84,11 +84,11 @@ class Vocabulary:
 
 
 def canonical(tenant_id: int | None = None) -> Vocabulary:
-    """The transformer's vocabulary: the only live token→id mapping."""
-    from app.services import brain
+    """The word model's vocabulary: the only live token→id mapping."""
+    from app.services.neural import engine_for
 
-    writer = brain.load_writer(tenant_id)
-    tokens = tuple(writer.vocabulary) if writer is not None else ()
+    task = engine_for(tenant_id).word_task
+    tokens = tuple(task.vocabulary) if task is not None else ()
     return Vocabulary(CANONICAL_OWNER, tokens)
 
 
@@ -119,7 +119,7 @@ def retired_names() -> list[str]:
 def guard_tensor_ids(
     ids: Iterable[int], source: str, vocabulary: Vocabulary | None = None
 ) -> list[int]:
-    """Check ids before they are bound for the transformer.
+    """Check ids before they are bound for the word model.
 
     An id that the canonical vocabulary does not hold would be read as
     whatever word sits at that position, so it is refused here instead of
@@ -200,7 +200,7 @@ def _boundary_problems() -> list[str]:
 
 
 def assert_single_vocabulary(tenant_id: int | None = None) -> dict:
-    """Check that only the transformer's mapping can reach the answering model.
+    """Check that only the word model's mapping can reach the model.
 
     This runs at startup, so a mistake stops the app instead of quietly
     answering with the wrong words.
@@ -223,7 +223,7 @@ def assert_single_vocabulary(tenant_id: int | None = None) -> dict:
 
     if problems:
         raise VocabularyError(
-            "the app must run on one vocabulary, the transformer's:\n- " + "\n- ".join(problems)
+            "the app must run on one vocabulary, the word model's:\n- " + "\n- ".join(problems)
         )
     return {
         "owner": vocab.owner,

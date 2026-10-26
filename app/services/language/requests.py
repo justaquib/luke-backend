@@ -4,18 +4,11 @@ Retrieval answers a question that was asked the way it was taught. A request
 like "write a short poem about the rain" is not that: the words of the request
 are mostly the words of the request, not the words of the lesson.
 
-So the answer comes in two steps:
-
-1. The request is read as a *shape* — a poem about a topic, a list of a topic,
-   some facts about a topic — and the topic is taken out of it.
-2. The lesson about that topic is found, and the trained model writes the
-   answer from it.
-
-The shapes here are the same ones the model is trained on, so a request is
-answered the way the model was taught to answer it. The material it is given
-is the lesson the trainer taught. The result is grounded: every word of the
-answer comes from the tenant's own material, and a request about something
-never taught is refused rather than invented.
+So the request is read as a *shape* — a poem about a topic, a list of a topic,
+some facts about a topic — the topic is taken out of it, and the lesson about
+that topic is found. The answer is the taught answer itself: the trainer's
+words are never reworded, and a request about something never taught is
+refused rather than invented.
 """
 
 from __future__ import annotations
@@ -27,7 +20,6 @@ from typing import Any
 from app.services.language import instructions as instruction_service
 from app.services.language.shapes import REQUEST_SHAPES
 from app.services.language.topics import topic_words
-from app.services.neural import quality as quality_service
 
 # The words that are never the topic of a request.
 _TOPIC_NOISE = frozenset(
@@ -218,43 +210,10 @@ def context_of(card: dict[str, Any]) -> str:
     return f"{question}. {answer}" if question else answer
 
 
-def _grounded(answer: str, context: str) -> bool:
-    """Whether every word of the answer comes from the material.
-
-    This is what keeps the model honest: an answer that uses a word the
-    trainer never taught is refused and the taught answer is used instead.
-    The words are compared whole, so "we" is not found inside "wonder".
-    """
-    given = set(_words(context))
-    for word in _words(answer):
-        if len(word) <= 2:
-            continue
-        if word not in given:
-            return False
-    return True
-
-
-def _with_uncertainty(answer: str, writer: Any) -> str:
-    """The answer, with a word of it the model was not sure about.
-
-    The model says what it is not sure of, so the reader knows that this word
-    is a guess and not something the trainer taught.
-    """
-    from app.services.neural import critique as critique_service
-
-    critique = getattr(writer, "last_critique", None)
-    if critique is None:
-        return answer
-    if critique.least_chance >= critique_service.MIN_WORD_CONFIDENCE:
-        return answer
-    return f"{answer} {critique.unsure_about}"
-
-
 def answer_request(
     question: str,
     tenant_id: int | None,
     cards: list[dict[str, Any]],
-    writer: Any = None,
 ) -> dict[str, Any] | None:
     """Answer a request from the material the tenant taught.
 
@@ -268,32 +227,12 @@ def answer_request(
     card = find_material(request, cards)
     if card is None:
         return None
-    context = context_of(card)
-    written = writer.respond(request.text, context=context) if writer is not None else None
-    critique = getattr(writer, "last_critique", None) if writer is not None else None
-    problems = tuple(getattr(critique, "problems", ()) or ()) if critique is not None else ()
     taught = str(card.get("answer") or "").strip()
-    if (
-        written
-        and not problems
-        and _grounded(written, context)
-        and not quality_service.repeats_itself(written)
-    ):
-        return {
-            "answer": _with_uncertainty(written, writer),
-            "source": "written",
-            "topic": request.topic,
-            "kind": request.kind,
-            "confidence": getattr(writer, "last_confidence", 0.0),
-            "uncertain_words": list(getattr(writer, "last_uncertain_words", []) or []),
-        }
-    if taught:
-        return {
-            "answer": taught,
-            "source": "taught",
-            "topic": request.topic,
-            "kind": request.kind,
-            "confidence": 0.0,
-            "uncertain_words": [],
-        }
-    return None
+    if not taught:
+        return None
+    return {
+        "answer": taught,
+        "source": "taught",
+        "topic": request.topic,
+        "kind": request.kind,
+    }

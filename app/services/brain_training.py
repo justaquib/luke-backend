@@ -1,4 +1,4 @@
-"""Training the answer and word models, and the markers around a run.
+"""Training the word model and the heads, and the markers around a run.
 
 The training runs in its own process, so the marker on disk is the truth the
 page reads: a flag in memory would not be seen by the process that watches
@@ -22,57 +22,15 @@ from app.services.brain_heads import (
     train_feedback_heads,
     train_intent_head,
 )
-from app.services.brain_instruction import remeasure_instruction
 
 if TYPE_CHECKING:
     from app.services.language.training_materials import TrainingSet
-    from app.services.neural.tasks import AnswerTask
 
 LOGGER = logging.getLogger(__name__)
 
 _LOCK = threading.RLock()
 
 TRAINING_TIMEOUT_SECONDS = 30 * 60
-
-
-def load_writer(tenant_id: int | None) -> AnswerTask | None:
-    """The trained answer model of this tenant, if it has one.
-
-    The engine keeps the model in memory and watches the file, so a model
-    that was trained in another process is picked up as soon as it lands.
-    """
-    from app.services import neural
-
-    return neural.engine_for(tenant_id).answer_task
-
-
-def train_writer(
-    tenant_id: int | None,
-    corpus: Any,
-    steps: int = 0,
-    config: dict[str, Any] | None = None,
-    progress: Callable[[int, int, float | None], None] | None = None,
-) -> dict[str, Any]:
-    """Train the answer model from scratch on the tenant's own material.
-
-    ``steps`` of 0 means the training is measured against the material: the
-    passes it has to make decide how long it trains. ``progress`` is told how
-    far the training has come, so a training in its own process can be
-    watched from the page.
-    """
-    from app.services import neural
-
-    job = neural.TrainingJob(
-        corpus={
-            "sentences": len(corpus.sentences),
-            "instructions": len(corpus.instructions),
-            "contexts": len(corpus.contexts),
-        },
-        config=config,
-        settings=neural.TrainingSettings(steps=steps),
-        progress=progress,
-    )
-    return neural.engine_for(tenant_id).train_answer(corpus, job)
 
 
 def training_path(tenant_id: int | None) -> Path:
@@ -122,37 +80,23 @@ def is_training(tenant_id: int | None) -> bool:
     return True
 
 
-def writer_state(tenant_id: int | None) -> dict[str, Any]:
-    """What the answer model knows about itself, read without building it.
+def word_state(tenant_id: int | None) -> dict[str, Any]:
+    """What the word model knows about itself, read without building it.
 
     The report is kept in the checkpoint, so a page that only shows the
-    numbers never pays for the weights: the file is mapped for its report and
-    the model is built when a request actually needs it.
+    numbers never pays for the weights.
     """
     from app.services import neural
 
-    report = neural.engine_for(tenant_id).state()["answer"]
+    report = neural.engine_for(tenant_id).state()["words"]
     if not report.get("trained"):
         return {"trained": False}
-    return {**report, "device": report.get("device") or transformer_device()}
+    return report
 
 
-def transformer_device() -> str:
-    from app.services import neural
-
-    return neural.device_name()
-
-
-def write_with_transformer(tenant_id: int | None, prompt: str, max_tokens: int = 24) -> str | None:
-    """Let the trained answer model write what comes after the prompt."""
-    from app.services import neural
-
-    return neural.engine_for(tenant_id).write(prompt, max_tokens=max_tokens)
-
-
-def _follow_writer_steps(
+def _follow_steps(
     tenant_id: int | None,
-    task: str = "writer",
+    task: str = "words",
 ) -> Callable[[int, int, float | None], None]:
     """The steps of a model, noted in the checklist as they happen.
 
@@ -196,17 +140,9 @@ def _train_words(
         corpus={"sentences": len(corpus), "instructions": len(materials.instructions)},
         config=config,
         settings=neural.TrainingSettings(steps=steps),
-        progress=_follow_writer_steps(tenant_id, "words"),
+        progress=_follow_steps(tenant_id, "words"),
     )
     return neural.engine_for(tenant_id).train_words(corpus, job)
-
-
-def _remeasure_after_training(tenant_id: int | None) -> None:
-    """Take a fresh instruction measurement, because the model just changed."""
-    try:
-        remeasure_instruction(tenant_id)
-    except (OSError, ValueError, RuntimeError) as error:
-        LOGGER.warning("The instruction test could not rerun after training: %s", error)
 
 
 def train(
@@ -215,33 +151,21 @@ def train(
     config: dict[str, Any] | None = None,
     steps: int = 0,
 ) -> dict[str, Any]:
-    """Train the writer and the heads from the tenant's material and feedback.
+    """Train the word model and the heads from the tenant's material.
 
-    ``steps`` of 0 means the writer trains as long as the material asks for
-    (see ``train_writer``). The transformer is the writer, so it is trained
-    again on everything the tenant has taught: every lesson, every approved
-    answer, every correction and every document is in the material, and the
-    vocabulary grows with it. The questions are turned into requests as well,
-    so the writer learns to answer a request and not only to be looked up.
+    ``steps`` of 0 means the word model trains as long as its material asks
+    for. The word model learns from everything the tenant has taught: every
+    lesson, every approved answer, every correction and every document is in
+    the material, and the vocabulary grows with it.
     """
-    from app.services import neural
-
     with _LOCK:
         feedback = load_feedback(tenant_id)
     corrections = [entry["correction"] for entry in feedback if entry.get("correction")]
     sentences = [sentence for sentence in materials.sentences if sentence]
     training_progress.start(tenant_id)
     mark_training(tenant_id, True)
-    writer_report: dict[str, Any] = {}
+    word_report: dict[str, Any] = {}
     try:
-        writer_report = train_writer(
-            tenant_id,
-            neural.AnswerCorpus(sentences, list(materials.instructions), list(materials.contexts)),
-            config=config,
-            steps=steps,
-            progress=_follow_writer_steps(tenant_id, "writer"),
-        )
-        training_progress.stage(tenant_id, "writer", training_progress.DONE)
         word_report = _train_words(tenant_id, sentences, materials, config, steps)
         training_progress.stage(tenant_id, "words", training_progress.DONE)
         emotion_examples = train_emotion_head(tenant_id, sentences)
@@ -253,10 +177,8 @@ def train(
         training_progress.stage(tenant_id, "feedback", training_progress.DONE)
     finally:
         clear_training(tenant_id)
-        training_progress.finish(tenant_id, writer_report.get("stop_reason"))
-    _remeasure_after_training(tenant_id)
+        training_progress.finish(tenant_id, word_report.get("stop_reason"))
     return {
-        "writer": writer_report,
         "words": word_report,
         "emotion_examples": emotion_examples,
         "intent_examples": intent_examples,

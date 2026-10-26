@@ -4,7 +4,7 @@ The word model that writes them is tested in ``test_word_model``; these tests
 keep the language services honest about the sentences they build and repair.
 """
 
-from app.services import brain, language_logic
+from app.services import language_logic
 
 
 def test_a_word_that_was_a_lesson_answer_becomes_a_sentence(monkeypatch, tmp_path):
@@ -182,7 +182,6 @@ def test_an_adjective_is_left_without_an_article():
 def test_a_list_is_not_cut_into_its_first_item(monkeypatch, tmp_path):
     monkeypatch.setattr(language_logic, "_DATA_DIR", tmp_path)
     language_logic._CACHE.clear()
-    monkeypatch.setattr(brain, "load_writer", lambda tenant_id: None)
     answer = "Some animals are ant, bear, cat, cow, deer, dog, elephant, fish."
 
     written = language_logic.paraphrase_answer(None, answer)

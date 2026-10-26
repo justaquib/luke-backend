@@ -5,10 +5,10 @@ not enough to answer a request that was never worded the same way: "write a
 short poem about the rain" asks for the lesson "Poem: Rain Rain Go Away" even
 though the two share almost no words.
 
-This module turns every lesson into a set of instructions, so the model learns
-the *request* as well as the answer. The forms are written by hand, and the
-ones that are only used to measure the model are kept apart from the ones it
-trains on, so the score says something true.
+This module turns every lesson into the ways it can be asked for. The word
+model reads the answers in those wordings as plain sentences, and the held-out
+forms stay apart from the ones training uses, so a probe still measures
+something the material did not show.
 """
 
 from __future__ import annotations

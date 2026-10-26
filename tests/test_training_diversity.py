@@ -1,14 +1,14 @@
 """Tests for the training data that shows the model where its material stops.
 
 The training holds requests about things that were never taught with the
-refusal to answer them. The adversarial score is the refusal the product
-gives the user, and the writer's own refusal is counted beside it.
+refusal to answer them, and the held-out requests are never the ones the
+training saw, so the refusal is measured honestly.
 """
 
-from app.services.language.evaluation import _refusals
 from app.services.language.negatives import (
     MAX_NEGATIVE_EXAMPLES,
     REFUSAL,
+    build_held_out_negatives,
     build_negatives,
     unknown_topics,
 )
@@ -67,50 +67,11 @@ def test_the_training_set_holds_the_refusal_for_an_unknown_topic(monkeypatch):
     assert any(response != REFUSAL for _, response in training.instructions)
 
 
-class _StubWriter:
-    """A writer that always writes the same answer."""
+def test_the_held_out_refusals_are_never_trained():
+    cards = _elephant_cards()
+    trained = {request for request, _ in build_negatives(cards)}
 
-    def __init__(self, says: str) -> None:
-        self.says = says
+    held = build_held_out_negatives(cards, 20)
 
-    def respond(self, request: str, context: str = "") -> str:
-        return self.says
-
-
-def test_the_material_boundary_refuses_what_was_never_taught():
-    result = _refusals(
-        None,
-        _elephant_cards(),
-        _StubWriter("Elephants sleep in the shade."),
-        [("Write a poem about the accordion.", REFUSAL)],
-    )
-
-    assert result["passed"] == 1
-    assert result["total"] == 1
-    assert result["score"] == 1.0
-    assert result["model"] == 0
-    assert result["probes"][0]["correct"] is True
-
-
-def test_the_writer_that_says_no_is_counted_beside_the_boundary():
-    result = _refusals(
-        None,
-        _elephant_cards(),
-        _StubWriter(REFUSAL),
-        [("Write a poem about the accordion.", REFUSAL)],
-    )
-
-    assert result["passed"] == 1
-    assert result["model"] == 1
-
-
-def test_an_answer_about_taught_material_is_not_a_refusal():
-    result = _refusals(
-        None,
-        _volcano_cards(),
-        _StubWriter("Elephants sleep in the shade."),
-        [("Tell me everything about the volcano.", REFUSAL)],
-    )
-
-    assert result["passed"] == 0
-    assert result["probes"][0]["answered"]
+    assert held
+    assert all(request not in trained for request, _ in held)

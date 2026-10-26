@@ -1,6 +1,6 @@
 """The one vocabulary.
 
-The transformer's token list is the only live token→id mapping. The old
+The word model's token list is the only live token→id mapping. The old
 mappings are frozen artefacts and must never produce ids again.
 """
 
@@ -11,7 +11,7 @@ import pytest
 from app.services import brain, language_logic, vocabulary
 
 
-def test_the_canonical_vocabulary_is_the_transformers():
+def test_the_canonical_vocabulary_is_the_models():
     canonical = vocabulary.canonical(None)
 
     assert canonical.owner == vocabulary.CANONICAL_OWNER
@@ -23,13 +23,15 @@ def test_the_canonical_vocabulary_is_the_transformers():
         assert canonical.token_of(position) == token
 
 
-def test_the_transformer_uses_the_canonical_vocabulary():
-    writer = brain.load_writer(None)
-    if writer is None:
-        pytest.skip("no transformer has been trained")
+def test_the_word_model_uses_the_canonical_vocabulary():
+    from app.services.neural import engine_for
 
-    assert writer.vocabulary == list(vocabulary.canonical(None).tokens)
-    assert writer.index == vocabulary.canonical(None).index
+    task = engine_for(None).word_task
+    if task is None:
+        pytest.skip("no word model has been trained")
+
+    assert list(task.vocabulary) == list(vocabulary.canonical(None).tokens)
+    assert task.index == vocabulary.canonical(None).index
 
 
 def test_a_retired_vocabulary_cannot_produce_ids():
@@ -67,10 +69,10 @@ def test_the_startup_guard_passes():
     assert report["retired"] == vocabulary.retired_names()
 
 
-def test_the_old_word_list_is_not_fully_inside_the_transformers():
+def test_the_old_word_list_is_not_fully_inside_the_word_model_vocabulary():
     """The gap that has to be closed before the old list can be encoded again.
 
-    The old learner knew some words the transformer was never trained on, so
+    The old learner knew some words the word model was never trained on, so
     those ids cannot be produced. The guard is what keeps them out.
     """
     canonical = vocabulary.canonical(None)
@@ -78,7 +80,7 @@ def test_the_old_word_list_is_not_fully_inside_the_transformers():
 
     missing = [token for token in old.tokens if token not in canonical]
 
-    # The old list holds words the transformer was never trained on, so those
+    # The old list holds words the word model was never trained on, so those
     # ids cannot be produced. How many there are changes with the corpus, so
     # the gap is checked, not counted.
     assert missing

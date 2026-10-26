@@ -6,6 +6,13 @@
 > "would probably be" — the strict rule in `../../CODE_STANDARDS.md` forbids
 > that. How the frontier labs measure the same qualities:
 > `docs/06-frontier-model-evaluation.md`.
+>
+> **Retired on 2026-10-25:** the from-scratch answer writer, its trace and the
+> Hugging Face base-model teacher were removed from the app. Their rows are
+> kept exactly as measured, marked as history. The measured reason: on the
+> held-out probes the writer was served **0** times — every cross-form and
+> cross-topic answer came from the taught material, and the writer refused
+> **0 of 8** adversarial probes on its own. The word model is the served model.
 
 ## The measuring drill
 
@@ -13,7 +20,7 @@ Every row below says which kind of read it is, and the kinds are not
 interchangeable:
 
 1. Build the training set exactly as production does (`training_materials.collect`,
-   `quality.keep`, `example_service.build`), with the same vocabulary the model
+   `quality.keep`, `examples.word_example`), with the same vocabulary the model
    actually holds.
 2. Split it into a train set and a held-out set by group — the group is the
    normalized response, so the same answer never sits on both sides
@@ -35,7 +42,10 @@ Every row also says whether the measurement used the corpus of that day. The
 corpus grows as the trainer adds lessons, so a held-out number belongs to its
 corpus and is never compared across corpora as if it were the same test.
 
-## The answer model
+## The answer model (retired 2026-10-25)
+
+The rows below measured the from-scratch answer writer before it was retired.
+They are kept as the record of what it did, not as the current model.
 
 | When | Model state | Train read | Held-out read | Chance | Best step / steps | Vocabulary | Examples (train / held-out) |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -83,13 +93,12 @@ What the rows say in one line each:
   model's own name, so it is not a like-for-like comparison with the 4.9207
   row above.
 
-## The answer trace
+## The answer trace (retired 2026-10-25)
 
-The answer details panel reads one question through the saved writer and shows
-what the model really did (`POST /language-model/trace`,
-`app/services/neural/tracing.py`). The read runs in the model's resting state
-(`eval`, dropout off, `torch.inference_mode`) and restores the previous
-train/eval mode afterwards; nothing is trained or saved by it.
+The answer details panel used to read one question through the saved writer and
+show what the model really did (`POST /language-model/trace`,
+`app/services/neural/tracing.py`). Both the endpoint and the module are gone;
+the measurement below is kept as history.
 
 Measured on 2026-10-24 against tenant None's saved checkpoint
 `transformer-0.pt`, question "who is your creator?":
@@ -104,23 +113,24 @@ Measured on 2026-10-24 against tenant None's saved checkpoint
 | Writer's run | `we have one have with we.` — 8 choices, stopped on the end mark in 0.018 s |
 | Response payload | 20,272 bytes |
 
-What these numbers say: the writer's next choice after the question is "we"
-with only 0.167 of its probability, and its eight chosen words do not answer
-the question. The trace reports that as it is — the real candidates and the
-real run, never a cleaned-up example. The served answer for this question may
-come from another route (conversation, taught material or retrieval), and the
-panel labels the trace as the writer's measured reading of the same question
+What these numbers say: the writer's next choice after the question was "we"
+with only 0.167 of its probability, and its eight chosen words did not answer
+the question. The trace reported that as it was — the real candidates and the
+real run, never a cleaned-up example. The served answer for this question came
+from another route (conversation, taught material or retrieval), and the panel
+labelled the trace as the writer's measured reading of the same question
 rather than the path that answer took.
 
 ## The word model
 
-The word model is the second task of the neural engine. It is measured with
+The word model is the served model of the neural engine. It is measured with
 the same drill and its own chance level.
 
 | When | State | Held-out loss | Train read | Chance | Next-word accuracy / chance | Perplexity / chance | Steps | Params |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 2026-10-24 | 8 passes, seed 7, serving gate passed | **3.1327** | **2.6567** | `ln 1523 = 7.3284` | **0.4571 / 0.0007** | **22.94 / 1,511** | 928 | 599,936 |
 | 2026-10-24 | 8 passes, seed 7, after conversation material, serving gate passed | **3.0976** | **2.674** | `ln 1563 = 7.3544` | **0.4792 / 0.0006** | **22.14 / 1,563** | 944 | 606,592 |
+| 2026-10-26 | 8 passes, seed 7, after the reading work; corpus 2,421 unique sentences (2,179 train / 242 held out), serving gate passed | **3.1008** | **2.667** | `ln 1563 = 7.3601` | **0.4694 / 0.0006** | **22.22 / 1,563** | 944 (best at 900) | 606,208 |
 
 The serving gate (`serving.py`) accepts this model: its held-out loss 3.1327
 is far below chance 7.3284, and its next-word accuracy is 457 times the
@@ -136,6 +146,131 @@ different read from the fixed training batches: 210 held-out examples /
 2,790 scored positions score 0.3165 top-1 accuracy and 55.96 perplexity, and
 both reads are kept here so they are not confused. The corpus changed, so
 this row belongs to its own corpus and does not replace the row above.
+
+The 2026-10-26 row re-measured the unchanged word-model code after the
+reading work, on the same command (`scripts/measure_words.py --tenant 0
+--seed 7`). The script collected 2,421 unique sentences; the task's grouped
+split kept 2,097 sentences / 30,746 transitions, 1,887 train and 210
+held-out examples, and a 1,572-word vocabulary. The run made 944 steps (best
+at 900) in 30.7 s on MPS, did not stop early, and the serving gate accepted
+it: held-out **3.1008** against **7.3601** chance, next-word accuracy
+**0.4694** against **0.0006**. The drill's per-position read scores 2,790
+positions at 0.3247 top-1 accuracy and 55.42 perplexity. The code did not
+change; the corpus did, so this row belongs to its own corpus.
+
+## Reading, connecting and finishing (2026-10-25)
+
+Measured on tenant 0's real material (1,032 lesson cards) with
+`.venv/bin/python scripts/measure_reading.py --tenant 0`. The script prints
+one JSON object and never trains or saves a checkpoint.
+
+### Reading
+
+| What | Measured |
+| --- | --- |
+| Questions read | 12 |
+| Words read | 63 |
+| Words with a dictionary meaning | 24 |
+| Words with synonyms | 21 |
+| Question types | lookup 8, definition 3, counting 1 |
+
+The 12 questions are fixed in the script. The types are the reader's own
+classification, not an answer key: "What is a circle?" reads as a definition,
+"Why is the sky blue?" and the poem request as lookups, and "How many legs
+does a dog have?" as counting. Only key words are looked up in the
+dictionary, which is why 24 of 63 words carry a meaning: the rest are
+function words and words the key-word pass did not select.
+
+### The synonym fallback
+
+Coverage first: the 1,032 lessons hold 777 distinct title words. 751 have a
+WordNet entry; the other 26 have neither an entry nor a synonym. That
+measurement changed the design. The first version ran the fallback only when
+the dictionary had no entry, but the same WordNet gate that reports "no
+entry" also returns no synonyms, so that path could never fire. The fallback
+now runs on every definition question; a lesson reached through a single-word
+synonym is served only when exactly one lesson is reached and it shares a key
+word with the question, and otherwise the dictionary answer stands unchanged.
+
+| What | Measured |
+| --- | --- |
+| Probes built from real lessons | 22 |
+| Reached the intended lesson | **5** (22.73%) |
+| Reached a different lesson | **0** |
+| Reached no lesson | **17** |
+
+Each probe asks "What is a {synonym}?", where the synonym is a WordNet synonym
+of a lesson's title word and appears in that lesson's answer, the exact
+lesson lookup does not already answer the question, and the dictionary holds
+the question word. The five that passed: "What is a base?" →
+"GK: What is a foundation?", "What is a fall?" → "GK: What is autumn?",
+"What is a times?" → "What is multiplication?", "What is a pool?" →
+"What is a pond?" and "What is a opposite?" → "What is an antonym?". The 17
+misses are printed with their reasons; they are mostly synonyms outside the
+fallback's six-synonym window. An earlier probe run, before the single-word
+filter, reached one wrong lesson through the multi-word synonym "looking at";
+phrases are now rejected and that misfire is gone. The fallback never guesses
+between two lessons.
+
+### Finishing
+
+| What | Measured |
+| --- | --- |
+| Taught lesson answers finished | 1,032 |
+| Already finished | 1,031 |
+| Changed | **1** |
+| Idempotent (`finish(finish(x)) == finish(x)`) | **1,032** |
+
+The one changed answer is a story that ended without a full stop; finishing
+added it. No answer lost a word, a capital or an existing mark.
+
+## Training Luke from a Hugging Face base model (retired 2026-10-25)
+
+The **Base model** tab used to train a Hugging Face teacher on the training
+room's material, let it write answers to the taught questions, and add those
+answers to Luke's material before Luke was trained again. The feature and its
+files are gone from the app; the run below is kept as history. It was measured
+on 2026-10-25 through the shipped path (`service.run`,
+`HuggingFaceTB/SmolLM2-135M`, 200 fine-tune steps) on this machine — macOS,
+arm64, 10 cores, 16 GB of memory, MPS, torch 2.14.1. The whole run, from
+loading the teacher to Luke's last step, took 613.1 s.
+
+| The teacher | Measured |
+| --- | --- |
+| Model / parameters / device | SmolLM2-135M, 134,515,008, MPS |
+| Fine-tune steps / examples | 200 / 400 |
+| Fine-tune loss (last step) | **0.75** |
+| Mean of the last 20 steps | **1.023** |
+| Fine-tune time | 126.3 s |
+| Teacher answers kept | **19 of 24** questions; 5 dropped by the 3–48-word / no-loop guard |
+| Saved teacher | **272,585,201 bytes** under `huggingface/tenant-0/teacher-HuggingFaceTB-SmolLM2-135M/` |
+
+| Luke after the lesson | Measured |
+| --- | --- |
+| Writer train / held-out loss | **4.2894 / 4.9552** |
+| Writer steps / time | 900 / 63.1 s, stopped early |
+| Word model train / held-out loss | **0.8578 / 1.6749** |
+| Word model steps / time | 4,200 / 129.9 s, stopped early |
+| Intent / emotion examples | 1,062 / 66 |
+| Material before the teacher wrote | 2,068 sentences and 17,872 requests |
+
+The two tables answer different questions and are not on the same scale: the
+teacher's loss is how well it fitted the 400 demonstrated answers during its
+fine-tune, while Luke's losses are how well he fits the enlarged material,
+read on a held-out split. The page keeps them apart for that reason.
+
+Two honesty notes belong with these rows. First, a teacher answer that
+survives the guard is used exactly as written: the run does not fact-check it,
+and a measured answer from this run was factually wrong. Second, the grouped
+validation split shifts when the teacher's answers join the corpus, so these
+Luke losses belong to this corpus and are not a like-for-like continuation of
+the rows above. The numbers are one honest measurement of one run, not an
+average; early stopping and MPS make another run possible to differ. The page
+prints "not measured" for any value a run did not measure.
+
+The default of 200 fine-tune steps is itself a measurement: a 60-step run
+repeated its own prompt in every answer, so the page starts at 200 (the range
+is 1 to 300).
 
 ## Retrieval: chunking and hybrid search
 
@@ -163,10 +298,9 @@ only overlaps whole sentences, which is why the answerable set goes from 21 to
 
 ## What the model does with what it knows
 
-Measured on the live tenant through `brain.remeasure_instruction` (stored in
-`instruction-0.json`; re-measured after the conversation material was added on
-2026-10-24, again after the poem-request fix on 2026-10-24, and again after the
-lesson-matching fix on 2026-10-24, with the same result):
+Measured 2026-10-24 on the live tenant through the writer's instruction test
+(then stored in `instruction-0.json`; the test was retired with the writer on
+2026-10-25). The rows are kept as the record that led to the retirement.
 
 | Measurement | Result | What it means |
 | --- | --- | --- |
@@ -176,23 +310,27 @@ lesson-matching fix on 2026-10-24, with the same result):
 | Adversarial refusals (writer alone) | **0 of 8** | the 2.2M-parameter writer does not learn to refuse by itself; the boundary is the guard, and both numbers are shown so this is not hidden |
 | Probe contamination | **0 of 12** held-out forms in the training | the probes measure what they claim to measure |
 
-The cross-form and cross-topic numbers are perfect *because* the writer falls
-back to the taught answer. The `written` column is the honest part: the model
-is not yet writing these answers in its own words. The loop guard
-(`quality.repeats_itself`) and the grounding check are what stop a bad written
-answer from being served; the taught answer is the correct fallback, not a
-bypass.
+The cross-form and cross-topic numbers are perfect *because* the taught answer
+wins every time. The `written` column is the honest part: the writer was
+served **0 of 12** forms and **0 of 6** subjects. That is the measured reason
+it was retired on 2026-10-25 — the taught answer is the correct path, not a
+fallback around a model that works.
 
 The two "Describe … to me" probes are refused *because the material boundary
-finds nothing*, not because the request is unreadable: `shapes.py` now reads
-that wording as a fact request, so the same wording about a taught topic
-("Describe the wind to me.") finds the lesson and is answered. Without that
-shape the probes would have been refused before the topic was even looked up,
-and the score would have meant nothing. The four negation probes are refused
-one step earlier: a poem that is *not* about a taught topic is not a request
-the product can satisfy, so it is never given to the writer.
+finds nothing*, not because the request is unreadable: `shapes.py` reads that
+wording as a fact request, so the same wording about a taught topic ("Describe
+the wind to me.") finds the lesson and is answered. Without that shape the
+probes would have been refused before the topic was even looked up, and the
+score would have meant nothing. The four negation probes are refused one step
+earlier: a poem that is *not* about a taught topic is not a request the
+product can satisfy.
 
 ## Changes and what they did
+
+Rows that mention the writer, the trace, the scaffold or the base-model teacher
+describe changes made while those features existed; they are kept as history.
+The reader, fallback and finishing changes of 2026-10-25 are measured in their
+own rows below the table, and in the section that follows it.
 
 | Change | Before | After |
 | --- | --- | --- |
@@ -207,6 +345,10 @@ the product can satisfy, so it is never given to the writer.
 | Hybrid reranking (`retrieval.rerank_hits`) | embedding distance alone | 0.4 semantic + 0.6 lexical, stopwords neutral: top-1 20 → 23 of 24, top-4 21 → 24 of 24 |
 | Held-out refusal probes (`negatives.build_held_out_negatives`) | refusals were scored on the same requests the training showed | the probes are requests the training never showed; the product refuses 8 of 8 and the writer's 0 of 8 is reported beside it |
 | Conversation material (`language/conversation.py`, `training_materials`) | a greeting, the model's name, thanks and a goodbye only reached the answer path through the taught material; the name was fixed | the pairs are answered directly and trained, and are built from the model name in Settings; the production drill on the new corpus reads 3.7497 held-out against 7.5348 chance |
+| Base-model teacher (`huggingface/service.py`, `teacher.py`) | Luke trained only on the training room's own material | SmolLM2-135M fitted 200 steps (loss 0.75), wrote 19 usable answers of 24, and Luke trained on them; the teacher is never served, and the report keeps its numbers apart from Luke's |
+| Reading before answering (`nlu/`, `answer_flow.py`, `answer_streams.py`) | the question went straight to retrieval and one typing bubble hid every step until the whole answer arrived | the question is read (12 probe questions: 63 words, 24 meanings, 21 synonym sets), then each source reports what it found or did not, and the JSON path and the stream consume the same events; nothing shown is invented by the page |
+| Synonym-aware lesson fallback (`language/fallback.py`) | a definition question that named no lesson title went to the dictionary even when a taught lesson answered the same idea in other words | WordNet synonyms of the question word are tried against the allowed lessons; a probe set of 22 real lessons reached 5 (22.73%) and picked a **different** lesson in 0; the rest stay on the dictionary. The approved plan scoped this to questions with *no* dictionary entry, but that state cannot occur: the entry lookup and the synonym expansion share the same WordNet gate, so a question without an entry has no synonyms either (777 lesson-title words measured: 751 entries, 26 with no entry and no synonyms). The fallback therefore runs on every definition question and overrides the dictionary only when exactly one lesson is reached and it shares a stemmed key word with the question |
+| Answer finishing (`language/finishing.py`) | a lowercase taught answer with no full stop was served exactly as stored | outer whitespace trimmed, first alphabetic character capitalized, and a full stop added only when the text ends in a letter or digit; no word is changed. Across 1,032 stored answers 1,031 already read as sentences, 1 changed (it gained its full stop), and all 1,032 are idempotent |
 
 ## The frontier comparison — in kind, not in number
 
@@ -218,20 +360,20 @@ follows the same conventions (details in
 
 | The frontier convention | Ours (measured where shown) |
 | --- | --- |
-| Held-out, averaged, eval-mode loss — never a single batch | `measurement.fixed_batches`: fixed train and held-out batches built once per run, resting state — the 4.9207 above is held-out, 4.3342 is its train read |
-| Perplexity declared only against its own corpus/tokenizer | the word model's 22.94 against its own chance of 1,511 |
-| Scaling laws: length of training measured against the material | one pass over the examples, capped at 20,000 steps and 900 s; the 8-pass probe showed more passes alone do not help when the schedule never anneals |
-| Grounding: every sentence supported by the given material | `_grounded`: every word from the taught material, else the taught answer — why `written` is 0 on the live model |
-| Calibration: "I am not sure" must mean something | the token-confidence critique and the unsure-word note |
-| Refusal instead of invention about the unknown | the material boundary refuses 8 of 8 held-out probes; the writer alone refuses 0 of 8 |
-| Contamination control: probes held out of training | `evaluation._contamination` reports 0 of 12 overlaps |
-| Reporting failures beside successes | `written` vs `looked_up`, product vs writer refusals, and the live checkpoint's own held-out row |
+| Held-out, averaged, eval-mode loss — never a single batch | `measurement.fixed_batches`: fixed train and held-out batches built once per run, resting state — the word model's 3.0976 is held-out, 2.674 is its train read |
+| Perplexity declared only against its own corpus/tokenizer | the word model's 22.14 against its own chance of 1,563 |
+| Scaling laws: length of training measured against the material | eight passes over the examples, capped at 20,000 steps and 1,500 s; the word model's material is small, so one pass would stop at the minimum step count |
+| Grounding: every sentence supported by the given material | the answer is served as the trainer wrote it, so nothing is written that needs grounding |
+| Calibration: "I am not sure" must mean something | the loose-match flag marks a weak match instead of pretending it is sure |
+| Refusal instead of invention about the unknown | the material boundary refuses 8 of 8 held-out probes |
+| Contamination control: probes held out of training | the generality probes are held out of training, and the request probes are built apart (`negatives.build_held_out_negatives`) |
+| Reporting failures beside successes | the brain page reports the held-out row, the run's stop reason and a measurement it could not take as "not measured" |
 
 ## Keeping this file honest
 
-- **Updated on every improvement**: any change to the brain — the writer, the
-  training loop, the heads, the request path — that could move these numbers
-  re-measures per the drill and adds a row (or updates one) in the same
+- **Updated on every improvement**: any change to the brain — the word model,
+  the training loop, the heads, the request path — that could move these
+  numbers re-measures per the drill and adds a row (or updates one) in the same
   change, before the work is called complete. The rule is written into
   `../../CODE_STANDARDS.md`.
 - **Updated on every retrain**: when the trainer retrains the brain for

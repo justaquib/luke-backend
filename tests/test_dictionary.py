@@ -114,3 +114,44 @@ def test_unsupported_question_falls_through(monkeypatch):
         dictionary.answer_dictionary_question("What is the customer name in this voucher?") is None
     )
     assert dictionary.answer_dictionary_question("What is the capital of France?") is None
+
+
+def test_a_definition_that_was_found_says_so(monkeypatch):
+    monkeypatch.setattr(
+        dictionary, "_unique_synsets", lambda word: [FakeSynset("n", "a fruit", ["apple"])]
+    )
+
+    answer, found = dictionary.answer_dictionary_question_with_status("What does apple mean?")
+
+    assert found is True
+    assert answer == "Apple (noun): a fruit"
+
+
+def test_a_definition_that_was_not_found_says_so(monkeypatch):
+    monkeypatch.setattr(dictionary, "_unique_synsets", lambda word: [])
+
+    answer, found = dictionary.answer_dictionary_question_with_status("What does flurble mean?")
+
+    assert found is False
+    assert answer == 'I couldn\'t find "flurble" in the offline English dictionary.'
+
+
+def test_a_letter_question_is_always_found():
+    answer, found = dictionary.answer_dictionary_question_with_status(
+        "What letter does apple start with?"
+    )
+
+    assert found is True
+    assert answer == "Apple starts with the letter A."
+
+
+def test_a_text_that_is_not_a_dictionary_question_is_not_found():
+    answer, found = dictionary.answer_dictionary_question_with_status("Describe a flurble.")
+
+    assert answer is None
+    assert found is False
+
+
+def test_the_request_kind_and_word_are_read():
+    assert dictionary.lookup_request("What is a drum?") == ("definition", "drum")
+    assert dictionary.lookup_request("Describe a flurble.") is None

@@ -1,8 +1,7 @@
-"""The cleaned sentences and requests the writing model learns from."""
+"""The cleaned sentences the word model learns from."""
 
 from __future__ import annotations
 
-from app.services.language import instructions as instruction_service
 from app.services.language import runtime
 from app.services.language.curriculum import FOUNDATION_LESSON_CARDS
 from app.services.language.grammar import _repair_sentences
@@ -40,41 +39,3 @@ def training_corpus(tenant_id: int | None) -> list[str]:
         seen.add(cleaned)
         sentences.append(cleaned)
     return sentences
-
-
-def instruction_pairs(tenant_id: int | None) -> list[tuple[str, str]]:
-    """Every request the model learns to answer, with the answer to it.
-
-    A lesson is taught as a question and an answer. The same lesson can be
-    asked for in many ways, and the model has to learn all of them, or it
-    only ever answers the one wording it was taught.
-    """
-    cards = all_lesson_cards(tenant_id)
-    index = instruction_service.topic_index(cards)
-    pairs: list[tuple[str, str]] = []
-    for card in cards:
-        key = str(card.get("id") or card.get("question") or "")
-        for item in instruction_service.instructions_for(card, index.get(key, [])):
-            pairs.append((item.instruction, item.response))
-    return pairs
-
-
-def grounded_pairs(tenant_id: int | None) -> list[tuple[str, str, str]]:
-    """Every request with the material it is answered from.
-
-    The material is the lesson itself, so the model learns to answer from
-    what the trainer taught instead of from what it half-remembers.
-    """
-    cards = all_lesson_cards(tenant_id)
-    index = instruction_service.topic_index(cards)
-    pairs: list[tuple[str, str, str]] = []
-    for card in cards:
-        question = (card.get("question") or "").strip()
-        answer = (card.get("answer") or "").strip()
-        if not answer:
-            continue
-        context = f"{question}. {answer}" if question else answer
-        key = str(card.get("id") or card.get("question") or "")
-        for item in instruction_service.instructions_for(card, index.get(key, [])):
-            pairs.append((item.instruction, context, item.response))
-    return pairs

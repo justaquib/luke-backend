@@ -4,6 +4,8 @@ from datetime import datetime
 
 from pydantic import BaseModel
 
+from app.schemas.understanding import QuestionUnderstandingOut
+
 
 class CoachingAnswerOut(BaseModel):
     """The coach's answer, and how sure the coach is of it."""
@@ -12,23 +14,14 @@ class CoachingAnswerOut(BaseModel):
     confidence: float
     grounded: bool
     source: str
-    grammar_notes: list[str] = []
-
-
-class CoachingScaffoldOut(BaseModel):
-    """The ways the parent can coach the coach better."""
-
-    suggestions: list[str] = []
-    retry_context: str = ""
-    failure: str = ""
 
 
 class CoachingTurnOut(BaseModel):
-    """The coach's answer to one turn, or the correction it still needs."""
+    """The coach's answer to one turn."""
 
     status: str
     answer: CoachingAnswerOut | None = None
-    scaffold: CoachingScaffoldOut | None = None
+    understanding: QuestionUnderstandingOut | None = None
 
 
 class CoachingSessionOut(BaseModel):
@@ -39,8 +32,6 @@ class CoachingSessionOut(BaseModel):
     child_age_band: str = ""
     status: str = "open"
     turns: int = 0
-    corrections_used: int = 0
-    scaffold_failures: int = 0
     created_at: datetime
     updated_at: datetime
 
@@ -56,9 +47,3 @@ class ParentingTurnBody(BaseModel):
     """What the parent said to the coach."""
 
     message: str
-
-
-class ParentingCorrection(BaseModel):
-    """The better way the parent, or the trainer, coached the coach."""
-
-    correction: str

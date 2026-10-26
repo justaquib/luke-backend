@@ -4,17 +4,19 @@ The chat, the learner preview, the grade tests and the coaching chat all ask
 the same learner the same question. Keeping the order in one place means a
 question cannot be answered from the lessons on one page and refused on
 another. A page may add its own sources around this answer (documents, the
-weather, a coaching writer), but the taught material itself is read here.
+weather), but the taught material itself is read here.
 """
 
 from __future__ import annotations
 
 import re
 from collections.abc import Callable
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 from app.services import dictionary
-from app.services.language import runtime
+from app.services.connections import Connection
+from app.services.language import fallback as fallback_service
+from app.services.language import finishing, runtime
 from app.services.language.alphabet import _answer_alphabet_question
 from app.services.language.basics import (
     _answer_counting_question,
@@ -36,8 +38,7 @@ from app.services.language.curriculum import (
 from app.services.language.grammar import apply_requested_count
 from app.services.language.lessons import all_lesson_cards
 from app.services.language.matching import _matched_learned_lesson
-from app.services.language.patterns import _NEXT_WORD_REQUEST, _SENTENCE_REQUEST
-from app.services.language.writing import _answer_from_sentence_examples
+from app.services.language.writing import _answer_from_sentence_examples, write_pattern_answer
 
 NOT_LEARNED = (
     "I haven't learned an answer to that yet. Teach me the word, sentence, or "
@@ -58,7 +59,6 @@ SOURCE_DETAILS = {
     "taught": "Taught lesson",
     "trainer": "Trainer-approved answer",
     "word_cards": "Learned word",
-    "written": "Written from a lesson",
 }
 
 _QUESTION_STARTS = frozenset(
@@ -117,6 +117,7 @@ class TaughtAnswer:
     answer: str
     source: str
     matched_question: str = ""
+    evidence: tuple[Connection, ...] = ()
 
     @property
     def detail(self) -> str:
@@ -135,6 +136,16 @@ class TaughtAnswer:
 def source_detail(source: str) -> str:
     """The plain-language name of an answer source."""
     return SOURCE_DETAILS.get(source, source.replace("_", " ").capitalize())
+
+
+def _evidenced(answer: str, source: str, detail: str, matched_question: str = "") -> TaughtAnswer:
+    """A taught answer together with the connection that found it."""
+    return TaughtAnswer(
+        answer=answer,
+        source=source,
+        matched_question=matched_question,
+        evidence=(Connection(source, "match", detail, matched_question),),
+    )
 
 
 def current_stage(state: dict) -> str:
@@ -189,7 +200,9 @@ def _quick_answer(question: str, state: dict, tenant_id: int | None = None) -> T
 
     conversational = answer_conversation(question, model_settings.name_for(tenant_id))
     if conversational:
-        return TaughtAnswer(answer=conversational, source="assistant_profile")
+        return _evidenced(
+            conversational, "assistant_profile", "The assistant's own profile answers this."
+        )
     steps: tuple[tuple[Callable[[str], str | None], str], ...] = (
         (_answer_calculation_question, "number_cards"),
         (answer_assistant_age, "assistant_profile"),
@@ -202,10 +215,10 @@ def _quick_answer(question: str, state: dict, tenant_id: int | None = None) -> T
     for answer_of, source in steps:
         answer = answer_of(question)
         if answer:
-            return TaughtAnswer(answer=answer, source=source)
+            return _evidenced(answer, source, f"{source_detail(source)} answers this.")
     answer = answer_letter_question(question, state["letters"])
     if answer:
-        return TaughtAnswer(answer=answer, source="letters")
+        return _evidenced(answer, "letters", "The learner's letter cards answer this.")
     return None
 
 
@@ -216,84 +229,114 @@ def _word_answer(question: str, state: dict, stage: str) -> TaughtAnswer | None:
         return None
     for item in [*_tenant_words_for_stage(state, stage), *_foundation_words_for_stage(stage)]:
         if item["word"].casefold() == word:
-            return TaughtAnswer(
-                answer=f"{item['word'].capitalize()} means {item['meaning']}.",
-                source="word_cards",
-                matched_question=f"What does {item['word']} mean?",
+            return _evidenced(
+                f"{item['word'].capitalize()} means {item['meaning']}.",
+                "word_cards",
+                f'"{item["word"]}" is a taught word.',
+                f"What does {item['word']} mean?",
             )
     return None
+
+
+def _allowed_lessons(state: dict, stage: str, include_lessons: bool = True) -> list[dict]:
+    """The lessons the learner has reached, when lessons may answer."""
+    if not include_lessons:
+        return []
+    allowed = _allowed_grades(stage)
+    return [
+        item
+        for item in [*state["lesson_cards"], *FOUNDATION_LESSON_CARDS]
+        if item.get("grade_id", "nursery") in allowed
+    ]
 
 
 def _lesson_answer(
     question: str, state: dict, stage: str, include_lessons: bool
 ) -> TaughtAnswer | None:
     """The lesson that covers the question, in the grades the learner has reached."""
-    if not include_lessons:
-        return None
-    allowed = _allowed_grades(stage)
-    lessons = [
-        item
-        for item in [*state["lesson_cards"], *FOUNDATION_LESSON_CARDS]
-        if item.get("grade_id", "nursery") in allowed
-    ]
+    lessons = _allowed_lessons(state, stage, include_lessons)
     matched = _matched_learned_lesson(question, lessons)
     if not matched:
         return None
-    return TaughtAnswer(
-        answer=apply_requested_count(question, matched["answer"]),
-        source="lesson_cards",
-        matched_question=matched.get("question", ""),
+    matched_question = str(matched.get("question") or "")
+    return _evidenced(
+        apply_requested_count(question, matched["answer"]),
+        "lesson_cards",
+        f"Lesson “{matched_question}” covers the question.",
+        matched_question,
     )
 
 
 def _request_answer(question: str, tenant_id: int | None) -> TaughtAnswer | None:
     """A request for something to be written, answered from a taught lesson."""
-    from app.services import brain
     from app.services.language import requests as request_service
 
     try:
         cards = all_lesson_cards(tenant_id)
     except (OSError, ValueError):
         return None
-    result = request_service.answer_request(
-        question, tenant_id, cards, writer=brain.load_writer(tenant_id)
-    )
+    result = request_service.answer_request(question, tenant_id, cards)
     if result is None:
         return None
-    return TaughtAnswer(answer=result["answer"], source=result["source"])
+    kind = str(result.get("kind") or "taught")
+    return _evidenced(
+        result["answer"],
+        result["source"],
+        f"The request was answered from the taught {kind} lesson.",
+    )
 
 
-def _generated_answer(question: str, state: dict, stage: str) -> TaughtAnswer | None:
+def _generated_answer(
+    question: str, state: dict, stage: str, include_lessons: bool = True
+) -> TaughtAnswer | None:
     """The dictionary, the word model and the learned sentence examples."""
-    dictionary_answer = dictionary.answer_dictionary_question(question)
+    dictionary_answer, found = dictionary.answer_dictionary_question_with_status(question)
     if dictionary_answer:
-        return TaughtAnswer(answer=dictionary_answer, source="dictionary")
-    next_match = _NEXT_WORD_REQUEST.search(question.strip())
-    if next_match:
-        prefix = (next_match.group(1) or next_match.group(2) or "").strip(" \t\r\n'\".,?!")
-        options = runtime._model(state, stage).predict_next(prefix)
-        if options:
-            return TaughtAnswer(
-                answer=(
-                    f"From my sentence lessons, after “{prefix}” I predict “{options[0]['word']}”."
-                ),
-                source="sentence_patterns",
-            )
-    sentence_match = _SENTENCE_REQUEST.search(question.strip())
-    if sentence_match:
-        requested = re.sub(r"[^A-Za-z'’-].*$", "", sentence_match.group(1)).strip(" '’-")
-        answer = (
-            runtime._model(state, stage).generate_sentence(seed=requested) if requested else None
+        # A definition question may name something the trainer taught under a
+        # different word. The synonym is read from WordNet, and the lesson is
+        # served only when it is the one lesson reached and it shares a key
+        # word with the question; otherwise the dictionary answer stands.
+        attempt = fallback_service.find_fallback(
+            question, _allowed_lessons(state, stage, include_lessons)
         )
-        if answer:
-            return TaughtAnswer(answer=answer, source="sentence_patterns")
+        if attempt is not None and attempt.answer is not None:
+            return TaughtAnswer(
+                answer=attempt.answer.answer,
+                source="lesson_cards",
+                matched_question=attempt.answer.matched_question,
+                evidence=(attempt.connection,),
+            )
+        if found:
+            evidence = (
+                Connection(
+                    "dictionary",
+                    "match",
+                    "The offline dictionary has an entry for the question word.",
+                ),
+            )
+            if attempt is not None:
+                evidence += (attempt.connection,)
+            return TaughtAnswer(answer=dictionary_answer, source="dictionary", evidence=evidence)
+        return TaughtAnswer(
+            answer=dictionary_answer,
+            source="dictionary",
+            evidence=(attempt.connection,) if attempt is not None else (),
+        )
+    pattern = write_pattern_answer(question, state, stage)
+    if pattern is not None:
+        answer, detail = pattern
+        return _evidenced(answer, "sentence_patterns", detail)
     examples = [
         *(item["text"] for item in state["lessons"]),
         *_foundation_sentences_for_stage(stage),
     ]
     answer = _answer_from_sentence_examples(question, examples)
     if answer:
-        return TaughtAnswer(answer=answer, source="sentence_examples")
+        return _evidenced(
+            answer,
+            "sentence_examples",
+            "A taught sentence example answers the question.",
+        )
     return None
 
 
@@ -321,11 +364,11 @@ def answer_from_state(
     steps.append(lambda: _lesson_answer(question, state, grade, include_lessons))
     if not request_first:
         steps.append(lambda: _request_answer(question, tenant_id))
-    steps.append(lambda: _generated_answer(question, state, grade))
+    steps.append(lambda: _generated_answer(question, state, grade, include_lessons))
     for find_answer in steps:
         answer = find_answer()
         if answer is not None:
-            return answer
+            return replace(answer, answer=finishing.finish(answer.answer))
     return None
 
 

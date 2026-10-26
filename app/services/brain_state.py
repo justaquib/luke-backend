@@ -11,7 +11,7 @@ import logging
 from typing import Any
 
 from app.services import (
-    brain_instruction,
+    brain_generality,
     brain_material,
     brain_paths,
     brain_rung_results,
@@ -51,7 +51,6 @@ __all__ = [
     "model_level",
     "should_ask_back",
     "state",
-    "write_sentence",
 ]
 
 
@@ -104,32 +103,15 @@ def _measure(tenant_id: int | None, force: bool) -> dict[str, Any]:
     rungs = brain_rung_results.rung_results(
         tenant_id, force=force, brain_state=brain_state, knowledge=knowledge
     )
-    generality = brain_instruction.generality_score(tenant_id)
+    generality = brain_generality.generality_score(tenant_id)
     return {
         "brain_state": brain_state,
         "knowledge": knowledge,
         "capabilities": capabilities,
         "generality": generality,
-        "instructions": brain_instruction.instruction_score(tenant_id),
         "coverage": counted,
         "rungs": rungs,
         "measured": _measured_level(rungs, generality["score"]),
-    }
-
-
-def _instruction_view(instructions: dict[str, Any]) -> dict[str, Any]:
-    """What the instruction test measured, and how its answers were reached."""
-    return {
-        "instruction_following": instructions["score"],
-        "instruction_probes": instructions["probes"],
-        "instruction_total": instructions["total"],
-        "instruction_measured": bool(instructions.get("measured")),
-        "instruction_written": instructions.get("written"),
-        "instruction_looked_up": instructions.get("looked_up"),
-        "instruction_measured_at": instructions.get("measured_at"),
-        "adversarial": instructions.get("adversarial") or {},
-        "cross_topic": instructions.get("cross_topic") or {},
-        "contamination": instructions.get("contamination") or {},
     }
 
 
@@ -164,7 +146,6 @@ def _level_view(
     counted = measured_data["coverage"]
     knowledge = measured_data["knowledge"]
     generality = measured_data["generality"]
-    instructions = measured_data["instructions"]
     rungs = measured_data["rungs"]
     settings = model_settings.read(tenant_id)
     model_name = settings.name
@@ -205,7 +186,6 @@ def _level_view(
         "generality": generality["score"],
         "generality_cap": generality["cap"],
         "generality_probes": generality["probes"],
-        **_instruction_view(instructions),
         "frontier_level": 6.0,
         "frontier_title": BENCHMARK_TITLE,
         "frontier_note": BENCHMARK_NOTE,
@@ -231,7 +211,7 @@ def model_level(tenant_id: int | None, force: bool = False) -> dict[str, Any]:
 def state(tenant_id: int | None) -> dict[str, Any]:
     """What the brain currently knows about itself.
 
-    The vocabulary here is the transformer's: it is the one live token list,
+    The vocabulary here is the word model's: it is the one live token list,
     so the numbers and the ids always mean the same words.
     """
     from app.services import vocabulary as vocabulary_service
@@ -243,14 +223,15 @@ def state(tenant_id: int | None) -> dict[str, Any]:
     intent = LinearHead.load(brain_paths.brain_path(tenant_id, "intent"))
     canonical = vocabulary_service.canonical(tenant_id)
     engine = engine_for(tenant_id).state()
+    words = engine["words"]
     return {
-        "trained": bool(engine["answer"]["trained"]),
+        "trained": bool(words["trained"]),
         "vocabulary": len(canonical),
-        "transformer": engine["answer"],
-        "transformer_ready": bool(engine["answer"]["trained"]),
+        "words": words,
+        "words_ready": bool(words["trained"]),
         "engine": engine,
-        "backend": engine["words"]["backend"],
-        "backend_reason": engine["words"]["backend_reason"],
+        "backend": words["backend"],
+        "backend_reason": words["backend_reason"],
         "training": is_training(tenant_id),
         "progress": training_progress.read(tenant_id),
         "emotions": emotion.labels if emotion else [],
@@ -265,10 +246,3 @@ def state(tenant_id: int | None) -> dict[str, Any]:
         "corrections": sum(1 for entry in feedback if entry.get("correction")),
         "learned_corrections": sum(1 for entry in feedback if entry.get("learned")),
     }
-
-
-def write_sentence(tenant_id: int | None, seed_word: str = "") -> str | None:
-    """Let the trained answer model write a sentence after the seed word."""
-    from app.services.brain_training import write_with_transformer
-
-    return write_with_transformer(tenant_id, seed_word)

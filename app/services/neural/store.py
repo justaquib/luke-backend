@@ -1,9 +1,4 @@
-"""Where the neural models of a tenant are kept, and the runs that trained them.
-
-The answer model keeps its old file name, so a tenant that trained before the
-engine existed is still found. The word model has a file of its own, so a
-good answer model never forces a weak word model into service.
-"""
+"""Where the neural word model of a tenant is kept, and the runs that trained it."""
 
 from __future__ import annotations
 
@@ -14,17 +9,11 @@ from typing import Any
 
 from app.services.brain_paths import brain_dir, tenant_key
 
-ANSWER_FILE = "transformer-{key}.pt"
 WORDS_FILE = "words-{key}.pt"
 RUNS_FILE = "runs-{key}.json"
 
 # How many runs the builder can read back.
 MAX_RUNS = 5
-
-
-def answer_path(tenant_id: int | None) -> Path:
-    """Where the answer model is kept."""
-    return brain_dir() / ANSWER_FILE.format(key=tenant_key(tenant_id))
 
 
 def words_path(tenant_id: int | None) -> Path:
@@ -45,9 +34,9 @@ def mtime(path: Path) -> float | None:
         return None
 
 
-def stamp(tenant_id: int | None) -> tuple[float | None, float | None]:
-    """Both model files' change times, so the engine cache can follow them."""
-    return mtime(answer_path(tenant_id)), mtime(words_path(tenant_id))
+def stamp(tenant_id: int | None) -> float | None:
+    """The word model's change time, so the engine cache can follow it."""
+    return mtime(words_path(tenant_id))
 
 
 def load_runs(tenant_id: int | None) -> list[dict[str, Any]]:

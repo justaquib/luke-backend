@@ -11,7 +11,7 @@ from __future__ import annotations
 import time
 from typing import Any
 
-from app.services import brain_instruction, vector_store
+from app.services import vector_store
 from app.services.brain_levels import level_order
 from app.services.brain_rungs import (
     CORRECTION_LIMIT,
@@ -79,40 +79,6 @@ def _probe_results(tenant_id: int | None) -> list[dict[str, Any]]:
             }
         )
     return results
-
-
-def _writing_rung(tenant_id: int | None) -> dict[str, Any]:
-    """The writing rung: whether the writer wrote a held-out answer itself."""
-    measurement = brain_instruction.stored_instruction(tenant_id)
-    measured = bool(measurement.get("measured"))
-    written = int(measurement.get("written") or 0)
-    total = int(measurement.get("total") or 0)
-    wrote = measured and written > 0
-    detail = (
-        f"the writer wrote {written} of {total} held-out answers"
-        if measured
-        else "no held-out writing measurement yet"
-    )
-    entry = {
-        "question": "Write a new sentence about what you know",
-        "expected": "an answer the writer produced itself",
-        "form": "held-out request",
-        "answered": f"the writer produced {written} of {total} answers itself",
-    }
-    failure = {
-        "question": "Write a new sentence about what you know",
-        "expected": "an answer the writer produced itself",
-        "form": "not measured yet" if not measured else "looked up instead",
-    }
-    return {
-        "rung": "0.0.4",
-        "probes": 1,
-        "passed": 1 if wrote else 0,
-        "rate": 1.0 if wrote else 0.0,
-        "passes": [entry] if wrote else [],
-        "failures": [] if wrote else [failure],
-        "detail": detail,
-    }
 
 
 def _correction_rung(brain_state: dict[str, Any]) -> dict[str, Any]:
@@ -251,7 +217,6 @@ def rung_results(
             return cached
     results = [
         *_probe_results(tenant_id),
-        _writing_rung(tenant_id),
         _correction_rung(brain_state),
         _exam_rung(knowledge),
         _grounded_rung(brain_state),

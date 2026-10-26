@@ -1,8 +1,7 @@
 """The coaching sessions of the parenting chat.
 
-A session is the parent and the coach at the table: the turns they take, the
-correction the parent gave, and whether the coach has to be handed to a human
-trainer.
+A session is the parent and the coach at the table: the turns they take and
+the last thing the parent said.
 """
 
 from __future__ import annotations
@@ -21,10 +20,7 @@ class CoachingSession:
     child_age_band: str
     status: str = "open"
     turns: int = 0
-    corrections_used: int = 0
-    scaffold_failures: int = 0
     last_message: str = ""
-    last_correction: str = ""
     created_at: datetime = field(default_factory=lambda: datetime.now(UTC))
     updated_at: datetime = field(default_factory=lambda: datetime.now(UTC))
 

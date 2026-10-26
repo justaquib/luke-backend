@@ -3,7 +3,7 @@
 A training runs in its own process, so the page cannot ask it how far it has
 come: every part of the job is noted in a small file beside the model, and
 the brain page reads that file while the training runs. It says which parts
-are done, which one the training is on, how many of the writer's steps have
+are done, which one the training is on, how many of the model's steps have
 happened, and how long the rest will take. When the training is finished the
 file keeps the answer, so the panel can say how long it took.
 """
@@ -21,11 +21,10 @@ from app.services.brain_paths import brain_dir, tenant_key
 logger = logging.getLogger(__name__)
 
 # The parts of a training, in the order they happen.
-STAGES: tuple[str, ...] = ("writer", "words", "emotion", "intent", "feedback")
+STAGES: tuple[str, ...] = ("words", "emotion", "intent", "feedback")
 
 # What each part does, in plain words.
 LABELS: dict[str, str] = {
-    "writer": "Read the material and trained the answer model",
     "words": "Trained the neural word model",
     "emotion": "Taught the emotion head",
     "intent": "Taught the intent head",

@@ -24,7 +24,7 @@ IGNORED_PARTS = {
     "uploads",
     "legacy",
 }
-BANNED_IMPORTS = {"numpy", "scikit-learn", "transformers"}
+BANNED_IMPORTS = {"numpy", "scikit-learn"}
 
 
 def python_files() -> list[Path]:

@@ -189,8 +189,8 @@ def _model_report(tenant_id: int | None) -> dict[str, Any]:
             total += size
             files.append({"name": path.name, "size_bytes": size})
 
-    state = brain.writer_state(tenant_id)
-    transformer_bytes = _file_bytes(brain.writer_path(tenant_id))
+    state = brain.word_state(tenant_id)
+    words_bytes = int(state.get("weights_bytes") or 0)
 
     corpus = language_logic.training_corpus(tenant_id)
     tokens = sum(len(text.split()) for text in corpus)
@@ -201,14 +201,14 @@ def _model_report(tenant_id: int | None) -> dict[str, Any]:
         "file_count": len(files),
         "size_bytes": total,
         "directory": str(brain_dir),
-        "transformer": {
+        "words": {
             "trained": bool(state.get("trained")),
             "parameters": int(state.get("parameters") or 0),
             "vocabulary": int(state.get("vocabulary") or 0),
             "steps": int(state.get("steps") or 0),
             "loss": state.get("loss"),
             "device": state.get("device") or "cpu",
-            "size_bytes": transformer_bytes,
+            "size_bytes": words_bytes,
         },
         "corpus": {
             "sentences": len(corpus),

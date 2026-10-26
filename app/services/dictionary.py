@@ -294,34 +294,55 @@ def _related_answer(word: str, synsets: list[Any], kind: str) -> str:
     return f"{label} of {word}: {', '.join(related)}."
 
 
-def _answer_for(kind: str, word: str) -> str | None:
-    """The answer to a parsed request, or nothing when the word is unknown."""
+def _answer_for_with_status(kind: str, word: str) -> tuple[str | None, bool]:
+    """The answer to a parsed request, and whether a real entry answered it."""
     if kind == "letter":
-        return _letter_answer(word)
+        answer = _letter_answer(word)
+        return answer, answer is not None
     try:
         synsets = _unique_synsets(word)
     except (ImportError, LookupError):
-        return None
+        return None, False
     if not synsets:
-        return f'I couldn\'t find "{word}" in the offline English dictionary.'
+        return f'I couldn\'t find "{word}" in the offline English dictionary.', False
     if kind == "definition":
-        return _definition_answer(word, synsets)
+        return _definition_answer(word, synsets), True
     if kind == "part_of_speech":
-        return _pos_answer(word, synsets)
-    return _related_answer(word, synsets, kind)
+        return _pos_answer(word, synsets), True
+    return _related_answer(word, synsets, kind), True
+
+
+def _answer_for(kind: str, word: str) -> str | None:
+    """The answer to a parsed request, or nothing when the word is unknown."""
+    return _answer_for_with_status(kind, word)[0]
+
+
+def lookup_request(question: str) -> tuple[str, str] | None:
+    """The kind of dictionary question, and the word it asks about."""
+    return _parse_request(question)
+
+
+def answer_dictionary_question_with_status(question: str) -> tuple[str | None, bool]:
+    """The dictionary answer, and whether an entry was found for the word.
+
+    A false status means the text is the apology for a word the dictionary
+    does not hold, or the question is not a dictionary question at all. The
+    caller may still serve the apology, but it is free to look for a taught
+    lesson first.
+    """
+    alphabet_answer = _answer_alphabet_sequence(question)
+    if alphabet_answer is not None:
+        return alphabet_answer, True
+
+    parsed = _parse_request(question)
+    if not parsed:
+        return None, False
+    return _answer_for_with_status(*parsed)
 
 
 def answer_dictionary_question(question: str) -> str | None:
     """Return a concise offline lexical answer, or None if unsupported/unavailable."""
-    alphabet_answer = _answer_alphabet_sequence(question)
-    if alphabet_answer is not None:
-        return alphabet_answer
-
-    parsed = _parse_request(question)
-    if not parsed:
-        return None
-    kind, word = parsed
-    return _answer_for(kind, word)
+    return answer_dictionary_question_with_status(question)[0]
 
 
 def is_dictionary_question(question: str) -> bool:
