@@ -38,6 +38,13 @@ def _flag_missing_confidence(answer: str, matched_question: str) -> str:
     return f"{answer.rstrip('. ')}. {NOT_SURE_NOTE.format(subject)}"
 
 
+def _confidence(distance: float | None) -> float | None:
+    """Cosine similarity, the chance the vector search gives the match."""
+    if distance is None:
+        return None
+    return round(max(0.0, min(1.0, 1.0 - float(distance))), 4)
+
+
 def _faq_step(req: QueryRequest, entities: list, tenant_id: int | None) -> SourceStep:
     hits = vector_store.search_faq(req.question, n_results=1, tenant_id=tenant_id)
     if not hits:
@@ -68,6 +75,8 @@ def _faq_step(req: QueryRequest, entities: list, tenant_id: int | None) -> Sourc
                     )
                 ],
                 entities=entities,
+                distance=distance,
+                confidence=_confidence(distance),
             ),
             (
                 Connection(
@@ -119,6 +128,8 @@ def _intent_response(req: QueryRequest, entities: list, intent: dict) -> QueryRe
         ],
         entities=entities,
         intent=intent,
+        distance=intent["distance"],
+        confidence=_confidence(intent["distance"]),
     )
 
 
@@ -205,6 +216,7 @@ def _taught_step(req: QueryRequest, entities: list, tenant_id: int | None) -> So
             answer=taught.answer,
             hits=hits,
             entities=entities,
+            confidence=taught.confidence,
         ),
         connections,
     )
@@ -324,6 +336,8 @@ def _docs_step(req: QueryRequest, entities: list, tenant_id: int | None) -> Sour
             answer=hits[0]["text"],
             hits=[QueryHit(**hit) for hit in hits],
             entities=entities,
+            distance=distance,
+            confidence=_confidence(distance),
         ),
         (Connection("docs", "match", detail),),
     )

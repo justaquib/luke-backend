@@ -1,8 +1,14 @@
 from datetime import datetime
 from typing import Literal
 
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, ConfigDict, EmailStr
 
+from app.schemas.models import (
+    HuggingFaceTrainBody as HuggingFaceTrainBody,
+)
+from app.schemas.models import (
+    PredictBody as PredictBody,
+)
 from app.schemas.parenting import (
     CoachingAnswerOut as CoachingAnswerOut,
 )
@@ -47,6 +53,7 @@ class QueryRequest(BaseModel):
     n_results: int = 4
     apps: dict | None = None
     location: dict | None = None
+    model: str | None = None
 
 
 class QueryHit(BaseModel):
@@ -56,6 +63,8 @@ class QueryHit(BaseModel):
 
 
 class QueryResponse(BaseModel):
+    model_config = ConfigDict(protected_namespaces=())
+
     question: str
     source: str
     answer: str
@@ -66,6 +75,10 @@ class QueryResponse(BaseModel):
     app: dict | None = None
     disabled_external_sources: list[str] | None = None
     understanding: QuestionUnderstandingOut | None = None
+    model: str | None = None
+    model_name: str | None = None
+    distance: float | None = None
+    confidence: float | None = None
 
 
 class StatsResponse(BaseModel):

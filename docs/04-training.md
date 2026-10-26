@@ -148,24 +148,39 @@ curl http://localhost:8000/language-model/brain/sources \
   -H "Authorization: Bearer $TOKEN"
 ```
 
-## Retired: the Hugging Face base-model teacher
+## The Hugging Face base-model teacher
 
-The **Base model** tab used to fine-tune a Hugging Face causal language model
-and let it write teacher answers, which then joined Luke's material. It was
-retired on 2026-10-25 together with the from-scratch answer writer: the
-served answer is the trainer's material, and the teacher added a second model
-without improving an answer (the writer won 0 of the measured probes; see
-`07-model-measurements.md`).
+The **Base model** tab in the training room fine-tunes a small Hugging Face
+causal language model on this tenant's material. It was retired on 2026-10-25
+with the from-scratch answer writer and restored on 2026-10-26: the trainer
+asked for it back, and the chat now lets them answer with Luke or with any
+teacher saved on this machine.
 
-The files it left on disk are user data, so the app leaves them untouched and
-simply stops reading them:
+- `GET /language-model/huggingface` reports the measured machine (device,
+  `torch`, `transformers`), the offered base models, the saved teachers and the
+  last run.
+- `POST /language-model/huggingface/train` starts one run in a background
+  thread (`model_id`, `steps`); a second run is refused with `409` while one is
+  going. The run records `download` and `tune` stages, the steps done, an ETA,
+  the loss it measured and the material it used, under
+  `hf-progress-<tenant>.json`; `last-run.json` keeps the finished report.
+- `DELETE /language-model/huggingface/teachers/{folder}` removes one teacher's
+  weights after a confirmation. The last-run report and the answers it already
+  wrote stay; a folder name outside the teacher folder is rejected.
+- `GET /language-model/models` lists Luke and every installed teacher, and
+  `POST /language-model/predict` returns the next words **and** the attention
+  the selected model measured for a prefix. Luke reads from the retained word
+  model; a teacher reads with `attn_implementation="eager"`.
 
-- `transformer-<tenant>.pt`, `instruction-<tenant>.json` and
-  `hf-progress-<tenant>.json` in the learner's folder,
-- `.language_model/huggingface/tenant-<id>/` with each saved teacher.
+Weights live beside the tenant's learner data, so the material and the teacher
+stay together:
 
-To reclaim the space, stop the app and delete those files by hand. Nothing in
-the app reads them again, and training the word model does not need them.
+- `.language_model/huggingface/tenant-<id>/teacher-<model>/` per teacher,
+- `last-run.json` in the tenant folder, `hf-progress-<tenant>.json` in the
+  learner's folder.
+
+To reclaim the space, stop the app and delete a teacher folder by hand (or use
+the trash control on the tab). Training the word model does not need it.
 
 ## Correcting an answer that was wrong
 

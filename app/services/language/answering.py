@@ -118,6 +118,7 @@ class TaughtAnswer:
     source: str
     matched_question: str = ""
     evidence: tuple[Connection, ...] = ()
+    confidence: float | None = None
 
     @property
     def detail(self) -> str:
@@ -138,13 +139,20 @@ def source_detail(source: str) -> str:
     return SOURCE_DETAILS.get(source, source.replace("_", " ").capitalize())
 
 
-def _evidenced(answer: str, source: str, detail: str, matched_question: str = "") -> TaughtAnswer:
+def _evidenced(
+    answer: str,
+    source: str,
+    detail: str,
+    matched_question: str = "",
+    confidence: float | None = None,
+) -> TaughtAnswer:
     """A taught answer together with the connection that found it."""
     return TaughtAnswer(
         answer=answer,
         source=source,
         matched_question=matched_question,
         evidence=(Connection(source, "match", detail, matched_question),),
+        confidence=confidence,
     )
 
 
@@ -259,11 +267,13 @@ def _lesson_answer(
     if not matched:
         return None
     matched_question = str(matched.get("question") or "")
+    stored = matched.get("confidence")
     return _evidenced(
         apply_requested_count(question, matched["answer"]),
         "lesson_cards",
         f"Lesson “{matched_question}” covers the question.",
         matched_question,
+        float(stored) if stored is not None else None,
     )
 
 

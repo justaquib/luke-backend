@@ -89,8 +89,8 @@ title, eyebrow, description or actions row in its body.
 | Top panel     | Shared frame: brand + navigation, page name + scope + session title, info/settings/details |
 | Sidebar       | Chat sessions, "New chat", the running background task at the bottom             |
 | Messages      | Flat answers; an answer opens its details in the right panel; provenance and copy / good / wrong actions |
-| Composer      | Textarea + send button                                                          |
-| Right sidebar | Page information (the conversation facts for the active session, then the engine facts) or answer details (question, answer, source, match, passages, "How this answer was found" and the live link), with running tasks pinned below |
+| Composer      | Model picker (Luke or an installed teacher) above the textarea + send button    |
+| Right sidebar | Page information (the conversation facts for the active session, then the engine facts) or answer details (question, answer, source, measured distance and confidence, model, match, passages, "How this answer was found", the selected model's attention heatmap and next words, and the live link), with running tasks pinned below |
 
 The conversation facts — message count, distinct answer sources and start time
 — live in the page information panel, not the body. They are read from the
@@ -118,6 +118,43 @@ The trace is stored with the message and shown in the answer details under
 **How this answer was found**. A stored trace is shown in full when the panel
 opens; it does not replay the word-by-word reveal. A failed stream clears the
 live trace and adds no answer.
+
+### The model picker
+
+The composer asks one model to answer: **Luke** (the taught material) or any
+Hugging Face teacher saved on this machine (`GET /language-model/models`). The
+choice is kept in this browser (`luke.answer-model`); a saved teacher that was
+removed falls back to the backend's default, so the picker is never empty. The
+chosen id is sent with `/query` and `/query/stream`, and the answer stores the
+model and its display name. A teacher answers from the same retrieved lesson or
+FAQ as Luke — it writes the wording from that reference, it does not invent
+material — and its stage appears as **Writing** with the model's name.
+
+### Distance, confidence and the model
+
+The provenance line under an answer reads `Source <label>` and, only when the
+backend measured them, `dist <0.10>` (the vector distance of the matched
+answer), `confidence <100%>` and `model <name>`. Luke's lesson answers keep the
+confidence they stored; a distance is shown only where a real vector distance
+exists. Nothing is estimated in the page.
+
+### The attention heatmap and the prediction lab
+
+The answer details end with what the selected model measured for the question:
+
+- `app-word-heatmap` draws one cell per word pair from the model's attention
+  (last layer, averaged over heads, 12-token window). Rows are the word
+  looking, columns the word it looked at; the colour is scaled to the strongest
+  cell of this prefix, and the caption says so. A model that returns no
+  attention shows a plain "did not report attention" line instead of an empty
+  grid.
+- **Open the prediction lab** opens a modal where the model continues one word
+  at a time. The words and probabilities are the backend's top five; the
+  animation only staggers the reveal of data already returned. The trainer can
+  edit the prefix, pick a suggested word, remove a picked word (and continue
+  from there) or type a replacement; every choice asks `POST
+  /language-model/predict` again from the new prefix. Under reduced motion the
+  chips appear without the stagger.
 
 ### Sessions (chats)
 

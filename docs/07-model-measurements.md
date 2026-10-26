@@ -7,12 +7,15 @@
 > that. How the frontier labs measure the same qualities:
 > `docs/06-frontier-model-evaluation.md`.
 >
-> **Retired on 2026-10-25:** the from-scratch answer writer, its trace and the
-> Hugging Face base-model teacher were removed from the app. Their rows are
-> kept exactly as measured, marked as history. The measured reason: on the
-> held-out probes the writer was served **0** times — every cross-form and
-> cross-topic answer came from the taught material, and the writer refused
-> **0 of 8** adversarial probes on its own. The word model is the served model.
+> **Retired on 2026-10-25, partially restored on 2026-10-26:** the from-scratch
+> answer writer and its trace were removed from the app; their rows are kept
+> exactly as measured, marked as history. The measured reason: on the held-out
+> probes the writer was served **0** times — every cross-form and cross-topic
+> answer came from the taught material, and the writer refused **0 of 8**
+> adversarial probes on its own. The Hugging Face base-model teacher was
+> restored on 2026-10-26 as a model the chat can ask directly (it writes from
+> the retrieved reference, measured attention included), not as a source of
+> training text for Luke. The word model is still Luke's only model.
 
 ## The measuring drill
 
@@ -224,16 +227,15 @@ between two lessons.
 The one changed answer is a story that ended without a full stop; finishing
 added it. No answer lost a word, a capital or an existing mark.
 
-## Training Luke from a Hugging Face base model (retired 2026-10-25)
+## Training with a Hugging Face base-model teacher
 
-The **Base model** tab used to train a Hugging Face teacher on the training
-room's material, let it write answers to the taught questions, and add those
-answers to Luke's material before Luke was trained again. The feature and its
-files are gone from the app; the run below is kept as history. It was measured
-on 2026-10-25 through the shipped path (`service.run`,
-`HuggingFaceTB/SmolLM2-135M`, 200 fine-tune steps) on this machine — macOS,
-arm64, 10 cores, 16 GB of memory, MPS, torch 2.14.1. The whole run, from
-loading the teacher to Luke's last step, took 613.1 s.
+The **Base model** tab trains a Hugging Face teacher on the training room's
+material. It was retired on 2026-10-25 and restored on 2026-10-26 in a
+different role: the chat can now answer with the saved teacher (it writes from
+the retrieved lesson or FAQ and reports its attention), instead of the teacher
+writing answers that then joined Luke's training material. The run below is the
+2026-10-25 measurement and is kept as history for the fine-tune itself; it is
+not a read of the restored serving path.
 
 | The teacher | Measured |
 | --- | --- |
@@ -270,7 +272,32 @@ prints "not measured" for any value a run did not measure.
 
 The default of 200 fine-tune steps is itself a measurement: a 60-step run
 repeated its own prompt in every answer, so the page starts at 200 (the range
-is 1 to 300).
+is 1 to 2000).
+
+## Serving the restored teacher (measured 2026-10-26)
+
+The restored chat path was read against the installed
+`teacher-HuggingFaceTB-SmolLM2-135M` on the same machine (Apple silicon, MPS,
+`torch` 2.14.1, `transformers` 5.20.2). The teacher has **30 layers, 9 heads,
+hidden size 576**.
+
+| The teacher's read | Measured |
+| --- | --- |
+| First prediction (weights load + forward) | **6.13 s** |
+| Warm answer | **2.52 s** |
+| Attention returned for `The sky appears blue because` | **5 × 5**, last layer averaged over heads, peak **1.0**, row sums 0.999–1.002 |
+| Next words | `the` **23.14%**, `of` **20.41%**, `it` **18.07%** |
+| Wording accepted of 6 probe references | **1 of 6** (`Paris is the capital of France`) |
+
+The 1-of-6 row is the important one. The teacher frequently continues with
+facts of its own rather than rewriting the reference — for example, asked why
+the sky is blue with the reference above, it wrote *"…This makes it easier for
+us to see in the dark."* The material guard (`_uses_material`) accepts an
+answer only when at least two of its content words come from the reference and
+make up a third of it, so that answer and four others were refused and the
+matched taught answer was served instead; the `model` connection records the
+fallback. The guard is a lexical measure and is not a fact check: an accepted
+rewrite can still be wrong. The page never presents a teacher answer as Luke's.
 
 ## Retrieval: chunking and hybrid search
 
@@ -345,7 +372,7 @@ own rows below the table, and in the section that follows it.
 | Hybrid reranking (`retrieval.rerank_hits`) | embedding distance alone | 0.4 semantic + 0.6 lexical, stopwords neutral: top-1 20 → 23 of 24, top-4 21 → 24 of 24 |
 | Held-out refusal probes (`negatives.build_held_out_negatives`) | refusals were scored on the same requests the training showed | the probes are requests the training never showed; the product refuses 8 of 8 and the writer's 0 of 8 is reported beside it |
 | Conversation material (`language/conversation.py`, `training_materials`) | a greeting, the model's name, thanks and a goodbye only reached the answer path through the taught material; the name was fixed | the pairs are answered directly and trained, and are built from the model name in Settings; the production drill on the new corpus reads 3.7497 held-out against 7.5348 chance |
-| Base-model teacher (`huggingface/service.py`, `teacher.py`) | Luke trained only on the training room's own material | SmolLM2-135M fitted 200 steps (loss 0.75), wrote 19 usable answers of 24, and Luke trained on them; the teacher is never served, and the report keeps its numbers apart from Luke's |
+| Base-model teacher (`huggingface/service.py`, `tuning.py`, `serving.py`) | the 2026-10-25 teacher only wrote answers that then trained Luke; it was never served, and the 2026-10-26 restored teacher was first guarded by a one-word overlap | the teacher is now answerable from the chat and grounded on the retrieved reference: of 6 probe references **1 of 6** wordings passed the stricter guard (two shared content words and a third of the answer), and the other 5 fell back to the matched answer. Attention and next words are real (30 layers / 9 heads, row sums 1.0) |
 | Reading before answering (`nlu/`, `answer_flow.py`, `answer_streams.py`) | the question went straight to retrieval and one typing bubble hid every step until the whole answer arrived | the question is read (12 probe questions: 63 words, 24 meanings, 21 synonym sets), then each source reports what it found or did not, and the JSON path and the stream consume the same events; nothing shown is invented by the page |
 | Synonym-aware lesson fallback (`language/fallback.py`) | a definition question that named no lesson title went to the dictionary even when a taught lesson answered the same idea in other words | WordNet synonyms of the question word are tried against the allowed lessons; a probe set of 22 real lessons reached 5 (22.73%) and picked a **different** lesson in 0; the rest stay on the dictionary. The approved plan scoped this to questions with *no* dictionary entry, but that state cannot occur: the entry lookup and the synonym expansion share the same WordNet gate, so a question without an entry has no synonyms either (777 lesson-title words measured: 751 entries, 26 with no entry and no synonyms). The fallback therefore runs on every definition question and overrides the dictionary only when exactly one lesson is reached and it shares a stemmed key word with the question |
 | Answer finishing (`language/finishing.py`) | a lowercase taught answer with no full stop was served exactly as stored | outer whitespace trimmed, first alphabetic character capitalized, and a full stop added only when the text ends in a letter or digit; no word is changed. Across 1,032 stored answers 1,031 already read as sentences, 1 changed (it gained its full stop), and all 1,032 are idempotent |

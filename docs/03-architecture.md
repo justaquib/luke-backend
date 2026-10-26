@@ -147,6 +147,30 @@ read the request; the work is done by the services in `app/services/language/`.
 Every route needs the same bearer token as the rest of the API and only ever
 reads or writes the tenant of the signed in user.
 
+### The model choice and the Hugging Face teachers
+
+`app/routers/huggingface.py` is thin; `app/services/model_choice.py` decides
+which model answers a message and `app/services/huggingface/` owns the teachers
+(catalogue, files, fine-tune, prompt and serving). A teacher is fine-tuned on
+the tenant's own taught material, written under
+`.language_model/huggingface/tenant-<id>/teacher-<model>/`, and loaded once and
+kept while it answers.
+
+| Route | What it does |
+| --- | --- |
+| `GET /language-model/models` | Luke and every installed teacher, with the default |
+| `POST /language-model/predict` | The next words and the measured attention of the chosen model |
+| `GET /language-model/huggingface` | The machine, the offered base models, the saved teachers and the last run |
+| `POST /language-model/huggingface/train` | Fine-tune one base model in the background (one run at a time) |
+| `DELETE /language-model/huggingface/teachers/{folder}` | Remove one teacher's weights |
+
+The chosen model is sent with `/query` and `/query/stream`. A teacher writes
+its answer from the retrieved reference (the matched answer plus the retrieved
+passages) and must share enough of the reference's words to be shown; when it
+does not, the matched answer is served and the `model` connection records the
+fallback. A teacher's measured limits are in `docs/07-model-measurements.md`;
+the chat always labels the answer with the model that wrote it.
+
 A session lasts a week. `POST /auth/refresh` gives a signed-in user a new
 token, so the app renews the session while it is in use instead of asking the
 user to sign in again every day.

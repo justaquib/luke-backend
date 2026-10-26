@@ -24,3 +24,7 @@ torch==2.14.1
 # Offline English dictionary: WordNet senses, parts of speech and synonyms.
 # Approved on 2026-10-25 in CODE_QUALITY_PLAN.md.
 nltk==3.10.3
+# Fine-tuning and serving a small Hugging Face teacher on the tenant's own
+# material. Approved on 2026-10-26 in CODE_QUALITY_PLAN.md.
+transformers==5.20.2
+safetensors==0.8.0

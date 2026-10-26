@@ -23,6 +23,7 @@ from app.routers import (
     auth,
     documents,
     faq,
+    huggingface,
     intents,
     language_brain,
     language_model,
@@ -48,6 +49,9 @@ def create_app() -> FastAPI:
     application.add_middleware(
         CORSMiddleware,
         allow_origins=settings.cors_list,
+        # The dev server picks whichever local port is free, so any loopback
+        # origin is allowed; the API itself only listens on the loopback host.
+        allow_origin_regex=r"^http://(localhost|127\.0\.0\.1|\[::1\])(:\d+)?$",
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
@@ -61,6 +65,7 @@ def create_app() -> FastAPI:
         faq.router,
         intents.router,
         language_model.router,
+        huggingface.router,
         language_brain.router,
         parenting.router,
     ):
