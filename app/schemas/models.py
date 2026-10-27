@@ -22,3 +22,12 @@ class PredictBody(BaseModel):
     text: str = Field(max_length=4000)
     model: str | None = None
     limit: int = Field(default=5, ge=1, le=10)
+
+
+class TransferBody(BaseModel):
+    """The teacher whose knowledge is transferred, and how much to ask it."""
+
+    model_config = ConfigDict(protected_namespaces=())
+
+    folder: str
+    limit: int = Field(default=40, ge=1, le=200)

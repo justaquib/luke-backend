@@ -42,6 +42,11 @@ def progress_path(tenant_id: int | None) -> Path:
     return brain_dir() / f"hf-progress-{tenant_key(tenant_id)}.json"
 
 
+def transfer_path(tenant_id: int | None) -> Path:
+    """The live record and the last report of the knowledge transfer."""
+    return brain_dir() / f"hf-transfer-{tenant_key(tenant_id)}.json"
+
+
 def read_json(path: Path) -> dict[str, Any]:
     """A JSON record, or nothing when it has not been written yet."""
     try:

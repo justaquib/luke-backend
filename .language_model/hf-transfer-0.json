@@ -1,0 +1,1 @@
+{"folder": "teacher-HuggingFaceTB-SmolLM2-135M", "model_id": "", "model_name": "HuggingFaceTB-SmolLM2-135M", "started": 1793028446.9291809, "finished": 1793028481.2189891, "stage": "done", "total": 200, "done": 200, "kept": 0, "skipped": 200, "by_kind": {}, "last_question": "GK: What is a dog?", "last_answer": "", "faq_ids": [], "undone": 0, "error": null, "seconds": 34.3}

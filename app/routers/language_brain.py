@@ -10,8 +10,10 @@ import multiprocessing
 from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi.responses import FileResponse
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
+from starlette.background import BackgroundTask
 
 from app.config import settings
 from app.core.files import folder_size
@@ -23,6 +25,7 @@ from app.services import documents as documents_service
 from app.services import model_settings
 from app.services import storage as storage_service
 from app.services.language import corrections as correction_service
+from app.services.language import export as export_service
 from app.services.language import lessons as lesson_service
 from app.services.language import reporting
 from app.services.language import runtime as runtime_service
@@ -76,6 +79,36 @@ def language_model_store(
             "uploads_bytes": folder_size(settings.upload_dir),
         },
     }
+
+
+@router.get("/export/preview")
+def luke_export_preview(
+    user: User = Depends(get_bearer_user),
+    db: Session = Depends(get_session),
+) -> dict[str, Any]:
+    """What a downloadable Luke package would hold, without building it."""
+    try:
+        return export_service.preview(tenant_id_of(user), db)
+    except export_service.ExportError as error:
+        raise HTTPException(400, str(error)) from error
+
+
+@router.get("/export")
+def luke_export(
+    user: User = Depends(get_bearer_user),
+    db: Session = Depends(get_session),
+) -> FileResponse:
+    """Build Luke's checkpoints and material into one zip and send it."""
+    try:
+        path, filename = export_service.build(tenant_id_of(user), db)
+    except export_service.ExportError as error:
+        raise HTTPException(400, str(error)) from error
+    return FileResponse(
+        path,
+        filename=filename,
+        media_type="application/zip",
+        background=BackgroundTask(path.unlink, missing_ok=True),
+    )
 
 
 @router.get("/settings")

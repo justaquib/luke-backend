@@ -89,7 +89,7 @@ title, eyebrow, description or actions row in its body.
 | Top panel     | Shared frame: brand + navigation, page name + scope + session title, info/settings/details |
 | Sidebar       | Chat sessions, "New chat", the running background task at the bottom             |
 | Messages      | Flat answers; an answer opens its details in the right panel; provenance and copy / good / wrong actions |
-| Composer      | Model picker (Luke or an installed teacher) above the textarea + send button    |
+| Composer      | Rounded input panel: auto-growing textarea over a dashed divider, then a tools row with new chat and the live-sources menu on the left and the model picker and stop / send on the right |
 | Right sidebar | Page information (the conversation facts for the active session, then the engine facts) or answer details (question, answer, source, measured distance and confidence, model, match, passages, "How this answer was found", the selected model's attention heatmap and next words, and the live link), with running tasks pinned below |
 
 The conversation facts — message count, distinct answer sources and start time
@@ -130,6 +130,19 @@ model and its display name. A teacher answers from the same retrieved lesson or
 FAQ as Luke — it writes the wording from that reference, it does not invent
 material — and its stage appears as **Writing** with the model's name.
 
+### The composer panel
+
+The input is one rounded panel, not a bare field: the textarea grows with the
+draft up to its cap, a dashed divider separates it from the tools row, and the
+panel takes the accent border while it has focus or an answer is streaming. On
+the left the **+** button starts a new chat and **Sources** opens a menu of the
+live sources (`Weather`, `Wiki`) that may answer when the taught material has
+none; the pill names how many are on. On the right the model picker names the
+model that answers, then **Stop** while an answer streams and the send button
+otherwise. Send is disabled for an empty draft, so a second question cannot be
+queued by accident; Enter sends and Shift + Enter starts a new line. The
+Sources menu closes when the message box takes focus and on Escape.
+
 ### Distance, confidence and the model
 
 The provenance line under an answer reads `Source <label>` and, only when the
@@ -138,9 +151,13 @@ answer), `confidence <100%>` and `model <name>`. Luke's lesson answers keep the
 confidence they stored; a distance is shown only where a real vector distance
 exists. Nothing is estimated in the page.
 
-### The attention heatmap and the prediction lab
+### The attention heatmaps and the prediction lab
 
-The answer details end with what the selected model measured for the question:
+The answer details end with what the selected model measured for **two** texts:
+the **Question** that produced this answer and the **Answer** itself. Each read
+shows its own attention heatmap and next-word list, so the trainer can compare
+what the model expected while reading the question with what it expected while
+writing the answer.
 
 - `app-word-heatmap` draws one cell per word pair from the model's attention
   (last layer, averaged over heads, 12-token window). Rows are the word
@@ -148,13 +165,24 @@ The answer details end with what the selected model measured for the question:
   cell of this prefix, and the caption says so. A model that returns no
   attention shows a plain "did not report attention" line instead of an empty
   grid.
-- **Open the prediction lab** opens a modal where the model continues one word
-  at a time. The words and probabilities are the backend's top five; the
-  animation only staggers the reveal of data already returned. The trainer can
-  edit the prefix, pick a suggested word, remove a picked word (and continue
-  from there) or type a replacement; every choice asks `POST
-  /language-model/predict` again from the new prefix. Under reduced motion the
-  chips appear without the stagger.
+- **Open in lab** appears on each read and opens the prediction modal seeded
+  with that text — the question or the answer. The words and probabilities are
+  the backend's top five; the animation only staggers the reveal of data
+  already returned. The trainer can edit the prefix, pick a suggested word,
+  remove a picked word (and continue from there) or type a replacement; every
+  choice asks `POST /language-model/predict` again from the new prefix. Under
+  reduced motion the chips appear without the stagger.
+- A workspace whose word model has not been trained yet (the backend answers
+  `409` with "no trained weights") is told so in one place: the section replaces
+  both reads with a dashed callout that explains there is no attention to
+  measure and links to the Assistance Brain, where **Train the brain** builds
+  it. The reads, and their disabled lab buttons, are not drawn in that state.
+- A read that fails for any other reason (the backend went away, the request
+  was cut off) keeps its own error line and gains **Try again**, which asks the
+  same two questions again from the same text and model. A reply that arrives
+  after a newer read has started is dropped, so a superseded request can never
+  paint an error over a fresh one. The lab's own **Predict again** button covers
+  the same case inside the modal.
 
 ### Sessions (chats)
 
@@ -249,6 +277,32 @@ answers from. Its first card is the upload tile: click it, or tab to its file
 input and press Enter, to pick a csv, xlsx, docx, doc, pdf or txt file. The
 tile shows the indexing state while `POST /upload` runs, and the refreshed file
 cards follow it with their chunk counts and view, download and remove actions.
+
+### 6. Teach the base model, then move its knowledge into Luke
+
+The **Base model** tab fine-tunes a Hugging Face teacher on this tenant's
+material and keeps every teacher it saves on this machine. Below the run card
+and the saved teachers, **Move the teacher's knowledge into Luke** asks one
+teacher every new question and stores its grounded answers as trained answers,
+so they survive the removal of the weights.
+
+- The card picks a saved teacher and a question count (1–200, default 40) and
+  says how many questions the material still offers, by source, with a sample
+  list behind **Sample questions**.
+- **Transfer into Luke** starts the run in the background; the card polls while
+  it goes and shows the stage, the bar, how many were asked / kept / skipped,
+  the last question and the answer it wrote.
+- When a run is finished, **Undo transfer** removes exactly the answers that
+  run created, after a confirmation, and leaves every other answer alone.
+- The run is refused while a teacher is fine-tuning, and a fine-tune or a
+  teacher removal is refused while a transfer is reading the teacher.
+
+Below that card, **Download Luke** writes one zip with the model, the heads, the
+learner state and every material line. Before anything is built it shows the
+model and level, the material count by source, the model files and their size,
+and the file name; **Download Luke** then builds the zip on the server and the
+browser saves it. The card says that teacher weights are left out, and how many
+unanswered questions ride along for context.
 
 ## Settings page
 

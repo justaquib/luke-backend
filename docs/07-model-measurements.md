@@ -299,6 +299,45 @@ matched taught answer was served instead; the `model` connection records the
 fallback. The guard is a lexical measure and is not a fact check: an accepted
 rewrite can still be wrong. The page never presents a teacher answer as Luke's.
 
+## Moving teacher knowledge into Luke (measured 2026-10-26)
+
+The transfer plan was read against tenant 0 on this machine with the installed
+teacher present, before any run was started:
+
+| The plan | Measured |
+| --- | --- |
+| Questions the material can still ask | **1,050** |
+| Lessons / starter lessons / corrections | **500 / 533 / 4** |
+| Taught words | **1** |
+| Topic questions (subjects, capped) | **12** (of 12 subjects) |
+| Document questions | **0** for this tenant |
+| Default run size | **40**, clamped to 1–200 |
+
+The same answer guard is used here, against the reference the teacher was
+given. In the transfer test suite, of three written answers **2 grounded ones
+were kept** as approved FAQs and indexed, and **1 ungrounded one was skipped**;
+undo then removed exactly the two it had created and left the tenant's other
+FAQs alone. These are test measurements of the guard and provenance rules, not
+a claim about how often a particular teacher stays grounded.
+
+## The downloadable package (measured 2026-10-26)
+
+The preview and one real download were read against tenant 0 (the
+administrator) on this machine, without starting a run:
+
+| The package | Measured |
+| --- | --- |
+| File | `luke-0-2026-10-26.zip`, **2,539,103 bytes** |
+| Material lines | **1,622** — lesson 500, starter lesson 533, conversation 29, approved answer 12, correction 147, document 387, word 1, sentence 13 |
+| Unresolved questions kept for context | **12** |
+| Checkpoints | **5** — word model 2,557,967 bytes; clarify 5,029; correct 5,029; emotion 14,309; intent 14,301 |
+| Files in the zip | **13**, each listed with its size and SHA-256 |
+| Teacher weights in the package | **0** — excluded by design |
+
+The zip holds only the administrator's own rows and files (`tenant_id IS NULL`);
+a tenant's package is built from that tenant's rows and files alone. That scoping
+is proved in `tests/test_language_export.py`, not assumed.
+
 ## Retrieval: chunking and hybrid search
 
 Measured on the uploaded `React_JavaScript_NextJS_Interview_QA_Guide.pdf`,

@@ -154,7 +154,11 @@ which model answers a message and `app/services/huggingface/` owns the teachers
 (catalogue, files, fine-tune, prompt and serving). A teacher is fine-tuned on
 the tenant's own taught material, written under
 `.language_model/huggingface/tenant-<id>/teacher-<model>/`, and loaded once and
-kept while it answers.
+kept while it answers. `transfer.py` moves that teacher's knowledge into Luke
+and `seeds.py` builds the questions it asks, so transfer can be tested and
+sized without loading a model. `export.py` writes Luke himself to one zip: the
+word model, the heads it trained, the learner state and every material line,
+each file listed with its size and SHA-256. Teacher weights stay out of it.
 
 | Route | What it does |
 | --- | --- |
@@ -163,6 +167,11 @@ kept while it answers.
 | `GET /language-model/huggingface` | The machine, the offered base models, the saved teachers and the last run |
 | `POST /language-model/huggingface/train` | Fine-tune one base model in the background (one run at a time) |
 | `DELETE /language-model/huggingface/teachers/{folder}` | Remove one teacher's weights |
+| `GET /language-model/huggingface/transfer` | The questions a transfer would ask, the run in progress and the last report |
+| `POST /language-model/huggingface/transfer` | Ask one teacher every new question in the background |
+| `POST /language-model/huggingface/transfer/undo` | Remove the answers the last transfer created |
+| `GET /language-model/export/preview` | What the downloadable package would hold, counted before it is built |
+| `GET /language-model/export` | Build the zip, send it, and delete the temporary file |
 
 The chosen model is sent with `/query` and `/query/stream`. A teacher writes
 its answer from the retrieved reference (the matched answer plus the retrieved

@@ -69,8 +69,14 @@ def start(
     pairs: Sequence[tuple[str, str]],
 ) -> dict[str, Any]:
     """Fine-tune a base model in the background and return the run's state."""
+    from app.services.huggingface import transfer
+
     if not catalog.known(model_id):
         raise BaseModelError(f"{model_id} is not one of the offered base models.")
+    if transfer.running(tenant_id):
+        raise BaseModelBusyError(
+            "A knowledge transfer is reading the machine; wait for it to finish."
+        )
     key = tenant_id or 0
     with _LOCK:
         if key in _RUNNING:
@@ -201,8 +207,12 @@ def _fail(tenant_id: int | None, model_id: str, started: float, error: Exception
 
 def remove_teacher(tenant_id: int | None, folder: str) -> dict[str, Any]:
     """Remove one teacher's weights from this machine."""
+    from app.services.huggingface import transfer
+
     if running(tenant_id):
         raise BaseModelBusyError("A base model is training; the run is using the machine.")
+    if transfer.running(tenant_id):
+        raise BaseModelBusyError("A knowledge transfer is reading the teacher; wait for it.")
     if not store.remove_teacher(tenant_id, folder):
         raise BaseModelMissingError(f"{folder} is not installed.")
     serving.forget(folder)

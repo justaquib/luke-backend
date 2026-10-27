@@ -14,8 +14,9 @@ from sqlalchemy.orm import Session
 from app.core.security import get_bearer_user, tenant_id_of
 from app.db.database import User, get_session
 from app.schemas import HuggingFaceTrainBody, PredictBody
+from app.schemas.models import TransferBody
 from app.services import model_choice
-from app.services.huggingface import service
+from app.services.huggingface import service, transfer
 from app.services.language import training_materials as materials_service
 
 router = APIRouter(prefix="/language-model", tags=["language-model"])
@@ -42,6 +43,46 @@ def train_with_huggingface(
     except service.BaseModelBusyError as error:
         raise HTTPException(409, str(error)) from error
     except service.BaseModelError as error:
+        raise HTTPException(400, str(error)) from error
+
+
+@router.get("/huggingface/transfer")
+def transfer_state(
+    user: User = Depends(get_bearer_user),
+    db: Session = Depends(get_session),
+) -> dict[str, Any]:
+    """The questions a transfer would ask, and the runs this tenant has had."""
+    return transfer.plan(tenant_id_of(user), db)
+
+
+@router.post("/huggingface/transfer")
+def start_transfer(
+    body: TransferBody,
+    user: User = Depends(get_bearer_user),
+    db: Session = Depends(get_session),
+) -> dict[str, Any]:
+    """Ask one installed teacher this tenant's material in the background."""
+    try:
+        return transfer.start(tenant_id_of(user), db, body.folder, body.limit)
+    except transfer.TransferBusyError as error:
+        raise HTTPException(409, str(error)) from error
+    except transfer.TransferMissingError as error:
+        raise HTTPException(404, str(error)) from error
+    except transfer.TransferError as error:
+        raise HTTPException(400, str(error)) from error
+
+
+@router.post("/huggingface/transfer/undo")
+def undo_transfer(
+    user: User = Depends(get_bearer_user),
+    db: Session = Depends(get_session),
+) -> dict[str, Any]:
+    """Remove the answers the last transfer added, and nothing else."""
+    try:
+        return transfer.undo(tenant_id_of(user), db)
+    except transfer.TransferBusyError as error:
+        raise HTTPException(409, str(error)) from error
+    except transfer.TransferError as error:
         raise HTTPException(400, str(error)) from error
 
 

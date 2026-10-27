@@ -182,6 +182,59 @@ stay together:
 To reclaim the space, stop the app and delete a teacher folder by hand (or use
 the trash control on the tab). Training the word model does not need it.
 
+## Moving the teacher's knowledge into Luke
+
+A teacher knows this tenant's material in its own words, but only while its
+weights are loaded. **Transfer into Luke** asks the teacher every question the
+material can still ask and keeps the answers as trained answers, so the
+knowledge stays when the weights are removed.
+
+- `GET /language-model/huggingface/transfer` reports the installed teachers,
+  how many questions are available (by source), a sample of them, the run in
+  progress and the last report. A question the tenant already has — at any
+  status — is not asked again.
+- `POST /language-model/huggingface/transfer` (`folder`, `limit` 1–200, default
+  40) loads the teacher and asks the questions in a background thread. The
+  sources are lessons, starter lessons, corrections, taught words, documents
+  and one topic question per subject. The report is written step by step under
+  `.language_model/learner-<tenant>/hf-transfer-<tenant>.json`.
+- An answer is kept only when it stays grounded in the reference it was given:
+  a short reference needs one shared content word, a longer one needs two and
+  a third of the answer's content words. An ungrounded answer is counted as
+  skipped, never stored.
+- A kept answer is stored as an approved FAQ and indexed at once, so Luke
+  answers it without the teacher loaded.
+- `POST /language-model/huggingface/transfer/undo` removes exactly the answers
+  the last transfer created (their ids are in its report) and nothing else.
+- One transfer runs at a time. It is refused while a fine-tune is going, and a
+  fine-tune or a teacher removal is refused while a transfer is reading the
+  teacher.
+
+## Downloading Luke as one package
+
+**Download Luke** on the Base model tab writes one zip with the model Luke
+answers with, the heads it trained, the learner state and every material line
+it learned from.
+
+- `GET /language-model/export/preview` counts the material by source, lists the
+  checkpoints with their size, the unresolved questions and the file name,
+  without building anything.
+- `GET /language-model/export` writes the zip to a temporary file, sends it with
+  the download file name, and removes the file once the response is sent.
+- The zip holds `model/` (the word model and the trained heads), `state/`
+  (learner lessons, model settings, level, progress and run history),
+  `data/materials.jsonl`, `data/pending.jsonl`, `data/summary.json`, `README.md`
+  and `manifest.json`; every file carries its size and SHA-256 in the manifest.
+- Teacher weights and the retired writer are left out; the teacher's knowledge
+  reaches Luke through transfer instead. Document files are left out too; their
+  indexed chunks are already in the material.
+- The package is scoped like the rest of the API: a tenant gets only its own
+  rows and files, and the administrator gets only the rows and files that have
+  no tenant.
+- Restore on another machine by stopping the API and copying `model/` and
+  `state/` into `.language_model/` for the same tenant number, or retrain from
+  `data/materials.jsonl`.
+
 ## Correcting an answer that was wrong
 
 Mark an answer wrong in the chat and write the answer that should have been
