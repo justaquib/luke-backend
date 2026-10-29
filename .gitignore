@@ -8,3 +8,4 @@ __pycache__/
 uploads/
 .language_model/huggingface/
 backups/
+.models/foundation/
