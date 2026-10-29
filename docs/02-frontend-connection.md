@@ -24,8 +24,9 @@ The Angular project already includes the API integration:
 - `src/environments/environment.production.ts` — empty `apiUrl` (use a reverse proxy).
 - `src/app/shared/` — the one frame: `app-shell`, `app-sidebar`, `app-top-bar` (brand + navigation, page name + scope, info/settings/details), the content-aware `app-right-sidebar` with its pinned background tasks, and the shared facts and actions bands.
 - `src/app/chat-ui/` — the assistant surface at `/chat` with sessions, train mode and inline corrections.
-- `src/app/trainer/`, `learner/`, `brain/`, `settings/`, `design/` and `tenants/` — the builder pages under `/dashboard`, all inside the shared frame.
-- `src/app/settings/` — Model identity (`GET`/`PUT /language-model/settings`, the model's name and starting version), engine connection, live sources and appearance.
+- `src/app/trainer/`, `learner/`, `brain/`, `expressions/`, `settings/` and `design/` — the builder pages under `/dashboard`, all inside the shared frame.
+- `src/app/settings/` — Lab settings: model identity (`GET`/`PUT /language-model/settings`, the model's name and starting version), the foundation checkpoint (`GET /language-model/foundation`), engine connection, live sources, appearance and the System Overview package list.
+- `src/app/expressions/` — the conversation expressions page at `/dashboard/expressions` (`GET`/`POST /language-model/expressions`, `PUT`/`DELETE /language-model/expressions/{id}`).
 - `proxy.conf.json` — dev server proxies `/api/*` to `localhost:8000` (wired into `angular.json`).
 
 If you start from a clean checkout, none of this is in the way — re-use or replace as needed.

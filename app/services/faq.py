@@ -24,7 +24,7 @@ from app.schemas import (
     MergeResult,
     PendingSuggestion,
 )
-from app.services import vector_store
+from app.services import contradictions, vector_store
 
 FAQ_STATUSES = {"pending", "approved", "declined", "duplicate"}
 
@@ -35,14 +35,14 @@ def _tenant(user: User, action: str) -> int:
 
 def _faq_for(user: User, faq_id: int, db: Session, missing: str = "FAQ not found") -> Faq:
     faq = db.get(Faq, faq_id)
-    if faq is None or (not user.is_systemadmin and faq.tenant_id != user.tenant_id):
+    if faq is None or (not user.is_systemadmin and faq.tenant_id != _tenant(user, "read FAQs")):
         raise HTTPException(404, missing)
     return faq
 
 
 def _pending_for(user: User, pending_id: int, db: Session) -> PendingQuestion:
     pending = db.get(PendingQuestion, pending_id)
-    if pending is None or pending.tenant_id != user.tenant_id:
+    if pending is None or pending.tenant_id != _tenant(user, "read pending questions"):
         raise HTTPException(404, "Pending question not found")
     return pending
 
@@ -60,6 +60,7 @@ def create_faq(user: User, req: FaqCreate, db: Session) -> Faq:
     db.commit()
     db.refresh(faq)
     vector_store.upsert_faq(faq.id, faq.question, faq.answer, faq.status, tenant_id)
+    contradictions.flag_conflict(db, tenant_id, faq.question, faq.answer)
     return faq
 
 
@@ -67,7 +68,7 @@ def list_faqs(user: User, status: str | None, db: Session) -> list[Faq]:
     """List FAQs visible to the current user."""
     statement = select(Faq).order_by(Faq.updated_at.desc())
     if not user.is_systemadmin:
-        statement = statement.where(Faq.tenant_id == user.tenant_id)
+        statement = statement.where(Faq.tenant_id == _tenant(user, "view FAQs"))
     if status:
         statement = statement.where(Faq.status == status)
     return list(db.execute(statement).scalars().all())
@@ -143,6 +144,7 @@ def answer_pending(user: User, pending_id: int, req: FaqUpdate, db: Session) -> 
     db.refresh(faq)
     vector_store.upsert_faq(faq.id, faq.question, faq.answer, faq.status, tenant_id)
     vector_store.delete_pending_index(pending_id)
+    contradictions.flag_conflict(db, tenant_id, faq.question, faq.answer)
     return faq
 
 
@@ -210,7 +212,7 @@ def merge_preview(user: User, pending_id: int, db: Session) -> MergePreview:
 
 
 def _merge_targets(
-    user: User, req: MergeRequest, canonical: PendingQuestion, db: Session
+    req: MergeRequest, canonical: PendingQuestion, tenant_id: int, db: Session
 ) -> list[PendingQuestion]:
     targets: list[PendingQuestion] = []
     for pending_id in req.pending_ids:
@@ -219,7 +221,7 @@ def _merge_targets(
             target is not None
             and not target.resolved
             and target.id != canonical.id
-            and target.tenant_id == user.tenant_id
+            and target.tenant_id == tenant_id
         ):
             targets.append(target)
     return targets
@@ -232,7 +234,7 @@ def merge_pending(user: User, pending_id: int, req: MergeRequest, db: Session) -
     answer = req.answer.strip()
     if not answer:
         raise HTTPException(400, "answer is required")
-    targets = _merge_targets(user, req, canonical, db)
+    targets = _merge_targets(req, canonical, tenant_id, db)
     faq = Faq(
         question=canonical.question.strip(), answer=answer, status="pending", tenant_id=tenant_id
     )
@@ -244,6 +246,7 @@ def merge_pending(user: User, pending_id: int, req: MergeRequest, db: Session) -
     canonical.resolved = True
     vector_store.delete_pending_index(canonical.id)
     db.commit()
+    contradictions.flag_conflict(db, tenant_id, faq.question, faq.answer)
     return MergeResult(canonical_faq_id=faq.id, created=created + 1, resolved=len(targets) + 1)
 
 
@@ -347,7 +350,7 @@ def faq_merge(user: User, faq_id: int, req: FaqMergeRequest, db: Session) -> Faq
         raise HTTPException(404, "Target FAQ not found")
     _apply_merge_answer(canonical, target, req.answer)
     db.flush()
-    absorbed_questions = _absorb_faqs(user, target, req.faq_ids, db)
+    absorbed_questions = _absorb_faqs(target, req.faq_ids, tenant_id, db)
     db.commit()
     db.refresh(target)
     vector_store.upsert_faq(target.id, target.question, target.answer, target.status)
@@ -372,11 +375,11 @@ def _apply_merge_answer(canonical: Faq, target: Faq, answer: str | None) -> None
         canonical.answer = new_answer
 
 
-def _absorb_faqs(user: User, target: Faq, faq_ids: list[int], db: Session) -> list[str]:
+def _absorb_faqs(target: Faq, faq_ids: list[int], tenant_id: int, db: Session) -> list[str]:
     questions: list[str] = []
     for faq_id in faq_ids:
         other = db.get(Faq, faq_id)
-        if other is None or other.id == target.id or other.tenant_id != user.tenant_id:
+        if other is None or other.id == target.id or other.tenant_id != tenant_id:
             continue
         questions.append(other.question)
         db.delete(other)

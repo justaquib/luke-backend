@@ -1,4 +1,4 @@
-"""Authentication and tenant administration routes."""
+"""Authentication and administration routes."""
 
 from __future__ import annotations
 
@@ -13,7 +13,6 @@ from app.schemas import (
     InviteCreate,
     InviteOut,
     SystemAdminLogin,
-    TenantOut,
     TokenResponse,
     UserOut,
 )
@@ -58,13 +57,6 @@ def list_invites(
     authorization: str = Header(""), db: Session = Depends(get_session)
 ) -> list[InviteOut]:
     return auth.list_invites(get_bearer_user(authorization, db), db)
-
-
-@router.get("/auth/tenants", response_model=list[TenantOut])
-def list_tenants(
-    authorization: str = Header(""), db: Session = Depends(get_session)
-) -> list[TenantOut]:
-    return auth.list_tenants(get_bearer_user(authorization, db), db)
 
 
 @router.get("/auth/me", response_model=UserOut)

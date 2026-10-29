@@ -19,6 +19,7 @@ select = [
     "N",
     "UP",
     "B",
+    "BLE001",
     "SIM",
     "C90",
     "PL",

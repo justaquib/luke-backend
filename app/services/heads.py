@@ -8,9 +8,12 @@ needs one library for its models and not two.
 
 from __future__ import annotations
 
+import logging
 from pathlib import Path
 
 import torch
+
+logger = logging.getLogger(__name__)
 
 
 class LinearHead:
@@ -106,11 +109,12 @@ class LinearHead:
         if not path.is_file():
             return None
         try:
-            data = torch.load(path, map_location="cpu", weights_only=False)
+            data = torch.load(path, map_location="cpu", weights_only=True)
             head = cls([str(label) for label in data["labels"]])
             head.weights = data["weights"].to(torch.float32)
             head.bias = data["bias"].to(torch.float32)
             head.fitted = True
             return head
-        except Exception:
+        except Exception as error:  # noqa: BLE001 -- the head checkpoint file boundary
+            logger.debug("the head at %s could not be loaded: %s", path, error)
             return None

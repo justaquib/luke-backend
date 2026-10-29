@@ -15,14 +15,16 @@ assistance_front/
 │   │   ├── shared/                    The frame: app-shell, app-sidebar, app-top-bar,
 │   │   │                              app-right-sidebar, page info and actions, app-engine-facts,
 │   │   │                              app-modal, toasts, icons and background tasks
-│   │   ├── chat-ui/                   Assistant surface (/chat)
-│   │   ├── brain/                     Assistance brain (/dashboard/brain)
+│   │   ├── chat-ui/                   Luke chat surface (/chat)
+│   │   ├── brain/                     Luke brain (/dashboard/brain)
+│   │   ├── assessment/                Held-out assessment (/dashboard/assessment):
+│   │   │                              run panel, eight skill cards and the rubric review
 │   │   ├── learner/                   Language learner (/dashboard/learner)
 │   │   ├── trainer/                   Training room (/dashboard/trainer)
 │   │   ├── parenting/                 Parenting coach (/dashboard/parenting)
-│   │   ├── settings/                  Model identity, engine, sources and appearance
-│   │   ├── design/                    Workspace design control room
-│   │   └── tenants/                   Tenant administration
+│   │   ├── settings/                  Lab settings: model identity, engine, sources,
+│   │   │                              appearance and the System Overview
+│   │   └── design/                    Lab design control room
 │   └── environments/
 │       ├── environment.ts             dev: apiUrl http://localhost:8000
 │       └── environment.production.ts  empty apiUrl (reverse-proxy expected)
@@ -38,7 +40,7 @@ every page in every sidebar state. It has three zones:
 - **left** — the brand (logo and assistant name) and the primary-sidebar
   toggle;
 - **middle** — the page name, a small accent dot and the page's scope,
-  centered (`Assistance brain` · `Model builder`, `Settings` · `Engine
+  centered (`Luke brain` · `Model builder`, `Lab settings` · `Engine
   setting`);
 - **right** — the page's one primary action when it has one (the brain's
   icon-only play button posts a training and opens its sources), then info
@@ -48,8 +50,8 @@ every page in every sidebar state. It has three zones:
 
 Page identity lives in the top bar and the info sidebar, not in the page body.
 `pageInfoForUrl` maps each route to a name, scope, title and description
-(`Assistance brain` / `Neural engine` / `Model builder`, `Chat` / `Chat` /
-`Assistant`). The bar shows the name, scope and the page's live context title
+(`Luke brain` / `Neural engine` / `Model builder`, `Chat` / `Chat` /
+`Luke`). The bar shows the name, scope and the page's live context title
 (a chat's session title, renamed in place); the info panel shows the title and
 description. A page with secondary controls registers them through a
 `<ng-template appPageInfoActions>` that the info panel draws below the page's
@@ -121,14 +123,36 @@ live trace and adds no answer.
 
 ### The model picker
 
-The composer asks one model to answer: **Luke** (the taught material) or any
-Hugging Face teacher saved on this machine (`GET /language-model/models`). The
+The composer asks one model to answer: **Luke** (taught material first, then
+the read-only foundation checkpoint when nothing is taught) or any Hugging Face
+teacher saved on this machine (`GET /language-model/models`). The
 choice is kept in this browser (`luke.answer-model`); a saved teacher that was
 removed falls back to the backend's default, so the picker is never empty. The
 chosen id is sent with `/query` and `/query/stream`, and the answer stores the
 model and its display name. A teacher answers from the same retrieved lesson or
 FAQ as Luke — it writes the wording from that reference, it does not invent
 material — and its stage appears as **Writing** with the model's name.
+
+### Taught, written and composed answers
+
+Every answer says which kind it is, in the provenance line and in the details:
+
+- **Taught** (`source` of a saved answer, lesson, expression or document) is
+  served as the trainer wrote it. That is the normal answer.
+- **Written** (`mode: "generated"`) has no taught match: the foundation
+  checkpoint wrote it. The line says **Written from the base model, not from
+  taught material. Unverified.** and the details show the model name and
+  version. It carries no citation, and the page never presents it as taught.
+- **Composed** (`mode: "hybrid"`) was written from numbered passages the
+  reader supplied. The details list **Cited passages** with the index, source,
+  label and excerpt, and the verifier's note. When the verifier rejects the
+  wording, the passages themselves are served and the page says so.
+
+While Luke writes, the stream shows **Writing** and the words arrive as
+`token` events; **Stop** ends the stream and frees the model. The details panel
+also carries the foundation card from Settings, so the reader can see which
+checkpoint wrote the answer. The measured speed, memory and perplexity are in
+`docs/07-model-measurements.md`.
 
 ### The composer panel
 
@@ -166,16 +190,18 @@ writing the answer.
   attention shows a plain "did not report attention" line instead of an empty
   grid.
 - **Open in lab** appears on each read and opens the prediction modal seeded
-  with that text — the question or the answer. The words and probabilities are
+  with that text — the question or the answer. The tokens and probabilities are
   the backend's top five; the animation only staggers the reveal of data
-  already returned. The trainer can edit the prefix, pick a suggested word,
-  remove a picked word (and continue from there) or type a replacement; every
+  already returned. The trainer can edit the prefix, pick a suggested token,
+  remove a picked token (and continue from there) or type a replacement; every
   choice asks `POST /language-model/predict` again from the new prefix. Under
-  reduced motion the chips appear without the stagger.
+  reduced motion the chips appear without the stagger. A BPE checkpoint is a
+  piece model: the lab says **piece**, joins pieces without adding spaces, and
+  never shows subword behaviour under the word label.
 - A workspace whose word model has not been trained yet (the backend answers
   `409` with "no trained weights") is told so in one place: the section replaces
   both reads with a dashed callout that explains there is no attention to
-  measure and links to the Assistance Brain, where **Train the brain** builds
+  measure and links to the Luke brain, where **Train the brain** builds
   it. The reads, and their disabled lab buttons, are not drawn in that state.
 - A read that fails for any other reason (the backend went away, the request
   was cut off) keeps its own error line and gains **Try again**, which asks the
@@ -259,7 +285,36 @@ learner's sentence feature uses. The Sources panel says what it will train
 from before the run, and the training happens in its own process so the rest
 of the app stays usable.
 
-### The level ladder
+The **Tokenizer** card beside **Models** shows what the checkpoint was trained
+with: the kind (word or byte-level BPE), the vocabulary count in its own unit,
+the artifact id prefix, the characters it was built from, its tokens per
+character, the artifact size, and which kind a new training uses. A missing or
+changed BPE artifact shows the backend's error and a **Check again** action;
+the card never substitutes a vocabulary. A word checkpoint says its vocabulary
+lives inside the checkpoint, because it has no separate file.
+
+### 5. Teach conversation expressions
+
+`/dashboard/expressions` is the page for the words Luke uses at the edges of a
+conversation. The trainer adds any wording under one of four moments — **open**,
+**close**, **pause**, **resume** — and the reply it should get, then edits or
+removes it from the same card. Each card shows the taught phrases with the
+reply, the count against the limit, and an **Add expression** action.
+
+- A taught expression is matched on the **whole message**, so "Bye" is answered
+  by its own reply and "Bye, see you after lunch" is not captured by accident.
+- A taught expression is answered before the built-in small talk, so the
+  trainer's wording wins.
+- The expressions also join the conversation training pairs, so the next
+  training learns the same voice.
+- The limits (120 expressions, 80 characters for the phrase, 240 for the reply)
+  are shown on the page as the measured headroom; they come from the backend.
+- Empty cards say that Luke uses its own wording for that moment.
+
+The page reads and writes `GET/POST /language-model/expressions` and
+`PUT/DELETE /language-model/expressions/{id}`.
+
+
 
 The brain page shows the whole road from `0.0.0` to `1.0.0` as a game ladder:
 101 rungs in ten bands, from Foundations to Judgment, ending at the Generalist.
@@ -270,15 +325,31 @@ rung says that no test has been written for it yet and never shows a
 measurement. The displayed level still moves only on the trainer's approval,
 and measurement stops at `0.1.0` until the higher rungs have real tests.
 
-### 5. Upload source documents
+### 6. Upload source documents
 
 The **Documents** tab in `/dashboard/trainer` lists every file the assistant
 answers from. Its first card is the upload tile: click it, or tab to its file
-input and press Enter, to pick a csv, xlsx, docx, doc, pdf or txt file. The
-tile shows the indexing state while `POST /upload` runs, and the refreshed file
-cards follow it with their chunk counts and view, download and remove actions.
+input and press Enter, to pick a csv, xlsx, docx, doc, pdf or txt file up to
+`MAX_UPLOAD_BYTES`.
 
-### 6. Teach the base model, then move its knowledge into Luke
+The request only hands the file over — `POST /upload` answers 202 with a job id —
+so the tile never waits on a large read. While the job is queued or running the
+tile shows its step and how far it has got ("Storing the passages · 96/312
+passages") above a bar for `progress`, and two controls: **Stop indexing the
+file** (`POST /ingest/jobs/{id}/cancel`, which removes the vectors the run had
+already written) and, once a run failed or was stopped, **Retry indexing the
+file** (`POST /ingest/jobs/{id}/retry`), which reads the stored file again from
+the start. A finished job says "N passages stored, M skipped", where M is the
+exact and near duplicates the collapse dropped, and a failed one shows the safe
+one-line reason instead. Uploading bytes the workspace already holds is reported
+as a duplicate and starts no job.
+
+The progress comes from `GET /ingest/jobs/{id}/events`, a server-sent event
+stream that repeats the job every half second until it reaches a terminal state;
+the last twenty jobs are listed by `GET /ingest/jobs`. The refreshed file cards
+follow the job with their chunk counts and view, download and remove actions.
+
+### 7. Teach the base model, then move its knowledge into Luke
 
 The **Base model** tab fine-tunes a Hugging Face teacher on this tenant's
 material and keeps every teacher it saves on this machine. Below the run card
@@ -297,28 +368,119 @@ so they survive the removal of the weights.
 - The run is refused while a teacher is fine-tuning, and a fine-tune or a
   teacher removal is refused while a transfer is reading the teacher.
 
-Below that card, **Download Luke** writes one zip with the model, the heads, the
-learner state and every material line. Before anything is built it shows the
-model and level, the material count by source, the model files and their size,
-and the file name; **Download Luke** then builds the zip on the server and the
-browser saves it. The card says that teacher weights are left out, and how many
-unanswered questions ride along for context.
+Below that card, **Download Luke** writes one zip with the model, the
+tokenizers, the learner state and every material line. Before anything is
+built it shows the model and level, the material count by source, the
+checkpoint, the tokenizers and their size, the base checkpoint's identity, and
+the file name with its size and file count for each mode; **Slim** and **Full**
+pick whether the base checkpoint's weights travel with the package, and
+**Download Luke** then builds the zip on the server and the browser saves it.
+The card says that teacher weights are left out, and how many unanswered
+questions ride along for context.
+
+The same card restores a package: **Choose package** takes a zip,
+**Check package** uploads it as a dry run and shows the file count and bytes
+checked, the rows, the material and whether this workspace would have to be
+replaced, and **Restore** applies it after a confirmation that says the current
+workspace is replaced. A cancelled confirmation says nothing was changed; a
+failed or incomplete report shows the reason and leaves the button and the
+current workspace alone.
+
+## The assessment page (`/dashboard/assessment`)
+
+The assessment page is the only surface that measures Luke rather than teaching
+him. It reads `GET /assessment/profiles?mode=…` for the eight cards and
+`GET /assessment/runs` for the history, and nothing on it is trained or stored
+as knowledge.
+
+- **Frame**: one primary action in the top bar — the play icon that starts a
+  run of the mode currently selected — and the info panel carries the page's
+  title, its state and the four measured facts: held-out items and bank
+  version, `done / total` scored in this mode, rubric answers awaiting review
+  (warn tone while any wait) and how many runs are recorded across both modes.
+  The run control, the stop control and the refresh control are icon-only with
+  `aria-label` and `title`.
+- **Modes** are tabs, not a toggle hidden in settings: *unaided* says the
+  checkpoint answered with only what it can read in the task, *retrieval-assisted*
+  says the workspace's own passages were offered first. The two modes are never
+  blended into one number; switching tabs reloads that mode's latest run, its
+  cards and its provenance.
+- **Run panel**: the live row of the run — the step text the worker writes per
+  item (`skill · item n of 240 · 6.4s`), a `done / total` count and a progress
+  bar — plus the provenance a score needs: the checkpoint
+  (`base@revision#weight-sha256`), the tokenizer's own file hash, the bank
+  version and the held-out item count. Progress arrives over
+  `GET /assessment/runs/{id}/events` as `event: run` frames, so the numbers move
+  while the run works; a finished, failed or cancelled frame closes the stream
+  and the page reloads the cards. A run that failed shows its `error` line under
+  the provenance instead of a progress bar.
+- **Skill cards** are one per skill, in the eight-skill grid: the score (or
+  `not measured yet`, never `0`), the verdict, the stage, the confidence with
+  the number of scored items behind it, the change against the same skill's
+  previous run of the same mode, the topics never tested and the next step. A
+  card whose skill has rubric answers waiting shows a `Review n waiting` button;
+  a skill with nothing scored reads *Unassessed*. `app-card-info` states what
+  the score is — the share of held-out items answered correctly in this mode, a
+  stage benchmark, not an age or an intelligence claim.
+- **Review** is one `app-modal` over the run's rubric rows for one skill: how
+  many still wait, the item's topic and stage, the prompt, the answer the run
+  stored (or that none was stored), the rubric's criteria under "What a good
+  answer does" and the reference answer when the bank has one — then a 0–100
+  score field and a note for the history. Saving posts
+  `POST /assessment/results/{id}/review`, which marks that row scored with the
+  reviewer's name and time, moves to the next row still waiting, and closes when
+  the last one is decided; the card is rebuilt from the stored rows afterwards.
+  The checkpoint never scores its own writing: an unreviewed rubric row keeps
+  `score = null` and its skill stays unassessed.
+- **Honesty**: a number on this page is only shown when a run produced it. With
+  no run the cards read "not measured yet" and the panel says no run has been
+  recorded; a request that fails shows the server's reason in a page-level
+  alert, stamps the panel `not read` and says the skills could not be read —
+  never that nothing was recorded, because that is not what is known. The grid
+  is `repeat(auto-fit, minmax(240px, 1fr))`, so 390 px shows one full-width
+  column with no page-level horizontal scroll, and the provenance values wrap
+  rather than overflow.
+
+The review dialog's two buttons sit in a `[modal-actions]` row, which is content
+the page projects into `app-modal`; a global rule in `styles.css` gives every
+such row the flex layout and the 8 px gap, because the modal's own stylesheet
+cannot reach projected content. That rule covers the confirm dialog, the
+expressions and design dialogs and the prediction lab the same way.
 
 ## Settings page
 
 Settings is `/dashboard/settings`, reached from the settings control in the top
-panel. It has four sections, in this order:
+panel. It has six sections, in this order:
 
 1. **Model identity** — the model's name (default `Luke`) and the version it
    starts from (default `0.0.0`). The name is used wherever the assistant
    speaks about itself, including the greeting, and the starting version is
    the floor of the level ladder. Saved through
-   `GET`/`PUT /language-model/settings`.
-2. **Engine connection** — the backend URL and the live connection state.
-3. **Live sources** — what the chat can answer from and where it falls back.
-4. **Appearance** — colour mode, text size, typeface and palette.
+   `GET`/`PUT /language-model/settings`. A reading that fails and a save that
+   is refused are kept apart, so the card can say which happened: "The model
+   identity could not be read: …" with a **Retry reading the model** action, or
+   "The model identity was not saved: …".
+2. **Foundation checkpoint** — the installed, verified base model (name,
+   version, base model, revision, licence, parameters, context limit, weight
+   size and dtype) and its runtime state (loaded or not, device, process
+   memory). The card says the checkpoint is read-only and that a taught answer
+   always wins. A missing or corrupt checkpoint shows the reason and a
+   **Check the checkpoint again** action, never a made-up identity.
+3. **Engine connection** — the backend URL and the live connection state.
+4. **Live sources** — what the chat can answer from and where it falls back.
+5. **Web evidence** — the allowlisted pages: the on switch, the search provider
+   and address, one address field to add a source, the source list with its
+   state and last check, **Check sources now**, and the counts of indexed,
+   waiting and replaced pages. A failed request shows its message and
+   **Try again**; the card never guesses a state.
+6. **Appearance** — colour mode, text size, typeface and palette.
 
 Each card has one info button; the explanations do not take up the page.
+
+A web answer in the chat is labelled **Web page (unverified)**, shows
+`as of <date>`, and its details panel carries the cited page and a link to it.
+The composer's **Sources** menu has a **Web pages** switch beside weather and
+Wikipedia; the per-question flag is what asks the backend for web evidence.
 
 ## Background tasks in the frame
 
@@ -328,6 +490,38 @@ root starts `BackgroundTasksService` once while signed in; it polls fast while
 a task runs and slowly while idle, so a task that starts later still appears.
 The right sidebar shows the task section only while a task runs; it never
 replaces the page details or the engine information.
+
+## When a read fails
+
+- **The API layer turns a transport failure into words once.** Every service in
+  `core/api` pipes every call through `BaseApiService.handleError`, which
+  answers with the backend's own `detail` when there is one, the status when
+  there is not, and "Could not reach the Luke Lab backend. Is the API running
+  on …?" when the request never landed. A component then prints `error.message`
+  and never an `HttpErrorResponse`: the transport's own message names the URL
+  and ends in "0 undefined", which is a log line, not a sentence shown to a
+  person. `core/api/error-mapping.spec.ts` holds the rule to one call per
+  service, and a call added without the mapping is what breaks it.
+- **The card names the thing that failed.** A bare reason is not enough when a
+  page holds several reads: the model card says *the model identity* could not
+  be read, the engine panel says *the engine* could not be read, and each keeps
+  its reading failure and its refused write in separate signals so a save that
+  was refused cannot be reported as a read that never happened.
+- **A failed read is not an empty list.** An empty-state sentence is a claim
+  about what the store holds, so it is suppressed whenever the read that fills
+  that store failed: the trainer inbox does not praise an empty inbox, the
+  trained-answer pills print `—` and the corpus facts `not read` instead of `0`,
+  the "Showing x of y" line stays out, and the documents panel does not report
+  an empty shelf. `store.error` was the first version of this and was worse than
+  nothing: it was written by every failed read and rendered by no template, so
+  the failure was invisible while the empty states kept asserting. The trainer
+  now keeps `corpusError` and `documentsError` apart and names each in a strip
+  above the tabs, with a button that reads that one list again.
+- **A failed read is not a read in progress.** A placeholder that says
+  "reading…" must clear when the read fails, not stand there forever: the
+  settings fact strip and the engine version both stamp `not read` instead, and
+  the assessment panel says the skills could not be read rather than that
+  nothing was recorded.
 
 ## State summary
 

@@ -8,7 +8,7 @@ import logging
 
 import pytest
 
-from app.services import vector_store
+from app.services import chroma, vector_store
 
 # The chroma logger that complains when a asked-for id was never stored.
 CHROMA_DELETE_LOGGER = "chromadb.segment.impl.vector.local_persistent_hnsw"
@@ -17,9 +17,9 @@ CHROMA_DELETE_LOGGER = "chromadb.segment.impl.vector.local_persistent_hnsw"
 @pytest.fixture()
 def fresh_store(monkeypatch, tmp_path):
     monkeypatch.setattr(vector_store.settings, "chroma_persist_dir", str(tmp_path / "chroma"))
-    vector_store._CLIENTS.clear()
+    chroma._CLIENTS.clear()
     yield
-    vector_store._CLIENTS.clear()
+    chroma._CLIENTS.clear()
 
 
 def test_a_repeated_delete_stays_quiet(fresh_store, caplog):

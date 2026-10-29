@@ -41,7 +41,11 @@ def _upload_text(source: str) -> str:
     from app.config import settings
     from app.core.files import extract_text_from_file
 
-    path = Path(settings.upload_dir) / source
+    root = Path(settings.upload_dir)
+    path = next(
+        (candidate for candidate in (root / source, root / "0" / source) if candidate.is_file()),
+        root / source,
+    )
     return extract_text_from_file(str(path), None)
 
 
@@ -100,17 +104,10 @@ def _semantic_ranking(question_vector: list[float], vectors: list[list[float]]) 
 def _hybrid_ranking(
     question: str, question_vector: list[float], chunks: list[str], vectors: list[list[float]]
 ) -> list[int]:
-    from app.services.retrieval import rerank_hits
+    from app.services.retrieval import bm25_ranking, fuse_rankings
 
-    hits = [
-        {
-            "text": chunk,
-            "distance": _cosine_distance(question_vector, vector),
-            "index": index,
-        }
-        for index, (chunk, vector) in enumerate(zip(chunks, vectors, strict=True))
-    ]
-    return [hit["index"] for hit in rerank_hits(question, hits)]
+    semantic = _semantic_ranking(question_vector, vectors)
+    return list(fuse_rankings([semantic, bm25_ranking(question, chunks)]))
 
 
 def _contains(chunk: str, phrase: str) -> bool:

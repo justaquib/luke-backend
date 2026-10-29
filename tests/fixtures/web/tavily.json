@@ -1,0 +1,17 @@
+{
+  "query": "how does byte level bpe work",
+  "results": [
+    {
+      "title": "Byte pair encoding",
+      "url": "https://example.net/bpe",
+      "content": "Byte pair encoding replaces the most frequent pair with a new symbol.",
+      "score": 0.91
+    },
+    {
+      "title": "A relative address",
+      "url": "/no-host",
+      "content": "This result has no site name and must be dropped."
+    }
+  ],
+  "response_time": 0.42
+}

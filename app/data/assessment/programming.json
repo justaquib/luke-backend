@@ -1,0 +1,861 @@
+{
+  "items": [
+    {
+      "expected": {
+        "answer": "{}",
+        "kind": "literal"
+      },
+      "id": "programming:cruxeval:sample_116",
+      "prompt": "What value does the call return? Give the exact value, not an explanation.\n\ndef f(d, count):\n    for i in range(count):\n        if d == {}:\n            break\n        d.popitem()\n    return d\n\nf({}, 200) = ?",
+      "skill": "programming",
+      "source": {
+        "dataset": "cruxeval-org/cruxeval",
+        "licence": "MIT",
+        "name": "cruxeval",
+        "record": "sample_116",
+        "url": "https://huggingface.co/datasets/cruxeval-org/cruxeval"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "iteration"
+    },
+    {
+      "expected": {
+        "answer": "'zbzquiuqnmfkx'",
+        "kind": "literal"
+      },
+      "id": "programming:cruxeval:sample_118",
+      "prompt": "What value does the call return? Give the exact value, not an explanation.\n\ndef f(text, chars):\n    num_applies = 2\n    extra_chars = ''\n    for i in range(num_applies):\n        extra_chars += chars\n        text = text.replace(extra_chars, '')\n    return text\n\nf('zbzquiuqnmfkx', 'mk') = ?",
+      "skill": "programming",
+      "source": {
+        "dataset": "cruxeval-org/cruxeval",
+        "licence": "MIT",
+        "name": "cruxeval",
+        "record": "sample_118",
+        "url": "https://huggingface.co/datasets/cruxeval-org/cruxeval"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "iteration"
+    },
+    {
+      "expected": {
+        "answer": "'Mmohamt'",
+        "kind": "literal"
+      },
+      "id": "programming:cruxeval:sample_128",
+      "prompt": "What value does the call return? Give the exact value, not an explanation.\n\ndef f(text):\n    odd = ''\n    even = ''\n    for i, c in enumerate(text):\n        if i % 2 == 0:\n            even += c\n        else:\n            odd += c\n    return even + odd.lower()\n\nf('Mammoth') = ?",
+      "skill": "programming",
+      "source": {
+        "dataset": "cruxeval-org/cruxeval",
+        "licence": "MIT",
+        "name": "cruxeval",
+        "record": "sample_128",
+        "url": "https://huggingface.co/datasets/cruxeval-org/cruxeval"
+      },
+      "split": "eval",
+      "stage": 3,
+      "topic": "iteration"
+    },
+    {
+      "expected": {
+        "answer": "[-2, 4, -4]",
+        "kind": "literal"
+      },
+      "id": "programming:cruxeval:sample_150",
+      "prompt": "What value does the call return? Give the exact value, not an explanation.\n\ndef f(numbers, index):\n    for n in numbers[index:]:\n        numbers.insert(index, n)\n        index += 1\n    return numbers[:index]\n\nf([-2, 4, -4], 0) = ?",
+      "skill": "programming",
+      "source": {
+        "dataset": "cruxeval-org/cruxeval",
+        "licence": "MIT",
+        "name": "cruxeval",
+        "record": "sample_150",
+        "url": "https://huggingface.co/datasets/cruxeval-org/cruxeval"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "iteration"
+    },
+    {
+      "expected": {
+        "answer": "'tqzym'",
+        "kind": "literal"
+      },
+      "id": "programming:cruxeval:sample_156",
+      "prompt": "What value does the call return? Give the exact value, not an explanation.\n\ndef f(text, limit, char):\n    if limit < len(text):\n        return text[0:limit]\n    return text.ljust(limit, char)\n\nf('tqzym', 5, 'c') = ?",
+      "skill": "programming",
+      "source": {
+        "dataset": "cruxeval-org/cruxeval",
+        "licence": "MIT",
+        "name": "cruxeval",
+        "record": "sample_156",
+        "url": "https://huggingface.co/datasets/cruxeval-org/cruxeval"
+      },
+      "split": "train",
+      "stage": 2,
+      "topic": "branching"
+    },
+    {
+      "expected": {
+        "answer": "[1, 3, 2]",
+        "kind": "literal"
+      },
+      "id": "programming:cruxeval:sample_174",
+      "prompt": "What value does the call return? Give the exact value, not an explanation.\n\ndef f(lst):\n    lst[1:4] = lst[1:4][::-1]\n    return lst\n\nf([1, 2, 3]) = ?",
+      "skill": "programming",
+      "source": {
+        "dataset": "cruxeval-org/cruxeval",
+        "licence": "MIT",
+        "name": "cruxeval",
+        "record": "sample_174",
+        "url": "https://huggingface.co/datasets/cruxeval-org/cruxeval"
+      },
+      "split": "train",
+      "stage": 2,
+      "topic": "sequence of statements"
+    },
+    {
+      "expected": {
+        "answer": "'some text'",
+        "kind": "literal"
+      },
+      "id": "programming:cruxeval:sample_176",
+      "prompt": "What value does the call return? Give the exact value, not an explanation.\n\ndef f(text, to_place):\n    after_place = text[:text.find(to_place, 0) + 1]\n    before_place = text[text.find(to_place, 0) + 1:]\n    return after_place + before_place\n\nf('some text', 'some') = ?",
+      "skill": "programming",
+      "source": {
+        "dataset": "cruxeval-org/cruxeval",
+        "licence": "MIT",
+        "name": "cruxeval",
+        "record": "sample_176",
+        "url": "https://huggingface.co/datasets/cruxeval-org/cruxeval"
+      },
+      "split": "train",
+      "stage": 3,
+      "topic": "sequence of statements"
+    },
+    {
+      "expected": {
+        "answer": "[15, 15]",
+        "kind": "literal"
+      },
+      "id": "programming:cruxeval:sample_202",
+      "prompt": "What value does the call return? Give the exact value, not an explanation.\n\ndef f(array, list):\n    array.extend(list)\n    [e for e in array if e % 2 == 0]\n    return [e for e in array if e >= 10]\n\nf([2, 15], [15, 1]) = ?",
+      "skill": "programming",
+      "source": {
+        "dataset": "cruxeval-org/cruxeval",
+        "licence": "MIT",
+        "name": "cruxeval",
+        "record": "sample_202",
+        "url": "https://huggingface.co/datasets/cruxeval-org/cruxeval"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "comprehension"
+    },
+    {
+      "expected": {
+        "answer": "'BA'",
+        "kind": "literal"
+      },
+      "id": "programming:cruxeval:sample_262",
+      "prompt": "What value does the call return? Give the exact value, not an explanation.\n\ndef f(nums):\n    count = len(nums)\n    score = {0: \"F\", 1: \"E\", 2: \"D\", 3: \"C\", 4: \"B\", 5: \"A\", 6: \"\"}\n    result = []\n    for i in range(count):\n        result.append(score.get(nums[i]))\n    return ''.join(result)\n\nf([4, 5]) = ?",
+      "skill": "programming",
+      "source": {
+        "dataset": "cruxeval-org/cruxeval",
+        "licence": "MIT",
+        "name": "cruxeval",
+        "record": "sample_262",
+        "url": "https://huggingface.co/datasets/cruxeval-org/cruxeval"
+      },
+      "split": "train",
+      "stage": 3,
+      "topic": "iteration"
+    },
+    {
+      "expected": {
+        "answer": "{}",
+        "kind": "literal"
+      },
+      "id": "programming:cruxeval:sample_270",
+      "prompt": "What value does the call return? Give the exact value, not an explanation.\n\ndef f(dic):\n    d = {}\n    for key in dic:\n        d[key] = dic.popitem(last = False)[1]\n    return d\n\nf({}) = ?",
+      "skill": "programming",
+      "source": {
+        "dataset": "cruxeval-org/cruxeval",
+        "licence": "MIT",
+        "name": "cruxeval",
+        "record": "sample_270",
+        "url": "https://huggingface.co/datasets/cruxeval-org/cruxeval"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "iteration"
+    },
+    {
+      "expected": {
+        "answer": "3",
+        "kind": "literal"
+      },
+      "id": "programming:cruxeval:sample_274",
+      "prompt": "What value does the call return? Give the exact value, not an explanation.\n\ndef f(nums, target):\n    count = 0\n    for n1 in nums:\n        for n2 in nums:\n            count += (n1+n2==target)\n    return count\n\nf([1, 2, 3], 4) = ?",
+      "skill": "programming",
+      "source": {
+        "dataset": "cruxeval-org/cruxeval",
+        "licence": "MIT",
+        "name": "cruxeval",
+        "record": "sample_274",
+        "url": "https://huggingface.co/datasets/cruxeval-org/cruxeval"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "iteration"
+    },
+    {
+      "expected": {
+        "answer": "'DST VAVF N DMV DFVM GAMCU DGCVB.'",
+        "kind": "literal"
+      },
+      "id": "programming:cruxeval:sample_298",
+      "prompt": "What value does the call return? Give the exact value, not an explanation.\n\ndef f(text):\n    new_text = list(text)\n    for i in range(len(new_text)):\n        character = new_text[i]\n        new_character = character.swapcase()\n        new_text[i] = new_character\n    return ''.join(new_text)\n\nf('dst vavf n dmv dfvm gamcu dgcvb.') = ?",
+      "skill": "programming",
+      "source": {
+        "dataset": "cruxeval-org/cruxeval",
+        "licence": "MIT",
+        "name": "cruxeval",
+        "record": "sample_298",
+        "url": "https://huggingface.co/datasets/cruxeval-org/cruxeval"
+      },
+      "split": "train",
+      "stage": 3,
+      "topic": "iteration"
+    },
+    {
+      "expected": {
+        "answer": "{87: 7, 18: 6}",
+        "kind": "literal"
+      },
+      "id": "programming:cruxeval:sample_304",
+      "prompt": "What value does the call return? Give the exact value, not an explanation.\n\ndef f(d):\n    key1 = sorted(d.items(), key=lambda x: x[0], reverse=True)[0][0]\n    val1 = d.pop(key1)\n    key2 = sorted(d.items(), key=lambda x: x[0], reverse=True)[0][0]\n    val2 = d.pop(key2)\n    return dict({key1: val1, key2: val2})\n\nf({2: 3, 17: 3, 16: 6, 18: 6, 87: 7}) = ?",
+      "skill": "programming",
+      "source": {
+        "dataset": "cruxeval-org/cruxeval",
+        "licence": "MIT",
+        "name": "cruxeval",
+        "record": "sample_304",
+        "url": "https://huggingface.co/datasets/cruxeval-org/cruxeval"
+      },
+      "split": "train",
+      "stage": 3,
+      "topic": "sequence of statements"
+    },
+    {
+      "expected": {
+        "answer": "['lsi', 's', 't', 't', 'd']",
+        "kind": "literal"
+      },
+      "id": "programming:cruxeval:sample_322",
+      "prompt": "What value does the call return? Give the exact value, not an explanation.\n\ndef f(chemicals, num):\n    fish = chemicals[1:]\n    chemicals.reverse()\n    for i in range(num):\n        fish.append(chemicals.pop(1))\n    chemicals.reverse()\n    return chemicals\n\nf(['lsi', 's', 't', 't', 'd'], 0) = ?",
+      "skill": "programming",
+      "source": {
+        "dataset": "cruxeval-org/cruxeval",
+        "licence": "MIT",
+        "name": "cruxeval",
+        "record": "sample_322",
+        "url": "https://huggingface.co/datasets/cruxeval-org/cruxeval"
+      },
+      "split": "eval",
+      "stage": 3,
+      "topic": "iteration"
+    },
+    {
+      "expected": {
+        "answer": "[2, 7, 7, 6, 8, 4, 2, 5, 21]",
+        "kind": "literal"
+      },
+      "id": "programming:cruxeval:sample_34",
+      "prompt": "What value does the call return? Give the exact value, not an explanation.\n\ndef f(nums, odd1, odd2):\n    while odd1 in nums:\n        nums.remove(odd1)\n    while odd2 in nums:\n        nums.remove(odd2)\n    return nums\n\nf([1, 2, 3, 7, 7, 6, 8, 4, 1, 2, 3, 5, 1, 3, 21, 1, 3], 3, 1) = ?",
+      "skill": "programming",
+      "source": {
+        "dataset": "cruxeval-org/cruxeval",
+        "licence": "MIT",
+        "name": "cruxeval",
+        "record": "sample_34",
+        "url": "https://huggingface.co/datasets/cruxeval-org/cruxeval"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "iteration"
+    },
+    {
+      "expected": {
+        "answer": "False",
+        "kind": "literal"
+      },
+      "id": "programming:cruxeval:sample_342",
+      "prompt": "What value does the call return? Give the exact value, not an explanation.\n\ndef f(text):\n    return text.count('-') == len(text)\n\nf(\"---123-4\") = ?",
+      "skill": "programming",
+      "source": {
+        "dataset": "cruxeval-org/cruxeval",
+        "licence": "MIT",
+        "name": "cruxeval",
+        "record": "sample_342",
+        "url": "https://huggingface.co/datasets/cruxeval-org/cruxeval"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "sequence of statements"
+    },
+    {
+      "expected": {
+        "answer": "'tr'",
+        "kind": "literal"
+      },
+      "id": "programming:cruxeval:sample_358",
+      "prompt": "What value does the call return? Give the exact value, not an explanation.\n\ndef f(text, value):\n    indexes = []\n    for i in range(len(text)):\n        if text[i] == value and (i == 0 or text[i-1] != value):\n            indexes.append(i) \n    if len(indexes) % 2 == 1:\n        return text\n    return text[indexes[0]+1:indexes[-1]]\n\nf('btrburger', 'b') = ?",
+      "skill": "programming",
+      "source": {
+        "dataset": "cruxeval-org/cruxeval",
+        "licence": "MIT",
+        "name": "cruxeval",
+        "record": "sample_358",
+        "url": "https://huggingface.co/datasets/cruxeval-org/cruxeval"
+      },
+      "split": "train",
+      "stage": 3,
+      "topic": "iteration"
+    },
+    {
+      "expected": {
+        "answer": "['']",
+        "kind": "literal"
+      },
+      "id": "programming:cruxeval:sample_372",
+      "prompt": "What value does the call return? Give the exact value, not an explanation.\n\ndef f(list_, num):\n    temp = []\n    for i in list_:\n        i = num // 2 * ('%s,' % i)\n        temp.append(i)\n    return temp\n\nf(['v'], 1) = ?",
+      "skill": "programming",
+      "source": {
+        "dataset": "cruxeval-org/cruxeval",
+        "licence": "MIT",
+        "name": "cruxeval",
+        "record": "sample_372",
+        "url": "https://huggingface.co/datasets/cruxeval-org/cruxeval"
+      },
+      "split": "train",
+      "stage": 2,
+      "topic": "iteration"
+    },
+    {
+      "expected": {
+        "answer": "'No such key!'",
+        "kind": "literal"
+      },
+      "id": "programming:cruxeval:sample_378",
+      "prompt": "What value does the call return? Give the exact value, not an explanation.\n\ndef f(dic, key):\n    dic = dict(dic)\n    v = dic.pop(key, 0)\n    if v == 0:\n        return 'No such key!'\n    while len(dic) > 0:\n        dic[dic.popitem()[1]] = dic.popitem()[0]\n    return int(dic.popitem()[0])\n\nf(dict(did=0), 'u') = ?",
+      "skill": "programming",
+      "source": {
+        "dataset": "cruxeval-org/cruxeval",
+        "licence": "MIT",
+        "name": "cruxeval",
+        "record": "sample_378",
+        "url": "https://huggingface.co/datasets/cruxeval-org/cruxeval"
+      },
+      "split": "eval",
+      "stage": 3,
+      "topic": "branching"
+    },
+    {
+      "expected": {
+        "answer": "'xxjarcz'",
+        "kind": "literal"
+      },
+      "id": "programming:cruxeval:sample_380",
+      "prompt": "What value does the call return? Give the exact value, not an explanation.\n\ndef f(text, delimiter):\n    text = text.rpartition(delimiter)\n    return text[0] + text[-1]\n\nf('xxjarczx', 'x') = ?",
+      "skill": "programming",
+      "source": {
+        "dataset": "cruxeval-org/cruxeval",
+        "licence": "MIT",
+        "name": "cruxeval",
+        "record": "sample_380",
+        "url": "https://huggingface.co/datasets/cruxeval-org/cruxeval"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "sequence of statements"
+    },
+    {
+      "expected": {
+        "answer": "0",
+        "kind": "literal"
+      },
+      "id": "programming:cruxeval:sample_390",
+      "prompt": "What value does the call return? Give the exact value, not an explanation.\n\ndef f(text):\n    if not text.strip():\n        return len(text.strip())\n    return None\n\nf(\" \\t \") = ?",
+      "skill": "programming",
+      "source": {
+        "dataset": "cruxeval-org/cruxeval",
+        "licence": "MIT",
+        "name": "cruxeval",
+        "record": "sample_390",
+        "url": "https://huggingface.co/datasets/cruxeval-org/cruxeval"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "branching"
+    },
+    {
+      "expected": {
+        "answer": "'Hello Is It MyClass'",
+        "kind": "literal"
+      },
+      "id": "programming:cruxeval:sample_392",
+      "prompt": "What value does the call return? Give the exact value, not an explanation.\n\ndef f(text):\n    if text.upper() == text:\n        return 'ALL UPPERCASE'\n    return text\n\nf('Hello Is It MyClass') = ?",
+      "skill": "programming",
+      "source": {
+        "dataset": "cruxeval-org/cruxeval",
+        "licence": "MIT",
+        "name": "cruxeval",
+        "record": "sample_392",
+        "url": "https://huggingface.co/datasets/cruxeval-org/cruxeval"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "branching"
+    },
+    {
+      "expected": {
+        "answer": "1",
+        "kind": "literal"
+      },
+      "id": "programming:cruxeval:sample_394",
+      "prompt": "What value does the call return? Give the exact value, not an explanation.\n\ndef f(text):\n    k = text.splitlines()\n    i = 0\n    for j in k:\n        if len(j) == 0:\n            return i\n        i+=1\n    return -1\n\nf(\"2 m2 \\n\\nbike\") = ?",
+      "skill": "programming",
+      "source": {
+        "dataset": "cruxeval-org/cruxeval",
+        "licence": "MIT",
+        "name": "cruxeval",
+        "record": "sample_394",
+        "url": "https://huggingface.co/datasets/cruxeval-org/cruxeval"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "iteration"
+    },
+    {
+      "expected": {
+        "answer": "2",
+        "kind": "literal"
+      },
+      "id": "programming:cruxeval:sample_403",
+      "prompt": "What value does the call return? Give the exact value, not an explanation.\n\ndef f(full, part):\n    length = len(part)\n    index = full.find(part)\n    count = 0\n    while index >= 0:\n        full = full[index + length:]\n        index = full.find(part)\n        count += 1\n    return count\n\nf('hrsiajiajieihruejfhbrisvlmmy', 'hr') = ?",
+      "skill": "programming",
+      "source": {
+        "dataset": "cruxeval-org/cruxeval",
+        "licence": "MIT",
+        "name": "cruxeval",
+        "record": "sample_403",
+        "url": "https://huggingface.co/datasets/cruxeval-org/cruxeval"
+      },
+      "split": "eval",
+      "stage": 3,
+      "topic": "iteration"
+    },
+    {
+      "expected": {
+        "answer": "[5, 3, 4, 1, 2, 3, 5]",
+        "kind": "literal"
+      },
+      "id": "programming:cruxeval:sample_405",
+      "prompt": "What value does the call return? Give the exact value, not an explanation.\n\ndef f(xs):\n    new_x = xs[0] - 1\n    xs.pop(0)\n    while(new_x <= xs[0]):\n        xs.pop(0)\n        new_x -= 1\n    xs.insert(0, new_x)\n    return xs\n\nf([6, 3, 4, 1, 2, 3, 5]) = ?",
+      "skill": "programming",
+      "source": {
+        "dataset": "cruxeval-org/cruxeval",
+        "licence": "MIT",
+        "name": "cruxeval",
+        "record": "sample_405",
+        "url": "https://huggingface.co/datasets/cruxeval-org/cruxeval"
+      },
+      "split": "eval",
+      "stage": 3,
+      "topic": "iteration"
+    },
+    {
+      "expected": {
+        "answer": "[8, 2, 8]",
+        "kind": "literal"
+      },
+      "id": "programming:cruxeval:sample_417",
+      "prompt": "What value does the call return? Give the exact value, not an explanation.\n\ndef f(lst):\n    lst.reverse()\n    lst.pop()\n    lst.reverse()\n    return lst\n\nf([7, 8, 2, 8]) = ?",
+      "skill": "programming",
+      "source": {
+        "dataset": "cruxeval-org/cruxeval",
+        "licence": "MIT",
+        "name": "cruxeval",
+        "record": "sample_417",
+        "url": "https://huggingface.co/datasets/cruxeval-org/cruxeval"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "sequence of statements"
+    },
+    {
+      "expected": {
+        "answer": "'T,T,Sspp,G ,.tB,Vxk,Cct'",
+        "kind": "literal"
+      },
+      "id": "programming:cruxeval:sample_433",
+      "prompt": "What value does the call return? Give the exact value, not an explanation.\n\ndef f(text):\n    text = text.split(',')\n    text.pop(0)\n    text.insert(0, text.pop(text.index('T')))\n    return 'T' + ',' + ','.join(text)\n\nf(\"Dmreh,Sspp,T,G ,.tB,Vxk,Cct\") = ?",
+      "skill": "programming",
+      "source": {
+        "dataset": "cruxeval-org/cruxeval",
+        "licence": "MIT",
+        "name": "cruxeval",
+        "record": "sample_433",
+        "url": "https://huggingface.co/datasets/cruxeval-org/cruxeval"
+      },
+      "split": "eval",
+      "stage": 3,
+      "topic": "sequence of statements"
+    },
+    {
+      "expected": {
+        "answer": "'?XyZ'",
+        "kind": "literal"
+      },
+      "id": "programming:cruxeval:sample_455",
+      "prompt": "What value does the call return? Give the exact value, not an explanation.\n\ndef f(text):\n    uppers = 0\n    for c in text:\n        if c.isupper():\n            uppers += 1\n    return text.upper() if uppers >= 10 else text\n\nf('?XyZ') = ?",
+      "skill": "programming",
+      "source": {
+        "dataset": "cruxeval-org/cruxeval",
+        "licence": "MIT",
+        "name": "cruxeval",
+        "record": "sample_455",
+        "url": "https://huggingface.co/datasets/cruxeval-org/cruxeval"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "iteration"
+    },
+    {
+      "expected": {
+        "answer": "{}",
+        "kind": "literal"
+      },
+      "id": "programming:cruxeval:sample_467",
+      "prompt": "What value does the call return? Give the exact value, not an explanation.\n\ndef f(nums):\n    copy = nums.copy()\n    newDict = dict()\n    for k in copy:\n        newDict[k] = len(copy[k])\n    return newDict\n\nf({}) = ?",
+      "skill": "programming",
+      "source": {
+        "dataset": "cruxeval-org/cruxeval",
+        "licence": "MIT",
+        "name": "cruxeval",
+        "record": "sample_467",
+        "url": "https://huggingface.co/datasets/cruxeval-org/cruxeval"
+      },
+      "split": "train",
+      "stage": 2,
+      "topic": "iteration"
+    },
+    {
+      "expected": {
+        "answer": "[1, 1]",
+        "kind": "literal"
+      },
+      "id": "programming:cruxeval:sample_481",
+      "prompt": "What value does the call return? Give the exact value, not an explanation.\n\ndef f(values, item1, item2):\n    if values[-1] == item2:\n        if values[0] not in values[1:]:\n            values.append(values[0])\n    elif values[-1] == item1:\n        if values[0] == item2:\n            values.append(values[0])\n    return values\n\nf([1, 1], 2, 3) = ?",
+      "skill": "programming",
+      "source": {
+        "dataset": "cruxeval-org/cruxeval",
+        "licence": "MIT",
+        "name": "cruxeval",
+        "record": "sample_481",
+        "url": "https://huggingface.co/datasets/cruxeval-org/cruxeval"
+      },
+      "split": "eval",
+      "stage": 3,
+      "topic": "branching"
+    },
+    {
+      "expected": {
+        "answer": "0",
+        "kind": "literal"
+      },
+      "id": "programming:cruxeval:sample_507",
+      "prompt": "What value does the call return? Give the exact value, not an explanation.\n\ndef f(text, search):\n    result = text.lower()\n    return result.find(search.lower())\n\nf('car hat', 'car') = ?",
+      "skill": "programming",
+      "source": {
+        "dataset": "cruxeval-org/cruxeval",
+        "licence": "MIT",
+        "name": "cruxeval",
+        "record": "sample_507",
+        "url": "https://huggingface.co/datasets/cruxeval-org/cruxeval"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "sequence of statements"
+    },
+    {
+      "expected": {
+        "answer": "[1, 2, 3]",
+        "kind": "literal"
+      },
+      "id": "programming:cruxeval:sample_529",
+      "prompt": "What value does the call return? Give the exact value, not an explanation.\n\ndef f(array):\n    prev = array[0]\n    newArray = array[:]\n    for i in range(1, len(array)):\n        if prev != array[i]:\n            newArray[i] = array[i]\n        else:\n            del newArray[i]\n        prev = array[i]\n    return newArray\n\nf([1, 2, 3]) = ?",
+      "skill": "programming",
+      "source": {
+        "dataset": "cruxeval-org/cruxeval",
+        "licence": "MIT",
+        "name": "cruxeval",
+        "record": "sample_529",
+        "url": "https://huggingface.co/datasets/cruxeval-org/cruxeval"
+      },
+      "split": "eval",
+      "stage": 3,
+      "topic": "iteration"
+    },
+    {
+      "expected": {
+        "answer": "'djgblw asdl '",
+        "kind": "literal"
+      },
+      "id": "programming:cruxeval:sample_531",
+      "prompt": "What value does the call return? Give the exact value, not an explanation.\n\ndef f(text, x):\n    if text.removeprefix(x) == text:\n        return f(text[1:], x)\n    else:\n        return text\n\nf(\"Ibaskdjgblw asdl \", \"djgblw\") = ?",
+      "skill": "programming",
+      "source": {
+        "dataset": "cruxeval-org/cruxeval",
+        "licence": "MIT",
+        "name": "cruxeval",
+        "record": "sample_531",
+        "url": "https://huggingface.co/datasets/cruxeval-org/cruxeval"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "branching"
+    },
+    {
+      "expected": {
+        "answer": "'akoXoosn'",
+        "kind": "literal"
+      },
+      "id": "programming:cruxeval:sample_581",
+      "prompt": "What value does the call return? Give the exact value, not an explanation.\n\ndef f(text, sign):\n    length = len(text)\n    new_text = list(text)\n    sign = list(sign)\n    for i in range(len(sign)):\n        new_text.insert((i * length - 1) // 2 + (i + 1) // 2, sign[i])\n    return ''.join(new_text)\n\nf('akoon', 'sXo') = ?",
+      "skill": "programming",
+      "source": {
+        "dataset": "cruxeval-org/cruxeval",
+        "licence": "MIT",
+        "name": "cruxeval",
+        "record": "sample_581",
+        "url": "https://huggingface.co/datasets/cruxeval-org/cruxeval"
+      },
+      "split": "train",
+      "stage": 3,
+      "topic": "iteration"
+    },
+    {
+      "expected": {
+        "answer": "([0, 0, 0, 0, 0, 0, 0, 0, 0], [3, 4, 6, 7, 8, 9])",
+        "kind": "literal"
+      },
+      "id": "programming:cruxeval:sample_591",
+      "prompt": "What value does the call return? Give the exact value, not an explanation.\n\ndef f(arr): \n    counts = [0] * 9 \n    ans = [] \n    for ele in arr: counts[ele - 1] += 1 \n    for i in range(len(counts)): \n        while counts[i] > 0: \n            counts[i] -= 1 \n            ans.append(i + 1)\n    return counts, ans\n\nf([6, 3, 0, 7, 4, 8]) = ?",
+      "skill": "programming",
+      "source": {
+        "dataset": "cruxeval-org/cruxeval",
+        "licence": "MIT",
+        "name": "cruxeval",
+        "record": "sample_591",
+        "url": "https://huggingface.co/datasets/cruxeval-org/cruxeval"
+      },
+      "split": "eval",
+      "stage": 3,
+      "topic": "iteration"
+    },
+    {
+      "expected": {
+        "answer": "'ccccc sssss hhhhh AAAAA rrrrr ppppp'",
+        "kind": "literal"
+      },
+      "id": "programming:cruxeval:sample_601",
+      "prompt": "What value does the call return? Give the exact value, not an explanation.\n\ndef f(text):\n    t = 5\n    tab = []\n    for i in text:\n        if i.lower() in 'aeiouy':\n            tab.append(i.upper() * t)\n        else:\n            tab.append(i * t)\n    return ' '.join(tab)\n\nf('csharp') = ?",
+      "skill": "programming",
+      "source": {
+        "dataset": "cruxeval-org/cruxeval",
+        "licence": "MIT",
+        "name": "cruxeval",
+        "record": "sample_601",
+        "url": "https://huggingface.co/datasets/cruxeval-org/cruxeval"
+      },
+      "split": "train",
+      "stage": 3,
+      "topic": "iteration"
+    },
+    {
+      "expected": {
+        "answer": "('ja', 'nee', 'coke', 'zoo')",
+        "kind": "literal"
+      },
+      "id": "programming:cruxeval:sample_62",
+      "prompt": "What value does the call return? Give the exact value, not an explanation.\n\ndef f(user):\n    if len(list(user.keys())) > len(list(user.values())):\n        return tuple(user.keys())\n    return tuple(user.values())\n\nf({\"eating\" : \"ja\", \"books\" : \"nee\", \"piano\" : \"coke\", \"excitement\" : \"zoo\"}) = ?",
+      "skill": "programming",
+      "source": {
+        "dataset": "cruxeval-org/cruxeval",
+        "licence": "MIT",
+        "name": "cruxeval",
+        "record": "sample_62",
+        "url": "https://huggingface.co/datasets/cruxeval-org/cruxeval"
+      },
+      "split": "eval",
+      "stage": 3,
+      "topic": "branching"
+    },
+    {
+      "expected": {
+        "answer": "'     7     '",
+        "kind": "literal"
+      },
+      "id": "programming:cruxeval:sample_64",
+      "prompt": "What value does the call return? Give the exact value, not an explanation.\n\ndef f(text, size):\n    counter = len(text)\n    for i in range(size-int(size%2)):\n        text = ' '+text+' '\n        counter += 2\n        if counter >= size:\n            return text\n\nf(\"7\", 10) = ?",
+      "skill": "programming",
+      "source": {
+        "dataset": "cruxeval-org/cruxeval",
+        "licence": "MIT",
+        "name": "cruxeval",
+        "record": "sample_64",
+        "url": "https://huggingface.co/datasets/cruxeval-org/cruxeval"
+      },
+      "split": "eval",
+      "stage": 3,
+      "topic": "iteration"
+    },
+    {
+      "expected": {
+        "answer": "'aCbCed'",
+        "kind": "literal"
+      },
+      "id": "programming:cruxeval:sample_665",
+      "prompt": "What value does the call return? Give the exact value, not an explanation.\n\ndef f(chars):\n    s = \"\"\n    for ch in chars:\n        if chars.count(ch) % 2 == 0:\n            s += ch.upper()\n        else:\n            s += ch\n    return s\n\nf(\"acbced\") = ?",
+      "skill": "programming",
+      "source": {
+        "dataset": "cruxeval-org/cruxeval",
+        "licence": "MIT",
+        "name": "cruxeval",
+        "record": "sample_665",
+        "url": "https://huggingface.co/datasets/cruxeval-org/cruxeval"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "iteration"
+    },
+    {
+      "expected": {
+        "answer": "'I'",
+        "kind": "literal"
+      },
+      "id": "programming:cruxeval:sample_677",
+      "prompt": "What value does the call return? Give the exact value, not an explanation.\n\ndef f(text, length):\n    length = -length if length < 0 else length\n    output = ''\n    for idx in range(length):\n        if text[idx % len(text)] != ' ':\n            output += text[idx % len(text)]\n        else:\n            break\n    return output\n\nf('I got 1 and 0.', 5) = ?",
+      "skill": "programming",
+      "source": {
+        "dataset": "cruxeval-org/cruxeval",
+        "licence": "MIT",
+        "name": "cruxeval",
+        "record": "sample_677",
+        "url": "https://huggingface.co/datasets/cruxeval-org/cruxeval"
+      },
+      "split": "train",
+      "stage": 3,
+      "topic": "iteration"
+    },
+    {
+      "expected": {
+        "answer": "True",
+        "kind": "literal"
+      },
+      "id": "programming:cruxeval:sample_72",
+      "prompt": "What value does the call return? Give the exact value, not an explanation.\n\ndef f(text):\n    for c in text:\n        if not c.isnumeric():\n            return False\n    return bool(text)\n\nf('99') = ?",
+      "skill": "programming",
+      "source": {
+        "dataset": "cruxeval-org/cruxeval",
+        "licence": "MIT",
+        "name": "cruxeval",
+        "record": "sample_72",
+        "url": "https://huggingface.co/datasets/cruxeval-org/cruxeval"
+      },
+      "split": "train",
+      "stage": 2,
+      "topic": "iteration"
+    },
+    {
+      "expected": {
+        "answer": "['dxh', 'ix', 'snegi', 'wiubvu']",
+        "kind": "literal"
+      },
+      "id": "programming:cruxeval:sample_727",
+      "prompt": "What value does the call return? Give the exact value, not an explanation.\n\ndef f(numbers, prefix):\n    return sorted(n[len(prefix):] if (len(n) > len(prefix) and n.startswith(prefix)) else n\n                  for n in numbers)\n\nf(['ix', 'dxh', 'snegi', 'wiubvu'], '') = ?",
+      "skill": "programming",
+      "source": {
+        "dataset": "cruxeval-org/cruxeval",
+        "licence": "MIT",
+        "name": "cruxeval",
+        "record": "sample_727",
+        "url": "https://huggingface.co/datasets/cruxeval-org/cruxeval"
+      },
+      "split": "eval",
+      "stage": 3,
+      "topic": "comprehension"
+    },
+    {
+      "expected": {
+        "answer": "False",
+        "kind": "literal"
+      },
+      "id": "programming:cruxeval:sample_739",
+      "prompt": "What value does the call return? Give the exact value, not an explanation.\n\ndef f(st, pattern):\n    for p in pattern:\n        if not st.startswith(p): return False\n        st = st[len(p):]\n    return True\n\nf('qwbnjrxs', ['jr', 'b', 'r', 'qw']) = ?",
+      "skill": "programming",
+      "source": {
+        "dataset": "cruxeval-org/cruxeval",
+        "licence": "MIT",
+        "name": "cruxeval",
+        "record": "sample_739",
+        "url": "https://huggingface.co/datasets/cruxeval-org/cruxeval"
+      },
+      "split": "train",
+      "stage": 2,
+      "topic": "iteration"
+    },
+    {
+      "expected": {
+        "answer": "'an2a8'",
+        "kind": "literal"
+      },
+      "id": "programming:cruxeval:sample_757",
+      "prompt": "What value does the call return? Give the exact value, not an explanation.\n\ndef f(text, char, replace):\n    return text.replace(char, replace)\n\nf('a1a8', '1', 'n2') = ?",
+      "skill": "programming",
+      "source": {
+        "dataset": "cruxeval-org/cruxeval",
+        "licence": "MIT",
+        "name": "cruxeval",
+        "record": "sample_757",
+        "url": "https://huggingface.co/datasets/cruxeval-org/cruxeval"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "sequence of statements"
+    },
+    {
+      "expected": {
+        "answer": "['sdfs', 'drcr', '2e']",
+        "kind": "literal"
+      },
+      "id": "programming:cruxeval:sample_86",
+      "prompt": "What value does the call return? Give the exact value, not an explanation.\n\ndef f(instagram, imgur, wins):\n    photos = [instagram, imgur]\n    if instagram == imgur:\n        return wins\n    if wins == 1:\n        return photos.pop()\n    else:\n        photos.reverse()\n        return photos.pop()\n\nf(['sdfs', 'drcr', '2e'], ['sdfs', 'dr2c', 'QWERTY'], 0) = ?",
+      "skill": "programming",
+      "source": {
+        "dataset": "cruxeval-org/cruxeval",
+        "licence": "MIT",
+        "name": "cruxeval",
+        "record": "sample_86",
+        "url": "https://huggingface.co/datasets/cruxeval-org/cruxeval"
+      },
+      "split": "train",
+      "stage": 3,
+      "topic": "branching"
+    }
+  ],
+  "skill": "programming",
+  "title": "Programming and debugging"
+}

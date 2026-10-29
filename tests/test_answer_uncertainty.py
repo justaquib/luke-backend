@@ -11,7 +11,7 @@ QUESTION = "what flies on the sea?"
 MATCH = {
     "question": "What is a kite?",
     "answer": "A kite flies on the wind.",
-    "distance": 0.6,
+    "distance": 0.32,
     "faq_id": 1,
 }
 

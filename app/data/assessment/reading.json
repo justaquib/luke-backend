@@ -1,0 +1,1126 @@
+{
+  "items": [
+    {
+      "choices": [
+        "No",
+        "Yes"
+      ],
+      "expected": {
+        "answer": "A",
+        "kind": "option"
+      },
+      "id": "reading:boolq:11",
+      "prompt": "Read the passage and answer the question with the letter for yes or no.\n\nPassage: Bloodline was announced in October 2014 as part of a partnership between Netflix and Sony Pictures Television, representing Netflix's first major deal with a major film studio for a television series. The series was created and executive produced by Todd A. Kessler, Glenn Kessler, and Daniel Zelman, who previously created the FX series Damages. According to its official synopsis released by Netflix, Bloodline ``centers on a close-knit family of four adult siblings whose secrets and scars are revealed when their black sheep brother returns home.''\n\nQuestion: is the show bloodline based on a true story\n\nA. No\nB. Yes",
+      "skill": "reading",
+      "source": {
+        "dataset": "google/boolq",
+        "licence": "CC BY-SA 3.0",
+        "name": "boolq",
+        "record": "11",
+        "url": "https://huggingface.co/datasets/google/boolq"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "is"
+    },
+    {
+      "choices": [
+        "No",
+        "Yes"
+      ],
+      "expected": {
+        "answer": "A",
+        "kind": "option"
+      },
+      "id": "reading:boolq:1587",
+      "prompt": "Read the passage and answer the question with the letter for yes or no.\n\nPassage: The lake was originally named the Andia-ta-roc-te by local Native Americans. James Fenimore Cooper in his narrative Last of the Mohicans called it the Horican, after a tribe which may have lived there, because he felt the original name was too hard to pronounce.\n\nQuestion: is lake george a man-made lake\n\nA. No\nB. Yes",
+      "skill": "reading",
+      "source": {
+        "dataset": "google/boolq",
+        "licence": "CC BY-SA 3.0",
+        "name": "boolq",
+        "record": "1587",
+        "url": "https://huggingface.co/datasets/google/boolq"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "is"
+    },
+    {
+      "choices": [
+        "No",
+        "Yes"
+      ],
+      "expected": {
+        "answer": "B",
+        "kind": "option"
+      },
+      "id": "reading:boolq:1596",
+      "prompt": "Read the passage and answer the question with the letter for yes or no.\n\nPassage: The unions between descendants of Queen Victoria and of King Christian IX did not end with the First World War, despite the overthrows of both the German and Russian monarchies (along with House of Habsburg in Austria-Hungary). On the contrary, nearly all European reigning kings and queens today are most closely related through their descent from Victoria, Christian or both.\n\nQuestion: are all the royal families of europe related\n\nA. No\nB. Yes",
+      "skill": "reading",
+      "source": {
+        "dataset": "google/boolq",
+        "licence": "CC BY-SA 3.0",
+        "name": "boolq",
+        "record": "1596",
+        "url": "https://huggingface.co/datasets/google/boolq"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "are"
+    },
+    {
+      "choices": [
+        "No",
+        "Yes"
+      ],
+      "expected": {
+        "answer": "B",
+        "kind": "option"
+      },
+      "id": "reading:boolq:1622",
+      "prompt": "Read the passage and answer the question with the letter for yes or no.\n\nPassage: The seventh season of Shameless, based on the British series of the same name by Paul Abbott, is an American comedy-drama television series with executive producers John Wells, Christopher Chulack, Krista Vernoff, Etan Frankel, Nancy M. Pimental and Sheila Callaghan. The season premiered on October 2, 2016, the first time the series has debuted in autumn. Showtime premiered a free preview of the season premiere online on September 23, 2016, ahead of the October 2 broadcast.\n\nQuestion: is there a season 7 of shameless us\n\nA. No\nB. Yes",
+      "skill": "reading",
+      "source": {
+        "dataset": "google/boolq",
+        "licence": "CC BY-SA 3.0",
+        "name": "boolq",
+        "record": "1622",
+        "url": "https://huggingface.co/datasets/google/boolq"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "is"
+    },
+    {
+      "choices": [
+        "Yes",
+        "No"
+      ],
+      "expected": {
+        "answer": "B",
+        "kind": "option"
+      },
+      "id": "reading:boolq:1652",
+      "prompt": "Read the passage and answer the question with the letter for yes or no.\n\nPassage: As with the film, this claim is untrue. Showrunner Noah Hawley continued to use the Coens' device, saying it allowed him to ``tell a story in a new way.'' Hawley has played with the realism of the story further; responding to queries about Charlie Gerhardt, a character from season 2, he stated ``If he's out there, I'd like to get a letter from him someday, telling me how he turned out.''\n\nQuestion: is fargo the series based on a true story\n\nA. Yes\nB. No",
+      "skill": "reading",
+      "source": {
+        "dataset": "google/boolq",
+        "licence": "CC BY-SA 3.0",
+        "name": "boolq",
+        "record": "1652",
+        "url": "https://huggingface.co/datasets/google/boolq"
+      },
+      "split": "train",
+      "stage": 1,
+      "topic": "is"
+    },
+    {
+      "choices": [
+        "No",
+        "Yes"
+      ],
+      "expected": {
+        "answer": "B",
+        "kind": "option"
+      },
+      "id": "reading:boolq:1661",
+      "prompt": "Read the passage and answer the question with the letter for yes or no.\n\nPassage: In March 2018, Shifting Lanes reported that Clarkson would test the Lamborghini Urus at the Arjeplog winter testing facility in northern Sweden. A month later, Clarkson reported on DriveTribe that the team would be filming in Scotland in three classic Italian sports cars. The following month, the team were spotted filming in Wales with some pickup trucks and were later spotted in London filming with some hatchbacks alongside Hammond's wife. May confirmed on DriveTribe that he would be testing the Alpine A110. In June 2018, the team was spotted filming in Detroit, Michigan, with Hammond driving the Dodge Challenger SRT Demon, May in the Hennessey Exorcist Camaro ZL1 and Clarkson drifting the Ford Mustang RTR. Later that month, CarTests reported that Clarkson, Hammond and May were spotted in Hong Kong with a film crew and later revealed the location of filming was Mongolia for their latest special. In July 2018, Clarkson confirmed on the Sunday Times that he would be testing the latest Bentley Continental GT at the Eboladrome. He later posted several images of him testing the Hongqi L5 in Chongqing. The team themselves were spotted filming with several second hand luxury cars in the city. At the end of the month Clarkson revealed he would be testing the McLaren Senna. In August 2018, Producer Andy Wilman showed pictures on Instagram of the Aston Martin Vantage being tested around the Eboladrome. Later that same month, Clarkson was spotted driving a De Tomaso Pantera in St Maurice France. In September 2018, the team were spotted in Arizona filming with a selection of motorhomes as well as the new Chevrolet Corvette ZR-1 which was driven by Clarkson. Later that month footage showed Harry Metcalfe's Lamborghini Countach being thrashed round the Eboladrome.At the end of the month Clarkson and Hammond were spotted with some mobile luggage at London Stansted Airport. In October 2018 the team were spotted filming in Georgia with Hammond driving the Bentley Continental GT, Clarkson enjoying the Aston Martin DBS Superlegerra and May in the BMW 8 Series. Later that month Clarkson posted on Instagram, him driving some new Lancia's round the Eboladrome. The team wrapped up filming in Lincoln later on that month.\n\nQuestion: is there going to be a new grand tour\n\nA. No\nB. Yes",
+      "skill": "reading",
+      "source": {
+        "dataset": "google/boolq",
+        "licence": "CC BY-SA 3.0",
+        "name": "boolq",
+        "record": "1661",
+        "url": "https://huggingface.co/datasets/google/boolq"
+      },
+      "split": "eval",
+      "stage": 3,
+      "topic": "is"
+    },
+    {
+      "choices": [
+        "Yes",
+        "No"
+      ],
+      "expected": {
+        "answer": "A",
+        "kind": "option"
+      },
+      "id": "reading:boolq:21",
+      "prompt": "Read the passage and answer the question with the letter for yes or no.\n\nPassage: A spark plug (sometimes, in British English, a sparking plug, and, colloquially, a plug) is a device for delivering electric current from an ignition system to the combustion chamber of a spark-ignition engine to ignite the compressed fuel/air mixture by an electric spark, while containing combustion pressure within the engine. A spark plug has a metal threaded shell, electrically isolated from a central electrode by a porcelain insulator. The central electrode, which may contain a resistor, is connected by a heavily insulated wire to the output terminal of an ignition coil or magneto. The spark plug's metal shell is screwed into the engine's cylinder head and thus electrically grounded. The central electrode protrudes through the porcelain insulator into the combustion chamber, forming one or more spark gaps between the inner end of the central electrode and usually one or more protuberances or structures attached to the inner end of the threaded shell and designated the side, earth, or ground electrode(s).\n\nQuestion: does a spark plug keep an engine running\n\nA. Yes\nB. No",
+      "skill": "reading",
+      "source": {
+        "dataset": "google/boolq",
+        "licence": "CC BY-SA 3.0",
+        "name": "boolq",
+        "record": "21",
+        "url": "https://huggingface.co/datasets/google/boolq"
+      },
+      "split": "eval",
+      "stage": 3,
+      "topic": "does"
+    },
+    {
+      "choices": [
+        "Yes",
+        "No"
+      ],
+      "expected": {
+        "answer": "B",
+        "kind": "option"
+      },
+      "id": "reading:boolq:3185",
+      "prompt": "Read the passage and answer the question with the letter for yes or no.\n\nPassage: Adult cartoonist Antonucci was dared to create a children's cartoon; while designing a commercial, he conceived Ed, Edd n Eddy, designing it to resemble classic cartoons from the 1940s--1970s. He pitched the series to Cartoon Network and Nickelodeon, but the latter demanded creative control, leading to him making a deal with the former and the series premiering on January 4, 1999. During the show's run, several specials and shorts were produced in addition to the regular television series. The series concluded with a TV movie, Ed, Edd n Eddy's Big Picture Show, on November 8, 2009.\n\nQuestion: will there be a new ed edd n eddy\n\nA. Yes\nB. No",
+      "skill": "reading",
+      "source": {
+        "dataset": "google/boolq",
+        "licence": "CC BY-SA 3.0",
+        "name": "boolq",
+        "record": "3185",
+        "url": "https://huggingface.co/datasets/google/boolq"
+      },
+      "split": "train",
+      "stage": 2,
+      "topic": "will"
+    },
+    {
+      "choices": [
+        "No",
+        "Yes"
+      ],
+      "expected": {
+        "answer": "A",
+        "kind": "option"
+      },
+      "id": "reading:boolq:3190",
+      "prompt": "Read the passage and answer the question with the letter for yes or no.\n\nPassage: The relationship between House and Cuddy is known by the portmanteau term ``Huddy''. Cuddy has what USA Today's Peter Johnson terms a ``cat-and-mouse'' relationship with House. Edelstein has described it as ``a really complicated, adult relationship'', explaining: ``These are people who have very full lives and lots of responsibilities that perhaps conflict with their feelings for each other.'' The actress ``would love for them to have a (romantic) relationship, because it could be as complicated as the rest of their relationship'', however, she is unsure how it would affect the dynamics of the show. Jacobs commented at the end of the show's third season: ``I can't see them pairing them in a permanent fashion. But they are close; they have gone through a lot together. Might there be a moment of weakness in which the two might explore their chemistry? Maybe.'' Questioned at the end of the fourth season on whether Cuddy and House would ever consummate their relationship on-screen, Jacobs responded: ``there is heat and chemistry between them and I never want to see that go away because that is the essence of their relationship. (...) we'll never ignore (their chemistry) because, as I said, it's the very essence of them. She wouldn't forgive him over and over again if he wasn't so brilliant in her eyes, clearly she's got a soft spot for him. And he has one for her. You will continue to see that.'' Prior to the beginning of the fifth season, series creator David Shore discussed his intention to further the relationship between the two, as: ``If House is capable of any relationship with anyone, it's Cuddy. We can't have them dancing around forever.'' Following the fifth season revelation that House had hallucinated a physical relationship with Cuddy, Shore commented on the storyline's continuation into the sixth season: ``it would be dishonest to just let that disappear. Obviously House has feelings for her. Even though the love affair didn't happen, in House's mind it did.'' Edelstein does not know whether the two characters will eventually end up together, however believes that the combination of frustration and love Cuddy feels for House ``makes for a very interesting relationship'', as: ``there's a great deal of admiration and respect, and also an incredible amount of annoyance and frustration, which is like how most relationships are in your life.'' As of the very end of the Sixth Season finale, Help Me, House and Cuddy appear to have entered a romantic relationship. In the closing minutes of the episode, House came very close to relapsing and taking vicodin once again, at which point Cuddy entered to tell him that she had ended her relationship with Lucas. She professed her love for House, which led to them kissing briefly. A close-up shot of their clasped hands (House's left, Cuddy's right) was the closing shot of the episode, as well as the season. The relationship later ends in season 7; in the episode ``Bombshells''.\n\nQuestion: do house and cuddy get back together in season 8\n\nA. No\nB. Yes",
+      "skill": "reading",
+      "source": {
+        "dataset": "google/boolq",
+        "licence": "CC BY-SA 3.0",
+        "name": "boolq",
+        "record": "3190",
+        "url": "https://huggingface.co/datasets/google/boolq"
+      },
+      "split": "eval",
+      "stage": 3,
+      "topic": "do"
+    },
+    {
+      "choices": [
+        "No",
+        "Yes"
+      ],
+      "expected": {
+        "answer": "B",
+        "kind": "option"
+      },
+      "id": "reading:boolq:3192",
+      "prompt": "Read the passage and answer the question with the letter for yes or no.\n\nPassage: The Aquarium's notable specimens include whale sharks, beluga whales, California sea lions, bottlenose dolphins, and manta rays.\n\nQuestion: does the georgia aquarium still have whale sharks\n\nA. No\nB. Yes",
+      "skill": "reading",
+      "source": {
+        "dataset": "google/boolq",
+        "licence": "CC BY-SA 3.0",
+        "name": "boolq",
+        "record": "3192",
+        "url": "https://huggingface.co/datasets/google/boolq"
+      },
+      "split": "train",
+      "stage": 1,
+      "topic": "does"
+    },
+    {
+      "choices": [
+        "No",
+        "Yes"
+      ],
+      "expected": {
+        "answer": "A",
+        "kind": "option"
+      },
+      "id": "reading:boolq:3196",
+      "prompt": "Read the passage and answer the question with the letter for yes or no.\n\nPassage: Following consecutive losses to Mexico and Costa Rica in the opening games of the final round of qualification for the 2018 FIFA World Cup, Klinsmann was removed as national team coach and technical director and replaced by previous U.S. manager Bruce Arena. World Cup qualification resumed on March 24, 2017, where Arena and his team had a record 6--0 win over Honduras. Four days later, the team traveled to Panama City, drawing Panama 1--1. After beating Trinidad and Tobago 2--0, the U.S. got their third ever result in World Cup Qualification at the Estadio Azteca when they drew 1--1 against Mexico. In July 2017, the U.S. won their sixth CONCACAF Gold Cup with a 2--1 win over Jamaica in the final. Following an agonizing 2--1 defeat to Trinidad and Tobago on October 10, 2017, the U.S. failed to qualify for the 2018 World Cup, missing the tournament for the first time since 1986. On October 13, 2017, Arena resigned. Many pundits and analysts called this the worst result and worst performance in the history of the national team.\n\nQuestion: does us have a team in the world cup\n\nA. No\nB. Yes",
+      "skill": "reading",
+      "source": {
+        "dataset": "google/boolq",
+        "licence": "CC BY-SA 3.0",
+        "name": "boolq",
+        "record": "3196",
+        "url": "https://huggingface.co/datasets/google/boolq"
+      },
+      "split": "eval",
+      "stage": 3,
+      "topic": "does"
+    },
+    {
+      "choices": [
+        "No",
+        "Yes"
+      ],
+      "expected": {
+        "answer": "B",
+        "kind": "option"
+      },
+      "id": "reading:boolq:3199",
+      "prompt": "Read the passage and answer the question with the letter for yes or no.\n\nPassage: All CBTL coffees, teas, and the powders used to make other beverages, are certified kosher. All company-owned CBTL locations in Southern California are certified kosher. Most in California and Nevada have signed and dated certificates indicating that the entirety of their items are kosher in conformance to the standards of the certifying agency. However, privately-owned franchise stores can opt out of kosher certification.\n\nQuestion: is the coffee bean and tea leaf kosher\n\nA. No\nB. Yes",
+      "skill": "reading",
+      "source": {
+        "dataset": "google/boolq",
+        "licence": "CC BY-SA 3.0",
+        "name": "boolq",
+        "record": "3199",
+        "url": "https://huggingface.co/datasets/google/boolq"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "is"
+    },
+    {
+      "choices": [
+        "No",
+        "Yes"
+      ],
+      "expected": {
+        "answer": "A",
+        "kind": "option"
+      },
+      "id": "reading:boolq:3204",
+      "prompt": "Read the passage and answer the question with the letter for yes or no.\n\nPassage: Lady Bird is a 2017 American coming-of-age comedy-drama film written and directed by Greta Gerwig and starring Saoirse Ronan, Laurie Metcalf, Tracy Letts, Lucas Hedges, Timothée Chalamet, Beanie Feldstein, Stephen McKinley Henderson, and Lois Smith. Set in Sacramento, California, in 2002, it is a coming-of-age story of a high-school senior and her turbulent relationship with her mother.\n\nQuestion: is the movie lady bird about lady bird johnson\n\nA. No\nB. Yes",
+      "skill": "reading",
+      "source": {
+        "dataset": "google/boolq",
+        "licence": "CC BY-SA 3.0",
+        "name": "boolq",
+        "record": "3204",
+        "url": "https://huggingface.co/datasets/google/boolq"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "is"
+    },
+    {
+      "choices": [
+        "Yes",
+        "No"
+      ],
+      "expected": {
+        "answer": "B",
+        "kind": "option"
+      },
+      "id": "reading:boolq:3213",
+      "prompt": "Read the passage and answer the question with the letter for yes or no.\n\nPassage: It is illegal to sell packaged liquor (off-premises sales) on Sundays. Sales also are prohibited on Memorial Day, Independence Day, Labor Day, Thanksgiving Day, and Christmas Day. Low-point beer for consumption off-premises may not be sold between 2:00 a.m. and 6:00 a.m.\n\nQuestion: are liquor stores in oklahoma open on 4th of july\n\nA. Yes\nB. No",
+      "skill": "reading",
+      "source": {
+        "dataset": "google/boolq",
+        "licence": "CC BY-SA 3.0",
+        "name": "boolq",
+        "record": "3213",
+        "url": "https://huggingface.co/datasets/google/boolq"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "are"
+    },
+    {
+      "choices": [
+        "No",
+        "Yes"
+      ],
+      "expected": {
+        "answer": "B",
+        "kind": "option"
+      },
+      "id": "reading:boolq:3246",
+      "prompt": "Read the passage and answer the question with the letter for yes or no.\n\nPassage: In economics, fixed costs, indirect costs or overheads are business expenses that are not dependent on the level of goods or services produced by the business. They tend to be time-related, such as salaries or rents being paid per month, and are often referred to as overhead costs. This is in contrast to variable costs, which are volume-related (and are paid per quantity produced). For a simple example, such as a bakery, the monthly rent for the baking facilities, and the monthly payments for the security system and basic phone line are fixed costs, as they do not change according to how much bread the bakery produces and sells. On the other hands, the wage costs of the bakery are variable, as the bakery will have to hire more workers if the production of bread increases. The relation between fixed cost and variable cost can be modelled by an analytical formula.\n\nQuestion: are fixed costs and overhead costs the same\n\nA. No\nB. Yes",
+      "skill": "reading",
+      "source": {
+        "dataset": "google/boolq",
+        "licence": "CC BY-SA 3.0",
+        "name": "boolq",
+        "record": "3246",
+        "url": "https://huggingface.co/datasets/google/boolq"
+      },
+      "split": "train",
+      "stage": 2,
+      "topic": "are"
+    },
+    {
+      "choices": [
+        "No",
+        "Yes"
+      ],
+      "expected": {
+        "answer": "B",
+        "kind": "option"
+      },
+      "id": "reading:boolq:3257",
+      "prompt": "Read the passage and answer the question with the letter for yes or no.\n\nPassage: Founded in 1945 as a manufacturer of locomotives, the company manufactured its first commercial vehicle in 1954 in a collaboration with Daimler-Benz AG, which ended in 1969. Tata Motors entered the passenger vehicle market in 1988 with the launch of the TataMobile followed by the Tata Sierra in 1991, becoming the first Indian manufacturer to achieve the capability of developing a competitive indigenous automobile. In 1998, Tata launched the first fully indigenous Indian passenger car, the Indica, and in 2008 launched the Tata Nano, the world's cheapest car. Tata Motors acquired the South Korean truck manufacturer Daewoo Commercial Vehicles Company in 2004 and purchased Jaguar Land Rover from Ford in 2008.\n\nQuestion: is jaguar and land rover owned by tata\n\nA. No\nB. Yes",
+      "skill": "reading",
+      "source": {
+        "dataset": "google/boolq",
+        "licence": "CC BY-SA 3.0",
+        "name": "boolq",
+        "record": "3257",
+        "url": "https://huggingface.co/datasets/google/boolq"
+      },
+      "split": "train",
+      "stage": 2,
+      "topic": "is"
+    },
+    {
+      "choices": [
+        "No",
+        "Yes"
+      ],
+      "expected": {
+        "answer": "B",
+        "kind": "option"
+      },
+      "id": "reading:boolq:3263",
+      "prompt": "Read the passage and answer the question with the letter for yes or no.\n\nPassage: In the 1770s, blacks throughout New England began sending petitions to northern legislatures demanding freedom. Five of the Northern self-declared states adopted policies to at least gradually abolish slavery: Pennsylvania (1780), New Hampshire and Massachusetts (1783), Connecticut and Rhode Island (1784). Vermont had abolished slavery in 1777, while it was still independent, and when it joined the United States as the 14th state in 1791, it was the first state to join untainted by slavery. These state jurisdictions thus enacted the first abolition laws in the Americas. By 1804 (including, New York (1799), New Jersey (1804)), all of the northern states had abolished slavery or set measures in place to gradually abolish it.\n\nQuestion: were the new england states free states in 1854\n\nA. No\nB. Yes",
+      "skill": "reading",
+      "source": {
+        "dataset": "google/boolq",
+        "licence": "CC BY-SA 3.0",
+        "name": "boolq",
+        "record": "3263",
+        "url": "https://huggingface.co/datasets/google/boolq"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "were"
+    },
+    {
+      "choices": [
+        "No",
+        "Yes"
+      ],
+      "expected": {
+        "answer": "A",
+        "kind": "option"
+      },
+      "id": "reading:boolq:3269",
+      "prompt": "Read the passage and answer the question with the letter for yes or no.\n\nPassage: In April 2017, it was announced that the series had been renewed for a third season of 20 episodes. The first half of ten episodes premiered on March 20, 2018. In June 2018, Freeform canceled the series after three seasons, but ordered two extra episodes to properly conclude the series' story; the second half of the third season is set to air in early 2019. As of May 15, 2018, 43 episodes of Shadowhunters have aired, concluding the first half of the third season.\n\nQuestion: will there be a season 5 of shadowhunters\n\nA. No\nB. Yes",
+      "skill": "reading",
+      "source": {
+        "dataset": "google/boolq",
+        "licence": "CC BY-SA 3.0",
+        "name": "boolq",
+        "record": "3269",
+        "url": "https://huggingface.co/datasets/google/boolq"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "will"
+    },
+    {
+      "choices": [
+        "Yes",
+        "No"
+      ],
+      "expected": {
+        "answer": "A",
+        "kind": "option"
+      },
+      "id": "reading:boolq:51",
+      "prompt": "Read the passage and answer the question with the letter for yes or no.\n\nPassage: Many martial arts employ the use of common objects as weapons; Filipino martial arts such as Eskrima include practice with machetes, canes, bamboo spears, and knives as a result of the 333 year Spanish colonization that took place in the Philippines which prohibited the ownership and use of standard swords and bladed weapons; Chinese martial arts and some Korean martial arts commonly feature the use of improvised weapons such as fans, hammers and staves. There are even some western martial arts that are based on improvised weapons such as British quarterstaff fighting and Irish stick fighting.\n\nQuestion: can a hammer be used as a weapon\n\nA. Yes\nB. No",
+      "skill": "reading",
+      "source": {
+        "dataset": "google/boolq",
+        "licence": "CC BY-SA 3.0",
+        "name": "boolq",
+        "record": "51",
+        "url": "https://huggingface.co/datasets/google/boolq"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "can"
+    },
+    {
+      "choices": [
+        "Yes",
+        "No"
+      ],
+      "expected": {
+        "answer": "B",
+        "kind": "option"
+      },
+      "id": "reading:boolq:80",
+      "prompt": "Read the passage and answer the question with the letter for yes or no.\n\nPassage: When asked about developing a sequel series, King stated ``I'd love to revisit Jake and Sadie, and also revisit the rabbit hole that dumps people into the past, but sometimes it's best not to go back for a second helping.''.\n\nQuestion: will there be a second season of 11.22.63\n\nA. Yes\nB. No",
+      "skill": "reading",
+      "source": {
+        "dataset": "google/boolq",
+        "licence": "CC BY-SA 3.0",
+        "name": "boolq",
+        "record": "80",
+        "url": "https://huggingface.co/datasets/google/boolq"
+      },
+      "split": "train",
+      "stage": 1,
+      "topic": "will"
+    },
+    {
+      "choices": [
+        "No",
+        "Yes"
+      ],
+      "expected": {
+        "answer": "B",
+        "kind": "option"
+      },
+      "id": "reading:boolq:81",
+      "prompt": "Read the passage and answer the question with the letter for yes or no.\n\nPassage: Nuclear power in the United States is provided by 99 commercial reactors with a net capacity of 100,350 megawatts (MW), 65 pressurized water reactors and 34 boiling water reactors. In 2016 they produced a total of 805.3 terawatt-hours of electricity, which accounted for 19.7% of the nation's total electric energy generation. In 2016, nuclear energy comprised nearly 60 percent of U.S. emission-free generation.\n\nQuestion: are there nuclear power plants in the us\n\nA. No\nB. Yes",
+      "skill": "reading",
+      "source": {
+        "dataset": "google/boolq",
+        "licence": "CC BY-SA 3.0",
+        "name": "boolq",
+        "record": "81",
+        "url": "https://huggingface.co/datasets/google/boolq"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "are"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It keeps only points the passage states.",
+          "It is shorter than the passage it summarises.",
+          "It adds no fact that is not in the passage.",
+          "It covers the main point rather than one detail."
+        ],
+        "kind": "rubric",
+        "reference": "Some of the most famous characters Marvel have produced include Spider-Man, Iron Man, Captain America, Thor, Doctor Strange, Hulk, and Wolverine. These characters are often affiliated with teams of superheroes, such as the Avengers, X-Men, Fantastic Four, and Guardians of the Galaxy."
+      },
+      "id": "reading:dolly_summary:10804",
+      "prompt": "Summarise the passage in your own words.\n\nGive me some of the most famous characters Marvel Comics has produced from this list.\n\nPassage: Marvel counts among its characters such well-known superheroes as Spider-Man, Iron Man, Captain America, Thor, Doctor Strange, Hulk, Daredevil, Wolverine, Black Panther and Captain Marvel, as well as popular superhero teams such as the Avengers, X-Men, Fantastic Four, and Guardians of the Galaxy. Its stable of well-known supervillains includes the likes of Doctor Doom, Magneto, Ultron, Thanos, Kang the Conqueror, Green Goblin, Galactus, Loki, and Kingpin. Most of Marvel's fictional characters operate in a single reality known as the Marvel Universe, with most locations mirroring real-life places; many major characters are based in New York City, New York, United States. Additionally, Marvel has published several licensed properties from other companies. This includes Star Wars comics twice from 1977 to 1986 and again since 2015.",
+      "skill": "reading",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_summary",
+        "record": "10804",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "summary of a passage"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It keeps only points the passage states.",
+          "It is shorter than the passage it summarises.",
+          "It adds no fact that is not in the passage.",
+          "It covers the main point rather than one detail."
+        ],
+        "kind": "rubric",
+        "reference": "The university that has Purdue Pete as their mascot is Purdue University."
+      },
+      "id": "reading:dolly_summary:12627",
+      "prompt": "Summarise the passage in your own words.\n\nWhich university has Purdue Pete as their mascot?\n\nPassage: Purdue Pete is a mascot of Purdue University. Despite his on-field presence at Purdue sporting events, Pete is only the athletic mascot of the university, and the official mascot of Purdue University is the Boilermaker Special.",
+      "skill": "reading",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_summary",
+        "record": "12627",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "summary of a passage"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It keeps only points the passage states.",
+          "It is shorter than the passage it summarises.",
+          "It adds no fact that is not in the passage.",
+          "It covers the main point rather than one detail."
+        ],
+        "kind": "rubric",
+        "reference": "Arkansas won the SEC softball season beating Missouri by 4-0."
+      },
+      "id": "reading:dolly_summary:13087",
+      "prompt": "Summarise the passage in your own words.\n\nWho won the 2022 SEC softball Season?\n\nPassage: The 2022 SEC softball season began play Thursday, February 10, and conference play began on Thursday, March 11. The 2022 Southeastern Conference softball tournament was May 10-14 at Katie Seashole Pressly Softball Stadium in Gainesville, Florida. Arkansas played Missouri in the tournament final, winning by a score of 4–0. Vanderbilt University is the only full member of the Southeastern Conference to not sponsor a softball program.",
+      "skill": "reading",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_summary",
+        "record": "13087",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "train",
+      "stage": 1,
+      "topic": "summary of a passage"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It keeps only points the passage states.",
+          "It is shorter than the passage it summarises.",
+          "It adds no fact that is not in the passage.",
+          "It covers the main point rather than one detail."
+        ],
+        "kind": "rubric",
+        "reference": "Bernoulli's principle is a key concept in fluid dynamics that relates pressure, speed and height. Bernoulli's principle states that an increase in the speed of a fluid occurs simultaneously with a decrease in static pressure or a decrease in the fluid's potential energy."
+      },
+      "id": "reading:dolly_summary:13127",
+      "prompt": "Summarise the passage in your own words.\n\nSummarise Bernoulli's principle based on the following paragraphs.\n\nPassage: Bernoulli's principle is a key concept in fluid dynamics that relates pressure, speed and height. Bernoulli's principle states that an increase in the speed of a fluid occurs simultaneously with a decrease in static pressure or a decrease in the fluid's potential energy.  The principle is named after the Swiss mathematician and physicist Daniel Bernoulli, who published it in his book Hydrodynamica in 1738.Although Bernoulli deduced that pressure decreases when the flow speed increases, it was Leonhard Euler in 1752 who derived Bernoulli's equation in its usual form. The principle is only applicable for isentropic flows: when the effects of irreversible processes (like turbulence) and non-adiabatic processes (e.g. thermal radiation) are small and can be neglected.\nBernoulli's principle can be derived from the principle of conservation of energy. This states that, in a steady flow, the sum of all forms of energy in a fluid is the same at all points that are free of viscous forces. This requires that the sum of kinetic energy, potential energy and internal energy remains constant. Thus an increase in the speed of the fluid—implying an increase in its kinetic energy (dynamic pressure)—occurs with a simultaneous decrease in (the sum of) its potential energy (including the static pressure) and internal energy. If the fluid is flowing out of a reservoir, the sum of all forms of energy is the same because in a reservoir the energy per unit volume (the sum of pressure and gravitational potential ρ g h) is the same everywhere.\nBernoulli's principle can also be derived directly from Isaac Newton's second Law of Motion. If a small volume of fluid is flowing horizontally from a region of high pressure to a region of low pressure, then there is more pressure behind than in front. This gives a net force on the volume, accelerating it along the streamline.\nFluid particles are subject only to pressure and their own weight. If a fluid is flowing horizontally and along a section of a streamline, where the speed increases it can only be because the fluid on that section has moved from a region of higher pressure to a region of lower pressure; and if its speed decreases, it can only be because it has moved from a region of lower pressure to a region of higher pressure. Consequently, within a fluid flowing horizontally, the highest speed occurs where the pressure is lowest, and the lowest speed occurs where the pressure is highest.",
+      "skill": "reading",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_summary",
+        "record": "13127",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "eval",
+      "stage": 3,
+      "topic": "summary of a passage"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It keeps only points the passage states.",
+          "It is shorter than the passage it summarises.",
+          "It adds no fact that is not in the passage.",
+          "It covers the main point rather than one detail."
+        ],
+        "kind": "rubric",
+        "reference": "With the advent of new electronic instruments in the 60s and 70s, namely synthesizers and drum machines, electronic music quickly gained mainstream popularity through genres like disco and hip hop. As the technology progressed through the 80s and 90s, more affordable instruments led electronic music to be even more widely embraced, cementing its status in pop culture and leading to the rise of large electronic music events around the globe."
+      },
+      "id": "reading:dolly_summary:1482",
+      "prompt": "Summarise the passage in your own words.\n\nCan you give me a short summary of the follow paragraph about the history of electronic music?\n\nPassage: During the 1960s, digital computer music was pioneered, innovation in live electronics took place, and Japanese electronic musical instruments began to influence the music industry. In the early 1970s, Moog synthesizers and drum machines helped popularize synthesized electronic music. The 1970s also saw electronic music begin to have a significant influence on popular music, with the adoption of polyphonic synthesizers, electronic drums, drum machines, and turntables, through the emergence of genres such as disco, krautrock, new wave, synth-pop, hip hop, and EDM. In the early 1980s mass-produced digital synthesizers, such as the Yamaha DX7, became popular, and MIDI (Musical Instrument Digital Interface) was developed. In the same decade, with a greater reliance on synthesizers and the adoption of programmable drum machines, electronic popular music came to the fore. During the 1990s, with the proliferation of increasingly affordable music technology, electronic music production became an established part of popular culture. In Berlin starting in 1989, the Love Parade became the largest street party with over 1 million visitors, inspiring other such popular celebrations of electronic music.",
+      "skill": "reading",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_summary",
+        "record": "1482",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "eval",
+      "stage": 3,
+      "topic": "summary of a passage"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It keeps only points the passage states.",
+          "It is shorter than the passage it summarises.",
+          "It adds no fact that is not in the passage.",
+          "It covers the main point rather than one detail."
+        ],
+        "kind": "rubric",
+        "reference": "Depends on the region, Amazon Prime in US cost USD 8.99"
+      },
+      "id": "reading:dolly_summary:6138",
+      "prompt": "Summarise the passage in your own words.\n\ntell me how much Amazon Prime would cost\n\nPassage: Amazon Prime Video, also known simply as Prime Video, is an American subscription video on-demand over-the-top streaming and rental service of Amazon offered as a standalone service or as part of Amazon's Prime subscription. The service primarily distributes films and television series produced by Amazon Studios and MGM Holdings or licensed to Amazon, as Amazon Originals, with the service also hosting content from other providers, content add-ons, live sporting events, and video rental and purchasing services.\n\nOperating worldwide, the service may require a full Prime subscription to be accessed. In countries such as the United States, United Kingdom, and Germany, the service can be accessed without a full Prime subscription, whereas in Australia, Canada, France, India, Turkey, and Italy, it can only be accessed through a dedicated website. Prime Video additionally offers a content add-on service in the form of channels, called Amazon Channels, or Prime Video Channels, which allow users to subscribe to additional video subscription services from other content providers within Prime Video.\n\nLaunched on September 7, 2006, as Amazon Unbox in the United States, the service grew with an expanding library, and added the Prime Video membership upon the development of the Prime subscription. It was then renamed as Amazon Instant Video on Demand. After acquiring the UK-based streaming and DVD-by-mail service LoveFilm in 2011, Prime Video was added to the Prime subscription in the United Kingdom, Germany and Austria in 2014, available on a monthly subscription of £/€8.99 per month, continuing the plan of LoveFilm Instant. The service was previously available in Norway, Denmark, and Sweden in 2012, but was discontinued in 2013. On April 18, 2016, Amazon split Prime Video from Amazon Prime in the US for $8.99 per month.",
+      "skill": "reading",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_summary",
+        "record": "6138",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "train",
+      "stage": 3,
+      "topic": "summary of a passage"
+    },
+    {
+      "expected": {
+        "acceptable": [
+          "Cam Newton"
+        ],
+        "answer": "Cam Newton",
+        "kind": "span"
+      },
+      "id": "reading:squad:56be4e1facb8001400a502f6",
+      "meta": {
+        "accepted": 1,
+        "title": "Super_Bowl_50"
+      },
+      "prompt": "Read the passage and answer with a phrase taken from it.\n\nPassage: The Panthers finished the regular season with a 15–1 record, and quarterback Cam Newton was named the NFL Most Valuable Player (MVP). They defeated the Arizona Cardinals 49–15 in the NFC Championship Game and advanced to their second Super Bowl appearance since the franchise was founded in 1995. The Broncos finished the regular season with a 12–4 record, and denied the New England Patriots a chance to defend their title from Super Bowl XLIX by defeating them 20–18 in the AFC Championship Game. They joined the Patriots, Dallas Cowboys, and Pittsburgh Steelers as one of four teams that have made eight appearances in the Super Bowl.\n\nQuestion: Which Carolina Panthers player was named Most Valuable Player?",
+      "skill": "reading",
+      "source": {
+        "dataset": "rajpurkar/squad",
+        "licence": "CC BY-SA 4.0",
+        "name": "squad",
+        "record": "56be4e1facb8001400a502f6",
+        "url": "https://huggingface.co/datasets/rajpurkar/squad"
+      },
+      "split": "train",
+      "stage": 1,
+      "topic": "which"
+    },
+    {
+      "expected": {
+        "acceptable": [
+          "Santa Clara"
+        ],
+        "answer": "Santa Clara",
+        "kind": "span"
+      },
+      "id": "reading:squad:56beace93aeaaa14008c91e1",
+      "meta": {
+        "accepted": 1,
+        "title": "Super_Bowl_50"
+      },
+      "prompt": "Read the passage and answer with a phrase taken from it.\n\nPassage: Super Bowl 50 was an American football game to determine the champion of the National Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title. The game was played on February 7, 2016, at Levi's Stadium in the San Francisco Bay Area at Santa Clara, California. As this was the 50th Super Bowl, the league emphasized the \"golden anniversary\" with various gold-themed initiatives, as well as temporarily suspending the tradition of naming each Super Bowl game with Roman numerals (under which the game would have been known as \"Super Bowl L\"), so that the logo could prominently feature the Arabic numerals 50.\n\nQuestion: What city did Super Bowl 50 take place in?",
+      "skill": "reading",
+      "source": {
+        "dataset": "rajpurkar/squad",
+        "licence": "CC BY-SA 4.0",
+        "name": "squad",
+        "record": "56beace93aeaaa14008c91e1",
+        "url": "https://huggingface.co/datasets/rajpurkar/squad"
+      },
+      "split": "train",
+      "stage": 1,
+      "topic": "what"
+    },
+    {
+      "expected": {
+        "acceptable": [
+          "Super Bowl L",
+          "L"
+        ],
+        "answer": "L",
+        "kind": "span"
+      },
+      "id": "reading:squad:56beace93aeaaa14008c91e2",
+      "meta": {
+        "accepted": 2,
+        "title": "Super_Bowl_50"
+      },
+      "prompt": "Read the passage and answer with a phrase taken from it.\n\nPassage: Super Bowl 50 was an American football game to determine the champion of the National Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title. The game was played on February 7, 2016, at Levi's Stadium in the San Francisco Bay Area at Santa Clara, California. As this was the 50th Super Bowl, the league emphasized the \"golden anniversary\" with various gold-themed initiatives, as well as temporarily suspending the tradition of naming each Super Bowl game with Roman numerals (under which the game would have been known as \"Super Bowl L\"), so that the logo could prominently feature the Arabic numerals 50.\n\nQuestion: If Roman numerals were used, what would Super Bowl 50 have been called?",
+      "skill": "reading",
+      "source": {
+        "dataset": "rajpurkar/squad",
+        "licence": "CC BY-SA 4.0",
+        "name": "squad",
+        "record": "56beace93aeaaa14008c91e2",
+        "url": "https://huggingface.co/datasets/rajpurkar/squad"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "if"
+    },
+    {
+      "expected": {
+        "acceptable": [
+          "$5 million"
+        ],
+        "answer": "$5 million",
+        "kind": "span"
+      },
+      "id": "reading:squad:56bf1ae93aeaaa14008c951c",
+      "meta": {
+        "accepted": 1,
+        "title": "Super_Bowl_50"
+      },
+      "prompt": "Read the passage and answer with a phrase taken from it.\n\nPassage: CBS broadcast Super Bowl 50 in the U.S., and charged an average of $5 million for a 30-second commercial during the game. The Super Bowl 50 halftime show was headlined by the British rock group Coldplay with special guest performers Beyoncé and Bruno Mars, who headlined the Super Bowl XLVII and Super Bowl XLVIII halftime shows, respectively. It was the third-most watched U.S. broadcast ever.\n\nQuestion: What was the average cost for a TV ad lasting 30 seconds during Super Bowl 50?",
+      "skill": "reading",
+      "source": {
+        "dataset": "rajpurkar/squad",
+        "licence": "CC BY-SA 4.0",
+        "name": "squad",
+        "record": "56bf1ae93aeaaa14008c951c",
+        "url": "https://huggingface.co/datasets/rajpurkar/squad"
+      },
+      "split": "train",
+      "stage": 1,
+      "topic": "what"
+    },
+    {
+      "expected": {
+        "acceptable": [
+          "$5 million"
+        ],
+        "answer": "$5 million",
+        "kind": "span"
+      },
+      "id": "reading:squad:56d2051ce7d4791d00902609",
+      "meta": {
+        "accepted": 1,
+        "title": "Super_Bowl_50"
+      },
+      "prompt": "Read the passage and answer with a phrase taken from it.\n\nPassage: CBS broadcast Super Bowl 50 in the U.S., and charged an average of $5 million for a 30-second commercial during the game. The Super Bowl 50 halftime show was headlined by the British rock group Coldplay with special guest performers Beyoncé and Bruno Mars, who headlined the Super Bowl XLVII and Super Bowl XLVIII halftime shows, respectively. It was the third-most watched U.S. broadcast ever.\n\nQuestion: How much money did a 1/2 minute commercial cost?",
+      "skill": "reading",
+      "source": {
+        "dataset": "rajpurkar/squad",
+        "licence": "CC BY-SA 4.0",
+        "name": "squad",
+        "record": "56d2051ce7d4791d00902609",
+        "url": "https://huggingface.co/datasets/rajpurkar/squad"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "how"
+    },
+    {
+      "expected": {
+        "acceptable": [
+          "Santa Clara, California.",
+          "Levi's Stadium"
+        ],
+        "answer": "Levi's Stadium",
+        "kind": "span"
+      },
+      "id": "reading:squad:56d600e31c85041400946eb1",
+      "meta": {
+        "accepted": 2,
+        "title": "Super_Bowl_50"
+      },
+      "prompt": "Read the passage and answer with a phrase taken from it.\n\nPassage: Super Bowl 50 was an American football game to determine the champion of the National Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title. The game was played on February 7, 2016, at Levi's Stadium in the San Francisco Bay Area at Santa Clara, California. As this was the 50th Super Bowl, the league emphasized the \"golden anniversary\" with various gold-themed initiatives, as well as temporarily suspending the tradition of naming each Super Bowl game with Roman numerals (under which the game would have been known as \"Super Bowl L\"), so that the logo could prominently feature the Arabic numerals 50.\n\nQuestion: Where was Super Bowl 50 held?",
+      "skill": "reading",
+      "source": {
+        "dataset": "rajpurkar/squad",
+        "licence": "CC BY-SA 4.0",
+        "name": "squad",
+        "record": "56d600e31c85041400946eb1",
+        "url": "https://huggingface.co/datasets/rajpurkar/squad"
+      },
+      "split": "train",
+      "stage": 1,
+      "topic": "where"
+    },
+    {
+      "expected": {
+        "acceptable": [
+          "Dutch",
+          "the Dutch gooien"
+        ],
+        "answer": "Dutch",
+        "kind": "span"
+      },
+      "id": "reading:squad:57267c63dd62a815002e86da",
+      "meta": {
+        "accepted": 2,
+        "title": "Newcastle_upon_Tyne"
+      },
+      "prompt": "Read the passage and answer with a phrase taken from it.\n\nPassage: \"Bairn\" and \"hyem\", meaning \"child\" and \"home\", respectively, are examples of Geordie words with origins in Scandinavia; barn and hjem are the corresponding modern Norwegian and Danish words. Some words used in the Geordie dialect are used elsewhere in the Northern United Kingdom. The words \"bonny\" (meaning \"pretty\"), \"howay\" (\"come on\"), \"stot\" (\"bounce\") and \"hadaway\" (\"go away\" or \"you're kidding\"), all appear to be used in Scots; \"aye\" (\"yes\") and \"nowt\" (IPA://naʊt/, rhymes with out,\"nothing\") are used elsewhere in Northern England. Many words, however, appear to be used exclusively in Newcastle and the surrounding area, such as \"Canny\" (a versatile word meaning \"good\", \"nice\" or \"very\"), \"hacky\" (\"dirty\"), \"netty\" (\"toilet\"), \"hoy\" (\"throw\", from the Dutch gooien, via West Frisian), \"hockle\" (\"spit\").\n\nQuestion: What language does \"hoy\" originate from?",
+      "skill": "reading",
+      "source": {
+        "dataset": "rajpurkar/squad",
+        "licence": "CC BY-SA 4.0",
+        "name": "squad",
+        "record": "57267c63dd62a815002e86da",
+        "url": "https://huggingface.co/datasets/rajpurkar/squad"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "what"
+    },
+    {
+      "expected": {
+        "acceptable": [
+          "'The Pink Triangle'",
+          "The Pink Triangle"
+        ],
+        "answer": "The Pink Triangle",
+        "kind": "span"
+      },
+      "id": "reading:squad:57267de1f1498d1400e8e197",
+      "meta": {
+        "accepted": 2,
+        "title": "Newcastle_upon_Tyne"
+      },
+      "prompt": "Read the passage and answer with a phrase taken from it.\n\nPassage: There are concentrations of pubs, bars and nightclubs around the Bigg Market and the Quayside area of the city centre. There are many bars on the Bigg Market, and other popular areas for nightlife are Collingwood Street, popularly referred to as the 'Diamond Strip' due to its concentration of high-end bars, Neville Street, the Central Station area and Osborne Road in the Jesmond area of the city. In recent years \"The Gate\" has opened in the city centre, a new indoor complex consisting of bars, upmarket clubs, restaurants and a 12-screen Empire multiplex cinema. Newcastle's gay scene - 'The Pink Triangle' - is centred on the Times Square area near the Centre for Life and has a range of bars, cafés and clubs.\n\nQuestion: What's the name of Newcastle's gay club scene?",
+      "skill": "reading",
+      "source": {
+        "dataset": "rajpurkar/squad",
+        "licence": "CC BY-SA 4.0",
+        "name": "squad",
+        "record": "57267de1f1498d1400e8e197",
+        "url": "https://huggingface.co/datasets/rajpurkar/squad"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "what's"
+    },
+    {
+      "expected": {
+        "acceptable": [
+          "Old Town Hall",
+          "the Old Town Hall",
+          "the Old Town Hall,"
+        ],
+        "answer": "Old Town Hall",
+        "kind": "span"
+      },
+      "id": "reading:squad:57268525dd62a815002e8807",
+      "meta": {
+        "accepted": 3,
+        "title": "Newcastle_upon_Tyne"
+      },
+      "prompt": "Read the passage and answer with a phrase taken from it.\n\nPassage: The Pilgrim Street building was refurbished between November 2006 and May 2008; during the refurbishment works, the cinema relocated to the Old Town Hall, Gateshead. In May 2008 the Tyneside Cinema reopened in the restored and refurbished original building. The site currently houses three cinemas, including the restored Classic —the United Kingdom's last surviving news cinema still in full-time operation—alongside two new screens, a roof extension containing the Tyneside Bar, and dedicated education and teaching suites.\n\nQuestion: Where was a cinema relocated while repairs were underway?",
+      "skill": "reading",
+      "source": {
+        "dataset": "rajpurkar/squad",
+        "licence": "CC BY-SA 4.0",
+        "name": "squad",
+        "record": "57268525dd62a815002e8807",
+        "url": "https://huggingface.co/datasets/rajpurkar/squad"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "where"
+    },
+    {
+      "expected": {
+        "acceptable": [
+          "gangster",
+          "noir thriller",
+          "gangster film,"
+        ],
+        "answer": "gangster",
+        "kind": "span"
+      },
+      "id": "reading:squad:57268731f1498d1400e8e2e4",
+      "meta": {
+        "accepted": 3,
+        "title": "Newcastle_upon_Tyne"
+      },
+      "prompt": "Read the passage and answer with a phrase taken from it.\n\nPassage: The earliest known movie featuring some exterior scenes filmed in the city is On the Night of the Fire (1939), though by and large the action is studio-bound. Later came The Clouded Yellow (1951) and Payroll (1961), both of which feature more extensive scenes filmed in the city. The 1971 film Get Carter was shot on location in and around Newcastle and offers an opportunity to see what Newcastle looked like in the 1960s and early 1970s. The city was also backdrop to another gangster film, the 1988 film noir thriller Stormy Monday, directed by Mike Figgis and starring Tommy Lee Jones, Melanie Griffith, Sting and Sean Bean.\n\nQuestion: What genre of film was the 1988 film Stormy Monday?",
+      "skill": "reading",
+      "source": {
+        "dataset": "rajpurkar/squad",
+        "licence": "CC BY-SA 4.0",
+        "name": "squad",
+        "record": "57268731f1498d1400e8e2e4",
+        "url": "https://huggingface.co/datasets/rajpurkar/squad"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "what"
+    },
+    {
+      "expected": {
+        "acceptable": [
+          "Edinburgh"
+        ],
+        "answer": "Edinburgh",
+        "kind": "span"
+      },
+      "id": "reading:squad:572689b6dd62a815002e8892",
+      "meta": {
+        "accepted": 1,
+        "title": "Newcastle_upon_Tyne"
+      },
+      "prompt": "Read the passage and answer with a phrase taken from it.\n\nPassage: Train operator Virgin Trains East Coast provides a half-hourly frequency of trains to London King's Cross, with a journey time of about three hours, these services call at Durham, Darlington, York, Doncaster, Newark North Gate and Peterborough and north to Scotland with all trains calling at Edinburgh and a small number of trains extended to Glasgow, Aberdeen and Inverness. CrossCountry trains serve destinations in Yorkshire, the Midlands and the South West. First TransPennine Express operates services to Manchester and Liverpool. Northern Rail provides local and regional services.\n\nQuestion: Where do all trains going to Scotland stop at?",
+      "skill": "reading",
+      "source": {
+        "dataset": "rajpurkar/squad",
+        "licence": "CC BY-SA 4.0",
+        "name": "squad",
+        "record": "572689b6dd62a815002e8892",
+        "url": "https://huggingface.co/datasets/rajpurkar/squad"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "where"
+    },
+    {
+      "expected": {
+        "acceptable": [
+          "the Moon",
+          "the mass () and the radius () of the Earth",
+          "force of gravity",
+          "the same force of gravity if the acceleration due to gravity decreased as an inverse square law."
+        ],
+        "answer": "the Moon",
+        "kind": "span"
+      },
+      "id": "reading:squad:573786b51c4567190057448e",
+      "meta": {
+        "accepted": 4,
+        "title": "Force"
+      },
+      "prompt": "Read the passage and answer with a phrase taken from it.\n\nPassage: Newton came to realize that the effects of gravity might be observed in different ways at larger distances. In particular, Newton determined that the acceleration of the Moon around the Earth could be ascribed to the same force of gravity if the acceleration due to gravity decreased as an inverse square law. Further, Newton realized that the acceleration due to gravity is proportional to the mass of the attracting body. Combining these ideas gives a formula that relates the mass () and the radius () of the Earth to the gravitational acceleration:\n\nQuestion: What could be attributed to gravity acceleration around the Earth?",
+      "skill": "reading",
+      "source": {
+        "dataset": "rajpurkar/squad",
+        "licence": "CC BY-SA 4.0",
+        "name": "squad",
+        "record": "573786b51c4567190057448e",
+        "url": "https://huggingface.co/datasets/rajpurkar/squad"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "what"
+    },
+    {
+      "expected": {
+        "acceptable": [
+          "James Clerk Maxwell"
+        ],
+        "answer": "James Clerk Maxwell",
+        "kind": "span"
+      },
+      "id": "reading:squad:57378e311c456719005744af",
+      "meta": {
+        "accepted": 1,
+        "title": "Force"
+      },
+      "prompt": "Read the passage and answer with a phrase taken from it.\n\nPassage: The origin of electric and magnetic fields would not be fully explained until 1864 when James Clerk Maxwell unified a number of earlier theories into a set of 20 scalar equations, which were later reformulated into 4 vector equations by Oliver Heaviside and Josiah Willard Gibbs. These \"Maxwell Equations\" fully described the sources of the fields as being stationary and moving charges, and the interactions of the fields themselves. This led Maxwell to discover that electric and magnetic fields could be \"self-generating\" through a wave that traveled at a speed that he calculated to be the speed of light. This insight united the nascent fields of electromagnetic theory with optics and led directly to a complete description of the electromagnetic spectrum.\n\nQuestion: Who first fully explained the origins of magnetic and electric fields?",
+      "skill": "reading",
+      "source": {
+        "dataset": "rajpurkar/squad",
+        "licence": "CC BY-SA 4.0",
+        "name": "squad",
+        "record": "57378e311c456719005744af",
+        "url": "https://huggingface.co/datasets/rajpurkar/squad"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "who"
+    },
+    {
+      "expected": {
+        "acceptable": [
+          "energy"
+        ],
+        "answer": "energy",
+        "kind": "span"
+      },
+      "id": "reading:squad:5737958ac3c5551400e51f2b",
+      "meta": {
+        "accepted": 1,
+        "title": "Force"
+      },
+      "prompt": "Read the passage and answer with a phrase taken from it.\n\nPassage: It is a common misconception to ascribe the stiffness and rigidity of solid matter to the repulsion of like charges under the influence of the electromagnetic force. However, these characteristics actually result from the Pauli exclusion principle.[citation needed] Since electrons are fermions, they cannot occupy the same quantum mechanical state as other electrons. When the electrons in a material are densely packed together, there are not enough lower energy quantum mechanical states for them all, so some of them must be in higher energy states. This means that it takes energy to pack them together. While this effect is manifested macroscopically as a structural force, it is technically only the result of the existence of a finite set of electron states.\n\nQuestion: What is needed to pack electrons densely together?",
+      "skill": "reading",
+      "source": {
+        "dataset": "rajpurkar/squad",
+        "licence": "CC BY-SA 4.0",
+        "name": "squad",
+        "record": "5737958ac3c5551400e51f2b",
+        "url": "https://huggingface.co/datasets/rajpurkar/squad"
+      },
+      "split": "train",
+      "stage": 1,
+      "topic": "what"
+    },
+    {
+      "expected": {
+        "acceptable": [
+          "normal",
+          "normal force"
+        ],
+        "answer": "normal",
+        "kind": "span"
+      },
+      "id": "reading:squad:57379a4b1c456719005744d0",
+      "meta": {
+        "accepted": 2,
+        "title": "Force"
+      },
+      "prompt": "Read the passage and answer with a phrase taken from it.\n\nPassage: The normal force is due to repulsive forces of interaction between atoms at close contact. When their electron clouds overlap, Pauli repulsion (due to fermionic nature of electrons) follows resulting in the force that acts in a direction normal to the surface interface between two objects.:93 The normal force, for example, is responsible for the structural integrity of tables and floors as well as being the force that responds whenever an external force pushes on a solid object. An example of the normal force in action is the impact force on an object crashing into an immobile surface.\n\nQuestion: What is the force that causes rigid strength in structures?",
+      "skill": "reading",
+      "source": {
+        "dataset": "rajpurkar/squad",
+        "licence": "CC BY-SA 4.0",
+        "name": "squad",
+        "record": "57379a4b1c456719005744d0",
+        "url": "https://huggingface.co/datasets/rajpurkar/squad"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "what"
+    },
+    {
+      "expected": {
+        "acceptable": [
+          "stress tensor",
+          "deformations",
+          "The stress tensor"
+        ],
+        "answer": "deformations",
+        "kind": "span"
+      },
+      "id": "reading:squad:5737a25ac3c5551400e51f51",
+      "meta": {
+        "accepted": 3,
+        "title": "Force"
+      },
+      "prompt": "Read the passage and answer with a phrase taken from it.\n\nPassage: where  is the relevant cross-sectional area for the volume for which the stress-tensor is being calculated. This formalism includes pressure terms associated with forces that act normal to the cross-sectional area (the matrix diagonals of the tensor) as well as shear terms associated with forces that act parallel to the cross-sectional area (the off-diagonal elements). The stress tensor accounts for forces that cause all strains (deformations) including also tensile stresses and compressions.:133–134:38-1–38-11\n\nQuestion: What causes strain in structures?",
+      "skill": "reading",
+      "source": {
+        "dataset": "rajpurkar/squad",
+        "licence": "CC BY-SA 4.0",
+        "name": "squad",
+        "record": "5737a25ac3c5551400e51f51",
+        "url": "https://huggingface.co/datasets/rajpurkar/squad"
+      },
+      "split": "train",
+      "stage": 1,
+      "topic": "what"
+    },
+    {
+      "expected": {
+        "acceptable": [
+          "rotational equivalent for position",
+          "rotation",
+          "rotational inertia",
+          "angle is the rotational equivalent for position"
+        ],
+        "answer": "rotation",
+        "kind": "span"
+      },
+      "id": "reading:squad:5737a4511c456719005744df",
+      "meta": {
+        "accepted": 4,
+        "title": "Force"
+      },
+      "prompt": "Read the passage and answer with a phrase taken from it.\n\nPassage: Torque is the rotation equivalent of force in the same way that angle is the rotational equivalent for position, angular velocity for velocity, and angular momentum for momentum. As a consequence of Newton's First Law of Motion, there exists rotational inertia that ensures that all bodies maintain their angular momentum unless acted upon by an unbalanced torque. Likewise, Newton's Second Law of Motion can be used to derive an analogous equation for the instantaneous angular acceleration of the rigid body:\n\nQuestion: What is the force equivalent of torque compared to angular momentum?",
+      "skill": "reading",
+      "source": {
+        "dataset": "rajpurkar/squad",
+        "licence": "CC BY-SA 4.0",
+        "name": "squad",
+        "record": "5737a4511c456719005744df",
+        "url": "https://huggingface.co/datasets/rajpurkar/squad"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "what"
+    },
+    {
+      "expected": {
+        "acceptable": [
+          "difference in potential energy",
+          "the difference in potential energy",
+          "the difference in potential energy between two different locations in space"
+        ],
+        "answer": "difference in potential energy",
+        "kind": "span"
+      },
+      "id": "reading:squad:5737a7351c456719005744f4",
+      "meta": {
+        "accepted": 3,
+        "title": "Force"
+      },
+      "prompt": "Read the passage and answer with a phrase taken from it.\n\nPassage: A conservative force that acts on a closed system has an associated mechanical work that allows energy to convert only between kinetic or potential forms. This means that for a closed system, the net mechanical energy is conserved whenever a conservative force acts on the system. The force, therefore, is related directly to the difference in potential energy between two different locations in space, and can be considered to be an artifact of the potential field in the same way that the direction and amount of a flow of water can be considered to be an artifact of the contour map of the elevation of an area.\n\nQuestion: What is the force between two locations related to?",
+      "skill": "reading",
+      "source": {
+        "dataset": "rajpurkar/squad",
+        "licence": "CC BY-SA 4.0",
+        "name": "squad",
+        "record": "5737a7351c456719005744f4",
+        "url": "https://huggingface.co/datasets/rajpurkar/squad"
+      },
+      "split": "train",
+      "stage": 2,
+      "topic": "what"
+    }
+  ],
+  "skill": "reading",
+  "title": "Reading comprehension and summarization"
+}

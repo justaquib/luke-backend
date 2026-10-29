@@ -8,7 +8,6 @@ package touches torch or a checkpoint file.
 from __future__ import annotations
 
 import threading
-from collections import OrderedDict
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -17,20 +16,19 @@ from typing import Any
 import torch
 
 from app.services.brain_paths import tenant_key
+from app.services.model_cache import ByteBoundedCache
 from app.services.neural import checkpoint, store
 from app.services.neural.model import device_name
 from app.services.neural.serving import ServingWord, serving_word, word_gate
 from app.services.neural.settings import TrainingSettings
+from app.services.neural.tokenizer import artifacts
 from app.services.neural.words import WordTask
 
-# The engine of every tenant, watched by the change time of its model.
-_CACHE: OrderedDict[int, tuple[float | None, NeuralEngine]] = OrderedDict()
+# The engine of every tenant, kept while the files behind it fit the memory
+# cap. A local install serves one tenant, but the trainer visits several, and
+# an engine is cheap to keep and kept from disk when its file changes.
+_CACHE = ByteBoundedCache()
 _LOCK = threading.Lock()
-
-# How many engines keep their models built. A local install serves one tenant,
-# and the weights are mapped from the files, so a second tenant's engine is
-# built from disk when it is asked for and the first one lets go.
-MAX_ENGINES = 1
 
 
 def engine_for(tenant_id: int | None) -> NeuralEngine:
@@ -38,31 +36,28 @@ def engine_for(tenant_id: int | None) -> NeuralEngine:
     key = tenant_key(tenant_id)
     stamp = store.stamp(tenant_id)
     with _LOCK:
-        cached = _CACHE.get(key)
-        if cached is not None and cached[0] == stamp:
-            _CACHE.move_to_end(key)
-            return cached[1]
+        cached = _CACHE.find(key, stamp)
+        if cached is not None:
+            return cached
         engine = NeuralEngine(tenant_id)
-        _remember(key, stamp, engine)
+        _remember(engine, stamp)
         return engine
 
 
-def _remember(key: int, stamp: float | None, engine: NeuralEngine) -> None:
-    """Keep the engine and let go of the oldest one beyond the limit."""
-    _CACHE[key] = (stamp, engine)
-    _CACHE.move_to_end(key)
-    while len(_CACHE) > MAX_ENGINES:
-        _CACHE.popitem(last=False)
+def _remember(engine: NeuralEngine, stamp: float | None) -> None:
+    """Keep the engine while its file fits the cap, letting the oldest go."""
+    key = tenant_key(engine.tenant_id)
+    _CACHE.keep(key, stamp, engine, store.words_size(engine.tenant_id))
 
 
 def forget(tenant_id: int | None) -> None:
     """Drop the cached engine, so the next call reads the files again."""
     with _LOCK:
-        _CACHE.pop(tenant_key(tenant_id), None)
+        _CACHE.drop(tenant_key(tenant_id))
 
 
 def loaded_engines() -> int:
-    """How many engines are cached, so a test can hold the limit."""
+    """How many engines are cached, so a test can hold the memory cap."""
     with _LOCK:
         return len(_CACHE)
 
@@ -147,6 +142,7 @@ class NeuralEngine:
             "vocabulary": len(stored.vocabulary),
             "trained_at": stored.created,
             "corpus": stored.corpus,
+            "tokenizer": artifacts.describe(stored.tokenizer),
             "weights_bytes": size,
         }
 
@@ -164,6 +160,7 @@ class NeuralEngine:
 
     def _record(self, task: str, report: dict[str, Any]) -> None:
         """Note the run in the short history the builder reads."""
+        tokenizer = dict(report.get("tokenizer") or {})
         store.append_run(
             self.tenant_id,
             {
@@ -174,6 +171,8 @@ class NeuralEngine:
                 "stop_reason": report.get("stop_reason"),
                 "steps": report.get("steps"),
                 "seconds": report.get("seconds"),
+                "tokenizer_kind": tokenizer.get("kind"),
+                "tokenizer_id": tokenizer.get("id"),
             },
         )
 
@@ -181,4 +180,4 @@ class NeuralEngine:
 def _cache_engine(engine: NeuralEngine) -> None:
     """Point the cache at the file time that was just written."""
     with _LOCK:
-        _remember(tenant_key(engine.tenant_id), store.stamp(engine.tenant_id), engine)
+        _remember(engine, store.stamp(engine.tenant_id))

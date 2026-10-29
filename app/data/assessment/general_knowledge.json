@@ -1,0 +1,1491 @@
+{
+  "items": [
+    {
+      "choices": [
+        "lever",
+        "pulley",
+        "inclined plane",
+        "wheel and axle"
+      ],
+      "expected": {
+        "answer": "D",
+        "kind": "option"
+      },
+      "id": "general_knowledge:arc_easy:ACTAAP_2009_5_4",
+      "meta": {
+        "dataset_labels": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "prompt": "Answer the question with the letter of the correct option.\n\nIn the United States, windmills have been used for farming for hundreds of years. Which simple machine is the most important part of a windmill?\n\nA. lever\nB. pulley\nC. inclined plane\nD. wheel and axle",
+      "skill": "general_knowledge",
+      "source": {
+        "dataset": "allenai/ai2_arc",
+        "licence": "CC BY-SA 4.0",
+        "name": "arc_easy",
+        "record": "ACTAAP_2009_5_4",
+        "url": "https://huggingface.co/datasets/allenai/ai2_arc"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "in"
+    },
+    {
+      "choices": [
+        "It was once underwater.",
+        "It was once much warmer.",
+        "It has become a rockier place.",
+        "It has changed little from then."
+      ],
+      "expected": {
+        "answer": "A",
+        "kind": "option"
+      },
+      "id": "general_knowledge:arc_easy:ACTAAP_2010_5_8",
+      "meta": {
+        "dataset_labels": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "prompt": "Answer the question with the letter of the correct option.\n\nFossils of sea animals were found in a cave in Arkansas. What does this mean about that area of Arkansas in the past?\n\nA. It was once underwater.\nB. It was once much warmer.\nC. It has become a rockier place.\nD. It has changed little from then.",
+      "skill": "general_knowledge",
+      "source": {
+        "dataset": "allenai/ai2_arc",
+        "licence": "CC BY-SA 4.0",
+        "name": "arc_easy",
+        "record": "ACTAAP_2010_5_8",
+        "url": "https://huggingface.co/datasets/allenai/ai2_arc"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "fossils"
+    },
+    {
+      "choices": [
+        "a solution.",
+        "a mixture.",
+        "a compound.",
+        "an element."
+      ],
+      "expected": {
+        "answer": "C",
+        "kind": "option"
+      },
+      "id": "general_knowledge:arc_easy:CSZ20823",
+      "meta": {
+        "dataset_labels": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "prompt": "Answer the question with the letter of the correct option.\n\nWhen magnesium (Mg) metal is burned in the presence of oxygen (O?), magnesium oxide (MgO) is produced. The properties of magnesium oxide are different than the individual properties of magnesium and oxygen because magnesium oxide is\n\nA. a solution.\nB. a mixture.\nC. a compound.\nD. an element.",
+      "skill": "general_knowledge",
+      "source": {
+        "dataset": "allenai/ai2_arc",
+        "licence": "CC BY-SA 4.0",
+        "name": "arc_easy",
+        "record": "CSZ20823",
+        "url": "https://huggingface.co/datasets/allenai/ai2_arc"
+      },
+      "split": "train",
+      "stage": 2,
+      "topic": "when"
+    },
+    {
+      "choices": [
+        "reproduce.",
+        "hold their rigid shape.",
+        "absorb and excrete materials.",
+        "carry out photosynthesis."
+      ],
+      "expected": {
+        "answer": "D",
+        "kind": "option"
+      },
+      "id": "general_knowledge:arc_easy:MCAS_2000_8_3",
+      "meta": {
+        "dataset_labels": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "prompt": "Answer the question with the letter of the correct option.\n\nChloroplasts in cells make it possible for the cells to\n\nA. reproduce.\nB. hold their rigid shape.\nC. absorb and excrete materials.\nD. carry out photosynthesis.",
+      "skill": "general_knowledge",
+      "source": {
+        "dataset": "allenai/ai2_arc",
+        "licence": "CC BY-SA 4.0",
+        "name": "arc_easy",
+        "record": "MCAS_2000_8_3",
+        "url": "https://huggingface.co/datasets/allenai/ai2_arc"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "chloroplasts"
+    },
+    {
+      "choices": [
+        "The water evaporates and the salt remains in the beaker.",
+        "Both the salt and the water evaporate and leave the beaker.",
+        "The salt becomes a new compound.",
+        "The salt will evaporate from the water and disperse into the environment."
+      ],
+      "expected": {
+        "answer": "A",
+        "kind": "option"
+      },
+      "id": "general_knowledge:arc_easy:MCAS_2002_8_7",
+      "meta": {
+        "dataset_labels": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "prompt": "Answer the question with the letter of the correct option.\n\nWhat happens when salt water is boiled?\n\nA. The water evaporates and the salt remains in the beaker.\nB. Both the salt and the water evaporate and leave the beaker.\nC. The salt becomes a new compound.\nD. The salt will evaporate from the water and disperse into the environment.",
+      "skill": "general_knowledge",
+      "source": {
+        "dataset": "allenai/ai2_arc",
+        "licence": "CC BY-SA 4.0",
+        "name": "arc_easy",
+        "record": "MCAS_2002_8_7",
+        "url": "https://huggingface.co/datasets/allenai/ai2_arc"
+      },
+      "split": "train",
+      "stage": 3,
+      "topic": "what"
+    },
+    {
+      "choices": [
+        "mass",
+        "direction",
+        "acceleration",
+        "volume"
+      ],
+      "expected": {
+        "answer": "B",
+        "kind": "option"
+      },
+      "id": "general_knowledge:arc_easy:MCAS_2006_9_38",
+      "meta": {
+        "dataset_labels": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "prompt": "Answer the question with the letter of the correct option.\n\nWhich of the following must be included with magnitude to represent a vector?\n\nA. mass\nB. direction\nC. acceleration\nD. volume",
+      "skill": "general_knowledge",
+      "source": {
+        "dataset": "allenai/ai2_arc",
+        "licence": "CC BY-SA 4.0",
+        "name": "arc_easy",
+        "record": "MCAS_2006_9_38",
+        "url": "https://huggingface.co/datasets/allenai/ai2_arc"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "which"
+    },
+    {
+      "choices": [
+        "hot spots",
+        "rift valleys",
+        "mountain ranges",
+        "mid-ocean ridges"
+      ],
+      "expected": {
+        "answer": "C",
+        "kind": "option"
+      },
+      "id": "general_knowledge:arc_easy:MCAS_2012_8_23644",
+      "meta": {
+        "dataset_labels": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "prompt": "Answer the question with the letter of the correct option.\n\nWhich of the following are formed when two crustal plates collide with one another?\n\nA. hot spots\nB. rift valleys\nC. mountain ranges\nD. mid-ocean ridges",
+      "skill": "general_knowledge",
+      "source": {
+        "dataset": "allenai/ai2_arc",
+        "licence": "CC BY-SA 4.0",
+        "name": "arc_easy",
+        "record": "MCAS_2012_8_23644",
+        "url": "https://huggingface.co/datasets/allenai/ai2_arc"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "which"
+    },
+    {
+      "choices": [
+        "developing a hypothesis after collecting data in the investigation",
+        "limiting the amount of background research before the investigation",
+        "designing an investigation with repeated trials during the investigation",
+        "obtaining other opinions concerning what should happen during the investigation"
+      ],
+      "expected": {
+        "answer": "C",
+        "kind": "option"
+      },
+      "id": "general_knowledge:arc_easy:MDSA_2008_8_35",
+      "meta": {
+        "dataset_labels": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "prompt": "Answer the question with the letter of the correct option.\n\nBiologists conduct investigations to learn about living organisms. Which method helps reduce bias during an investigation?\n\nA. developing a hypothesis after collecting data in the investigation\nB. limiting the amount of background research before the investigation\nC. designing an investigation with repeated trials during the investigation\nD. obtaining other opinions concerning what should happen during the investigation",
+      "skill": "general_knowledge",
+      "source": {
+        "dataset": "allenai/ai2_arc",
+        "licence": "CC BY-SA 4.0",
+        "name": "arc_easy",
+        "record": "MDSA_2008_8_35",
+        "url": "https://huggingface.co/datasets/allenai/ai2_arc"
+      },
+      "split": "eval",
+      "stage": 3,
+      "topic": "biologists"
+    },
+    {
+      "choices": [
+        "The westward deflection of equatorial winds.",
+        "The movement of rising air currents away from the equator.",
+        "The rotation of storm systems.",
+        "The formation of calm \"eyes\" in the centers of cyclones."
+      ],
+      "expected": {
+        "answer": "B",
+        "kind": "option"
+      },
+      "id": "general_knowledge:arc_easy:Mercury_189753",
+      "meta": {
+        "dataset_labels": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "prompt": "Answer the question with the letter of the correct option.\n\nThe Earth's equator receives more direct sunlight than the regions to its north and south. This distribution of sunlight accounts directly for which phenomenon?\n\nA. The westward deflection of equatorial winds.\nB. The movement of rising air currents away from the equator.\nC. The rotation of storm systems.\nD. The formation of calm \"eyes\" in the centers of cyclones.",
+      "skill": "general_knowledge",
+      "source": {
+        "dataset": "allenai/ai2_arc",
+        "licence": "CC BY-SA 4.0",
+        "name": "arc_easy",
+        "record": "Mercury_189753",
+        "url": "https://huggingface.co/datasets/allenai/ai2_arc"
+      },
+      "split": "eval",
+      "stage": 3,
+      "topic": "the"
+    },
+    {
+      "choices": [
+        "the Sun",
+        "the Moon",
+        "Earth's core",
+        "Earth's mantle"
+      ],
+      "expected": {
+        "answer": "D",
+        "kind": "option"
+      },
+      "id": "general_knowledge:arc_easy:Mercury_190190",
+      "meta": {
+        "dataset_labels": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "prompt": "Answer the question with the letter of the correct option.\n\nWhich of the following has the greatest direct influence on movement of the lithosphere?\n\nA. the Sun\nB. the Moon\nC. Earth's core\nD. Earth's mantle",
+      "skill": "general_knowledge",
+      "source": {
+        "dataset": "allenai/ai2_arc",
+        "licence": "CC BY-SA 4.0",
+        "name": "arc_easy",
+        "record": "Mercury_190190",
+        "url": "https://huggingface.co/datasets/allenai/ai2_arc"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "which"
+    },
+    {
+      "choices": [
+        "cell",
+        "organ",
+        "compound",
+        "element"
+      ],
+      "expected": {
+        "answer": "A",
+        "kind": "option"
+      },
+      "id": "general_knowledge:arc_easy:Mercury_404898",
+      "meta": {
+        "dataset_labels": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "prompt": "Answer the question with the letter of the correct option.\n\nWhich is a basic structure found in all living organisms?\n\nA. cell\nB. organ\nC. compound\nD. element",
+      "skill": "general_knowledge",
+      "source": {
+        "dataset": "allenai/ai2_arc",
+        "licence": "CC BY-SA 4.0",
+        "name": "arc_easy",
+        "record": "Mercury_404898",
+        "url": "https://huggingface.co/datasets/allenai/ai2_arc"
+      },
+      "split": "train",
+      "stage": 1,
+      "topic": "which"
+    },
+    {
+      "choices": [
+        "gases",
+        "rocks",
+        "elements",
+        "molecules"
+      ],
+      "expected": {
+        "answer": "B",
+        "kind": "option"
+      },
+      "id": "general_knowledge:arc_easy:Mercury_405057",
+      "meta": {
+        "dataset_labels": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "prompt": "Answer the question with the letter of the correct option.\n\nDuring science class, a teacher explains that the samples the students are studying are made of two or more minerals. What are the students studying?\n\nA. gases\nB. rocks\nC. elements\nD. molecules",
+      "skill": "general_knowledge",
+      "source": {
+        "dataset": "allenai/ai2_arc",
+        "licence": "CC BY-SA 4.0",
+        "name": "arc_easy",
+        "record": "Mercury_405057",
+        "url": "https://huggingface.co/datasets/allenai/ai2_arc"
+      },
+      "split": "train",
+      "stage": 2,
+      "topic": "during"
+    },
+    {
+      "choices": [
+        "These mountains were once under the ocean.",
+        "These mountains once had a more rainy climate.",
+        "Mountain river clams evolved from ocean clams.",
+        "Ocean clams evolved from mountain river clams."
+      ],
+      "expected": {
+        "answer": "A",
+        "kind": "option"
+      },
+      "id": "general_knowledge:arc_easy:Mercury_416355",
+      "meta": {
+        "dataset_labels": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "prompt": "Answer the question with the letter of the correct option.\n\nImprints of the shells of ocean clams are often found in the rocks of the Appalachian Mountains. What do these imprint fossils most likely indicate?\n\nA. These mountains were once under the ocean.\nB. These mountains once had a more rainy climate.\nC. Mountain river clams evolved from ocean clams.\nD. Ocean clams evolved from mountain river clams.",
+      "skill": "general_knowledge",
+      "source": {
+        "dataset": "allenai/ai2_arc",
+        "licence": "CC BY-SA 4.0",
+        "name": "arc_easy",
+        "record": "Mercury_416355",
+        "url": "https://huggingface.co/datasets/allenai/ai2_arc"
+      },
+      "split": "eval",
+      "stage": 3,
+      "topic": "imprints"
+    },
+    {
+      "choices": [
+        "gold.",
+        "helium.",
+        "sodium.",
+        "aluminum."
+      ],
+      "expected": {
+        "answer": "B",
+        "kind": "option"
+      },
+      "id": "general_knowledge:arc_easy:Mercury_7007788",
+      "meta": {
+        "dataset_labels": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "prompt": "Answer the question with the letter of the correct option.\n\nAll of these elements are metals except\n\nA. gold.\nB. helium.\nC. sodium.\nD. aluminum.",
+      "skill": "general_knowledge",
+      "source": {
+        "dataset": "allenai/ai2_arc",
+        "licence": "CC BY-SA 4.0",
+        "name": "arc_easy",
+        "record": "Mercury_7007788",
+        "url": "https://huggingface.co/datasets/allenai/ai2_arc"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "all"
+    },
+    {
+      "choices": [
+        "a rockslide",
+        "a volcano erupting",
+        "an earthquake occurring",
+        "a rock freezing and thawing"
+      ],
+      "expected": {
+        "answer": "D",
+        "kind": "option"
+      },
+      "id": "general_knowledge:arc_easy:Mercury_7008033",
+      "meta": {
+        "dataset_labels": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "prompt": "Answer the question with the letter of the correct option.\n\nWhich is an example of mechanical weathering?\n\nA. a rockslide\nB. a volcano erupting\nC. an earthquake occurring\nD. a rock freezing and thawing",
+      "skill": "general_knowledge",
+      "source": {
+        "dataset": "allenai/ai2_arc",
+        "licence": "CC BY-SA 4.0",
+        "name": "arc_easy",
+        "record": "Mercury_7008033",
+        "url": "https://huggingface.co/datasets/allenai/ai2_arc"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "which"
+    },
+    {
+      "choices": [
+        "using open flames to heat all materials",
+        "keeping your cell phone on the laboratory countertop",
+        "knowing where your instructor/laboratory leader is at all times",
+        "removing your safety glasses when moving from station to station"
+      ],
+      "expected": {
+        "answer": "C",
+        "kind": "option"
+      },
+      "id": "general_knowledge:arc_easy:Mercury_7030450",
+      "meta": {
+        "dataset_labels": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "prompt": "Answer the question with the letter of the correct option.\n\nWhich would be a safe practice to exercise during laboratory investigations?\n\nA. using open flames to heat all materials\nB. keeping your cell phone on the laboratory countertop\nC. knowing where your instructor/laboratory leader is at all times\nD. removing your safety glasses when moving from station to station",
+      "skill": "general_knowledge",
+      "source": {
+        "dataset": "allenai/ai2_arc",
+        "licence": "CC BY-SA 4.0",
+        "name": "arc_easy",
+        "record": "Mercury_7030450",
+        "url": "https://huggingface.co/datasets/allenai/ai2_arc"
+      },
+      "split": "eval",
+      "stage": 3,
+      "topic": "which"
+    },
+    {
+      "choices": [
+        "winter",
+        "spring",
+        "summer",
+        "fall"
+      ],
+      "expected": {
+        "answer": "A",
+        "kind": "option"
+      },
+      "id": "general_knowledge:arc_easy:Mercury_7057593",
+      "meta": {
+        "dataset_labels": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "prompt": "Answer the question with the letter of the correct option.\n\nWhen the Northern Hemisphere is tilted away from the Sun causing the rays of light to hit Earth at large angles, which season occurs?\n\nA. winter\nB. spring\nC. summer\nD. fall",
+      "skill": "general_knowledge",
+      "source": {
+        "dataset": "allenai/ai2_arc",
+        "licence": "CC BY-SA 4.0",
+        "name": "arc_easy",
+        "record": "Mercury_7057593",
+        "url": "https://huggingface.co/datasets/allenai/ai2_arc"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "when"
+    },
+    {
+      "choices": [
+        "The soil absorbs sunlight.",
+        "Water filters through the soil.",
+        "Organic matter is decayed in the soil.",
+        "The soil is exposed to air."
+      ],
+      "expected": {
+        "answer": "C",
+        "kind": "option"
+      },
+      "id": "general_knowledge:arc_easy:Mercury_7057960",
+      "meta": {
+        "dataset_labels": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "prompt": "Answer the question with the letter of the correct option.\n\nHow do the nutrients necessary for plant growth get into the soil?\n\nA. The soil absorbs sunlight.\nB. Water filters through the soil.\nC. Organic matter is decayed in the soil.\nD. The soil is exposed to air.",
+      "skill": "general_knowledge",
+      "source": {
+        "dataset": "allenai/ai2_arc",
+        "licence": "CC BY-SA 4.0",
+        "name": "arc_easy",
+        "record": "Mercury_7057960",
+        "url": "https://huggingface.co/datasets/allenai/ai2_arc"
+      },
+      "split": "train",
+      "stage": 2,
+      "topic": "how"
+    },
+    {
+      "choices": [
+        "eating",
+        "breathing",
+        "running",
+        "sleeping"
+      ],
+      "expected": {
+        "answer": "A",
+        "kind": "option"
+      },
+      "id": "general_knowledge:arc_easy:Mercury_7092190",
+      "meta": {
+        "dataset_labels": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "prompt": "Answer the question with the letter of the correct option.\n\nThrough which activity do animals get the carbon that is needed for their bodies?\n\nA. eating\nB. breathing\nC. running\nD. sleeping",
+      "skill": "general_knowledge",
+      "source": {
+        "dataset": "allenai/ai2_arc",
+        "licence": "CC BY-SA 4.0",
+        "name": "arc_easy",
+        "record": "Mercury_7092190",
+        "url": "https://huggingface.co/datasets/allenai/ai2_arc"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "through"
+    },
+    {
+      "choices": [
+        "It codes for proteins.",
+        "It inhibits division of cells.",
+        "It helps in energy transformation.",
+        "It regulates traffic in and out of the cell."
+      ],
+      "expected": {
+        "answer": "A",
+        "kind": "option"
+      },
+      "id": "general_knowledge:arc_easy:Mercury_7109428",
+      "meta": {
+        "dataset_labels": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "prompt": "Answer the question with the letter of the correct option.\n\nThe nucleus contains DNA. Which statement best describes how DNA controls the working of the cell?\n\nA. It codes for proteins.\nB. It inhibits division of cells.\nC. It helps in energy transformation.\nD. It regulates traffic in and out of the cell.",
+      "skill": "general_knowledge",
+      "source": {
+        "dataset": "allenai/ai2_arc",
+        "licence": "CC BY-SA 4.0",
+        "name": "arc_easy",
+        "record": "Mercury_7109428",
+        "url": "https://huggingface.co/datasets/allenai/ai2_arc"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "the"
+    },
+    {
+      "choices": [
+        "the nervous system",
+        "the digestive system",
+        "the excretory system",
+        "the endocrine system"
+      ],
+      "expected": {
+        "answer": "B",
+        "kind": "option"
+      },
+      "id": "general_knowledge:arc_easy:Mercury_7195178",
+      "meta": {
+        "dataset_labels": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "prompt": "Answer the question with the letter of the correct option.\n\nSome runners ate pasta before a race. The pasta was broken down into simple sugars and was absorbed by the blood stream. What body system was responsible for breaking down the pasta into small nutrients for use in the cells of the runners?\n\nA. the nervous system\nB. the digestive system\nC. the excretory system\nD. the endocrine system",
+      "skill": "general_knowledge",
+      "source": {
+        "dataset": "allenai/ai2_arc",
+        "licence": "CC BY-SA 4.0",
+        "name": "arc_easy",
+        "record": "Mercury_7195178",
+        "url": "https://huggingface.co/datasets/allenai/ai2_arc"
+      },
+      "split": "eval",
+      "stage": 3,
+      "topic": "some"
+    },
+    {
+      "choices": [
+        "learned behavior",
+        "migration instinct",
+        "response to stimuli",
+        "reproductive strategy"
+      ],
+      "expected": {
+        "answer": "C",
+        "kind": "option"
+      },
+      "id": "general_knowledge:arc_easy:Mercury_7202353",
+      "meta": {
+        "dataset_labels": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "prompt": "Answer the question with the letter of the correct option.\n\nWhen the soil is saturated, earthworms move to the top of the soil to obtain oxygen. This behavior is evidence of which biological concept in earthworms?\n\nA. learned behavior\nB. migration instinct\nC. response to stimuli\nD. reproductive strategy",
+      "skill": "general_knowledge",
+      "source": {
+        "dataset": "allenai/ai2_arc",
+        "licence": "CC BY-SA 4.0",
+        "name": "arc_easy",
+        "record": "Mercury_7202353",
+        "url": "https://huggingface.co/datasets/allenai/ai2_arc"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "when"
+    },
+    {
+      "choices": [
+        "They vibrate in place within a fixed volume.",
+        "They move around freely within a fixed volume.",
+        "They vibrate in place and take the shape of a container.",
+        "They move around freely and take the shape of a container."
+      ],
+      "expected": {
+        "answer": "A",
+        "kind": "option"
+      },
+      "id": "general_knowledge:arc_easy:Mercury_7212048",
+      "meta": {
+        "dataset_labels": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "prompt": "Answer the question with the letter of the correct option.\n\nWhich statement best describes the motion of the molecules of a solid object?\n\nA. They vibrate in place within a fixed volume.\nB. They move around freely within a fixed volume.\nC. They vibrate in place and take the shape of a container.\nD. They move around freely and take the shape of a container.",
+      "skill": "general_knowledge",
+      "source": {
+        "dataset": "allenai/ai2_arc",
+        "licence": "CC BY-SA 4.0",
+        "name": "arc_easy",
+        "record": "Mercury_7212048",
+        "url": "https://huggingface.co/datasets/allenai/ai2_arc"
+      },
+      "split": "eval",
+      "stage": 3,
+      "topic": "which"
+    },
+    {
+      "choices": [
+        "discuss the findings with scientists who agree with you",
+        "discuss the findings with a well-known scientist",
+        "publish the findings in scientific journals",
+        "publish the findings in local newspapers"
+      ],
+      "expected": {
+        "answer": "C",
+        "kind": "option"
+      },
+      "id": "general_knowledge:arc_easy:Mercury_7217333",
+      "meta": {
+        "dataset_labels": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "prompt": "Answer the question with the letter of the correct option.\n\nThe scientific method is the inquiry process by which scientists raise and attempt to answer new questions. Which is the best way to communicate findings that result from scientific inquiry?\n\nA. discuss the findings with scientists who agree with you\nB. discuss the findings with a well-known scientist\nC. publish the findings in scientific journals\nD. publish the findings in local newspapers",
+      "skill": "general_knowledge",
+      "source": {
+        "dataset": "allenai/ai2_arc",
+        "licence": "CC BY-SA 4.0",
+        "name": "arc_easy",
+        "record": "Mercury_7217333",
+        "url": "https://huggingface.co/datasets/allenai/ai2_arc"
+      },
+      "split": "train",
+      "stage": 3,
+      "topic": "the"
+    },
+    {
+      "choices": [
+        "anatomical comparison",
+        "gene sequencing",
+        "radiometric analysis",
+        "fossil depth measurement"
+      ],
+      "expected": {
+        "answer": "C",
+        "kind": "option"
+      },
+      "id": "general_knowledge:arc_easy:Mercury_7234168",
+      "meta": {
+        "dataset_labels": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "prompt": "Answer the question with the letter of the correct option.\n\nA certain fossil (Y) is found in a layer of rock that lies between two index fossils, X and Z. Surprisingly, the older of the index fossils (Z) is found above the other fossils, suggesting that the rock layer has overturned. Which dating method is best to confirm the rock layer has overturned by determining the ages of these fossils?\n\nA. anatomical comparison\nB. gene sequencing\nC. radiometric analysis\nD. fossil depth measurement",
+      "skill": "general_knowledge",
+      "source": {
+        "dataset": "allenai/ai2_arc",
+        "licence": "CC BY-SA 4.0",
+        "name": "arc_easy",
+        "record": "Mercury_7234168",
+        "url": "https://huggingface.co/datasets/allenai/ai2_arc"
+      },
+      "split": "train",
+      "stage": 3,
+      "topic": "a"
+    },
+    {
+      "choices": [
+        "They live in the same habitat and niche.",
+        "They forage and eat the same type of food.",
+        "They mate and produce fertile offspring.",
+        "They are similar in appearance and color."
+      ],
+      "expected": {
+        "answer": "C",
+        "kind": "option"
+      },
+      "id": "general_knowledge:arc_easy:Mercury_7241063",
+      "meta": {
+        "dataset_labels": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "prompt": "Answer the question with the letter of the correct option.\n\nWhich factor determines if two individuals are members of the same species?\n\nA. They live in the same habitat and niche.\nB. They forage and eat the same type of food.\nC. They mate and produce fertile offspring.\nD. They are similar in appearance and color.",
+      "skill": "general_knowledge",
+      "source": {
+        "dataset": "allenai/ai2_arc",
+        "licence": "CC BY-SA 4.0",
+        "name": "arc_easy",
+        "record": "Mercury_7241063",
+        "url": "https://huggingface.co/datasets/allenai/ai2_arc"
+      },
+      "split": "train",
+      "stage": 2,
+      "topic": "which"
+    },
+    {
+      "choices": [
+        "trenches",
+        "rift zones",
+        "tidal zones",
+        "mountain ranges"
+      ],
+      "expected": {
+        "answer": "D",
+        "kind": "option"
+      },
+      "id": "general_knowledge:arc_easy:Mercury_7246278",
+      "meta": {
+        "dataset_labels": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "prompt": "Answer the question with the letter of the correct option.\n\nWhich crustal feature forms when two continental plates collide?\n\nA. trenches\nB. rift zones\nC. tidal zones\nD. mountain ranges",
+      "skill": "general_knowledge",
+      "source": {
+        "dataset": "allenai/ai2_arc",
+        "licence": "CC BY-SA 4.0",
+        "name": "arc_easy",
+        "record": "Mercury_7246278",
+        "url": "https://huggingface.co/datasets/allenai/ai2_arc"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "which"
+    },
+    {
+      "choices": [
+        "transferring impulses to the appropriate muscle",
+        "receiving sensory impulses from the environment",
+        "delivering regular impulses to the autonomic system",
+        "processing impulses within the cerebral cortex"
+      ],
+      "expected": {
+        "answer": "A",
+        "kind": "option"
+      },
+      "id": "general_knowledge:arc_easy:Mercury_7248255",
+      "meta": {
+        "dataset_labels": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "prompt": "Answer the question with the letter of the correct option.\n\nWhich activity illustrates the main function of the motor neuron complex?\n\nA. transferring impulses to the appropriate muscle\nB. receiving sensory impulses from the environment\nC. delivering regular impulses to the autonomic system\nD. processing impulses within the cerebral cortex",
+      "skill": "general_knowledge",
+      "source": {
+        "dataset": "allenai/ai2_arc",
+        "licence": "CC BY-SA 4.0",
+        "name": "arc_easy",
+        "record": "Mercury_7248255",
+        "url": "https://huggingface.co/datasets/allenai/ai2_arc"
+      },
+      "split": "train",
+      "stage": 2,
+      "topic": "which"
+    },
+    {
+      "choices": [
+        "burrowing below the frost point of the soil surface",
+        "burrowing in tree trunks above the soil surface",
+        "consuming roots found under the soil surface",
+        "consuming organisms found in the soil surface"
+      ],
+      "expected": {
+        "answer": "A",
+        "kind": "option"
+      },
+      "id": "general_knowledge:arc_easy:Mercury_7252403",
+      "meta": {
+        "dataset_labels": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "prompt": "Answer the question with the letter of the correct option.\n\nA population of ground squirrels has established a community in the grasslands of the Great Plains. Temperatures often reach -15°C for most of the winter. What is the most likely behavior the ground squirrels use to survive these winter temperatures?\n\nA. burrowing below the frost point of the soil surface\nB. burrowing in tree trunks above the soil surface\nC. consuming roots found under the soil surface\nD. consuming organisms found in the soil surface",
+      "skill": "general_knowledge",
+      "source": {
+        "dataset": "allenai/ai2_arc",
+        "licence": "CC BY-SA 4.0",
+        "name": "arc_easy",
+        "record": "Mercury_7252403",
+        "url": "https://huggingface.co/datasets/allenai/ai2_arc"
+      },
+      "split": "train",
+      "stage": 3,
+      "topic": "a"
+    },
+    {
+      "choices": [
+        "comets.",
+        "the Sun.",
+        "asteroids.",
+        "the Moon."
+      ],
+      "expected": {
+        "answer": "D",
+        "kind": "option"
+      },
+      "id": "general_knowledge:arc_easy:Mercury_SC_400854",
+      "meta": {
+        "dataset_labels": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "prompt": "Answer the question with the letter of the correct option.\n\nThe pull of gravity from Earth has the greatest effect on\n\nA. comets.\nB. the Sun.\nC. asteroids.\nD. the Moon.",
+      "skill": "general_knowledge",
+      "source": {
+        "dataset": "allenai/ai2_arc",
+        "licence": "CC BY-SA 4.0",
+        "name": "arc_easy",
+        "record": "Mercury_SC_400854",
+        "url": "https://huggingface.co/datasets/allenai/ai2_arc"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "the"
+    },
+    {
+      "choices": [
+        "increases the need for trees.",
+        "helps conserve resources.",
+        "increases the need for landfills.",
+        "helps remove pollutants from the air."
+      ],
+      "expected": {
+        "answer": "B",
+        "kind": "option"
+      },
+      "id": "general_knowledge:arc_easy:Mercury_SC_400987",
+      "meta": {
+        "dataset_labels": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "prompt": "Answer the question with the letter of the correct option.\n\nRecycling newspapers is good for the environment because it\n\nA. increases the need for trees.\nB. helps conserve resources.\nC. increases the need for landfills.\nD. helps remove pollutants from the air.",
+      "skill": "general_knowledge",
+      "source": {
+        "dataset": "allenai/ai2_arc",
+        "licence": "CC BY-SA 4.0",
+        "name": "arc_easy",
+        "record": "Mercury_SC_400987",
+        "url": "https://huggingface.co/datasets/allenai/ai2_arc"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "recycling"
+    },
+    {
+      "choices": [
+        "swimming speed.",
+        "body temperature.",
+        "chance of survival.",
+        "visibility to predators."
+      ],
+      "expected": {
+        "answer": "C",
+        "kind": "option"
+      },
+      "id": "general_knowledge:arc_easy:Mercury_SC_401143",
+      "meta": {
+        "dataset_labels": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "prompt": "Answer the question with the letter of the correct option.\n\nA group of the same species of fish swim together to increase an individual's\n\nA. swimming speed.\nB. body temperature.\nC. chance of survival.\nD. visibility to predators.",
+      "skill": "general_knowledge",
+      "source": {
+        "dataset": "allenai/ai2_arc",
+        "licence": "CC BY-SA 4.0",
+        "name": "arc_easy",
+        "record": "Mercury_SC_401143",
+        "url": "https://huggingface.co/datasets/allenai/ai2_arc"
+      },
+      "split": "train",
+      "stage": 1,
+      "topic": "a"
+    },
+    {
+      "choices": [
+        "writing a science report",
+        "mixing baking soda with water",
+        "measuring the length of a shadow",
+        "examining a leaf with a microscope"
+      ],
+      "expected": {
+        "answer": "B",
+        "kind": "option"
+      },
+      "id": "general_knowledge:arc_easy:Mercury_SC_402980",
+      "meta": {
+        "dataset_labels": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "prompt": "Answer the question with the letter of the correct option.\n\nDuring which activity should a student wear goggles?\n\nA. writing a science report\nB. mixing baking soda with water\nC. measuring the length of a shadow\nD. examining a leaf with a microscope",
+      "skill": "general_knowledge",
+      "source": {
+        "dataset": "allenai/ai2_arc",
+        "licence": "CC BY-SA 4.0",
+        "name": "arc_easy",
+        "record": "Mercury_SC_402980",
+        "url": "https://huggingface.co/datasets/allenai/ai2_arc"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "during"
+    },
+    {
+      "choices": [
+        "planting trees",
+        "water pollution",
+        "rainfall",
+        "sunlight"
+      ],
+      "expected": {
+        "answer": "B",
+        "kind": "option"
+      },
+      "id": "general_knowledge:arc_easy:Mercury_SC_405199",
+      "meta": {
+        "dataset_labels": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "prompt": "Answer the question with the letter of the correct option.\n\nWhich of these will most likely harm a habitat?\n\nA. planting trees\nB. water pollution\nC. rainfall\nD. sunlight",
+      "skill": "general_knowledge",
+      "source": {
+        "dataset": "allenai/ai2_arc",
+        "licence": "CC BY-SA 4.0",
+        "name": "arc_easy",
+        "record": "Mercury_SC_405199",
+        "url": "https://huggingface.co/datasets/allenai/ai2_arc"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "which"
+    },
+    {
+      "choices": [
+        "carbon dioxide",
+        "hydrogen",
+        "nitrogen",
+        "oxygen"
+      ],
+      "expected": {
+        "answer": "A",
+        "kind": "option"
+      },
+      "id": "general_knowledge:arc_easy:Mercury_SC_408762",
+      "meta": {
+        "dataset_labels": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "prompt": "Answer the question with the letter of the correct option.\n\nMarshall learned that plants need a substance from the air to make their own food. What does a plant take from the air in the presence of sunlight?\n\nA. carbon dioxide\nB. hydrogen\nC. nitrogen\nD. oxygen",
+      "skill": "general_knowledge",
+      "source": {
+        "dataset": "allenai/ai2_arc",
+        "licence": "CC BY-SA 4.0",
+        "name": "arc_easy",
+        "record": "Mercury_SC_408762",
+        "url": "https://huggingface.co/datasets/allenai/ai2_arc"
+      },
+      "split": "train",
+      "stage": 2,
+      "topic": "marshall"
+    },
+    {
+      "choices": [
+        "carbon dioxide and water",
+        "oxygen and carbon dioxide",
+        "carbon dioxide and food",
+        "oxygen and food"
+      ],
+      "expected": {
+        "answer": "A",
+        "kind": "option"
+      },
+      "id": "general_knowledge:arc_easy:Mercury_SC_413638",
+      "meta": {
+        "dataset_labels": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "prompt": "Answer the question with the letter of the correct option.\n\nWhich two things are produced when a plant breaks down sugar to release energy?\n\nA. carbon dioxide and water\nB. oxygen and carbon dioxide\nC. carbon dioxide and food\nD. oxygen and food",
+      "skill": "general_knowledge",
+      "source": {
+        "dataset": "allenai/ai2_arc",
+        "licence": "CC BY-SA 4.0",
+        "name": "arc_easy",
+        "record": "Mercury_SC_413638",
+        "url": "https://huggingface.co/datasets/allenai/ai2_arc"
+      },
+      "split": "train",
+      "stage": 2,
+      "topic": "which"
+    },
+    {
+      "choices": [
+        "The average temperature yesterday was 15°C.",
+        "The temperature range today was 10°C to 20°C.",
+        "The high temperature tomorrow will be 14°C.",
+        "The average high temperature in May is 20°C."
+      ],
+      "expected": {
+        "answer": "D",
+        "kind": "option"
+      },
+      "id": "general_knowledge:arc_easy:Mercury_SC_415412",
+      "meta": {
+        "dataset_labels": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "prompt": "Answer the question with the letter of the correct option.\n\nWhich is a statement about climate?\n\nA. The average temperature yesterday was 15°C.\nB. The temperature range today was 10°C to 20°C.\nC. The high temperature tomorrow will be 14°C.\nD. The average high temperature in May is 20°C.",
+      "skill": "general_knowledge",
+      "source": {
+        "dataset": "allenai/ai2_arc",
+        "licence": "CC BY-SA 4.0",
+        "name": "arc_easy",
+        "record": "Mercury_SC_415412",
+        "url": "https://huggingface.co/datasets/allenai/ai2_arc"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "which"
+    },
+    {
+      "choices": [
+        "The schoolyard has few trees.",
+        "The schoolyard has rocks and sand.",
+        "The schoolyard gets warm in the summer.",
+        "The schoolyard gets little rain during the year."
+      ],
+      "expected": {
+        "answer": "D",
+        "kind": "option"
+      },
+      "id": "general_knowledge:arc_easy:Mercury_SC_417579",
+      "meta": {
+        "dataset_labels": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "prompt": "Answer the question with the letter of the correct option.\n\nClara says that her school is in a desert. Which fact about her schoolyard most helps her claim?\n\nA. The schoolyard has few trees.\nB. The schoolyard has rocks and sand.\nC. The schoolyard gets warm in the summer.\nD. The schoolyard gets little rain during the year.",
+      "skill": "general_knowledge",
+      "source": {
+        "dataset": "allenai/ai2_arc",
+        "licence": "CC BY-SA 4.0",
+        "name": "arc_easy",
+        "record": "Mercury_SC_417579",
+        "url": "https://huggingface.co/datasets/allenai/ai2_arc"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "clara"
+    },
+    {
+      "choices": [
+        "pulley",
+        "lever",
+        "inclined plane",
+        "wheel and axle"
+      ],
+      "expected": {
+        "answer": "B",
+        "kind": "option"
+      },
+      "id": "general_knowledge:arc_easy:Mercury_SC_LBS10784",
+      "meta": {
+        "dataset_labels": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "prompt": "Answer the question with the letter of the correct option.\n\nUsing a softball bat to hit a softball is an example of using which simple machine?\n\nA. pulley\nB. lever\nC. inclined plane\nD. wheel and axle",
+      "skill": "general_knowledge",
+      "source": {
+        "dataset": "allenai/ai2_arc",
+        "licence": "CC BY-SA 4.0",
+        "name": "arc_easy",
+        "record": "Mercury_SC_LBS10784",
+        "url": "https://huggingface.co/datasets/allenai/ai2_arc"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "using"
+    },
+    {
+      "choices": [
+        "water",
+        "soil",
+        "air",
+        "sunlight"
+      ],
+      "expected": {
+        "answer": "D",
+        "kind": "option"
+      },
+      "id": "general_knowledge:arc_easy:NCEOGA_2013_8_36",
+      "meta": {
+        "dataset_labels": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "prompt": "Answer the question with the letter of the correct option.\n\nWhere do plants get most of the energy they need to live and grow?\n\nA. water\nB. soil\nC. air\nD. sunlight",
+      "skill": "general_knowledge",
+      "source": {
+        "dataset": "allenai/ai2_arc",
+        "licence": "CC BY-SA 4.0",
+        "name": "arc_easy",
+        "record": "NCEOGA_2013_8_36",
+        "url": "https://huggingface.co/datasets/allenai/ai2_arc"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "where"
+    },
+    {
+      "choices": [
+        "offspring",
+        "DNA",
+        "cells",
+        "traits"
+      ],
+      "expected": {
+        "answer": "B",
+        "kind": "option"
+      },
+      "id": "general_knowledge:arc_easy:NYSEDREGENTS_2010_8_13",
+      "meta": {
+        "dataset_labels": [
+          "1",
+          "2",
+          "3",
+          "4"
+        ]
+      },
+      "prompt": "Answer the question with the letter of the correct option.\n\nWhat are genes composed of?\n\nA. offspring\nB. DNA\nC. cells\nD. traits",
+      "skill": "general_knowledge",
+      "source": {
+        "dataset": "allenai/ai2_arc",
+        "licence": "CC BY-SA 4.0",
+        "name": "arc_easy",
+        "record": "NYSEDREGENTS_2010_8_13",
+        "url": "https://huggingface.co/datasets/allenai/ai2_arc"
+      },
+      "split": "train",
+      "stage": 1,
+      "topic": "what"
+    },
+    {
+      "choices": [
+        "bird",
+        "insect",
+        "dog",
+        "water"
+      ],
+      "expected": {
+        "answer": "D",
+        "kind": "option"
+      },
+      "id": "general_knowledge:arc_easy:NYSEDREGENTS_2012_4_26",
+      "meta": {
+        "dataset_labels": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "prompt": "Answer the question with the letter of the correct option.\n\nWhich is an example of a nonliving thing?\n\nA. bird\nB. insect\nC. dog\nD. water",
+      "skill": "general_knowledge",
+      "source": {
+        "dataset": "allenai/ai2_arc",
+        "licence": "CC BY-SA 4.0",
+        "name": "arc_easy",
+        "record": "NYSEDREGENTS_2012_4_26",
+        "url": "https://huggingface.co/datasets/allenai/ai2_arc"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "which"
+    },
+    {
+      "choices": [
+        "the Moon to revolve once",
+        "the Moon to rotate once",
+        "Earth to rotate once",
+        "Earth to revolve once"
+      ],
+      "expected": {
+        "answer": "C",
+        "kind": "option"
+      },
+      "id": "general_knowledge:arc_easy:NYSEDREGENTS_2015_8_24",
+      "meta": {
+        "dataset_labels": [
+          "1",
+          "2",
+          "3",
+          "4"
+        ]
+      },
+      "prompt": "Answer the question with the letter of the correct option.\n\nThe length of one day on Earth is determined by how long it takes\n\nA. the Moon to revolve once\nB. the Moon to rotate once\nC. Earth to rotate once\nD. Earth to revolve once",
+      "skill": "general_knowledge",
+      "source": {
+        "dataset": "allenai/ai2_arc",
+        "licence": "CC BY-SA 4.0",
+        "name": "arc_easy",
+        "record": "NYSEDREGENTS_2015_8_24",
+        "url": "https://huggingface.co/datasets/allenai/ai2_arc"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "the"
+    },
+    {
+      "choices": [
+        "observing if they lack true stems, roots, or leaves",
+        "examining the plants for spores",
+        "counting the number of leaves on each stalk",
+        "noticing if the plants are near rocks"
+      ],
+      "expected": {
+        "answer": "A",
+        "kind": "option"
+      },
+      "id": "general_knowledge:arc_easy:VASoL_2007_5_38",
+      "meta": {
+        "dataset_labels": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "prompt": "Answer the question with the letter of the correct option.\n\nA student sees many plants around a pond. The student can determine which plants are nonvascular by\n\nA. observing if they lack true stems, roots, or leaves\nB. examining the plants for spores\nC. counting the number of leaves on each stalk\nD. noticing if the plants are near rocks",
+      "skill": "general_knowledge",
+      "source": {
+        "dataset": "allenai/ai2_arc",
+        "licence": "CC BY-SA 4.0",
+        "name": "arc_easy",
+        "record": "VASoL_2007_5_38",
+        "url": "https://huggingface.co/datasets/allenai/ai2_arc"
+      },
+      "split": "eval",
+      "stage": 3,
+      "topic": "a"
+    },
+    {
+      "choices": [
+        "land on the Moon",
+        "orbit a planet",
+        "return to Earth",
+        "walk in space"
+      ],
+      "expected": {
+        "answer": "A",
+        "kind": "option"
+      },
+      "id": "general_knowledge:arc_easy:VASoL_2009_5_3",
+      "meta": {
+        "dataset_labels": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "prompt": "Answer the question with the letter of the correct option.\n\nThe Apollo 11 mission was able to retrieve samples of the Moon's surface because it was the first mission to have astronauts\n\nA. land on the Moon\nB. orbit a planet\nC. return to Earth\nD. walk in space",
+      "skill": "general_knowledge",
+      "source": {
+        "dataset": "allenai/ai2_arc",
+        "licence": "CC BY-SA 4.0",
+        "name": "arc_easy",
+        "record": "VASoL_2009_5_3",
+        "url": "https://huggingface.co/datasets/allenai/ai2_arc"
+      },
+      "split": "train",
+      "stage": 2,
+      "topic": "the"
+    }
+  ],
+  "skill": "general_knowledge",
+  "title": "General knowledge"
+}

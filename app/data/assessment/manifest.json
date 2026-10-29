@@ -1,0 +1,546 @@
+{
+  "bank": "luke-assessment-bank",
+  "built_at": "2026-10-28",
+  "eval_items_per_skill": 30,
+  "files": [
+    {
+      "bytes": 45881,
+      "eval": 30,
+      "items": 45,
+      "kinds": [
+        "rules"
+      ],
+      "name": "conversation.json",
+      "sha256": "9513d83002961cc9596cb372714b64ded8799e02e5ef3c04273e82b59857fa24",
+      "skill": "conversation",
+      "stages": [
+        1,
+        2,
+        3
+      ],
+      "title": "Conversation and instruction following",
+      "topics": [
+        "change_case",
+        "combination",
+        "detectable_content",
+        "detectable_format",
+        "keywords",
+        "language",
+        "length_constraints",
+        "punctuation",
+        "startend"
+      ],
+      "train": 15
+    },
+    {
+      "bytes": 94889,
+      "eval": 30,
+      "items": 45,
+      "kinds": [
+        "rubric"
+      ],
+      "name": "creative_writing.json",
+      "sha256": "d9ef26bfc7c84bd77f349aa02aee1c712da2708f566efa4619630a3194210faa",
+      "skill": "creative_writing",
+      "stages": [
+        1,
+        2,
+        3
+      ],
+      "title": "Creative writing, stories and poetry",
+      "topics": [
+        "scene or paragraph",
+        "story"
+      ],
+      "train": 15
+    },
+    {
+      "bytes": 48657,
+      "eval": 30,
+      "items": 45,
+      "kinds": [
+        "option"
+      ],
+      "name": "general_knowledge.json",
+      "sha256": "1b6d5fae0654a2305cadc49497604fd825bd9ee154a8f377955fba891ba62060",
+      "skill": "general_knowledge",
+      "stages": [
+        1,
+        2,
+        3
+      ],
+      "title": "General knowledge",
+      "topics": [
+        "a",
+        "all",
+        "biologists",
+        "chloroplasts",
+        "clara",
+        "during",
+        "fossils",
+        "how",
+        "imprints",
+        "in",
+        "marshall",
+        "recycling",
+        "some",
+        "the",
+        "through",
+        "using",
+        "what",
+        "when",
+        "where",
+        "which"
+      ],
+      "train": 15
+    },
+    {
+      "bytes": 39185,
+      "eval": 30,
+      "items": 45,
+      "kinds": [
+        "option"
+      ],
+      "name": "grammar.json",
+      "sha256": "4369722be734294cc7c75d55eb6dc10f4b15ffb2a681eb4a2d259522d95e2a24",
+      "skill": "grammar",
+      "stages": [
+        1,
+        2,
+        3
+      ],
+      "title": "Language comprehension and grammar",
+      "topics": [
+        "anaphor_agreement",
+        "argument_structure",
+        "determiner_noun_agreement",
+        "filler_gap_dependency",
+        "irregular_forms",
+        "island_effects",
+        "npi_licensing",
+        "quantifiers",
+        "subject_verb_agreement"
+      ],
+      "train": 15
+    },
+    {
+      "bytes": 34371,
+      "eval": 30,
+      "items": 45,
+      "kinds": [
+        "number"
+      ],
+      "name": "mathematics.json",
+      "sha256": "eb5def67e3d50b37d5309affa79197b3c5177bce56c1489cf2dd8ebf0aa05d3f",
+      "skill": "mathematics",
+      "stages": [
+        1,
+        2,
+        3
+      ],
+      "title": "Mathematics and logical reasoning",
+      "topics": [
+        "word problem"
+      ],
+      "train": 15
+    },
+    {
+      "bytes": 34545,
+      "eval": 30,
+      "items": 45,
+      "kinds": [
+        "literal"
+      ],
+      "name": "programming.json",
+      "sha256": "a4bee97c574e2a17938c134baba932b6e795b4a32daeb726aeb014497a919673",
+      "skill": "programming",
+      "stages": [
+        1,
+        2,
+        3
+      ],
+      "title": "Programming and debugging",
+      "topics": [
+        "branching",
+        "comprehension",
+        "iteration",
+        "sequence of statements"
+      ],
+      "train": 15
+    },
+    {
+      "bytes": 68725,
+      "eval": 30,
+      "items": 45,
+      "kinds": [
+        "option",
+        "rubric",
+        "span"
+      ],
+      "name": "reading.json",
+      "sha256": "3927d96d633fa4b551db710837580765519207550b58f895bf321ee4b1e99f3f",
+      "skill": "reading",
+      "stages": [
+        1,
+        2,
+        3
+      ],
+      "title": "Reading comprehension and summarization",
+      "topics": [
+        "are",
+        "can",
+        "do",
+        "does",
+        "how",
+        "if",
+        "is",
+        "summary of a passage",
+        "were",
+        "what",
+        "what's",
+        "where",
+        "which",
+        "who",
+        "will"
+      ],
+      "train": 15
+    },
+    {
+      "bytes": 53233,
+      "eval": 30,
+      "items": 45,
+      "kinds": [
+        "option"
+      ],
+      "name": "science.json",
+      "sha256": "f98db4fb924ce4470ceda4d12c8e38030e5e96518cc82e924e8f1b3b2feb3f9a",
+      "skill": "science",
+      "stages": [
+        1,
+        2,
+        3
+      ],
+      "title": "Scientific and technical understanding",
+      "topics": [
+        "a",
+        "an",
+        "burning",
+        "clouds",
+        "desalination",
+        "devil",
+        "dominic",
+        "earth's",
+        "molly",
+        "planets",
+        "pluto",
+        "researchers",
+        "snow",
+        "some",
+        "students",
+        "the",
+        "thunderstorms",
+        "tonya",
+        "trail",
+        "two",
+        "what",
+        "when",
+        "where",
+        "which"
+      ],
+      "train": 15
+    }
+  ],
+  "salt": "luke-assessment-v1",
+  "sources": [
+    {
+      "dataset": "nyu-mll/blimp",
+      "fetches": [
+        {
+          "config": "anaphor_number_agreement",
+          "file": "",
+          "revision": "",
+          "rows": 30,
+          "split": "train",
+          "spread": false
+        },
+        {
+          "config": "determiner_noun_agreement_1",
+          "file": "",
+          "revision": "",
+          "rows": 30,
+          "split": "train",
+          "spread": false
+        },
+        {
+          "config": "regular_plural_subject_verb_agreement_1",
+          "file": "",
+          "revision": "",
+          "rows": 30,
+          "split": "train",
+          "spread": false
+        },
+        {
+          "config": "irregular_past_participle_verbs",
+          "file": "",
+          "revision": "",
+          "rows": 30,
+          "split": "train",
+          "spread": false
+        },
+        {
+          "config": "transitive",
+          "file": "",
+          "revision": "",
+          "rows": 30,
+          "split": "train",
+          "spread": false
+        },
+        {
+          "config": "causative",
+          "file": "",
+          "revision": "",
+          "rows": 30,
+          "split": "train",
+          "spread": false
+        },
+        {
+          "config": "passive_1",
+          "file": "",
+          "revision": "",
+          "rows": 30,
+          "split": "train",
+          "spread": false
+        },
+        {
+          "config": "existential_there_quantifiers_2",
+          "file": "",
+          "revision": "",
+          "rows": 30,
+          "split": "train",
+          "spread": false
+        },
+        {
+          "config": "matrix_question_npi_licensor_present",
+          "file": "",
+          "revision": "",
+          "rows": 30,
+          "split": "train",
+          "spread": false
+        },
+        {
+          "config": "sentential_negation_npi_licensor_present",
+          "file": "",
+          "revision": "",
+          "rows": 30,
+          "split": "train",
+          "spread": false
+        },
+        {
+          "config": "wh_questions_object_gap",
+          "file": "",
+          "revision": "",
+          "rows": 30,
+          "split": "train",
+          "spread": false
+        },
+        {
+          "config": "complex_NP_island",
+          "file": "",
+          "revision": "",
+          "rows": 30,
+          "split": "train",
+          "spread": false
+        }
+      ],
+      "key": "blimp",
+      "licence": "CC BY 4.0",
+      "records": "paradigm and pair id",
+      "rows": 360,
+      "shaped": 360,
+      "skill": "grammar",
+      "url": "https://huggingface.co/datasets/nyu-mll/blimp"
+    },
+    {
+      "dataset": "google/IFEval",
+      "fetches": [
+        {
+          "config": "default",
+          "file": "ifeval_input_data.jsonl",
+          "revision": "966cd89545d6b6acfd7638bc708b98261ca58e84",
+          "rows": 200,
+          "split": "train",
+          "spread": true
+        }
+      ],
+      "key": "ifeval",
+      "licence": "Apache-2.0",
+      "records": "the dataset's own key",
+      "rows": 200,
+      "shaped": 200,
+      "skill": "conversation",
+      "url": "https://huggingface.co/datasets/google/IFEval"
+    },
+    {
+      "dataset": "rajpurkar/squad",
+      "fetches": [
+        {
+          "config": "plain_text",
+          "file": "",
+          "revision": "",
+          "rows": 300,
+          "split": "validation",
+          "spread": true
+        }
+      ],
+      "key": "squad",
+      "licence": "CC BY-SA 4.0",
+      "records": "the dataset's own id",
+      "rows": 300,
+      "shaped": 300,
+      "skill": "reading",
+      "url": "https://huggingface.co/datasets/rajpurkar/squad"
+    },
+    {
+      "dataset": "google/boolq",
+      "fetches": [
+        {
+          "config": "default",
+          "file": "",
+          "revision": "",
+          "rows": 300,
+          "split": "validation",
+          "spread": true
+        }
+      ],
+      "key": "boolq",
+      "licence": "CC BY-SA 3.0",
+      "records": "row index",
+      "rows": 300,
+      "shaped": 300,
+      "skill": "reading",
+      "url": "https://huggingface.co/datasets/google/boolq"
+    },
+    {
+      "dataset": "databricks/databricks-dolly-15k",
+      "fetches": [
+        {
+          "config": "default",
+          "file": "databricks-dolly-15k.jsonl",
+          "revision": "bdd27f4d94b9c1f951818a7da7fd7aeea5dbff1a",
+          "rows": 1500,
+          "split": "train",
+          "spread": true
+        }
+      ],
+      "key": "dolly_summary",
+      "licence": "CC BY-SA 3.0",
+      "records": "row index",
+      "rows": 1500,
+      "shaped": 106,
+      "skill": "reading",
+      "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+    },
+    {
+      "dataset": "openai/gsm8k",
+      "fetches": [
+        {
+          "config": "main",
+          "file": "",
+          "revision": "",
+          "rows": 300,
+          "split": "test",
+          "spread": true
+        }
+      ],
+      "key": "gsm8k",
+      "licence": "MIT",
+      "records": "row index",
+      "rows": 300,
+      "shaped": 300,
+      "skill": "mathematics",
+      "url": "https://huggingface.co/datasets/openai/gsm8k"
+    },
+    {
+      "dataset": "cruxeval-org/cruxeval",
+      "fetches": [
+        {
+          "config": "default",
+          "file": "test.jsonl",
+          "revision": "b96af0450242eb4da433032b90998f25588a5d0f",
+          "rows": 400,
+          "split": "test",
+          "spread": true
+        }
+      ],
+      "key": "cruxeval",
+      "licence": "MIT",
+      "records": "the dataset's own id",
+      "rows": 400,
+      "shaped": 400,
+      "skill": "programming",
+      "url": "https://huggingface.co/datasets/cruxeval-org/cruxeval"
+    },
+    {
+      "dataset": "allenai/ai2_arc",
+      "fetches": [
+        {
+          "config": "ARC-Easy",
+          "file": "",
+          "revision": "",
+          "rows": 300,
+          "split": "test",
+          "spread": true
+        }
+      ],
+      "key": "arc_easy",
+      "licence": "CC BY-SA 4.0",
+      "records": "the item's own id",
+      "rows": 300,
+      "shaped": 300,
+      "skill": "general_knowledge",
+      "url": "https://huggingface.co/datasets/allenai/ai2_arc"
+    },
+    {
+      "dataset": "allenai/ai2_arc",
+      "fetches": [
+        {
+          "config": "ARC-Challenge",
+          "file": "",
+          "revision": "",
+          "rows": 300,
+          "split": "test",
+          "spread": true
+        }
+      ],
+      "key": "arc_challenge",
+      "licence": "CC BY-SA 4.0",
+      "records": "the item's own id",
+      "rows": 300,
+      "shaped": 300,
+      "skill": "science",
+      "url": "https://huggingface.co/datasets/allenai/ai2_arc"
+    },
+    {
+      "dataset": "databricks/databricks-dolly-15k",
+      "fetches": [
+        {
+          "config": "default",
+          "file": "databricks-dolly-15k.jsonl",
+          "revision": "bdd27f4d94b9c1f951818a7da7fd7aeea5dbff1a",
+          "rows": 1500,
+          "split": "train",
+          "spread": true
+        }
+      ],
+      "key": "dolly_creative",
+      "licence": "CC BY-SA 3.0",
+      "records": "row index",
+      "rows": 1500,
+      "shaped": 76,
+      "skill": "creative_writing",
+      "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+    }
+  ],
+  "train_items_per_skill": 15,
+  "version": 1
+}

@@ -2,11 +2,14 @@
 
 from __future__ import annotations
 
+import logging
 import re
 from typing import Any
 
 from app.services.language.patterns import _COUNT_REQUEST, _COUNT_WORDS
 from app.services.tokenizer import tokenize
+
+logger = logging.getLogger(__name__)
 
 _FUNCTION_WORDS = {
     "a",
@@ -200,7 +203,8 @@ def _is_naming_word(word: str) -> bool:
         from app.services.nlp import get_nlp
 
         doc = get_nlp()(word)
-    except Exception:
+    except Exception as error:  # noqa: BLE001 -- the optional grammar-model boundary
+        logger.debug("the grammar model could not read %s: %s", word, error)
         return False
     if not doc or not doc[0].pos_:
         return False
@@ -239,7 +243,8 @@ def _add_missing_articles(sentence: str) -> str:
         from app.services.nlp import get_nlp
 
         doc = get_nlp()(sentence)
-    except Exception:
+    except Exception as error:  # noqa: BLE001 -- the optional grammar-model boundary
+        logger.debug("the grammar model could not read a sentence: %s", error)
         return sentence
     return _insert_articles(sentence, doc)
 
@@ -259,7 +264,8 @@ def _repair_sentences(texts: list[str]) -> list[str]:
 
         nlp = get_nlp()
         documents = list(nlp.pipe(texts, batch_size=64))
-    except Exception:
+    except Exception as error:  # noqa: BLE001 -- the optional grammar-model boundary
+        logger.debug("the grammar model could not read %s sentences: %s", len(texts), error)
         documents = [None] * len(texts)
     repaired: list[str] = []
     for text, document in zip(texts, documents, strict=True):

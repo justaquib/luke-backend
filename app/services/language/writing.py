@@ -2,8 +2,11 @@
 
 from __future__ import annotations
 
+import logging
 import re
+from typing import Any
 
+from app.services.assessment.integrity import is_held_out
 from app.services.language import runtime
 from app.services.language.curriculum import (
     FOUNDATION_LESSON_CARDS,
@@ -25,6 +28,8 @@ from app.services.language.lessons import all_lesson_cards
 from app.services.language.paraphrase import _wording_score
 from app.services.language.patterns import _NEXT_WORD_REQUEST, _SENTENCE_REQUEST
 from app.services.tokenizer import tokenize
+
+logger = logging.getLogger(__name__)
 
 
 def _taught_word_meanings(tenant_id: int | None) -> dict[str, str]:
@@ -79,7 +84,8 @@ def _tenant_lesson_answers(tenant_id: int | None) -> list[str]:
     """The answers the trainer taught, which read like sentences as well."""
     try:
         cards = all_lesson_cards(tenant_id)
-    except Exception:
+    except Exception as error:  # noqa: BLE001 -- the taught lesson-card boundary
+        logger.debug("the taught answers could not be read: %s", error)
         return []
     return [
         card["answer"] for card in cards if card.get("kind") != "starter" and card.get("answer")
@@ -93,7 +99,8 @@ def _lesson_statement_for_word(tenant_id: int | None, word: str) -> str | None:
         return None
     try:
         cards = all_lesson_cards(tenant_id)
-    except Exception:
+    except Exception as error:  # noqa: BLE001 -- the taught lesson-card boundary
+        logger.debug("the taught sentences could not be read: %s", error)
         return None
     for card in cards:
         card_answer = card.get("answer", "")
@@ -132,6 +139,7 @@ def _sentence_corpus(tenant_id: int | None) -> list[str]:
             _tenant_lesson_answers(tenant_id),
         )
         for sentence in group
+        if not is_held_out(sentence)
     ]
 
 
@@ -275,6 +283,11 @@ def answer_sentence_request(question: str, tenant_id: int | None) -> str | None:
     )
 
 
+def _unit(rows: list[dict]) -> str:
+    """What one predicted token is called in the model that wrote it."""
+    return "piece" if rows and rows[0].get("piece") else "word"
+
+
 def write_pattern_answer(question: str, state: dict, stage: str) -> tuple[str, str] | None:
     """The next word or sentence the word model writes, with its connection detail."""
     next_match = _NEXT_WORD_REQUEST.search(question.strip())
@@ -282,9 +295,11 @@ def write_pattern_answer(question: str, state: dict, stage: str) -> tuple[str, s
         prefix = (next_match.group(1) or next_match.group(2) or "").strip(" \t\r\n'\".,?!")
         options = runtime._model(state, stage).predict_next(prefix)
         if options:
+            unit = _unit(options)
             return (
-                f"From my sentence lessons, after “{prefix}” I predict “{options[0]['word']}”.",
-                "The word model predicts the next word from the learner's sentences.",
+                f"From my sentence lessons, after “{prefix}” I predict the next {unit} "
+                f"“{options[0]['word']}”.",
+                f"The word model predicts the next {unit} from the learner's sentences.",
             )
     sentence_match = _SENTENCE_REQUEST.search(question.strip())
     if sentence_match:
@@ -313,12 +328,12 @@ def answer_next_word_request(question: str, tenant_id: int | None) -> str | None
         for item in words[:3]
     )
     return (
-        f"After “{prefix}”, my learned examples suggest: {options}. This is a word-pattern "
-        "prediction, not a guaranteed continuation."
+        f"After “{prefix}”, my learned examples suggest: {options}. This is a "
+        f"{_unit(words)}-pattern prediction, not a guaranteed continuation."
     )
 
 
-def predict_next(tenant_id: int | None, prefix: str) -> list[dict[str, int | str]]:
+def predict_next(tenant_id: int | None, prefix: str) -> list[dict[str, Any]]:
     with runtime._LOCK:
         return runtime._model(runtime._read(tenant_id)).predict_next(prefix)
 

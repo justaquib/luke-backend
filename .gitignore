@@ -7,3 +7,4 @@ __pycache__/
 .venv
 uploads/
 .language_model/huggingface/
+backups/

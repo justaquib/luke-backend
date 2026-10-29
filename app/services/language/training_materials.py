@@ -19,8 +19,14 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.db.database import Document, Faq
+from app.services.assessment import integrity
 from app.services.language import instructions as instruction_service
 from app.services.language import runtime
+from app.services.language.document_passages import (
+    MAX_DOCUMENT_TOKENS,
+    DocumentPassages,
+    document_passages,
+)
 from app.services.language.lessons import all_lesson_cards
 from app.services.language.negatives import build_negatives
 from app.services.language.runtime import subject_of
@@ -39,10 +45,6 @@ CONVERSATION = "conversation"
 # The kinds that hold a question and an answer, so they can be asked for.
 ASKABLE_KINDS = (LESSON, STARTER, APPROVED, CORRECTION, CONVERSATION)
 
-# How many chunks of an uploaded document are used. A long document is still
-# read, but the training does not grow without end.
-MAX_DOCUMENT_CHUNKS = 500
-
 # How many sentences the model is given at most.
 MAX_SENTENCES = 20000
 
@@ -58,6 +60,7 @@ class Material:
     question: str
     answer: str
     subject: str = ""
+    quality: float = 0.0
 
     def as_card(self) -> dict[str, Any]:
         """The lesson shape the instruction builder works with."""
@@ -77,12 +80,13 @@ class TrainingSet:
     sentences: list[str] = field(default_factory=list)
     instructions: list[tuple[str, str]] = field(default_factory=list)
     materials: list[Material] = field(default_factory=list)
+    documents: DocumentPassages = field(default_factory=DocumentPassages)
 
 
 def collect(
     tenant_id: int | None,
     approved: Sequence[tuple[str, str]] = (),
-    documents: Sequence[tuple[str, str]] = (),
+    documents: Sequence[tuple[str, str, float | None]] = (),
     corrections: Sequence[tuple[str, str]] = (),
 ) -> list[Material]:
     """Every piece of material this tenant has given the brain.
@@ -98,7 +102,7 @@ def collect(
     materials.extend(_document_materials(documents))
     materials.extend(_word_materials(tenant_id))
     materials.extend(_sentence_materials(tenant_id))
-    return materials
+    return _without_held_out(materials)
 
 
 def gather(tenant_id: int | None, db: Session) -> list[Material]:
@@ -132,17 +136,24 @@ def training_set(
     A question and an answer become a request and its answer, in more than one
     wording, so the model answers a request it was never taught instead of
     only repeating the lesson. The material itself is also a sentence, so the
-    words of a document or a correction reach the vocabulary. The answers are
-    written again in the model's own words, and the requests about things that
-    were never taught are refused, so the model learns where its material
+    words of a document or a correction reach the vocabulary. Document chunks
+    are cut into 3-50-word passages and kept by quality within a token budget;
+    a passage is reading material, never a question with an answer. The answers
+    are written again in the model's own words, and the requests about things
+    that were never taught are refused, so the model learns where its material
     stops.
     """
+    materials = _without_held_out(list(materials))
     cards = [material.as_card() for material in materials if material.kind in ASKABLE_KINDS]
     index = topic_index(cards)
     sentences: list[str] = []
     spoken: list[str] = []
     instructions: list[tuple[str, str]] = []
+    documents: list[Material] = []
     for material in materials:
+        if material.kind == DOCUMENT:
+            documents.append(material)
+            continue
         answer = material.answer.strip()
         if not answer:
             continue
@@ -153,6 +164,8 @@ def training_set(
             sentences.append(answer)
         for instruction, response in _instructions_for(material, index):
             instructions.append((instruction, response))
+    passages = document_passages(documents, budget=MAX_DOCUMENT_TOKENS)
+    sentences.extend(passages.texts)
     sentences.extend(_repaired(spoken))
     sentences.extend(_paraphrased(tenant_id, spoken))
     instructions.extend(build_negatives(cards))
@@ -160,6 +173,7 @@ def training_set(
         sentences=_unique(sentences)[:MAX_SENTENCES],
         instructions=instructions,
         materials=list(materials),
+        documents=passages,
     )
 
 
@@ -189,6 +203,15 @@ def _repaired(sentences: list[str]) -> list[str]:
     return _repair_sentences(sentences)
 
 
+def _without_held_out(materials: Sequence[Material]) -> list[Material]:
+    """Drop any material that carries a held-out assessment item."""
+    return [
+        material
+        for material in materials
+        if not integrity.is_held_out(f"{material.question}\n{material.answer}")
+    ]
+
+
 def _unique(sentences: list[str]) -> list[str]:
     """The sentences, without the ones that say the same thing twice."""
     seen: set[str] = set()
@@ -208,7 +231,9 @@ def _instructions_for(material: Material, index: dict[str, list[str]]) -> list[t
         meaning = f"{material.question} means {material.answer}."
         return [(f"What does the word {material.question} mean?", meaning)]
     if material.kind == DOCUMENT:
-        return [(f"Tell me about {material.question}.", material.answer)]
+        # A passage is material to read, not a question with an answer. Ask
+        # nothing of it, or the model learns that a filename means a page.
+        return []
     card = material.as_card()
     return [
         (item.instruction, item.response)
@@ -224,12 +249,16 @@ def _approved_from_database(tenant_id: int | None, db: Session) -> list[tuple[st
     return [(question, answer) for question, answer in db.execute(statement).all()]
 
 
-def _documents_from_database(tenant_id: int | None, db: Session) -> list[tuple[str, str]]:
-    """The chunks of the documents that were uploaded."""
-    statement = select(Document.source, Document.text)
+def _documents_from_database(
+    tenant_id: int | None, db: Session
+) -> list[tuple[str, str, float | None]]:
+    """The chunks of the documents that were uploaded, with their quality."""
+    statement = select(Document.source, Document.text, Document.quality).order_by(
+        Document.source, Document.chunk_index, Document.id
+    )
     if tenant_id is not None:
         statement = statement.where(Document.tenant_id == tenant_id)
-    return [(source, text) for source, text in db.execute(statement).all()]
+    return [(source, text, quality) for source, text, quality in db.execute(statement).all()]
 
 
 def _lesson_materials(tenant_id: int | None) -> list[Material]:
@@ -246,15 +275,18 @@ def _lesson_materials(tenant_id: int | None) -> list[Material]:
 
 
 def _conversation_materials(tenant_id: int | None) -> list[Material]:
-    """The greetings and small talk the assistant answers itself."""
+    """The greetings, small talk and taught expressions the assistant answers itself."""
     from app.services import model_settings
-    from app.services.language import conversation
+    from app.services.language import conversation, expressions
 
     name = model_settings.name_for(tenant_id)
-    return [
-        Material(CONVERSATION, question, answer)
+    pairs = {
+        question.casefold(): (question, answer)
         for question, answer in conversation.training_pairs(name)
-    ]
+    }
+    for question, answer in expressions.pairs(tenant_id):
+        pairs[question.casefold()] = (question, answer)
+    return [Material(CONVERSATION, question, answer) for question, answer in pairs.values()]
 
 
 def _approved_materials(approved: Sequence[tuple[str, str]]) -> list[Material]:
@@ -281,14 +313,23 @@ def _correction_materials(corrections: Sequence[tuple[str, str]]) -> list[Materi
     return materials
 
 
-def _document_materials(documents: Sequence[tuple[str, str]]) -> list[Material]:
-    """The chunks of the documents that were uploaded."""
+def _document_materials(
+    documents: Sequence[tuple[str, str, float | None]],
+) -> list[Material]:
+    """The chunks of the documents that were uploaded, with their quality."""
     materials: list[Material] = []
-    for source, text in list(documents)[:MAX_DOCUMENT_CHUNKS]:
+    for source, text, quality in documents:
         clean_text = str(text or "").strip()
         if not clean_text:
             continue
-        materials.append(Material(DOCUMENT, str(source or "document").strip(), clean_text))
+        materials.append(
+            Material(
+                DOCUMENT,
+                str(source or "document").strip(),
+                clean_text,
+                quality=float(quality or 0.0),
+            )
+        )
     return materials
 
 

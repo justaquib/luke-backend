@@ -14,6 +14,21 @@ from app.routers import language_brain, language_model
 from app.services.language import runtime
 
 
+@pytest.fixture(autouse=True)
+def no_installed_foundation(monkeypatch, tmp_path) -> Iterator[None]:
+    """No test loads the real checkpoint; a test that needs one builds a fake."""
+    from app.config import settings
+    from app.services.foundation import identity
+    from app.services.foundation import runtime as foundation_runtime
+
+    monkeypatch.setattr(settings, "foundation_model_dir", str(tmp_path / "foundation"))
+    identity._verified.cache_clear()
+    foundation_runtime.unload()
+    yield
+    identity._verified.cache_clear()
+    foundation_runtime.unload()
+
+
 class _EmptyResult:
     """A query result with no rows, so the test needs no database."""
 

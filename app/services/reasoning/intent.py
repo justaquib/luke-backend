@@ -14,11 +14,14 @@ names the training data: it never answers a question.
 
 from __future__ import annotations
 
+import logging
 import re
 from pathlib import Path
 from typing import Any
 
 from app.services.heads import LinearHead
+
+logger = logging.getLogger(__name__)
 
 # The kinds of question the assistant can be asked.
 KINDS: tuple[str, ...] = (
@@ -101,7 +104,8 @@ def train(tenant_id: int | None, cards: list[dict[str, Any]]) -> int:
         return 0
     try:
         features = embeddings.embed_texts([question for question, _ in labelled])
-    except Exception:
+    except Exception as error:  # noqa: BLE001 -- the embedding provider boundary
+        logger.debug("the questions could not be embedded: %s", error)
         return 0
     if len(features) != len(labelled):
         return 0
@@ -130,7 +134,8 @@ def classify(tenant_id: int | None, question: str) -> tuple[str, str]:
     if head is not None:
         try:
             features = embeddings.embed_texts([question])
-        except Exception:
+        except Exception as error:  # noqa: BLE001 -- the embedding provider boundary
+            logger.debug("the question could not be embedded: %s", error)
             features = []
         if features:
             label, confidence, _ = head.predict(features)

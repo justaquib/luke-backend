@@ -1,0 +1,5 @@
+# Recorded from a documentation site.
+User-agent: *
+Disallow: /private
+Allow: /private/public
+Disallow: /search

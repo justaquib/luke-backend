@@ -16,7 +16,8 @@ from sqlalchemy import MetaData, Table, func, inspect, select, text
 
 from app.config import settings
 from app.db.database import engine
-from app.services import brain, language_logic, vector_store
+from app.services import brain, language_logic
+from app.services.chroma import get_client
 
 LOGGER = logging.getLogger(__name__)
 
@@ -50,7 +51,8 @@ def _database_report() -> dict[str, Any]:
     total_rows = 0
     try:
         names = inspect(engine).get_table_names()
-    except Exception:
+    except Exception as error:  # noqa: BLE001 -- the database metadata boundary
+        LOGGER.warning("the database tables could not be listed: %s", error)
         names = []
     with engine.connect() as connection:
         metadata = MetaData()
@@ -60,7 +62,7 @@ def _database_report() -> dict[str, Any]:
                 rows = int(
                     connection.execute(select(func.count()).select_from(table)).scalar() or 0
                 )
-            except Exception as error:
+            except Exception as error:  # noqa: BLE001 -- the table row-count boundary
                 LOGGER.warning("the table %s could not be counted: %s", name, error)
                 continue
             total_rows += rows
@@ -71,8 +73,9 @@ def _database_report() -> dict[str, Any]:
                 connection.execute(text("SELECT pg_database_size(current_database())")).scalar()
                 or 0
             )
-        except Exception:
+        except Exception as error:  # noqa: BLE001 -- the database size boundary
             # Not a PostgreSQL server, so the size is not read this way.
+            LOGGER.debug("the database size is not readable here: %s", error)
             size_bytes = 0
     url = settings.database_url
     engine_name = "postgresql" if url.startswith("postgres") else "sqlite"
@@ -89,11 +92,12 @@ def _vector_report() -> dict[str, Any]:
     collections: list[dict[str, Any]] = []
     total_records = 0
     try:
-        client = vector_store.get_client()
+        client = get_client()
         for collection in client.list_collections():
             try:
                 count = int(collection.count())
-            except Exception:
+            except Exception as error:  # noqa: BLE001 -- the vector count boundary
+                LOGGER.warning("the %s collection could not be counted: %s", collection.name, error)
                 count = 0
             dimensions = 0
             try:
@@ -101,13 +105,15 @@ def _vector_report() -> dict[str, Any]:
                 embeddings = sample.get("embeddings") if isinstance(sample, dict) else None
                 if embeddings is not None and len(embeddings):
                     dimensions = len(embeddings[0])
-            except Exception:
+            except Exception as error:  # noqa: BLE001 -- the vector sample boundary
+                LOGGER.debug("the %s dimensions could not be read: %s", collection.name, error)
                 dimensions = 0
             total_records += count
             collections.append(
                 {"name": collection.name, "records": count, "dimensions": dimensions}
             )
-    except Exception:
+    except Exception as error:  # noqa: BLE001 -- the vector index boundary
+        LOGGER.warning("the vector index could not be read: %s", error)
         collections = []
     size_bytes, files = _directory_bytes(Path(settings.chroma_persist_dir))
     return {
@@ -157,7 +163,8 @@ def _chunks_report(tenant_id: int | None) -> dict[str, Any]:
                 ).scalar()
                 or 0
             )
-    except Exception:
+    except Exception as error:  # noqa: BLE001 -- the chunk statistics boundary
+        LOGGER.warning("the chunk statistics could not be read: %s", error)
         rows = 0
     sources = 0
     try:
@@ -166,7 +173,8 @@ def _chunks_report(tenant_id: int | None) -> dict[str, Any]:
                 connection.execute(text("SELECT COUNT(DISTINCT source) FROM documents")).scalar()
                 or 0
             )
-    except Exception:
+    except Exception as error:  # noqa: BLE001 -- the chunk sources boundary
+        LOGGER.warning("the chunk sources could not be counted: %s", error)
         sources = 0
     return {
         "chunks": rows,

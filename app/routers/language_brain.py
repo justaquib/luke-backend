@@ -1,4 +1,4 @@
-"""HTTP routes for the assistance brain: what it knows and how it learns.
+"""HTTP routes for the Luke brain: what it knows and how it learns.
 
 The routes stay thin: they check the caller, read the request, and hand the
 work to the service that owns it.
@@ -9,7 +9,7 @@ from __future__ import annotations
 import multiprocessing
 from typing import Any
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from fastapi.responses import FileResponse
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
@@ -31,6 +31,7 @@ from app.services.language import reporting
 from app.services.language import runtime as runtime_service
 from app.services.language import training_materials as materials_service
 from app.services.language import training_report as training_report_service
+from app.services.language.package import restore as package_import_service
 
 router = APIRouter(prefix="/language-model", tags=["language-model"])
 
@@ -95,12 +96,17 @@ def luke_export_preview(
 
 @router.get("/export")
 def luke_export(
+    mode: str = "full",
     user: User = Depends(get_bearer_user),
     db: Session = Depends(get_session),
 ) -> FileResponse:
-    """Build Luke's checkpoints and material into one zip and send it."""
+    """Build Luke's checkpoints and material into one zip and send it.
+
+    ``mode=full`` carries the pinned base checkpoint; ``mode=slim`` records its
+    name, revision and hash instead, so the file is small enough to move alone.
+    """
     try:
-        path, filename = export_service.build(tenant_id_of(user), db)
+        path, filename = export_service.build(tenant_id_of(user), db, mode)
     except export_service.ExportError as error:
         raise HTTPException(400, str(error)) from error
     return FileResponse(
@@ -109,6 +115,31 @@ def luke_export(
         media_type="application/zip",
         background=BackgroundTask(path.unlink, missing_ok=True),
     )
+
+
+@router.post("/package/import")
+def luke_package_import(
+    file: UploadFile = File(...),
+    dry_run: bool = True,
+    replace: bool = False,
+    user: User = Depends(get_bearer_user),
+    db: Session = Depends(get_session),
+) -> dict[str, Any]:
+    """Check a package and, when the trainer confirms, restore it here.
+
+    A dry run checks the manifest and every file and reports what would be
+    restored. A real import needs ``replace=true`` when this workspace already
+    holds rows or model files, and either way the import is verified before the
+    response says it succeeded.
+    """
+    try:
+        return package_import_service.import_package(
+            tenant_id_of(user), db, file.file, dry_run=dry_run, replace=replace
+        )
+    except package_import_service.PackageConflictError as error:
+        raise HTTPException(409, str(error)) from error
+    except export_service.ExportError as error:
+        raise HTTPException(400, str(error)) from error
 
 
 @router.get("/settings")

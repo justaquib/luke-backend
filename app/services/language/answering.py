@@ -205,7 +205,11 @@ def answer_letter_question(question: str, alphabet: str) -> str | None:
 def _quick_answer(question: str, state: dict, tenant_id: int | None = None) -> TaughtAnswer | None:
     """The facts the learner knows without a lesson lookup."""
     from app.services import model_settings
+    from app.services.language import expressions
 
+    taught = expressions.reply_for(tenant_id, question)
+    if taught:
+        return _evidenced(taught, "expressions", "The trainer taught this conversation expression.")
     conversational = answer_conversation(question, model_settings.name_for(tenant_id))
     if conversational:
         return _evidenced(

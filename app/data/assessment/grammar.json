@@ -1,0 +1,1176 @@
+{
+  "items": [
+    {
+      "choices": [
+        "Thomas complained about themselves.",
+        "Thomas complained about himself."
+      ],
+      "expected": {
+        "answer": "B",
+        "kind": "option"
+      },
+      "id": "grammar:blimp:anaphor_number_agreement-21",
+      "meta": {
+        "paradigm": "anaphor_number_agreement"
+      },
+      "prompt": "Which sentence is grammatically correct? Answer with the letter only.\n\nA. Thomas complained about themselves.\nB. Thomas complained about himself.",
+      "skill": "grammar",
+      "source": {
+        "dataset": "nyu-mll/blimp",
+        "licence": "CC BY 4.0",
+        "name": "blimp",
+        "record": "anaphor_number_agreement-21",
+        "url": "https://huggingface.co/datasets/nyu-mll/blimp"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "anaphor_agreement"
+    },
+    {
+      "choices": [
+        "All waiters couldn't criticize themselves.",
+        "All waiters couldn't criticize himself."
+      ],
+      "expected": {
+        "answer": "A",
+        "kind": "option"
+      },
+      "id": "grammar:blimp:anaphor_number_agreement-24",
+      "meta": {
+        "paradigm": "anaphor_number_agreement"
+      },
+      "prompt": "Which sentence is grammatically correct? Answer with the letter only.\n\nA. All waiters couldn't criticize themselves.\nB. All waiters couldn't criticize himself.",
+      "skill": "grammar",
+      "source": {
+        "dataset": "nyu-mll/blimp",
+        "licence": "CC BY 4.0",
+        "name": "blimp",
+        "record": "anaphor_number_agreement-24",
+        "url": "https://huggingface.co/datasets/nyu-mll/blimp"
+      },
+      "split": "train",
+      "stage": 1,
+      "topic": "anaphor_agreement"
+    },
+    {
+      "choices": [
+        "Julie hadn't revealed herself.",
+        "Julie hadn't revealed themselves."
+      ],
+      "expected": {
+        "answer": "A",
+        "kind": "option"
+      },
+      "id": "grammar:blimp:anaphor_number_agreement-26",
+      "meta": {
+        "paradigm": "anaphor_number_agreement"
+      },
+      "prompt": "Which sentence is grammatically correct? Answer with the letter only.\n\nA. Julie hadn't revealed herself.\nB. Julie hadn't revealed themselves.",
+      "skill": "grammar",
+      "source": {
+        "dataset": "nyu-mll/blimp",
+        "licence": "CC BY 4.0",
+        "name": "blimp",
+        "record": "anaphor_number_agreement-26",
+        "url": "https://huggingface.co/datasets/nyu-mll/blimp"
+      },
+      "split": "train",
+      "stage": 1,
+      "topic": "anaphor_agreement"
+    },
+    {
+      "choices": [
+        "Many people bothered themselves.",
+        "Many people bothered itself."
+      ],
+      "expected": {
+        "answer": "A",
+        "kind": "option"
+      },
+      "id": "grammar:blimp:anaphor_number_agreement-27",
+      "meta": {
+        "paradigm": "anaphor_number_agreement"
+      },
+      "prompt": "Which sentence is grammatically correct? Answer with the letter only.\n\nA. Many people bothered themselves.\nB. Many people bothered itself.",
+      "skill": "grammar",
+      "source": {
+        "dataset": "nyu-mll/blimp",
+        "licence": "CC BY 4.0",
+        "name": "blimp",
+        "record": "anaphor_number_agreement-27",
+        "url": "https://huggingface.co/datasets/nyu-mll/blimp"
+      },
+      "split": "train",
+      "stage": 1,
+      "topic": "anaphor_agreement"
+    },
+    {
+      "choices": [
+        "Kimberley had slowed every skateboard.",
+        "Kimberley had rusted every skateboard."
+      ],
+      "expected": {
+        "answer": "A",
+        "kind": "option"
+      },
+      "id": "grammar:blimp:causative-12",
+      "meta": {
+        "paradigm": "causative"
+      },
+      "prompt": "Which sentence is grammatically correct? Answer with the letter only.\n\nA. Kimberley had slowed every skateboard.\nB. Kimberley had rusted every skateboard.",
+      "skill": "grammar",
+      "source": {
+        "dataset": "nyu-mll/blimp",
+        "licence": "CC BY 4.0",
+        "name": "blimp",
+        "record": "causative-12",
+        "url": "https://huggingface.co/datasets/nyu-mll/blimp"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "argument_structure"
+    },
+    {
+      "choices": [
+        "Noah hasn't shattered a mirror.",
+        "Noah hasn't fallen a mirror."
+      ],
+      "expected": {
+        "answer": "A",
+        "kind": "option"
+      },
+      "id": "grammar:blimp:causative-21",
+      "meta": {
+        "paradigm": "causative"
+      },
+      "prompt": "Which sentence is grammatically correct? Answer with the letter only.\n\nA. Noah hasn't shattered a mirror.\nB. Noah hasn't fallen a mirror.",
+      "skill": "grammar",
+      "source": {
+        "dataset": "nyu-mll/blimp",
+        "licence": "CC BY 4.0",
+        "name": "blimp",
+        "record": "causative-21",
+        "url": "https://huggingface.co/datasets/nyu-mll/blimp"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "argument_structure"
+    },
+    {
+      "choices": [
+        "Some guests reunite Rachelle's teachers.",
+        "Some guests whisper Rachelle's teachers."
+      ],
+      "expected": {
+        "answer": "A",
+        "kind": "option"
+      },
+      "id": "grammar:blimp:causative-23",
+      "meta": {
+        "paradigm": "causative"
+      },
+      "prompt": "Which sentence is grammatically correct? Answer with the letter only.\n\nA. Some guests reunite Rachelle's teachers.\nB. Some guests whisper Rachelle's teachers.",
+      "skill": "grammar",
+      "source": {
+        "dataset": "nyu-mll/blimp",
+        "licence": "CC BY 4.0",
+        "name": "blimp",
+        "record": "causative-23",
+        "url": "https://huggingface.co/datasets/nyu-mll/blimp"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "argument_structure"
+    },
+    {
+      "choices": [
+        "David isn't falling many blouses.",
+        "David isn't drying many blouses."
+      ],
+      "expected": {
+        "answer": "B",
+        "kind": "option"
+      },
+      "id": "grammar:blimp:causative-26",
+      "meta": {
+        "paradigm": "causative"
+      },
+      "prompt": "Which sentence is grammatically correct? Answer with the letter only.\n\nA. David isn't falling many blouses.\nB. David isn't drying many blouses.",
+      "skill": "grammar",
+      "source": {
+        "dataset": "nyu-mll/blimp",
+        "licence": "CC BY 4.0",
+        "name": "blimp",
+        "record": "causative-26",
+        "url": "https://huggingface.co/datasets/nyu-mll/blimp"
+      },
+      "split": "train",
+      "stage": 1,
+      "topic": "argument_structure"
+    },
+    {
+      "choices": [
+        "Who aren't most hospitals that hadn't talked about most waitresses alarming?",
+        "Who aren't most waitresses alarming most hospitals that hadn't talked about?"
+      ],
+      "expected": {
+        "answer": "A",
+        "kind": "option"
+      },
+      "id": "grammar:blimp:complex_np_island-0",
+      "meta": {
+        "paradigm": "complex_NP_island"
+      },
+      "prompt": "Which sentence is grammatically correct? Answer with the letter only.\n\nA. Who aren't most hospitals that hadn't talked about most waitresses alarming?\nB. Who aren't most waitresses alarming most hospitals that hadn't talked about?",
+      "skill": "grammar",
+      "source": {
+        "dataset": "nyu-mll/blimp",
+        "licence": "CC BY 4.0",
+        "name": "blimp",
+        "record": "complex_np_island-0",
+        "url": "https://huggingface.co/datasets/nyu-mll/blimp"
+      },
+      "split": "eval",
+      "stage": 3,
+      "topic": "island_effects"
+    },
+    {
+      "choices": [
+        "Who was Tonya approaching Gary's lawyer who could respect?",
+        "Who was Gary's lawyer who could respect Tonya approaching?"
+      ],
+      "expected": {
+        "answer": "B",
+        "kind": "option"
+      },
+      "id": "grammar:blimp:complex_np_island-10",
+      "meta": {
+        "paradigm": "complex_NP_island"
+      },
+      "prompt": "Which sentence is grammatically correct? Answer with the letter only.\n\nA. Who was Tonya approaching Gary's lawyer who could respect?\nB. Who was Gary's lawyer who could respect Tonya approaching?",
+      "skill": "grammar",
+      "source": {
+        "dataset": "nyu-mll/blimp",
+        "licence": "CC BY 4.0",
+        "name": "blimp",
+        "record": "complex_np_island-10",
+        "url": "https://huggingface.co/datasets/nyu-mll/blimp"
+      },
+      "split": "eval",
+      "stage": 3,
+      "topic": "island_effects"
+    },
+    {
+      "choices": [
+        "What can't some actor argue about a guest who would like?",
+        "What can't a guest who would like some actor argue about?"
+      ],
+      "expected": {
+        "answer": "B",
+        "kind": "option"
+      },
+      "id": "grammar:blimp:complex_np_island-12",
+      "meta": {
+        "paradigm": "complex_NP_island"
+      },
+      "prompt": "Which sentence is grammatically correct? Answer with the letter only.\n\nA. What can't some actor argue about a guest who would like?\nB. What can't a guest who would like some actor argue about?",
+      "skill": "grammar",
+      "source": {
+        "dataset": "nyu-mll/blimp",
+        "licence": "CC BY 4.0",
+        "name": "blimp",
+        "record": "complex_np_island-12",
+        "url": "https://huggingface.co/datasets/nyu-mll/blimp"
+      },
+      "split": "train",
+      "stage": 3,
+      "topic": "island_effects"
+    },
+    {
+      "choices": [
+        "Who had Omar returned to some ladies that had hired?",
+        "Who had some ladies that had hired Omar returned to?"
+      ],
+      "expected": {
+        "answer": "B",
+        "kind": "option"
+      },
+      "id": "grammar:blimp:complex_np_island-28",
+      "meta": {
+        "paradigm": "complex_NP_island"
+      },
+      "prompt": "Which sentence is grammatically correct? Answer with the letter only.\n\nA. Who had Omar returned to some ladies that had hired?\nB. Who had some ladies that had hired Omar returned to?",
+      "skill": "grammar",
+      "source": {
+        "dataset": "nyu-mll/blimp",
+        "licence": "CC BY 4.0",
+        "name": "blimp",
+        "record": "complex_np_island-28",
+        "url": "https://huggingface.co/datasets/nyu-mll/blimp"
+      },
+      "split": "train",
+      "stage": 3,
+      "topic": "island_effects"
+    },
+    {
+      "choices": [
+        "Raymond is selling this sketch.",
+        "Raymond is selling this sketches."
+      ],
+      "expected": {
+        "answer": "A",
+        "kind": "option"
+      },
+      "id": "grammar:blimp:determiner_noun_agreement_1-0",
+      "meta": {
+        "paradigm": "determiner_noun_agreement_1"
+      },
+      "prompt": "Which sentence is grammatically correct? Answer with the letter only.\n\nA. Raymond is selling this sketch.\nB. Raymond is selling this sketches.",
+      "skill": "grammar",
+      "source": {
+        "dataset": "nyu-mll/blimp",
+        "licence": "CC BY 4.0",
+        "name": "blimp",
+        "record": "determiner_noun_agreement_1-0",
+        "url": "https://huggingface.co/datasets/nyu-mll/blimp"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "determiner_noun_agreement"
+    },
+    {
+      "choices": [
+        "Elaine was biking to this bank.",
+        "Elaine was biking to this banks."
+      ],
+      "expected": {
+        "answer": "A",
+        "kind": "option"
+      },
+      "id": "grammar:blimp:determiner_noun_agreement_1-15",
+      "meta": {
+        "paradigm": "determiner_noun_agreement_1"
+      },
+      "prompt": "Which sentence is grammatically correct? Answer with the letter only.\n\nA. Elaine was biking to this bank.\nB. Elaine was biking to this banks.",
+      "skill": "grammar",
+      "source": {
+        "dataset": "nyu-mll/blimp",
+        "licence": "CC BY 4.0",
+        "name": "blimp",
+        "record": "determiner_noun_agreement_1-15",
+        "url": "https://huggingface.co/datasets/nyu-mll/blimp"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "determiner_noun_agreement"
+    },
+    {
+      "choices": [
+        "Vanessa can talk to these doctor.",
+        "Vanessa can talk to these doctors."
+      ],
+      "expected": {
+        "answer": "B",
+        "kind": "option"
+      },
+      "id": "grammar:blimp:determiner_noun_agreement_1-21",
+      "meta": {
+        "paradigm": "determiner_noun_agreement_1"
+      },
+      "prompt": "Which sentence is grammatically correct? Answer with the letter only.\n\nA. Vanessa can talk to these doctor.\nB. Vanessa can talk to these doctors.",
+      "skill": "grammar",
+      "source": {
+        "dataset": "nyu-mll/blimp",
+        "licence": "CC BY 4.0",
+        "name": "blimp",
+        "record": "determiner_noun_agreement_1-21",
+        "url": "https://huggingface.co/datasets/nyu-mll/blimp"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "determiner_noun_agreement"
+    },
+    {
+      "choices": [
+        "A teacher talked to that customer.",
+        "A teacher talked to that customers."
+      ],
+      "expected": {
+        "answer": "A",
+        "kind": "option"
+      },
+      "id": "grammar:blimp:determiner_noun_agreement_1-28",
+      "meta": {
+        "paradigm": "determiner_noun_agreement_1"
+      },
+      "prompt": "Which sentence is grammatically correct? Answer with the letter only.\n\nA. A teacher talked to that customer.\nB. A teacher talked to that customers.",
+      "skill": "grammar",
+      "source": {
+        "dataset": "nyu-mll/blimp",
+        "licence": "CC BY 4.0",
+        "name": "blimp",
+        "record": "determiner_noun_agreement_1-28",
+        "url": "https://huggingface.co/datasets/nyu-mll/blimp"
+      },
+      "split": "train",
+      "stage": 1,
+      "topic": "determiner_noun_agreement"
+    },
+    {
+      "choices": [
+        "Each art gallery was there irritating a lot of committees.",
+        "There was each art gallery irritating a lot of committees."
+      ],
+      "expected": {
+        "answer": "A",
+        "kind": "option"
+      },
+      "id": "grammar:blimp:existential_there_quantifiers_2-10",
+      "meta": {
+        "paradigm": "existential_there_quantifiers_2"
+      },
+      "prompt": "Which sentence is grammatically correct? Answer with the letter only.\n\nA. Each art gallery was there irritating a lot of committees.\nB. There was each art gallery irritating a lot of committees.",
+      "skill": "grammar",
+      "source": {
+        "dataset": "nyu-mll/blimp",
+        "licence": "CC BY 4.0",
+        "name": "blimp",
+        "record": "existential_there_quantifiers_2-10",
+        "url": "https://huggingface.co/datasets/nyu-mll/blimp"
+      },
+      "split": "train",
+      "stage": 2,
+      "topic": "quantifiers"
+    },
+    {
+      "choices": [
+        "There wasn't every coat twirling.",
+        "Every coat wasn't there twirling."
+      ],
+      "expected": {
+        "answer": "B",
+        "kind": "option"
+      },
+      "id": "grammar:blimp:existential_there_quantifiers_2-25",
+      "meta": {
+        "paradigm": "existential_there_quantifiers_2"
+      },
+      "prompt": "Which sentence is grammatically correct? Answer with the letter only.\n\nA. There wasn't every coat twirling.\nB. Every coat wasn't there twirling.",
+      "skill": "grammar",
+      "source": {
+        "dataset": "nyu-mll/blimp",
+        "licence": "CC BY 4.0",
+        "name": "blimp",
+        "record": "existential_there_quantifiers_2-25",
+        "url": "https://huggingface.co/datasets/nyu-mll/blimp"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "quantifiers"
+    },
+    {
+      "choices": [
+        "There are all bikes embarrassing Brian.",
+        "All bikes are there embarrassing Brian."
+      ],
+      "expected": {
+        "answer": "B",
+        "kind": "option"
+      },
+      "id": "grammar:blimp:existential_there_quantifiers_2-26",
+      "meta": {
+        "paradigm": "existential_there_quantifiers_2"
+      },
+      "prompt": "Which sentence is grammatically correct? Answer with the letter only.\n\nA. There are all bikes embarrassing Brian.\nB. All bikes are there embarrassing Brian.",
+      "skill": "grammar",
+      "source": {
+        "dataset": "nyu-mll/blimp",
+        "licence": "CC BY 4.0",
+        "name": "blimp",
+        "record": "existential_there_quantifiers_2-26",
+        "url": "https://huggingface.co/datasets/nyu-mll/blimp"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "quantifiers"
+    },
+    {
+      "choices": [
+        "The Borgias wore a lot of scarves.",
+        "The Borgias worn a lot of scarves."
+      ],
+      "expected": {
+        "answer": "A",
+        "kind": "option"
+      },
+      "id": "grammar:blimp:irregular_past_participle_verbs-0",
+      "meta": {
+        "paradigm": "irregular_past_participle_verbs"
+      },
+      "prompt": "Which sentence is grammatically correct? Answer with the letter only.\n\nA. The Borgias wore a lot of scarves.\nB. The Borgias worn a lot of scarves.",
+      "skill": "grammar",
+      "source": {
+        "dataset": "nyu-mll/blimp",
+        "licence": "CC BY 4.0",
+        "name": "blimp",
+        "record": "irregular_past_participle_verbs-0",
+        "url": "https://huggingface.co/datasets/nyu-mll/blimp"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "irregular_forms"
+    },
+    {
+      "choices": [
+        "Randolf drove to a mall.",
+        "Randolf driven to a mall."
+      ],
+      "expected": {
+        "answer": "A",
+        "kind": "option"
+      },
+      "id": "grammar:blimp:irregular_past_participle_verbs-10",
+      "meta": {
+        "paradigm": "irregular_past_participle_verbs"
+      },
+      "prompt": "Which sentence is grammatically correct? Answer with the letter only.\n\nA. Randolf drove to a mall.\nB. Randolf driven to a mall.",
+      "skill": "grammar",
+      "source": {
+        "dataset": "nyu-mll/blimp",
+        "licence": "CC BY 4.0",
+        "name": "blimp",
+        "record": "irregular_past_participle_verbs-10",
+        "url": "https://huggingface.co/datasets/nyu-mll/blimp"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "irregular_forms"
+    },
+    {
+      "choices": [
+        "Every waiter hidden Julia.",
+        "Every waiter hid Julia."
+      ],
+      "expected": {
+        "answer": "B",
+        "kind": "option"
+      },
+      "id": "grammar:blimp:irregular_past_participle_verbs-29",
+      "meta": {
+        "paradigm": "irregular_past_participle_verbs"
+      },
+      "prompt": "Which sentence is grammatically correct? Answer with the letter only.\n\nA. Every waiter hidden Julia.\nB. Every waiter hid Julia.",
+      "skill": "grammar",
+      "source": {
+        "dataset": "nyu-mll/blimp",
+        "licence": "CC BY 4.0",
+        "name": "blimp",
+        "record": "irregular_past_participle_verbs-29",
+        "url": "https://huggingface.co/datasets/nyu-mll/blimp"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "irregular_forms"
+    },
+    {
+      "choices": [
+        "Cheryl come here.",
+        "Cheryl came here."
+      ],
+      "expected": {
+        "answer": "B",
+        "kind": "option"
+      },
+      "id": "grammar:blimp:irregular_past_participle_verbs-3",
+      "meta": {
+        "paradigm": "irregular_past_participle_verbs"
+      },
+      "prompt": "Which sentence is grammatically correct? Answer with the letter only.\n\nA. Cheryl come here.\nB. Cheryl came here.",
+      "skill": "grammar",
+      "source": {
+        "dataset": "nyu-mll/blimp",
+        "licence": "CC BY 4.0",
+        "name": "blimp",
+        "record": "irregular_past_participle_verbs-3",
+        "url": "https://huggingface.co/datasets/nyu-mll/blimp"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "irregular_forms"
+    },
+    {
+      "choices": [
+        "Erin went to some schools.",
+        "Erin gone to some schools."
+      ],
+      "expected": {
+        "answer": "A",
+        "kind": "option"
+      },
+      "id": "grammar:blimp:irregular_past_participle_verbs-6",
+      "meta": {
+        "paradigm": "irregular_past_participle_verbs"
+      },
+      "prompt": "Which sentence is grammatically correct? Answer with the letter only.\n\nA. Erin went to some schools.\nB. Erin gone to some schools.",
+      "skill": "grammar",
+      "source": {
+        "dataset": "nyu-mll/blimp",
+        "licence": "CC BY 4.0",
+        "name": "blimp",
+        "record": "irregular_past_participle_verbs-6",
+        "url": "https://huggingface.co/datasets/nyu-mll/blimp"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "irregular_forms"
+    },
+    {
+      "choices": [
+        "Had Patrick ever answered?",
+        "Patrick had ever answered."
+      ],
+      "expected": {
+        "answer": "A",
+        "kind": "option"
+      },
+      "id": "grammar:blimp:matrix_question_npi_licensor_present-1",
+      "meta": {
+        "paradigm": "matrix_question_npi_licensor_present"
+      },
+      "prompt": "Which sentence is grammatically correct? Answer with the letter only.\n\nA. Had Patrick ever answered?\nB. Patrick had ever answered.",
+      "skill": "grammar",
+      "source": {
+        "dataset": "nyu-mll/blimp",
+        "licence": "CC BY 4.0",
+        "name": "blimp",
+        "record": "matrix_question_npi_licensor_present-1",
+        "url": "https://huggingface.co/datasets/nyu-mll/blimp"
+      },
+      "split": "eval",
+      "stage": 3,
+      "topic": "npi_licensing"
+    },
+    {
+      "choices": [
+        "Suzanne had ever sat down.",
+        "Had Suzanne ever sat down?"
+      ],
+      "expected": {
+        "answer": "B",
+        "kind": "option"
+      },
+      "id": "grammar:blimp:matrix_question_npi_licensor_present-25",
+      "meta": {
+        "paradigm": "matrix_question_npi_licensor_present"
+      },
+      "prompt": "Which sentence is grammatically correct? Answer with the letter only.\n\nA. Suzanne had ever sat down.\nB. Had Suzanne ever sat down?",
+      "skill": "grammar",
+      "source": {
+        "dataset": "nyu-mll/blimp",
+        "licence": "CC BY 4.0",
+        "name": "blimp",
+        "record": "matrix_question_npi_licensor_present-25",
+        "url": "https://huggingface.co/datasets/nyu-mll/blimp"
+      },
+      "split": "train",
+      "stage": 3,
+      "topic": "npi_licensing"
+    },
+    {
+      "choices": [
+        "Jill did ever die.",
+        "Did Jill ever die?"
+      ],
+      "expected": {
+        "answer": "B",
+        "kind": "option"
+      },
+      "id": "grammar:blimp:matrix_question_npi_licensor_present-27",
+      "meta": {
+        "paradigm": "matrix_question_npi_licensor_present"
+      },
+      "prompt": "Which sentence is grammatically correct? Answer with the letter only.\n\nA. Jill did ever die.\nB. Did Jill ever die?",
+      "skill": "grammar",
+      "source": {
+        "dataset": "nyu-mll/blimp",
+        "licence": "CC BY 4.0",
+        "name": "blimp",
+        "record": "matrix_question_npi_licensor_present-27",
+        "url": "https://huggingface.co/datasets/nyu-mll/blimp"
+      },
+      "split": "train",
+      "stage": 3,
+      "topic": "npi_licensing"
+    },
+    {
+      "choices": [
+        "Has Cindy ever anticipated most dancers to study?",
+        "Cindy has ever anticipated most dancers to study."
+      ],
+      "expected": {
+        "answer": "A",
+        "kind": "option"
+      },
+      "id": "grammar:blimp:matrix_question_npi_licensor_present-5",
+      "meta": {
+        "paradigm": "matrix_question_npi_licensor_present"
+      },
+      "prompt": "Which sentence is grammatically correct? Answer with the letter only.\n\nA. Has Cindy ever anticipated most dancers to study?\nB. Cindy has ever anticipated most dancers to study.",
+      "skill": "grammar",
+      "source": {
+        "dataset": "nyu-mll/blimp",
+        "licence": "CC BY 4.0",
+        "name": "blimp",
+        "record": "matrix_question_npi_licensor_present-5",
+        "url": "https://huggingface.co/datasets/nyu-mll/blimp"
+      },
+      "split": "eval",
+      "stage": 3,
+      "topic": "npi_licensing"
+    },
+    {
+      "choices": [
+        "Richard is investigated by the cashiers.",
+        "Richard is laughed by the cashiers."
+      ],
+      "expected": {
+        "answer": "A",
+        "kind": "option"
+      },
+      "id": "grammar:blimp:passive_1-22",
+      "meta": {
+        "paradigm": "passive_1"
+      },
+      "prompt": "Which sentence is grammatically correct? Answer with the letter only.\n\nA. Richard is investigated by the cashiers.\nB. Richard is laughed by the cashiers.",
+      "skill": "grammar",
+      "source": {
+        "dataset": "nyu-mll/blimp",
+        "licence": "CC BY 4.0",
+        "name": "blimp",
+        "record": "passive_1-22",
+        "url": "https://huggingface.co/datasets/nyu-mll/blimp"
+      },
+      "split": "train",
+      "stage": 1,
+      "topic": "argument_structure"
+    },
+    {
+      "choices": [
+        "These patients aren't visited by David.",
+        "These patients aren't profited by David."
+      ],
+      "expected": {
+        "answer": "A",
+        "kind": "option"
+      },
+      "id": "grammar:blimp:passive_1-28",
+      "meta": {
+        "paradigm": "passive_1"
+      },
+      "prompt": "Which sentence is grammatically correct? Answer with the letter only.\n\nA. These patients aren't visited by David.\nB. These patients aren't profited by David.",
+      "skill": "grammar",
+      "source": {
+        "dataset": "nyu-mll/blimp",
+        "licence": "CC BY 4.0",
+        "name": "blimp",
+        "record": "passive_1-28",
+        "url": "https://huggingface.co/datasets/nyu-mll/blimp"
+      },
+      "split": "train",
+      "stage": 1,
+      "topic": "argument_structure"
+    },
+    {
+      "choices": [
+        "David wasn't disgusted by these hospitals.",
+        "David wasn't shouted by these hospitals."
+      ],
+      "expected": {
+        "answer": "A",
+        "kind": "option"
+      },
+      "id": "grammar:blimp:passive_1-9",
+      "meta": {
+        "paradigm": "passive_1"
+      },
+      "prompt": "Which sentence is grammatically correct? Answer with the letter only.\n\nA. David wasn't disgusted by these hospitals.\nB. David wasn't shouted by these hospitals.",
+      "skill": "grammar",
+      "source": {
+        "dataset": "nyu-mll/blimp",
+        "licence": "CC BY 4.0",
+        "name": "blimp",
+        "record": "passive_1-9",
+        "url": "https://huggingface.co/datasets/nyu-mll/blimp"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "argument_structure"
+    },
+    {
+      "choices": [
+        "Some organizations aren't disturbing Vanessa.",
+        "Some organizations isn't disturbing Vanessa."
+      ],
+      "expected": {
+        "answer": "A",
+        "kind": "option"
+      },
+      "id": "grammar:blimp:regular_plural_subject_verb_agreement_1-2",
+      "meta": {
+        "paradigm": "regular_plural_subject_verb_agreement_1"
+      },
+      "prompt": "Which sentence is grammatically correct? Answer with the letter only.\n\nA. Some organizations aren't disturbing Vanessa.\nB. Some organizations isn't disturbing Vanessa.",
+      "skill": "grammar",
+      "source": {
+        "dataset": "nyu-mll/blimp",
+        "licence": "CC BY 4.0",
+        "name": "blimp",
+        "record": "regular_plural_subject_verb_agreement_1-2",
+        "url": "https://huggingface.co/datasets/nyu-mll/blimp"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "subject_verb_agreement"
+    },
+    {
+      "choices": [
+        "Most glasses scares Martin.",
+        "Most glasses scare Martin."
+      ],
+      "expected": {
+        "answer": "B",
+        "kind": "option"
+      },
+      "id": "grammar:blimp:regular_plural_subject_verb_agreement_1-21",
+      "meta": {
+        "paradigm": "regular_plural_subject_verb_agreement_1"
+      },
+      "prompt": "Which sentence is grammatically correct? Answer with the letter only.\n\nA. Most glasses scares Martin.\nB. Most glasses scare Martin.",
+      "skill": "grammar",
+      "source": {
+        "dataset": "nyu-mll/blimp",
+        "licence": "CC BY 4.0",
+        "name": "blimp",
+        "record": "regular_plural_subject_verb_agreement_1-21",
+        "url": "https://huggingface.co/datasets/nyu-mll/blimp"
+      },
+      "split": "train",
+      "stage": 1,
+      "topic": "subject_verb_agreement"
+    },
+    {
+      "choices": [
+        "Some legislature forgets Janice.",
+        "Some legislature forget Janice."
+      ],
+      "expected": {
+        "answer": "A",
+        "kind": "option"
+      },
+      "id": "grammar:blimp:regular_plural_subject_verb_agreement_1-25",
+      "meta": {
+        "paradigm": "regular_plural_subject_verb_agreement_1"
+      },
+      "prompt": "Which sentence is grammatically correct? Answer with the letter only.\n\nA. Some legislature forgets Janice.\nB. Some legislature forget Janice.",
+      "skill": "grammar",
+      "source": {
+        "dataset": "nyu-mll/blimp",
+        "licence": "CC BY 4.0",
+        "name": "blimp",
+        "record": "regular_plural_subject_verb_agreement_1-25",
+        "url": "https://huggingface.co/datasets/nyu-mll/blimp"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "subject_verb_agreement"
+    },
+    {
+      "choices": [
+        "Michelle were impressing Deanna.",
+        "Michelle is impressing Deanna."
+      ],
+      "expected": {
+        "answer": "B",
+        "kind": "option"
+      },
+      "id": "grammar:blimp:regular_plural_subject_verb_agreement_1-7",
+      "meta": {
+        "paradigm": "regular_plural_subject_verb_agreement_1"
+      },
+      "prompt": "Which sentence is grammatically correct? Answer with the letter only.\n\nA. Michelle were impressing Deanna.\nB. Michelle is impressing Deanna.",
+      "skill": "grammar",
+      "source": {
+        "dataset": "nyu-mll/blimp",
+        "licence": "CC BY 4.0",
+        "name": "blimp",
+        "record": "regular_plural_subject_verb_agreement_1-7",
+        "url": "https://huggingface.co/datasets/nyu-mll/blimp"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "subject_verb_agreement"
+    },
+    {
+      "choices": [
+        "Julia had really ever forced Kirsten to get a job.",
+        "Julia had not ever forced Kirsten to get a job."
+      ],
+      "expected": {
+        "answer": "B",
+        "kind": "option"
+      },
+      "id": "grammar:blimp:sentential_negation_npi_licensor_present-13",
+      "meta": {
+        "paradigm": "sentential_negation_npi_licensor_present"
+      },
+      "prompt": "Which sentence is grammatically correct? Answer with the letter only.\n\nA. Julia had really ever forced Kirsten to get a job.\nB. Julia had not ever forced Kirsten to get a job.",
+      "skill": "grammar",
+      "source": {
+        "dataset": "nyu-mll/blimp",
+        "licence": "CC BY 4.0",
+        "name": "blimp",
+        "record": "sentential_negation_npi_licensor_present-13",
+        "url": "https://huggingface.co/datasets/nyu-mll/blimp"
+      },
+      "split": "eval",
+      "stage": 3,
+      "topic": "npi_licensing"
+    },
+    {
+      "choices": [
+        "Donna had not ever tempted Sheila's boss to explore those schools.",
+        "Donna had probably ever tempted Sheila's boss to explore those schools."
+      ],
+      "expected": {
+        "answer": "A",
+        "kind": "option"
+      },
+      "id": "grammar:blimp:sentential_negation_npi_licensor_present-18",
+      "meta": {
+        "paradigm": "sentential_negation_npi_licensor_present"
+      },
+      "prompt": "Which sentence is grammatically correct? Answer with the letter only.\n\nA. Donna had not ever tempted Sheila's boss to explore those schools.\nB. Donna had probably ever tempted Sheila's boss to explore those schools.",
+      "skill": "grammar",
+      "source": {
+        "dataset": "nyu-mll/blimp",
+        "licence": "CC BY 4.0",
+        "name": "blimp",
+        "record": "sentential_negation_npi_licensor_present-18",
+        "url": "https://huggingface.co/datasets/nyu-mll/blimp"
+      },
+      "split": "eval",
+      "stage": 3,
+      "topic": "npi_licensing"
+    },
+    {
+      "choices": [
+        "Robert has really ever threatened to appear.",
+        "Robert has not ever threatened to appear."
+      ],
+      "expected": {
+        "answer": "B",
+        "kind": "option"
+      },
+      "id": "grammar:blimp:sentential_negation_npi_licensor_present-24",
+      "meta": {
+        "paradigm": "sentential_negation_npi_licensor_present"
+      },
+      "prompt": "Which sentence is grammatically correct? Answer with the letter only.\n\nA. Robert has really ever threatened to appear.\nB. Robert has not ever threatened to appear.",
+      "skill": "grammar",
+      "source": {
+        "dataset": "nyu-mll/blimp",
+        "licence": "CC BY 4.0",
+        "name": "blimp",
+        "record": "sentential_negation_npi_licensor_present-24",
+        "url": "https://huggingface.co/datasets/nyu-mll/blimp"
+      },
+      "split": "eval",
+      "stage": 3,
+      "topic": "npi_licensing"
+    },
+    {
+      "choices": [
+        "Homer has not ever disturbed those doctors.",
+        "Homer has really ever disturbed those doctors."
+      ],
+      "expected": {
+        "answer": "A",
+        "kind": "option"
+      },
+      "id": "grammar:blimp:sentential_negation_npi_licensor_present-28",
+      "meta": {
+        "paradigm": "sentential_negation_npi_licensor_present"
+      },
+      "prompt": "Which sentence is grammatically correct? Answer with the letter only.\n\nA. Homer has not ever disturbed those doctors.\nB. Homer has really ever disturbed those doctors.",
+      "skill": "grammar",
+      "source": {
+        "dataset": "nyu-mll/blimp",
+        "licence": "CC BY 4.0",
+        "name": "blimp",
+        "record": "sentential_negation_npi_licensor_present-28",
+        "url": "https://huggingface.co/datasets/nyu-mll/blimp"
+      },
+      "split": "eval",
+      "stage": 3,
+      "topic": "npi_licensing"
+    },
+    {
+      "choices": [
+        "Many sisters of some guest murmured Eva.",
+        "Many sisters of some guest forget Eva."
+      ],
+      "expected": {
+        "answer": "B",
+        "kind": "option"
+      },
+      "id": "grammar:blimp:transitive-18",
+      "meta": {
+        "paradigm": "transitive"
+      },
+      "prompt": "Which sentence is grammatically correct? Answer with the letter only.\n\nA. Many sisters of some guest murmured Eva.\nB. Many sisters of some guest forget Eva.",
+      "skill": "grammar",
+      "source": {
+        "dataset": "nyu-mll/blimp",
+        "licence": "CC BY 4.0",
+        "name": "blimp",
+        "record": "transitive-18",
+        "url": "https://huggingface.co/datasets/nyu-mll/blimp"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "argument_structure"
+    },
+    {
+      "choices": [
+        "The pedestrians wave some people.",
+        "The pedestrians question some people."
+      ],
+      "expected": {
+        "answer": "B",
+        "kind": "option"
+      },
+      "id": "grammar:blimp:transitive-8",
+      "meta": {
+        "paradigm": "transitive"
+      },
+      "prompt": "Which sentence is grammatically correct? Answer with the letter only.\n\nA. The pedestrians wave some people.\nB. The pedestrians question some people.",
+      "skill": "grammar",
+      "source": {
+        "dataset": "nyu-mll/blimp",
+        "licence": "CC BY 4.0",
+        "name": "blimp",
+        "record": "transitive-8",
+        "url": "https://huggingface.co/datasets/nyu-mll/blimp"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "argument_structure"
+    },
+    {
+      "choices": [
+        "Omar hasn't forgotten who Tara is attacking every woman.",
+        "Omar hasn't forgotten every woman that Tara is attacking."
+      ],
+      "expected": {
+        "answer": "B",
+        "kind": "option"
+      },
+      "id": "grammar:blimp:wh_questions_object_gap-17",
+      "meta": {
+        "paradigm": "wh_questions_object_gap"
+      },
+      "prompt": "Which sentence is grammatically correct? Answer with the letter only.\n\nA. Omar hasn't forgotten who Tara is attacking every woman.\nB. Omar hasn't forgotten every woman that Tara is attacking.",
+      "skill": "grammar",
+      "source": {
+        "dataset": "nyu-mll/blimp",
+        "licence": "CC BY 4.0",
+        "name": "blimp",
+        "record": "wh_questions_object_gap-17",
+        "url": "https://huggingface.co/datasets/nyu-mll/blimp"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "filler_gap_dependency"
+    },
+    {
+      "choices": [
+        "Holly researched what Emily couldn't discover a lot of hypotheses.",
+        "Holly researched a lot of hypotheses that Emily couldn't discover."
+      ],
+      "expected": {
+        "answer": "B",
+        "kind": "option"
+      },
+      "id": "grammar:blimp:wh_questions_object_gap-19",
+      "meta": {
+        "paradigm": "wh_questions_object_gap"
+      },
+      "prompt": "Which sentence is grammatically correct? Answer with the letter only.\n\nA. Holly researched what Emily couldn't discover a lot of hypotheses.\nB. Holly researched a lot of hypotheses that Emily couldn't discover.",
+      "skill": "grammar",
+      "source": {
+        "dataset": "nyu-mll/blimp",
+        "licence": "CC BY 4.0",
+        "name": "blimp",
+        "record": "wh_questions_object_gap-19",
+        "url": "https://huggingface.co/datasets/nyu-mll/blimp"
+      },
+      "split": "train",
+      "stage": 2,
+      "topic": "filler_gap_dependency"
+    },
+    {
+      "choices": [
+        "Kirsten questions what this guest wouldn't explore banks.",
+        "Kirsten questions banks that this guest wouldn't explore."
+      ],
+      "expected": {
+        "answer": "B",
+        "kind": "option"
+      },
+      "id": "grammar:blimp:wh_questions_object_gap-26",
+      "meta": {
+        "paradigm": "wh_questions_object_gap"
+      },
+      "prompt": "Which sentence is grammatically correct? Answer with the letter only.\n\nA. Kirsten questions what this guest wouldn't explore banks.\nB. Kirsten questions banks that this guest wouldn't explore.",
+      "skill": "grammar",
+      "source": {
+        "dataset": "nyu-mll/blimp",
+        "licence": "CC BY 4.0",
+        "name": "blimp",
+        "record": "wh_questions_object_gap-26",
+        "url": "https://huggingface.co/datasets/nyu-mll/blimp"
+      },
+      "split": "train",
+      "stage": 2,
+      "topic": "filler_gap_dependency"
+    },
+    {
+      "choices": [
+        "Mark discovers what Randolf remembered most analyses.",
+        "Mark discovers most analyses that Randolf remembered."
+      ],
+      "expected": {
+        "answer": "B",
+        "kind": "option"
+      },
+      "id": "grammar:blimp:wh_questions_object_gap-9",
+      "meta": {
+        "paradigm": "wh_questions_object_gap"
+      },
+      "prompt": "Which sentence is grammatically correct? Answer with the letter only.\n\nA. Mark discovers what Randolf remembered most analyses.\nB. Mark discovers most analyses that Randolf remembered.",
+      "skill": "grammar",
+      "source": {
+        "dataset": "nyu-mll/blimp",
+        "licence": "CC BY 4.0",
+        "name": "blimp",
+        "record": "wh_questions_object_gap-9",
+        "url": "https://huggingface.co/datasets/nyu-mll/blimp"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "filler_gap_dependency"
+    }
+  ],
+  "skill": "grammar",
+  "title": "Language comprehension and grammar"
+}

@@ -3,7 +3,7 @@ from typing import Any
 
 from app import main as api
 from app.schemas import QueryRequest, QueryResponse
-from app.services import answer_flow, answer_sources, apps
+from app.services import answer_flow, answer_live, apps
 from app.services import query as query_service
 
 
@@ -122,7 +122,7 @@ def test_weather_integration_precedes_irrelevant_document_matches(monkeypatch):
         ),
     )
     monkeypatch.setattr(
-        answer_sources.apps,
+        answer_live.apps,
         "weather_for",
         lambda question, lat=None, lon=None: {
             "answer": "Currently clear sky, 30°C.",
@@ -160,7 +160,7 @@ def test_wiki_integration_precedes_document_matches(monkeypatch):
 
     monkeypatch.setattr(query_service.vector_store, "query", query_documents)
     monkeypatch.setattr(
-        answer_sources.apps,
+        answer_live.apps,
         "wiki_summary",
         lambda question: {
             "answer": "Paris is the capital of France.",

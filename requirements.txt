@@ -28,3 +28,25 @@ nltk==3.10.3
 # material. Approved on 2026-10-26 in CODE_QUALITY_PLAN.md.
 transformers==5.20.2
 safetensors==0.8.0
+# Byte-level BPE for scratch-trained word models; already installed through
+# transformers, pinned here because Luke calls it directly. Approved on
+# 2026-10-27 in CODE_QUALITY_PLAN.md.
+tokenizers==0.23.2
+# Reads allowlisted web pages through the guarded fetcher and asks the local
+# search instance. Already installed through Hugging Face; pinned here because
+# Luke calls it directly. Approved on 2026-10-28 in CODE_QUALITY_PLAN.md.
+httpx==0.28.1
+# The readable text of a web page, without its navigation or markup. Approved
+# on 2026-10-28 in CODE_QUALITY_PLAN.md.
+trafilatura==2.3.1
+# LoRA adapters for Phase 7: peft adds the adapter layers and saves and reloads
+# them, accelerate is its declared training companion. Approved on 2026-10-29 in
+# CODE_QUALITY_PLAN.md as the compatibility run that proves they train and serve
+# against the installed checkpoint. No app code imports them yet — Phase 7 is not
+# built — so nothing changes in the answer path until it is.
+peft==0.21.2
+accelerate==1.15.0
+# Pulled in by both peft and accelerate, and called directly by accelerate for
+# its device and memory checks; pinned here because it is a hard dependency of
+# both. BSD-3-Clause.
+psutil==7.2.2

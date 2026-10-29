@@ -104,20 +104,62 @@ def test_the_approved_answers_are_part_of_the_training(learner):
 
 
 def test_the_documents_are_part_of_the_training(learner):
-    db = _FakeSession(documents=[("notes.pdf", "The lighthouse stands on the cliff.")])
+    db = _FakeSession(documents=[("notes.pdf", "The lighthouse stands on the cliff.", 0.9)])
 
     materials = materials_service.gather(None, db)
     training = materials_service.training_set(materials)
 
     assert any("lighthouse" in sentence for sentence in training.sentences)
-    assert any("notes.pdf" in instruction for instruction, _ in training.instructions)
+    assert not any("notes" in instruction for instruction, _ in training.instructions), (
+        "a passage is read, not asked for as a filename"
+    )
+    assert not any("lighthouse" in response for _, response in training.instructions), (
+        "a passage is never the answer to a question"
+    )
+    assert training.documents.chunks == 1
+    assert training.documents.kept_chunks == 1
+    assert training.documents.dropped_chunks == 0
+
+
+def test_a_document_chunk_is_cut_into_model_sized_passages(learner):
+    text = " ".join(f"The sea moves slowly today number {index}." for index in range(20))
+    materials = materials_service.collect(None, documents=[("long.pdf", text, 0.5)])
+
+    training = materials_service.training_set(materials)
+    passages = [sentence for sentence in training.sentences if sentence.startswith("The sea moves")]
+
+    assert len(passages) >= 2, "a 140-word chunk is more than one training example"
+    assert all(3 <= len(passage.split()) <= 50 for passage in passages)
+    assert training.documents.tokens == 140
+    assert len(training.documents.texts) == len(passages)
+
+
+def test_quality_decides_which_document_is_kept(learner, monkeypatch):
+    monkeypatch.setattr(materials_service, "MAX_DOCUMENT_TOKENS", 8)
+    materials = materials_service.collect(
+        None,
+        documents=[
+            ("low.pdf", "The low page talks about the river bank.", 0.1),
+            ("high.pdf", "The high page talks about the mountain top.", 0.9),
+        ],
+    )
+
+    training = materials_service.training_set(materials)
+    text = " ".join(training.sentences)
+
+    assert "mountain" in text
+    assert "river" not in text
+    assert training.documents.kept_chunks == 1
+    assert training.documents.dropped_chunks == 1
+    assert training.documents.dropped_passages == 1
+    assert training.documents.budget == 8
 
 
 def test_the_words_of_every_source_reach_the_vocabulary(learner):
     teaching.teach(None, "Q: What is a drum?\nA: A drum is hit with a stick.", "nursery", "Music")
     db = _FakeSession(
         faqs=[("What is a kite?", "A kite is a light frame with a tail.")],
-        documents=[("notes.pdf", "The lighthouse stands on the cliff.")],
+        documents=[("notes.pdf", "The lighthouse stands on the cliff.", 0.9)],
     )
 
     materials = materials_service.gather(None, db)

@@ -9,19 +9,18 @@ model really measured instead of a picture of it.
 from __future__ import annotations
 
 import threading
-from collections import OrderedDict
 from pathlib import Path
 from typing import Any
 
 from app.services.huggingface import store
+from app.services.model_cache import ByteBoundedCache, file_size
 
 ATTENTION_TOKENS = 12
 MAX_ANSWER_TOKENS = 96
 MAX_PREDICT_TOKENS = 64
-MAX_TEACHERS = 1
 
 _LOCK = threading.Lock()
-_CACHE: OrderedDict[str, tuple[float, Teacher]] = OrderedDict()
+_CACHE = ByteBoundedCache()
 
 
 class Teacher:
@@ -147,18 +146,14 @@ def load(tenant_id: int | None, folder: str) -> Teacher | None:
         return None
     stamp = weights.stat().st_mtime
     with _LOCK:
-        cached = _CACHE.get(folder)
-        if cached is not None and cached[0] == stamp:
-            _CACHE.move_to_end(folder)
-            return cached[1]
+        cached = _CACHE.find(folder, stamp)
+        if cached is not None:
+            return cached
     teacher = _read(path)
     if teacher is None:
         return None
     with _LOCK:
-        _CACHE[folder] = (stamp, teacher)
-        _CACHE.move_to_end(folder)
-        while len(_CACHE) > MAX_TEACHERS:
-            _CACHE.popitem(last=False)
+        _CACHE.keep(folder, stamp, teacher, file_size(weights))
     return teacher
 
 
@@ -183,10 +178,10 @@ def forget(folder: str | None = None) -> None:
         if folder is None:
             _CACHE.clear()
         else:
-            _CACHE.pop(folder, None)
+            _CACHE.drop(folder)
 
 
 def loaded() -> int:
-    """How many teachers are loaded, so a test can hold the limit."""
+    """How many teachers are loaded, so a test can hold the memory cap."""
     with _LOCK:
         return len(_CACHE)

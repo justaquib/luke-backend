@@ -5,6 +5,7 @@ chance and a real count, a written sentence, and numbers it measured rather
 than invented.
 """
 
+from app.services.neural.prediction import predict_with_attention
 from app.services.neural.settings import TrainingSettings
 from app.services.neural.tokens import tokenize
 from app.services.neural.words import PUNCTUATION, WordTask
@@ -86,6 +87,20 @@ def test_a_prefix_with_no_known_word_predicts_from_the_start():
     rows = task.predict_next("xyzzy", limit=2)
 
     assert all(row["source"] == "neural" for row in rows)
+
+
+def test_a_prefix_longer_than_the_context_still_predicts():
+    task = _trained()
+    prefix = " ".join(["The cow is an animal"] * 5)
+
+    result = predict_with_attention(task, prefix, limit=3)
+
+    assert result is not None
+    assert len(result["tokens"]) == SMALL["context"]
+    assert result["tokens"][-1] == "animal"
+    assert result["attention"] is not None
+    assert len(result["attention"]) == len(result["tokens"])
+    assert all(row["source"] == "neural" for row in result["next"])
 
 
 def test_a_saved_word_model_can_be_loaded_again(tmp_path):

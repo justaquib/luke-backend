@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
+import logging
 import re
 
 from app.services.language.helpers import _normalize_phrase
 from app.services.language.lessons import all_lesson_cards
+
+logger = logging.getLogger(__name__)
 
 _LESSON_QUESTION_STATEMENT = re.compile(
     r"^(?:what|which|who)\s+is\s+(.+?)\s*\??$",
@@ -61,7 +64,8 @@ def _list_statement_for_word(tenant_id: int | None, word: str) -> str | None:
         return None
     try:
         cards = all_lesson_cards(tenant_id)
-    except Exception:
+    except Exception as error:  # noqa: BLE001 -- the taught lesson-card boundary
+        logger.debug("the lesson sentences could not be read: %s", error)
         return None
     for card in cards:
         match = _LESSON_NAME_LIST.match((card.get("question") or "").strip())

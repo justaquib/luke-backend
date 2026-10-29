@@ -1,8 +1,39 @@
 from datetime import datetime
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, EmailStr
+from pydantic import BaseModel
 
+from app.schemas.accounts import AcceptInviteRequest as AcceptInviteRequest
+from app.schemas.accounts import GoogleAuthRequest as GoogleAuthRequest
+from app.schemas.accounts import InviteCreate as InviteCreate
+from app.schemas.accounts import InviteOut as InviteOut
+from app.schemas.accounts import SystemAdminLogin as SystemAdminLogin
+from app.schemas.accounts import TokenResponse as TokenResponse
+from app.schemas.accounts import UserOut as UserOut
+from app.schemas.assessment import (
+    AssessmentBankOut as AssessmentBankOut,
+)
+from app.schemas.assessment import (
+    AssessmentProfileOut as AssessmentProfileOut,
+)
+from app.schemas.assessment import (
+    AssessmentProfilesOut as AssessmentProfilesOut,
+)
+from app.schemas.assessment import (
+    AssessmentResultOut as AssessmentResultOut,
+)
+from app.schemas.assessment import (
+    AssessmentReviewIn as AssessmentReviewIn,
+)
+from app.schemas.assessment import (
+    AssessmentRunOut as AssessmentRunOut,
+)
+from app.schemas.assessment import (
+    AssessmentStart as AssessmentStart,
+)
+from app.schemas.assessment import (
+    AssessmentStarted as AssessmentStarted,
+)
 from app.schemas.models import (
     HuggingFaceTrainBody as HuggingFaceTrainBody,
 )
@@ -24,6 +55,18 @@ from app.schemas.parenting import (
 from app.schemas.parenting import (
     ParentingTurnBody as ParentingTurnBody,
 )
+from app.schemas.query import (
+    CitationOut as CitationOut,
+)
+from app.schemas.query import (
+    QueryHit as QueryHit,
+)
+from app.schemas.query import (
+    QueryRequest as QueryRequest,
+)
+from app.schemas.query import (
+    QueryResponse as QueryResponse,
+)
 from app.schemas.understanding import (
     ConnectionOut as ConnectionOut,
 )
@@ -32,6 +75,12 @@ from app.schemas.understanding import (
 )
 from app.schemas.understanding import (
     WordReadingOut as WordReadingOut,
+)
+from app.schemas.web import (
+    WebSettingsBody as WebSettingsBody,
+)
+from app.schemas.web import (
+    WebSourceBody as WebSourceBody,
 )
 
 RULE_KINDS = {"instruction", "own_words", "short"}
@@ -46,39 +95,23 @@ class IngestResponse(BaseModel):
     source: str
     chunks: int
     start_id: int | None = None
+    duplicates: dict[str, int] | None = None
 
 
-class QueryRequest(BaseModel):
-    question: str
-    n_results: int = 4
-    apps: dict | None = None
-    location: dict | None = None
-    model: str | None = None
-
-
-class QueryHit(BaseModel):
-    text: str
-    metadata: dict
-    distance: float | None = None
-
-
-class QueryResponse(BaseModel):
-    model_config = ConfigDict(protected_namespaces=())
-
-    question: str
+class IngestJobOut(BaseModel):
+    id: int
     source: str
-    answer: str
-    hits: list[QueryHit]
-    entities: list[dict]
-    pending_id: int | None = None
-    intent: dict | None = None
-    app: dict | None = None
-    disabled_external_sources: list[str] | None = None
-    understanding: QuestionUnderstandingOut | None = None
-    model: str | None = None
-    model_name: str | None = None
-    distance: float | None = None
-    confidence: float | None = None
+    status: str
+    step: str
+    progress: float
+    done: int
+    total: int
+    chunks: int
+    duplicates: dict[str, int]
+    error: str | None = None
+    created_at: str | None = None
+    started_at: str | None = None
+    finished_at: str | None = None
 
 
 class StatsResponse(BaseModel):
@@ -115,6 +148,7 @@ class FaqOut(BaseModel):
 class PendingOut(BaseModel):
     id: int
     question: str
+    note: str | None = None
     occurrences: int
     resolved: bool
     created_at: datetime
@@ -246,68 +280,6 @@ class FeedbackOut(BaseModel):
 
     class Config:
         from_attributes = True
-
-
-class GoogleAuthRequest(BaseModel):
-    id_token: str
-    invite_token: str | None = None
-
-
-class TokenResponse(BaseModel):
-    access_token: str
-    token_type: str = "bearer"  # noqa: S105 -- OAuth token type label, not a secret
-
-
-class UserOut(BaseModel):
-    id: int
-    google_id: str | None
-    email: str
-    name: str
-    picture: str | None = None
-    tenant_id: int | None = None
-    role: str = "user"
-    is_systemadmin: bool = False
-    created_at: datetime
-
-    class Config:
-        from_attributes = True
-
-
-class TenantOut(BaseModel):
-    id: int
-    name: str
-    slug: str
-    created_at: datetime
-
-    class Config:
-        from_attributes = True
-
-
-class InviteCreate(BaseModel):
-    email: EmailStr
-    role: str = "user"
-
-
-class InviteOut(BaseModel):
-    id: int
-    tenant_id: int
-    email: str
-    role: str
-    token: str
-    expires_at: datetime
-    used_at: datetime | None = None
-    created_at: datetime
-
-    class Config:
-        from_attributes = True
-
-
-class SystemAdminLogin(BaseModel):
-    pin: str
-
-
-class AcceptInviteRequest(BaseModel):
-    id_token: str
 
 
 MergePreview.model_rebuild()

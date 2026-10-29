@@ -6,17 +6,14 @@ from fastapi import HTTPException
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from app.core.security import require_tenant_user
 from app.db.database import Intent, User
 from app.schemas import IntentCreate
 from app.services import vector_store
 
 
 def _tenant(user: User, action: str) -> int:
-    if user.is_systemadmin:
-        raise HTTPException(403, f"System admin cannot {action}")
-    if not user.tenant_id:
-        raise HTTPException(403, "User is not assigned to a tenant")
-    return user.tenant_id
+    return require_tenant_user(user, action)
 
 
 def create_intent(user: User, req: IntentCreate, db: Session) -> Intent:
@@ -41,7 +38,7 @@ def list_intents(user: User, db: Session) -> list[Intent]:
     """List intents visible to the current user."""
     statement = select(Intent).order_by(Intent.updated_at.desc())
     if not user.is_systemadmin:
-        statement = statement.where(Intent.tenant_id == user.tenant_id)
+        statement = statement.where(Intent.tenant_id == _tenant(user, "view intents"))
     return list(db.execute(statement).scalars().all())
 
 

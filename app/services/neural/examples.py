@@ -39,6 +39,10 @@ def _group(text: str) -> str:
 
 
 def word_example(task: object, sentence: str) -> Example:
-    """A sentence scored from its first word to its last, for the word model."""
-    sequence = [task.index[START], *_ids(task, tokenize(sentence)), task.index[FINISH]]
+    """A sentence scored from its first token to its last, for the word model."""
+    tokenizer = getattr(task, "tokenizer", None)
+    if tokenizer is not None:
+        sequence = [tokenizer.start_id, *tokenizer.encode(sentence), tokenizer.end_id]
+    else:
+        sequence = [task.index[START], *_ids(task, tokenize(sentence)), task.index[FINISH]]
     return Example(sequence, _group(sentence), difficulty.level_of(sentence))

@@ -175,6 +175,7 @@ def test_the_word_model_and_the_document_search_are_never_invented(monkeypatch):
         "taught",
         "wiki",
         "docs",
+        "foundation",
         "pending",
     ]
     assert all(item["detail"] for item in _connections(events))

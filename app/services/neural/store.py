@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Any
 
 from app.services.brain_paths import brain_dir, tenant_key
+from app.services.model_cache import file_size
 
 WORDS_FILE = "words-{key}.pt"
 RUNS_FILE = "runs-{key}.json"
@@ -37,6 +38,11 @@ def mtime(path: Path) -> float | None:
 def stamp(tenant_id: int | None) -> float | None:
     """The word model's change time, so the engine cache can follow it."""
     return mtime(words_path(tenant_id))
+
+
+def words_size(tenant_id: int | None) -> int:
+    """How many bytes the word model takes, so the cache can hold its cap."""
+    return file_size(words_path(tenant_id))
 
 
 def load_runs(tenant_id: int | None) -> list[dict[str, Any]]:

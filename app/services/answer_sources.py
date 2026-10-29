@@ -10,17 +10,25 @@ from __future__ import annotations
 import logging
 from dataclasses import dataclass
 
+from sqlalchemy.orm import Session
+
 from app.config import settings
 from app.schemas import QueryHit, QueryRequest, QueryResponse
-from app.services import apps, vector_store
+from app.services import vector_store
 from app.services.connections import Connection
+from app.services.foundation import answers as foundation_answers
+from app.services.foundation.identity import FoundationError as FoundationFailure
 from app.services.language import answering
+from app.services.retrieval import similarity_from_distance
+from app.services.web import step as web_evidence
 
 logger = logging.getLogger(__name__)
 
 # A match beyond the exact threshold is only a guess, so the answer says so
 # until a trainer confirms it.
 NOT_SURE_NOTE = "I am not sure about the answer to “{0}”. A trainer can check it."
+
+RETRIEVAL_OFF = "Retrieval is off for this question."
 
 
 @dataclass(frozen=True)
@@ -32,20 +40,25 @@ class SourceStep:
     connections: tuple[Connection, ...] = ()
 
 
+def _retrieval_off(source: str) -> SourceStep:
+    """The step that never reads saved material, so a run stays unaided."""
+    return SourceStep(source, None, (Connection(source, "skipped", RETRIEVAL_OFF),))
+
+
 def _flag_missing_confidence(answer: str, matched_question: str) -> str:
     """The loosely matched answer, with a word that it is a guess."""
     subject = matched_question.strip() or "this question"
     return f"{answer.rstrip('. ')}. {NOT_SURE_NOTE.format(subject)}"
 
 
-def _confidence(distance: float | None) -> float | None:
-    """Cosine similarity, the chance the vector search gives the match."""
-    if distance is None:
-        return None
-    return round(max(0.0, min(1.0, 1.0 - float(distance))), 4)
+def _confidence(distance: float | None, collection: str) -> float | None:
+    """The similarity the vector search gives the match, in its real space."""
+    return similarity_from_distance(distance, vector_store.collection_space(collection))
 
 
 def _faq_step(req: QueryRequest, entities: list, tenant_id: int | None) -> SourceStep:
+    if not req.retrieval:
+        return _retrieval_off("faq")
     hits = vector_store.search_faq(req.question, n_results=1, tenant_id=tenant_id)
     if not hits:
         return SourceStep(
@@ -76,7 +89,7 @@ def _faq_step(req: QueryRequest, entities: list, tenant_id: int | None) -> Sourc
                 ],
                 entities=entities,
                 distance=distance,
-                confidence=_confidence(distance),
+                confidence=_confidence(distance, settings.chroma_faq_collection),
             ),
             (
                 Connection(
@@ -129,11 +142,13 @@ def _intent_response(req: QueryRequest, entities: list, intent: dict) -> QueryRe
         entities=entities,
         intent=intent,
         distance=intent["distance"],
-        confidence=_confidence(intent["distance"]),
+        confidence=_confidence(intent["distance"], settings.chroma_intents_collection),
     )
 
 
 def _loose_intent_step(req: QueryRequest, entities: list, tenant_id: int | None) -> SourceStep:
+    if not req.retrieval:
+        return _retrieval_off("intent")
     candidate = _loose_candidate(req, tenant_id)
     if candidate is None:
         return SourceStep(
@@ -173,6 +188,8 @@ def _loose_intent_step(req: QueryRequest, entities: list, tenant_id: int | None)
 
 
 def _taught_step(req: QueryRequest, entities: list, tenant_id: int | None) -> SourceStep:
+    if not req.retrieval:
+        return _retrieval_off("taught")
     try:
         taught = answering.answer_from_curriculum(req.question, tenant_id)
     except (OSError, ValueError, RuntimeError) as error:
@@ -222,88 +239,9 @@ def _taught_step(req: QueryRequest, entities: list, tenant_id: int | None) -> So
     )
 
 
-def _weather_step(
-    req: QueryRequest,
-    entities: list,
-    app_settings: dict,
-    location: dict,
-    detected: list[str],
-) -> SourceStep:
-    if "weather" not in detected:
-        return SourceStep("weather", None)
-    if not app_settings.get("weather"):
-        return SourceStep(
-            "weather",
-            None,
-            (Connection("weather", "skipped", "Weather is not enabled in Settings."),),
-        )
-    result = apps.weather_for(req.question, lat=location.get("lat"), lon=location.get("lon"))
-    if not result:
-        return SourceStep(
-            "weather",
-            None,
-            (Connection("weather", "miss", "No live weather answer was found."),),
-        )
-    return SourceStep(
-        "weather",
-        QueryResponse(
-            question=req.question,
-            source="weather",
-            answer=result["answer"],
-            hits=[],
-            entities=entities,
-            app=result["payload"],
-        ),
-        (
-            Connection(
-                "weather",
-                "match",
-                "A live weather answer was found for the place asked about.",
-            ),
-        ),
-    )
-
-
-def _wiki_step(
-    req: QueryRequest, entities: list, app_settings: dict, detected: list[str]
-) -> SourceStep:
-    if "wiki" not in detected:
-        return SourceStep("wiki", None)
-    if not app_settings.get("wiki"):
-        return SourceStep(
-            "wiki",
-            None,
-            (Connection("wiki", "skipped", "Wikipedia is not enabled in Settings."),),
-        )
-    result = apps.wiki_summary(req.question)
-    if not result:
-        return SourceStep(
-            "wiki",
-            None,
-            (Connection("wiki", "miss", "No matching Wikipedia page was found."),),
-        )
-    title = result["payload"].get("title", req.question)
-    return SourceStep(
-        "wiki",
-        QueryResponse(
-            question=req.question,
-            source="wiki",
-            answer=result["answer"],
-            hits=[
-                QueryHit(
-                    text=title,
-                    metadata={"source": "wiki", "url": result["payload"].get("url")},
-                    distance=None,
-                )
-            ],
-            entities=entities,
-            app=result["payload"],
-        ),
-        (Connection("wiki", "match", f"Wikipedia has a page for “{title}”.", str(title)),),
-    )
-
-
 def _docs_step(req: QueryRequest, entities: list, tenant_id: int | None) -> SourceStep:
+    if not req.retrieval:
+        return _retrieval_off("docs")
     hits = vector_store.query(req.question, n_results=req.n_results, tenant_id=tenant_id)
     if not hits:
         return SourceStep(
@@ -337,32 +275,50 @@ def _docs_step(req: QueryRequest, entities: list, tenant_id: int | None) -> Sour
             hits=[QueryHit(**hit) for hit in hits],
             entities=entities,
             distance=distance,
-            confidence=_confidence(distance),
+            confidence=_confidence(distance, settings.chroma_collection),
         ),
         (Connection("docs", "match", detail),),
     )
 
 
-def _disabled_sources(detected: list[str], app_settings: dict) -> list[str]:
-    disabled: list[str] = []
-    if "weather" in detected and not app_settings.get("weather"):
-        disabled.append("weather")
-    if "wiki" in detected and not app_settings.get("wiki"):
-        disabled.append("wiki")
-    return disabled
+def _compose_step(
+    req: QueryRequest,
+    entities: list,
+    tenant_id: int | None,
+    model_name: str,
+) -> SourceStep:
+    """Luke writes from numbered passages, and the verifier decides if it may."""
+    if not req.retrieval:
+        return _retrieval_off("foundation")
+    if not foundation_answers.installed():
+        return SourceStep(
+            "foundation",
+            None,
+            (foundation_answers.missing_connection(),),
+        )
+    hits = vector_store.query(req.question, n_results=req.n_results, tenant_id=tenant_id)
+    usable = [hit for hit in hits if hit.get("distance") is None or float(hit["distance"]) < 1]
+    if not usable:
+        return SourceStep(
+            "foundation",
+            None,
+            (Connection("foundation", "miss", "No passage was close enough to compose from."),),
+        )
+    try:
+        composed = foundation_answers.compose(req, tenant_id, entities, model_name, usable)
+    except FoundationFailure as error:
+        return SourceStep("foundation", None, (Connection("foundation", "fail", str(error)),))
+    if composed is None:
+        return SourceStep(
+            "foundation",
+            None,
+            (Connection("foundation", "miss", "The passages could not be numbered."),),
+        )
+    response, connection = composed
+    return SourceStep("foundation", response, (connection,))
 
 
-def _disabled_response(req: QueryRequest, entities: list, disabled: list[str]) -> QueryResponse:
-    names = ["Weather" if item == "weather" else "Wikipedia" for item in disabled]
-    joined = " and ".join(names)
-    return QueryResponse(
-        question=req.question,
-        source="pending",
-        answer=(
-            "I don't have a trained answer for that yet. "
-            f"Enable {joined} in Settings to get live answers from your location or the web."
-        ),
-        hits=[],
-        entities=entities,
-        disabled_external_sources=disabled,
-    )
+def _web_step(req: QueryRequest, entities: list, tenant_id: int | None, db: Session) -> SourceStep:
+    """A trusted page, quoted with its address and the date it was fetched."""
+    response, connections = web_evidence.web_answer(req, entities, tenant_id, db)
+    return SourceStep("web", response, connections)

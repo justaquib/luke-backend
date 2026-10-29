@@ -22,7 +22,7 @@ from app.services.neural.model import TinyTransformer
 
 logger = logging.getLogger(__name__)
 
-SCHEMA = 2
+SCHEMA = 3
 
 # The keys a checkpoint owns; everything else is a task's own extra.
 RESERVED = frozenset(
@@ -33,6 +33,7 @@ RESERVED = frozenset(
         "config",
         "pad_id",
         "vocabulary",
+        "tokenizer",
         "state",
         "corpus",
         "torch",
@@ -82,6 +83,7 @@ class Checkpoint:
     config: dict[str, Any]
     metrics: dict[str, Any]
     corpus: dict[str, Any] = field(default_factory=dict)
+    tokenizer: dict[str, Any] = field(default_factory=dict)
     extras: dict[str, Any] = field(default_factory=dict)
 
     def payload(self) -> dict[str, Any]:
@@ -94,6 +96,7 @@ class Checkpoint:
             "config": self.config,
             "pad_id": self.config.get("pad_id"),
             "vocabulary": list(self.vocabulary),
+            "tokenizer": dict(self.tokenizer),
             "state": self.model.state_dict(),
             "corpus": dict(self.corpus),
             "torch": str(torch.__version__),
@@ -112,6 +115,7 @@ class Stored:
     task: str
     config: dict[str, Any]
     vocabulary: list[str]
+    tokenizer: dict[str, Any]
     state: dict[str, Any]
     metrics: dict[str, Any]
     corpus: dict[str, Any]
@@ -153,7 +157,7 @@ def load(path: Path) -> Stored | None:
         return None
     try:
         data = torch.load(path, map_location="cpu", weights_only=True, mmap=True)
-    except Exception as error:
+    except Exception as error:  # noqa: BLE001 -- the checkpoint read boundary
         logger.warning("The checkpoint %s could not be read: %s", path, error)
         return None
     if not isinstance(data, dict) or "state" not in data:
@@ -172,6 +176,7 @@ def load(path: Path) -> Stored | None:
         task=str(data.get("task", "answer")),
         config=dict(data.get("config") or {}),
         vocabulary=[str(token) for token in data.get("vocabulary", [])],
+        tokenizer=dict(data.get("tokenizer") or {}),
         state=data["state"],
         metrics=metrics,
         corpus=dict(data.get("corpus") or {}),

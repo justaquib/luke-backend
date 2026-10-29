@@ -1,5 +1,27 @@
 [
   {
+    "at": 1793187661.492357,
+    "task": "words",
+    "loss": 1.122,
+    "validation_loss": 3.1265,
+    "passes": 5,
+    "stop_reason": "early",
+    "steps": 5600,
+    "seconds": 153.3,
+    "tokenizer_kind": "word",
+    "tokenizer_id": "f2788e81b6fb8747bc6ef53f2e5e244a5767f72484ea77e29a02596102779f71"
+  },
+  {
+    "at": 1793089415.539454,
+    "task": "words",
+    "loss": 0.8441,
+    "validation_loss": 2.749,
+    "passes": 3,
+    "stop_reason": "early",
+    "steps": 3400,
+    "seconds": 51.3
+  },
+  {
     "at": 1792957583.0964942,
     "task": "words",
     "loss": 0.8578,
@@ -28,25 +50,5 @@
     "stop_reason": "early",
     "steps": 1400,
     "seconds": 76.1
-  },
-  {
-    "at": 1792916694.9108841,
-    "task": "words",
-    "loss": 0.8529,
-    "validation_loss": 1.7649,
-    "passes": 4,
-    "stop_reason": "early",
-    "steps": 4500,
-    "seconds": 195.3
-  },
-  {
-    "at": 1792916490.282331,
-    "task": "answer",
-    "loss": 4.5635,
-    "validation_loss": 5.4435,
-    "passes": 0,
-    "stop_reason": "early",
-    "steps": 1100,
-    "seconds": 85.0
   }
 ]

@@ -1,4 +1,4 @@
-# Assistance — self-trained RAG API
+# Luke Lab — self-trained RAG API
 
 A small retrieval-augmented chatbot backend you can train on your own documents.
 

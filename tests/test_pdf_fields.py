@@ -9,7 +9,7 @@ from app.core.pdf_fields import (
     answer_from_document,
     faq_field_subjects_compatible,
 )
-from app.services import vector_store
+from app.services import chunk_vectors, vector_store
 
 
 class PdfFieldAnswerTests(unittest.TestCase):
@@ -119,22 +119,22 @@ class PdfFieldAnswerTests(unittest.TestCase):
             "Reservation code: AB-2048",
         )
 
-    @patch("app.services.vector_store.get_collection")
+    @patch("app.services.chunk_vectors.get_collection")
     def test_pdf_fields_are_saved_as_chunk_metadata(self, get_collection):
         collection = Mock()
         get_collection.return_value = collection
-        vector_store.add_chunks(
+        chunk_vectors.add_chunks(
             "voucher.pdf",
             ["Voucher text"],
             ["voucher-1"],
             tenant_id=7,
-            notes=vector_store.ChunkNotes(
+            notes=chunk_vectors.ChunkNotes(
                 page_numbers=[1],
                 pdf_fields=[{"customer_name": "Avery SamplePerson"}],
             ),
         )
 
-        metadata = collection.add.call_args.kwargs["metadatas"][0]
+        metadata = collection.upsert.call_args.kwargs["metadatas"][0]
         self.assertEqual(metadata["source"], "voucher.pdf")
         self.assertEqual(metadata["tenant_id"], "7")
         self.assertEqual(metadata["page_number"], 1)
@@ -143,23 +143,26 @@ class PdfFieldAnswerTests(unittest.TestCase):
         )
 
     @patch("app.services.vector_store.get_collection")
-    def test_chunk_search_reranks_semantic_candidates_with_question_terms(self, get_collection):
+    def test_chunk_search_fuses_semantic_and_word_matches(self, get_collection):
+        documents = [
+            "Ferry schedule and island transfer details.",
+            "Confirmation voucher. CUSTOMER NAME: Avery SamplePerson",
+        ]
+        metadatas = [
+            {"source": "travel.pdf", "page_number": 1},
+            {"source": "travel.pdf", "page_number": 2},
+        ]
         collection = Mock()
         collection.count.return_value = 2
-        collection.get.return_value = {"ids": ["semantic", "lexical"]}
+        collection.get.return_value = {
+            "ids": ["semantic", "lexical"],
+            "documents": documents,
+            "metadatas": metadatas,
+        }
         collection.query.return_value = {
-            "documents": [
-                [
-                    "Ferry schedule and island transfer details.",
-                    "Confirmation voucher. CUSTOMER NAME: Avery SamplePerson",
-                ]
-            ],
-            "metadatas": [
-                [
-                    {"source": "travel.pdf", "page_number": 1},
-                    {"source": "travel.pdf", "page_number": 2},
-                ]
-            ],
+            "ids": [["semantic", "lexical"]],
+            "documents": [documents],
+            "metadatas": [metadatas],
             "distances": [[0.2, 1.0]],
         }
         get_collection.return_value = collection
@@ -171,7 +174,7 @@ class PdfFieldAnswerTests(unittest.TestCase):
         self.assertEqual(len(hits), 1)
         self.assertIn("CUSTOMER NAME: Avery SamplePerson", hits[0]["text"])
         self.assertEqual(hits[0]["metadata"]["page_number"], 2)
-        self.assertEqual(collection.query.call_args.kwargs["n_results"], 2)
+        self.assertEqual(collection.query.call_args.kwargs["n_results"], 8)
 
     def test_missing_or_conflicting_field_does_not_guess(self):
         missing = self.make_hit({"customer_name": ""}, "CUSTOMER NAME AGENT MOBILE NO EMAIL")

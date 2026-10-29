@@ -1,1 +1,1 @@
-{"started": 1792957482.925121, "stages": {"words": "done", "emotion": "done", "intent": "done", "feedback": "done"}, "steps_done": 3564, "steps_total": 10320, "eta_seconds": null, "loss": 0.6585, "finished": 1792957824.679167, "seconds": 341.8, "stop_reason": "early"}
+{"started": 1793187506.7681239, "stages": {"words": "done", "emotion": "done", "intent": "done", "feedback": "done"}, "steps_done": 5573, "steps_total": 8688, "eta_seconds": null, "loss": 1.0188, "finished": 1793187690.7173371, "seconds": 183.9, "stop_reason": "early"}

@@ -12,6 +12,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.config import settings
+from app.core.workspace import current_workspace
 from app.db.database import SessionLocal, User, get_session
 
 
@@ -64,28 +65,20 @@ def get_bearer_user(authorization: str = Header(""), db: Session = Depends(get_s
     return user
 
 
-def tenant_id_of(user: User) -> int | None:
-    """The tenant whose lessons and answers this user may read and teach."""
-    return user.tenant_id
+def tenant_id_of(user: User) -> int:
+    """The workspace whose lessons and answers this user may read and teach."""
+    return current_workspace()
 
 
 def require_tenant_user(user: User, action: str) -> int:
-    """Return the tenant id or fail when the user cannot perform the action."""
-    if user.is_systemadmin:
-        # The system administrator has no tenant of their own and looks after
-        # every tenant, so they may perform cross-tenant governance actions.
-        return user.tenant_id or 0
-    if not user.tenant_id:
-        raise HTTPException(403, "User is not assigned to a tenant")
-    return user.tenant_id
+    """Return the workspace for an action a signed-in person may perform."""
+    return current_workspace()
 
 
 def require_admin(user: User, action: str) -> int:
-    """Return the tenant id for an administrator-only action."""
+    """Return the workspace for an administrator-only action."""
     if user.is_systemadmin:
         raise HTTPException(403, f"System admin cannot {action}")
-    if not user.tenant_id:
-        raise HTTPException(403, "User is not assigned to a tenant")
     if user.role not in ("superadmin", "admin"):
         raise HTTPException(403, f"Only admins can {action}")
-    return user.tenant_id
+    return current_workspace()

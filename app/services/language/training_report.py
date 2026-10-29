@@ -100,6 +100,7 @@ def source_report(
             "words": sum(entry["words"] for entry in sources),
             "sentences": len(training.sentences) if training else 0,
         },
+        "documents": training.documents.as_dict() if training else None,
         "model": words or {},
     }
 

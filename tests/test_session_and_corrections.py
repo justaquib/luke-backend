@@ -11,6 +11,7 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
 from app.core.security import get_bearer_user
+from app.core.workspace import CANONICAL_WORKSPACE
 from app.db.database import User, get_session
 from app.routers import language_brain, language_model
 from app.schemas import QueryRequest
@@ -131,7 +132,15 @@ def test_the_chat_gives_the_same_lesson_answer_as_the_learner(no_index, monkeypa
     runtime._CACHE.clear()
 
 
-def test_a_user_without_a_tenant_is_turned_away(no_index):
+def test_a_user_without_a_tenant_uses_the_one_workspace(no_index, monkeypatch):
+    """Luke Lab has one workspace, so nobody is turned away for lacking a tenant."""
+    seen: list[int | None] = []
+
+    def _answer(request, db, tenant_id, default_response):
+        seen.append(tenant_id)
+        return _default_response(db, request, [], None)
+
+    monkeypatch.setattr(query_service.answer_flow, "answer_for_tenant", _answer)
     user = User(
         id=2,
         email="nobody@example.com",
@@ -140,16 +149,16 @@ def test_a_user_without_a_tenant_is_turned_away(no_index):
         tenant_id=None,
     )
 
-    with pytest.raises(Exception) as error:
-        query_service.answer_question(
-            QueryRequest(question="What are the rudiments?"),
-            "Bearer token",
-            _FakeSession(),
-            lambda authorization, db: user,
-            _default_response,
-        )
+    response = query_service.answer_question(
+        QueryRequest(question="What are the rudiments?"),
+        "Bearer token",
+        _FakeSession(),
+        lambda authorization, db: user,
+        _default_response,
+    )
 
-    assert "tenant" in str(error.value)
+    assert seen == [CANONICAL_WORKSPACE]
+    assert response.answer
 
 
 @pytest.fixture()

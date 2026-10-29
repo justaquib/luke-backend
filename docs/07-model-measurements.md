@@ -161,6 +161,27 @@ it: held-out **3.1008** against **7.3601** chance, next-word accuracy
 positions at 0.3247 top-1 accuracy and 55.42 perplexity. The code did not
 change; the corpus did, so this row belongs to its own corpus.
 
+## The passages the training keeps (measured 2026-10-27)
+
+The training bridge cuts each stored chunk into 3–50-word passages and keeps
+them best quality first inside a 100,000-word budget
+(`app/services/language/document_passages.py`). Read against tenant 0's real
+material with `training_materials.gather(0, db)` and `document_passages(...)`
+on this machine; nothing was trained or saved.
+
+| The passage budget | Measured |
+| --- | --- |
+| Document chunks | **387** |
+| Chunks kept / dropped | **387 / 0** |
+| Passages kept | **1,314** |
+| Passages dropped at the budget | **0** |
+| Words in the kept passages | **53,891** of a **100,000** budget |
+
+This corpus uses just over half its passage budget, so nothing is dropped and
+the ordering by quality has nothing to exclude here. The material the bridge
+reads in total is **1,697 lines**: lesson 500, starter lesson 533, conversation
+29, approved answer 24, correction 210, document 387, word 1, sentence 13.
+
 ## Reading, connecting and finishing (2026-10-25)
 
 Measured on tenant 0's real material (1,032 lesson cards) with
@@ -338,6 +359,115 @@ The zip holds only the administrator's own rows and files (`tenant_id IS NULL`);
 a tenant's package is built from that tenant's rows and files alone. That scoping
 is proved in `tests/test_language_export.py`, not assumed.
 
+## The package, format 2 (measured 2026-10-27)
+
+`bundle.preview` and `bundle.build` were read against tenant 0 on this machine,
+and the slim zip was then dry-run through `restore.import_package(0, db, ...,
+dry_run=True)`. The dry run checks the schema, every file hash, the counts and
+the local references and stops before touching a row, file or vector, so
+nothing in the workspace moved for these rows.
+
+| The package | Measured |
+| --- | --- |
+| Preview, full | **41** files, **1,019,363,363 bytes** |
+| Preview, slim | **32** files, **19,764,148 bytes** |
+| Full zip | `luke-0-2026-10-27.zip`, **1,009,100,162 bytes**, built in **2.11 s** |
+| Slim zip | `luke-0-2026-10-27-slim.zip`, **17,230,663 bytes**, built in **0.40 s** |
+| Base checkpoint in the full package | **9** files, **999,599,334 bytes** — Luke 0.0.1, Apache-2.0, weight SHA-256 recorded |
+| Dry run of the slim zip | **0.71 s**; **32** files / **19,764,148 bytes** checked; `replace_required: true` against this non-empty workspace |
+| Material lines in the manifest | **1,697**, as in the passage section above |
+| Rows in the manifest | documents 387, FAQs 24, unresolved pending 16 of 21, feedback 35, uploads 0, intents 0 |
+| Derived counts | 1,314 passages, 5 checkpoints, 4 tokenizers, 4 raw files |
+
+The full zip is almost entirely the base checkpoint: 999.6 MB of the 1,009.1 MB
+zip is `weights/base/`, and the workspace's own material is the 17.2 MB the
+slim zip carries. Both modes are built from the same state, so the difference
+between them is the base weights and nothing else.
+
+The first real dry run failed with `A Feedback row is missing question.`:
+**11 of the workspace's 35 ratings** were recorded against an answer whose
+question the app did not keep, so their `question` column is empty. The app
+stores those rows, so the package must carry them; the restore now writes them
+back with an empty question instead of refusing the whole package, and
+`tests/test_package_import.py::test_feedback_without_a_question_is_exported_and_restored`
+covers both the empty value and a line written without the column at all.
+
+## Rebuilding the index in a cosine space (measured 2026-10-27)
+
+The collections were rebuilt from Postgres with cosine space, HNSW settings
+M 16 / construction 200 / search 100 and UUID5 ids, verified against the
+database, then the old collections were deleted and the store vacuumed. The
+numbers are what `backups/index-rebuild-20261027-230714/report.json` recorded
+during the run.
+
+| The rebuild | Measured |
+| --- | --- |
+| Collections before | 387 documents, 24 FAQs, 16 intents, all in Chroma's default `l2` space |
+| Store before → after | 20 files / **287,171,593 bytes** → 32 files / **244,206,773 bytes** |
+| Bytes saved by the rebuild | **42,964,820** |
+| Vacuum | **284,278,784 → 232,390,656 bytes**, **51,888,128 bytes** saved |
+| Collections after | 387 / 24 / 16, `hnsw:space` cosine, M 16, construction 200, search 100 |
+| Verification before the swap | FAQs and intents found their sample at rank 1; the document sample — a chunk's first 12 words, not a question — did not return in the top 5 |
+| Verification after the swap | all three collections returned their sample at rank 1 |
+| Same query's similarity | **0.8** read through the old `l2` label, **0.6** in the new cosine space |
+
+The old store was smaller in file count but larger in bytes because Chroma's
+`l2` segments had not been compacted; the rebuild wrote a smaller store and the
+vacuum compacted it again. The two savings are measured against different
+snapshots (the rebuild against the pre-rebuild directory, the vacuum against
+the store as the run found it), so they are reported separately and not added
+into one total. The document sample is the one check that read `ok: false`
+before the swap: its query was the first words of the chunk ("By T . Albert
+Illustrated by…"), which is a caption rather than a question, and the check was
+rerun against the canonical collections with the same sample, which returned
+at rank 1.
+
+## Reciprocal rank fusion (measured 2026-10-27)
+
+The app now fuses the semantic and lexical rankings by reciprocal rank
+(`fuse_rankings`, k = 60) instead of the weighted sum the earlier comparison
+used. Re-run against the same 24 question/answer pairs and the same in-memory
+embeddings, on the rebuilt index:
+`.venv/bin/python scripts/measure_retrieval.py --source 0/React_JavaScript_NextJS_Interview_QA_Guide.pdf`.
+
+| Measurement | Semantic only | Fused by reciprocal rank |
+| --- | --- | --- |
+| Top-1 | 22 of 24 | **23 of 24** |
+| Top-4 | 23 of 24 | **23 of 24** |
+| Chunks / open boundaries | 47 / **0** | 47 / **0** |
+| Answers wholly inside one chunk | **24 of 24** | **24 of 24** |
+
+The old splitter's chunks are no longer in the index after the rebuild, so this
+run reports **0** old chunks and the old/new columns of the earlier table
+cannot be reproduced; those rows belong to their own index and are kept as
+history. Top-4 fused reads 23 of 24 here where the earlier weighted run read
+24 of 24 — a different fusion rule on a rebuilt index, so the difference is
+reported rather than smoothed over.
+
+## The FAQ and intent thresholds (measured 2026-10-27)
+
+`scripts/calibrate_thresholds.py` reads every rating the workspace holds
+against its current FAQs and prints the distances the labelled rows support.
+It only chooses a threshold when at least 3 positives and 3 negatives exist,
+and says so when they do not.
+
+| The thresholds | Measured |
+| --- | --- |
+| FAQs / feedback rows read | **24 / 35** |
+| Current FAQ match threshold | **0.28** |
+| Current intent match threshold | **0.36** |
+| FAQ positives / negatives | **1 / 17** |
+| Distance the FAQ rows suggest | **0.223** (accuracy 1.0, margin 0.4455) |
+| Intent rows that support a threshold | **0** disliked answers |
+| Thresholds changed | **none** — the script reported `enough: false` for both |
+
+The single positive is closer than every one of the 17 negatives, the nearest
+of which sits at 0.4455, and the midpoint the script would choose is 0.223.
+One labelled example is not a measurement of a threshold, so the value stays at
+the 0.28 production already uses and the midpoint is reported only as what the
+evidence holds. The intent threshold has no disliked answer to read at all.
+
+
 ## Retrieval: chunking and hybrid search
 
 Measured on the uploaded `React_JavaScript_NextJS_Interview_QA_Guide.pdf`,
@@ -361,6 +491,55 @@ sixteen chunk edges cut an answer in half, so no embedding of that chunk could
 hold the whole answer. The new chunker starts a question on its own chunk and
 only overlaps whole sentences, which is why the answerable set goes from 21 to
 24 and top-4 hybrid reaches 24 of 24.
+
+## The similarity label (measured 2026-10-27)
+
+Read from the persisted Chroma collections: `docs` 387 vectors, `faq` 12,
+`intents` 16, each with no `hnsw:space` metadata, which is Chroma's `l2`
+default. A squared L2 distance of `d` is now reported as similarity `1 - d/2`;
+a cosine space would be `1 - d`. Before this change every distance was read as
+cosine, which reported a lower similarity than the stored distance supports.
+
+No threshold was moved with the label. The numbers the chat shows and the
+thresholds that gate an answer stay separate, and recalibrating them belongs to
+the Phase 2 index rebuild where the collections are rebuilt with a declared
+space.
+
+## The foundation checkpoint — Luke 0.0.1 (measured 2026-10-27)
+
+`scripts/measure_foundation.py` loads the installed checkpoint through the same
+loader the app uses and reads every number below from that run. The checkpoint
+is pinned, read-only and verified against a recorded hash; nothing in this
+section was written by Luke, and no weight was changed.
+
+| Item | Value |
+| --- | --- |
+| Model | Luke 0.0.1 |
+| Base model | `Qwen/Qwen2.5-0.5B-Instruct` |
+| Revision | `7ae557604adf67be50417f59c2c2f167def9a775` |
+| Licence | Apache-2.0 |
+| Parameters | 494,032,768 |
+| Context limit | 32,768 tokens |
+| Weights | BF16, 988,097,824 bytes (942.3 MB) |
+| Weight SHA-256 | `fdf756fa7fcbe7404d5c60e26bff1a0c8b8aa1f72ced49e7dd0210fe288fb7fe` |
+| Device | mps (float16); CPU fallback is float32 |
+| Cold load | 7.64 s |
+| One fixed prompt | 75 new tokens in 2.986 s = **25.117 tokens/second**, stopped on EOS |
+| Peak resident memory | 1,931,182,080 bytes (1,841.7 MB), after load and two answers |
+| Held-out perplexity | **7.272** on a 99-token general-text sample (water cycle) that is not taught |
+| Streaming | first piece after 0.086 s, 35 pieces, 1.386 s total, greedy; the prompt is not echoed |
+
+The prompt was "Explain in three sentences why the sky looks blue during the
+day." and the answer was three grammatical sentences about scattering. The
+streaming check asked for a colour in one short sentence and received one.
+Speed is measured on this machine (Apple silicon, MPS) and will differ
+elsewhere; memory is the process peak, not the checkpoint's file size.
+
+The checkpoint is a writer of last resort, not a source of knowledge. A taught
+answer always wins; when nothing is taught the answer is labelled written and
+unverified, carries no citation, and is never stored as a lesson, FAQ or
+training pair. That boundary is what keeps Luke 0.0.1 lightweight: the base
+model adds wording, not garbage knowledge.
 
 ## What the model does with what it knows
 
@@ -415,6 +594,58 @@ own rows below the table, and in the section that follows it.
 | Reading before answering (`nlu/`, `answer_flow.py`, `answer_streams.py`) | the question went straight to retrieval and one typing bubble hid every step until the whole answer arrived | the question is read (12 probe questions: 63 words, 24 meanings, 21 synonym sets), then each source reports what it found or did not, and the JSON path and the stream consume the same events; nothing shown is invented by the page |
 | Synonym-aware lesson fallback (`language/fallback.py`) | a definition question that named no lesson title went to the dictionary even when a taught lesson answered the same idea in other words | WordNet synonyms of the question word are tried against the allowed lessons; a probe set of 22 real lessons reached 5 (22.73%) and picked a **different** lesson in 0; the rest stay on the dictionary. The approved plan scoped this to questions with *no* dictionary entry, but that state cannot occur: the entry lookup and the synonym expansion share the same WordNet gate, so a question without an entry has no synonyms either (777 lesson-title words measured: 751 entries, 26 with no entry and no synonyms). The fallback therefore runs on every definition question and overrides the dictionary only when exactly one lesson is reached and it shares a stemmed key word with the question |
 | Answer finishing (`language/finishing.py`) | a lowercase taught answer with no full stop was served exactly as stored | outer whitespace trimmed, first alphabetic character capitalized, and a full stop added only when the text ends in a letter or digit; no word is changed. Across 1,032 stored answers 1,031 already read as sentences, 1 changed (it gained its full stop), and all 1,032 are idempotent |
+| Foundation checkpoint (`foundation/`, chat generation) | the chat served only taught material; the 606K-parameter word model was the only writer and was not competent | the pinned Qwen2.5-0.5B-Instruct checkpoint writes only when no taught answer exists: 75 tokens in 2.986 s (25.117 tok/s), 7.272 perplexity on held-out prose, 1,931,182,080 bytes peak. The checkpoint is read-only, its answer is labelled written and unverified, carries no citation, and is never stored as knowledge — taught answers still win |
+| Conversation expressions (`language/expressions.py`, `/dashboard/expressions`) | opening and closing lines were fixed in code and only four built-in small-talk pairs reached the answer path | the trainer teaches any wording under open/close/pause/resume (whole-message match), a taught expression is answered before built-in small talk, and the pairs also join the training material |
+| Scratch tokenizer (`neural/tokenizer/`, checkpoint schema 3) | one word-level vocabulary; a checkpoint recorded no tokenizer, and there was no subword path | a tokenizer belongs to the weights it trained with: the word adapter keeps every legacy id, byte-level BPE is available as an opt-in, artifacts are content-addressed and verified by hash, and a mismatch is refused. **Measured (same split, 600 steps): word 1.3298 bits/char at 620,416 parameters; BPE 1.4807 at 888,704** — the word tokenizer stays the default and BPE is not promoted |
+| Cosine threshold calibration (`config.py`, `.env`, `scripts/calibrate_thresholds.py`) | the calibrated values in `config.py` were overridden by `.env`, so the old L2 limits `0.55`/`0.75` were applied to cosine distances. The nearest saved answer to "Write a short poem about the rain." was the Twinkle poem at **0.5339**, inside the old exact limit while the taught rain poem existed | `0.28` exact and `0.36` loose, both below the lowest measured negative (`0.4455`) and the calibration's best split (`0.223`, accuracy 1.0, 1 positive / 17 negatives). The rain regression (`tests/test_rain_regression.py`) reads **2 of 9 failed before, 9 of 9 passed after**; exact, paraphrase and partial-phrase wordings all serve the whole taught poem, and a question with no lesson is written and labelled `generated` |
+
+## The scratch tokenizer experiment (2026-10-27)
+
+`scripts/measure_tokenizer.py`, tenant 0, seed 7. The corpus is the material
+the word model trains from: 2,861 sentences, 2,425 kept, split by whole groups
+into 2,183 training and 242 held-out sentences (136,477 and 14,613
+characters). A BPE vocabulary is built from the training side only; every model
+row trained with the same 600 steps, width 128, 2 layers, 4 heads, context 64
+and learning rate 5e-4. Bits per character = held-out nats per token × held-out
+tokens per character ÷ ln 2, the only figure comparable across vocabularies.
+
+| Tokenizer | Vocabulary | Held-out loss | Bits/char | Tokens/char | Accuracy | Parameters | Embedding parameters | Tokenizer artifact | Checkpoint |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Word (baseline) | 1,683 | 3.8539 | **1.3298** | 0.2392 | 0.3761 | 620,416 | 215,424 | none | 2,529,035 B |
+| BPE, 2,048 asked | 2,048 | 4.3209 | 1.7405 | 0.2792 | 0.3226 | 667,136 | 262,144 | 49,375 B | 2,735,371 B |
+| BPE, 4,096 asked | 3,779 | 4.0979 | 1.4807 | 0.2505 | 0.3751 | 888,704 | 483,712 | 99,867 B | 3,665,291 B |
+| BPE, 8,192 asked | 3,779 | 4.0979 | 1.4807 | 0.2505 | 0.3751 | 888,704 | 483,712 | 99,867 B | 3,665,291 B |
+| BPE, 16,384 asked | 3,779 | 4.0979 | 1.4807 | 0.2505 | 0.3751 | 888,704 | 483,712 | 99,867 B | 3,665,291 B |
+
+- Truncation at 64 tokens: word 0.0; BPE 2,048 **0.0041**, BPE 3,779 0.0. At
+  128 and 256 both are 0.0, so context length is not where BPE could win here.
+- Encode throughput: word 8,359,443 characters/s; BPE 2,164,902 (2,048) and
+  1,883,341 (3,779) on the same 14,613 held-out characters.
+- Held-out words a train-only word vocabulary could not hold: **17 of 3,474
+  (0.49%)**, so the word model's full-corpus vocabulary does not flatter it
+  materially against BPE's training-only vocabulary.
+- The 136K-character corpus cannot fill a larger vocabulary: the 4,096, 8,192
+  and 16,384 requests all produced the same **3,779-piece** vocabulary and the
+  same artifact (`bff213f5…`, SHA-256), where the 2,048 request produced
+  `0dd3e700…`.
+- Training seconds in this run: baseline 22.8, BPE 2,048 39.0, BPE 3,779 46.4
+  (the three identical 3,779 rows trained 27.5 and 23.4 s on re-runs).
+
+**Decision.** The word tokenizer stays the default for new scratch training:
+it is 0.15 bits per character better on held-out text and costs 268,288 fewer
+parameters and a 1.14 MB smaller checkpoint. BPE is an explicit opt-in
+(`tokenizer_kind: "bpe"`), remains fully tested and loadable, and every artifact
+is content-addressed so a retrained tokenizer never silently replaces an older
+one. No claim is made that BPE improves the model's intelligence; on this
+corpus it does not.
+
+**Verification (2026-10-27).** `./quality.sh` green: frontend 50 files and 225
+tests, backend 473 tests, Ruff and the structure checker clean. The Brain
+tokenizer card was read in a browser at 1440, 1024 and 390 px in four states —
+a BPE checkpoint, a word checkpoint, no checkpoint, and a missing artifact —
+with no console error and no sideways scroll; the missing state shows the
+backend's error and a "Check again" button. A unit test proves the prediction
+lab calls a BPE token a piece and joins it without adding a space.
 
 ## The frontier comparison — in kind, not in number
 
@@ -434,6 +665,601 @@ follows the same conventions (details in
 | Refusal instead of invention about the unknown | the material boundary refuses 8 of 8 held-out probes |
 | Contamination control: probes held out of training | the generality probes are held out of training, and the request probes are built apart (`negatives.build_held_out_negatives`) |
 | Reporting failures beside successes | the brain page reports the held-out row, the run's stop reason and a measurement it could not take as "not measured" |
+
+## Web evidence (Phase 4)
+
+The web step was added on 2026-10-28. It changes the request path, so it is
+recorded here even though most of what it does cannot be measured on this
+machine yet.
+
+| What | Measured |
+| --- | --- |
+| Live search latency, extraction speed, refresh duration | **Not measured yet.** No SearXNG instance and no Brave or Tavily key are configured on this machine, so there is no real search to time. They will be measured before a live number is shown anywhere. |
+| Repeat question from a stored snapshot | **Not measured yet** as a latency figure; by design the stored path makes no network call, and the tests assert that a stored hit answers without one. |
+| Refusals (SSRF, unapproved domain, redirect cap, size and type caps, robots) | **58 offline tests** in `tests/test_web_policy.py`, `test_web_fetch.py`, `test_web_store.py` and `test_web_routes.py`, using recorded fixtures and `httpx.MockTransport`; no test opens a socket to the internet. |
+| Answer discipline | A web answer carries a citation, the URL, `as_of`, `verified: "false"`, and a connection that calls it unverified and not taught material. The verifier marks it understood but not grounded in taught material. |
+
+What these rows say: the safety properties are tested offline and pass; the
+speed and refresh numbers do not exist yet and are written as such rather than
+invented.
+
+## Ingest quality and dedupe (Phase 5)
+
+The ingest path now measures every passage before it is stored. The change
+alters which passages future training runs will prefer, so it is recorded here;
+no model was retrained for it.
+
+| What | Measured |
+| --- | --- |
+| Passage quality | `passage_quality = language_factor × text_density × (1 − repetition)`, rounded to four places. English scores at 1.0, an unconfirmed language at 0.5, fewer than three words or repetition at or above 0.6 scores 0.0. The tests assert a clean sentence scores 1.0, a repeated sentence 0.0, a fragment 0.0 and an unconfirmed language 0.5. |
+| SimHash near-duplicate distance | 64-bit SimHash over word unigrams with Hamming threshold 5. Unit tests measure a one-word change at distance 4 (collapsed), a two-word change at 1 (collapsed) and unrelated chunk-sized text at 16 (kept). |
+| SHA-256 exact duplicates | Collapsed within the same file and against every stored row of the workspace, at passage level. |
+| Existing rows backfilled | 387 of 387 `documents` rows received a SimHash on 2026-10-28; the migration report is `backups/simhash-20261028-121229-521271/report.json`. |
+| Existing rows scored | The same 387 rows had no language and no quality — they were written before the score existed, so a training run would have ranked the whole corpus below any new upload. `scripts/migrate_quality.py` measured them with the ingest path's own functions and filled **387 of 387** on 2026-10-28; report `backups/quality-20261028-155329-337930/report.json`, tests in `tests/test_migrate_quality.py` (3 passed, including "a second run fills nothing"). |
+| Quality of the stored corpus | Of the 387 scored passages: **all 387 detected as English**; mean **0.9001**, median **0.9027**, p5 0.8146, p95 0.9817, min 0.0 (1 passage), max 1.0 (7 passages), **335 distinct** values. The `documents` table went from 816 kB to 856 kB for the two filled columns. |
+| Effect on training | No model was retrained for this change. The score orders the candidate passages a run picks and filters nothing, and with every stored passage now scored the ordering is real for the whole corpus rather than only for new uploads. |
+| Trainer surface | Every job state was driven in a real browser against the running backend at 1440, 1024 and 390 px, including the two error paths. It found a retry defect that doubled a source's passages; see "What the trainer sees while a file is being read". |
+
+### How far apart two answers have to be to be a conflict
+
+`SAME_ANSWER_SIMILARITY` is a word-set Jaccard: shared words over all words in
+both answers, after casefolding and stripping punctuation. Measured against the
+tests that fix the boundary in `tests/test_contradictions.py`:
+
+| What | Measured |
+| --- | --- |
+| "Water falling from clouds." against "Water falls from clouds." | 3 shared / 5 union = **0.60** — under 0.8, so a conflict and it reaches the inbox |
+| "Water falls from clouds." against "Water falls from the clouds." | 4 shared / 5 union = **0.80** — at the threshold, so a rephrasing and nothing is filed |
+| Question matching | word-set equality: "what is rain" matches "What is rain?" (0 tests needed — the same four words in another order or punctuation) |
+| What a conflict does | one inbox row with both answers in the note, `occurrences` counted up on a repeat instead of a second row; the approved answer is untouched and keeps serving |
+| Coverage | **8 tests** in `tests/test_contradictions.py`, including another workspace answering into this inbox |
+
+## Request-path speed (Phase 5)
+
+The request path changed on 2026-10-28: the same passages and the same
+ranking are used, but the work behind them is cached. Nothing here claims a
+different answer — the tests assert the ranking still finds the named passage.
+
+Measured on this machine with the live store (387 document chunks, 384
+dimensions), Python 3.13, Chroma 0.5.5:
+
+| What | Measured |
+| --- | --- |
+| HNSW settings actually in the live collections | `docs`, `faq`, `intents`, `web` all report `cosine`, `M=16`, `construction_ef=200`, `search_ef=100` (read back with `chroma.collection_settings`) |
+| HNSW recall@10 against an exact cosine scan | **1.0** on 40 questions (10 questions asked four times), so `search_ef=100` already returns the exact neighbours at this corpus size |
+| HNSW search, per query | p50 **2.25 ms**, p95 **2.94 ms** |
+| Exact cosine scan of the same 387 vectors, per query | **15.05 ms** |
+| Embedding one question, model loaded and cache empty | **67.6 ms** |
+| Embedding the same question again | **0.002 ms** (answered from the cache) |
+| Full `vector_store.query` (embed, vector search, word ranking, fusion), cold cache | 38.4–137.1 ms over five distinct questions |
+| Full `vector_store.query`, warm cache | p50 **3.21 ms**, p95 **4.79 ms** over 50 queries |
+
+What changed:
+
+- **Query-embedding cache.** The collections are opened with an embedding
+  function that remembers the vectors of short texts (512 entries, texts up to
+  256 characters). A repeated question skips the model; an upload's long
+  passages are not kept.
+- **Corpus cache.** The whole-collection read used for the word ranking is
+  kept per workspace until the Chroma file changes; the BM25 word counts are
+  built once with it. The HNSW tuning itself needed no rebuild: the index was
+  already built with `construction_ef=200` and `search_ef=100`, twice and ten
+  times Chroma's defaults.
+- **Model cache by memory, not by count.** The word engine and teacher caches
+  now evict the least recently used model once the weight files pass
+  `weights_cache_bytes` (1.5 GiB) instead of dropping every model but one;
+  the serving model is never evicted.
+- **Incremental startup sync** was already in place and is covered by
+  `test_resync_writes_the_workspace_and_only_changed_rows`: a restart writes
+  only the FAQ, pending and intent rows whose timestamps moved.
+
+### Which execution provider embeds the text
+
+Chroma's default embedding function hands the ONNX MiniLM the whole provider
+list it finds (`CoreMLExecutionProvider`, `AzureExecutionProvider`,
+`CPUExecutionProvider`) and pads **every** text to 256 tokens, so the cost of a
+batch follows the number of texts, not their length. Measured on this machine
+(Apple M4, 10 cores, onnxruntime 1.30.0, arm64 build) by embedding the same
+texts twice, once through the default list and once with the CPU only:
+
+| What | Measured |
+| --- | --- |
+| First batch of one text (creates the session) | **5.23 s** with the default providers, **1.02 s** on the CPU |
+| Eight passages of 200 words | **6.15 s** default, **2.52 s** on the CPU — 0.77 s vs **0.32 s** per passage |
+| Eight short questions | **4.71 s** default, **3.03 s** on the CPU |
+| Largest difference between the two vectors of the same text | **0.0** (384 numbers × 4 passages compared to six decimals) |
+
+`app/services/embeddings.py` therefore asks for `CPUExecutionProvider` and
+nothing else: the same model, the same file, the same numbers, about twice the
+speed, and no reason to rebuild the index. The test
+`test_the_model_is_asked_for_the_cpu_and_nothing_else` keeps the choice. Because
+every text is padded to 256 tokens, an upload's cost is proportional to its
+passage count — which is also why the duplicate collapse in the same phase is a
+speed change as much as a hygiene one.
+
+### The predictor and a prefix longer than its context
+
+The word model has exactly `context` position embeddings — the served checkpoint
+reports **64** — and `predict_with_attention` fed it the whole prefix while the
+writing path beside it (`writer.py`) already cut the prefix to its last `context`
+positions. So a paste of 64 known words, 65 ids once `<start>` is added, raised
+`IndexError: index out of range in self` and `POST /language-model/predict`
+answered **500**, while a shorter one answered normally — which is why it looked
+intermittent. Fixed on 2026-10-28 with the same window the writer uses; the
+request schema still accepts 4,000 characters.
+
+Measured on this machine with the served `words-0.pt` (4,147 words, `context` 64,
+CPU, 30 timed calls after 3 warm-up, the "before" column run on the same trained
+task):
+
+| Prefix | ids fed | before the fix | after the fix |
+| --- | --- | --- | --- |
+| 3 words | 4 | answered | p50 **0.658 ms**, p95 0.729 ms |
+| 48 words | 53 | answered | p50 **0.955 ms**, p95 1.293 ms |
+| 65 words (329 characters) | 66 | **500 — IndexError** | p50 **1.106 ms**, p95 1.451 ms |
+| 117 words (593 characters) | 118 | **500 — IndexError** | p50 **1.012 ms**, p95 1.291 ms |
+| 520 words (2,639 characters) | 521 | **500 — IndexError** | p50 **1.193 ms**, p95 1.725 ms |
+
+The two rows that used to answer are not slower for the change: a prefix of at
+most `context` positions is its own window, so the model call is the identical
+one. Only the 500 cases became answers, and they cost about the same as the
+48-word paste, because the model now reads at most 64 positions whatever was
+pasted. The page shows the last 12 of them (`ATTENTION_TOKENS`), and `test_a_prefix_longer_than_the_context_still_predicts`
+keeps the guard on a 12-position test model: without the window that test fails
+with the same `IndexError`, which was checked before the fix was written.
+
+### What was retired
+
+| What | Measured |
+| --- | --- |
+| `lessons` Chroma collection | **651** vectors with no metadata, written by the pre-Phase-2 trainer and read by nothing in the runtime; removed on 2026-10-28 by `scripts/retire_artifacts.py`, which first saved all 651 ids, texts and metadata to `backups/retired-20261028-141921-045824/lessons.json` |
+| `.language_model/transformer-0.pt` | **10,794,147 bytes** of the retired scratch word model, moved into the same backup folder; `--rollback` puts both back and `tests/test_retire_artifacts.py` covers plan, backup, removal and rollback |
+| The collections left after the run | `docs`, `faq`, `intents`, `web` — `docs` still holds **387** vectors |
+
+### How fast an upload is indexed
+
+Measured on 2026-10-28 through the real path on this machine: `POST`-equivalent
+`queue_upload` writes the file and the job row, the bounded pool worker reads,
+cleans, cuts, collapses and stores it, and the measurement polls the `IngestJob`
+row until it is terminal. The text is synthetic and each paragraph has its own
+vocabulary, so nothing collapses that would not collapse in real material. Every
+file was deleted and its passages removed afterwards, and the store was verified
+back at **387** `documents` rows and **387** `docs` vectors.
+
+| Upload | Passages stored | Size | Wall time | Passages per second | Kilobytes per second | Near-duplicates collapsed |
+| --- | --- | --- | --- | --- | --- | --- |
+| first file after the process starts | 22 | 13,916 B | **8.26 s** | 2.66 | 1.6 | 0 |
+| second | 66 | 43,026 B | **13.80 s** | 4.78 | 3.0 | 1 |
+| third | 204 | 135,520 B | **33.66 s** | 6.06 | 3.9 | 1 |
+| fourth | 473 | 325,177 B | **75.89 s** | **6.23** | **4.2** | 10 |
+
+What the table says: about **6.2 passages per second** and **4.2 KB per second**
+once the process is warm, and a little over **4 minutes for a 1 MB text**. The
+first file of a process is the slow one per passage — the ONNX session is created
+inside that job (1.02 s, see the provider row above) — which is why 22 passages
+take 8.26 s while 473 take 75.89 s. Because every text is padded to 256 tokens,
+the cost follows the passage count, and the 10 collapses in the last row are 10
+passages the run never embedded. No upload left a partial row: the job's own
+cleanup and `remaining_rows: 0` in all four measurements.
+
+### How long an answer takes
+
+Measured on 2026-10-28 over HTTP against the running server (`POST /query` with
+a bearer token, the workspace's real store: 387 passages, 24 approved answers).
+The 24 questions are the 12 first approved-answer questions of the workspace and
+the 12 best-scoring stored passages, cut to their first 120 characters. p50 and
+p95 are the ordered values at that share of the sample; the run was repeated
+after the quality backfill, and these are the second, quieter figures.
+
+| What | Measured |
+| --- | --- |
+| First request of the process | **1,364.6 ms** — the cost of opening the embedding session and the word engine, which the provider row above measures at 1.02 s |
+| Remaining 23 questions, caches cold | p10 46.4 ms, p50 **87.5 ms**, p75 112.2 ms, p95 **122.0 ms**, mean 83.2 ms, range 42.1–195.3 ms |
+| The same 24 asked four times, 96 requests, caches warm | p10 21.3 ms, p50 **65.5 ms**, p75 75.4 ms, p95 **92.4 ms**, mean 51.8 ms, range 20.7–95.0 ms |
+
+The warm mean sits below the warm p50 because the path is two populations, and
+measuring them separately shows which is which — the median of eight repeats of
+each question:
+
+| Question kind | Measured p50 per question |
+| --- | --- |
+| A question an approved answer owns (12 questions) | **20.9–26.4 ms**, all of them |
+| A question that has to search the passages (12 questions) | **66.2–95.4 ms**, all of them |
+
+48 of the 96 warm requests — exactly the four repeats of those twelve approved
+answers — finish under 50 ms. The retrieval inside those figures is the cached
+path measured above (p50 3.21 ms warm); the rest is the FastAPI request, the
+database read and the answer composition.
+
+### How long the process takes to start
+
+| What | Measured |
+| --- | --- |
+| `import app.main` | **5.62 s**, **5.64 s**, **5.65 s**, **5.88 s** (four runs; the packages pulled in at import are the word model, Chroma and ONNX Runtime) |
+| `uvicorn app.main:app` to the first `200` on `/health` | **5.57 s**, **5.61 s**, **5.91 s**, **6.02 s** |
+| The same with other work running on the machine | 12.03–15.47 s — measured while the ingest and query runs were live, so the honest figure is the quiet-machine one above |
+
+The steps the app runs itself after importing, timed in one process on the live
+workspace:
+
+| Step | Measured |
+| --- | --- |
+| `init_db` — create the missing tables | 0.123 s |
+| `ensure_systemadmin` | 0.485 s |
+| `resync_approved_faqs` — the incremental sync of the 24 approved answers | 0.375 s |
+| `ingest_jobs.recover` — mark the jobs a restart interrupted | 0.008 s (0 jobs found) |
+| open the upload directory | 0.001 s |
+
+All five together are **0.99 s** of the roughly 5.6 s; the rest is importing the
+models. The sync is incremental already: on a restart with nothing changed it
+writes no row, which `test_resync_writes_the_workspace_and_only_changed_rows`
+asserts.
+
+### How much space the stores use
+
+Database `assistance` (PostgreSQL 14 in Docker, port 5433), measured with
+`pg_database_size` and `pg_total_relation_size`, row counts from `count(*)`,
+after the quality backfill and a `VACUUM ANALYZE`:
+
+| Store | Measured |
+| --- | --- |
+| Whole database | **9,959 kB** (9,647 kB with the two score columns still empty) |
+| `documents` | 856 kB · **387** rows |
+| `website_pages` | 208 kB · 14 rows |
+| `users` | 96 kB · 1 row |
+| `tenants` | 80 kB · 1 row |
+| `feedback` | 72 kB · 35 rows |
+| `pending_questions` | 72 kB · 21 rows |
+| `rules` | 64 kB · 1 row |
+| `website_crawls` | 64 kB · 3 rows |
+| `faqs` | 64 kB · **24** rows |
+| `ingest_jobs` (new this phase) | 40 kB · **0** rows |
+| `uploaded_files` (new this phase) | 40 kB · **0** rows |
+| `intents` / `invites` | 24 kB each · 0 rows |
+| `web_sources` / `web_snapshots` | 16 kB each · 0 rows |
+
+The whole workspace's knowledge — 387 passages, 24 approved answers, 21 inbox
+questions, 35 feedback rows — fits in under 10 MB. The two tables this phase
+added cost their empty 40 kB each: an ingestion job is a row, not a store, and
+everything about the file itself stays in the `documents` rows the job produced.
+Nothing was deleted and no index was rebuilt to get these numbers; the growth
+from 9,647 kB is the 387 scored rows and the statistics `VACUUM ANALYZE` wrote.
+
+On disk in `assistance_back`:
+
+| Directory | Bytes | What is in it |
+| --- | --- | --- |
+| `.chroma` | **244,392,442** | 4 collections: `docs` 387, `faq` 24, `intents` 16, `web` 0 vectors |
+| `.models` | 999,601,601 | the pinned Luke 0.0.1 checkpoint and its tokenizer |
+| `.language_model` | 275,793,568 | the word model, including the retired `transformer-0.pt` until 2026-10-28 removed 10,794,147 B of it |
+| `uploads` | 14,895,633 | the 4 PDFs the trainer keeps |
+
+`.chroma` holds far more than 387 vectors because the HNSW index and the SQLite
+log grow with every write and are not compacted by a delete; it was
+244,206,773 B after the Phase 3 rebuild and vacuum, and has moved 185 kB since.
+
+### What the trainer sees while a file is being read
+
+Every job state was driven in a real browser (headless Chrome over CDP, so the
+viewports are the real thing) against the running backend, with the trainer's
+own Documents tab. Layout: `.documents-grid` computed **4 columns at 1440 px, 3
+at 1024 px (narrowest track 245.328 px) and 1 at 390 px (366 px)**, with no
+zero-width element and no horizontal overflow at any of the three. The console
+stayed empty apart from the two refusals below, which the server answers with a
+415 and a 413.
+
+| State | What the page actually showed |
+| --- | --- |
+| Idle | `Upload a document` · `csv, xlsx, docx, doc, pdf, txt` |
+| Reading | `Indexing…` on the upload card and the same step line on the job card: `Reading the file` → `Finding the passages` → `Storing the passages · 96/406 passages` |
+| Progress | sampled 4 s apart: **96/406 at 24 %, 224/406 at 55 %, 352/406 at 87 %** — 128 passages between every pair, so the bar itself moves at about **32 passages a second**; the whole job took ~24 s, of which reading and cutting the file was the first ~8-12 s. That is why the 6.23 passages/s in the upload table above is the slower number: it is measured from the request to the last batch of a real PDF. |
+| Done | `406 passages stored` and the toast `Indexed browser-check-mid.txt: 406 passages.` |
+| Stopped | red-edged `stopped` card, `Stopped before it finished.`, Retry and Dismiss offered, and the file absent from the document list — the read left no rows |
+| Failed | `failed` card carrying the backend's own message, `LibreOffice is required to read this file type` (this machine has no LibreOffice), with Retry and Dismiss |
+| Duplicate | `browser-check-long.txt is already in the corpus.` and no second document: 7 documents before, 7 after |
+| Refused type | `Unsupported file type: .exe` (415) — no job was started |
+| Over the cap | `browser-check-big.txt is larger than 25 MB.` (413) for a 27,262,976 B file |
+| Reloaded mid-read | the job card came back still running, at the step the worker had reached |
+
+**What the run found.** After stopping a read and pressing Retry, the job
+reported `935 passages stored` but the document card said `1870 chunks`. The
+database agreed with the card: 1,870 rows for that source, 935 distinct content
+hashes, one document record, and **every `chunk_index` present twice**. The
+cause was in this file's own queue: a retry cleared the stop flag of a run that
+was still in the file, so the stopped attempt went on to commit its passages
+beside the retried run's. Three changes close it — runs of one job now take a
+lock for the whole read, a run clears its own stop flag when it takes the job
+over rather than the retry doing it, and a terminal report from a run whose job
+has since been re-queued is dropped. Fixed with **3 tests**
+(`test_a_retried_run_waits_for_the_stopped_one_to_leave_the_file`,
+`test_a_retry_after_a_stop_indexes_the_file_once`,
+`test_a_late_report_from_a_stopped_run_leaves_a_retry_alone`) and re-measured in
+the browser: stop → retry → `406 passages stored`, and the document card and
+`/documents` both listed **406**.
+
+**What the verification left behind.** Every test file was removed through the
+page's own delete button, and the stores came back to what they were: **387
+passages, 387 `docs` vectors**, `faq` 24, `intents` 16, `web` 0, `uploads`
+14,895,633 B (the trainer's 4 PDFs), and 0 rows in `ingest_jobs` and
+`uploaded_files`. The database itself is 10,101,263 B (9,865 kB) after
+`VACUUM ANALYZE`, inside the 9,959 kB recorded above. `.chroma` is
+**246,420,848 B — 2,028,406 B larger** than the 244,392,442 B above, and that
+growth stayed after the delete: the ~2,700 passages this run added and then
+removed cost the HNSW index and the write log about 2 MB that a delete does not
+give back.
+
+### What a boundary catch says when it degrades (2026-10-28)
+
+`BLE001` (do not catch blind `Exception`) was added to the Ruff `select` list,
+and the first run flagged **23 catches in 11 service modules** that had been
+failing quietly: the storage report (8), the optional spaCy grammar model (3),
+the taught lesson cards (4), the embedding provider (2), the weather provider
+(2), the head and checkpoint files (2), one teacher training run, the generation
+worker and the vector index. Each now logs the failure it absorbs and carries a
+`# noqa: BLE001 -- <boundary>` directive, and each still returns the same value
+it returned before — the same empty list, `None`, `0` or unfinished sentence.
+
+No number in this file was re-measured for it, and the reason is measured rather
+than assumed: every new statement sits inside the `except` body, so it runs only
+when the fallback was already taken. The four answer-path test files
+(`test_answer_flow`, `test_request_answers`, `test_answer_streams`,
+`test_answer_finishing`) ran with logging at `DEBUG` — **28 tests passed in
+0.95 s and emitted none of the 23 lines**, so the answer path never reaches them.
+The whole suite ran the same way it did before the change: **653 tests in
+81.61 s**, against 82.51 s beforehand.
+
+What did change is what a trainer can find out. A storage figure that shows 0
+because the vector index could not be read now says so at `warning` in the API
+log, with the error behind it; a sentence that came back without its article
+because the grammar model failed says so at `debug`. Before this, both were
+indistinguishable from a workspace that genuinely holds nothing.
+
+## The assessment engine (measured 2026-10-29)
+
+Phase 6 added a measuring stick rather than a new model, and every number below
+is read from the rows the engine itself wrote (`scripts/measure_assessment.py`
+reports the bank, the scorers, the pilot, the memorisation probe and a finished
+run). Nothing was retrained for it; the checkpoint is the same Luke 0.0.1 that
+the chat uses.
+
+### The bank it measures against
+
+| What | Measured |
+| --- | --- |
+| Files | 8 skill files plus `manifest.json`, **431,978 B** in total — **419,486 B** of items and **12,492 B** of manifest, read offline; a run never opens a socket |
+| Items | **360** in total: 240 held-out `eval` and 120 `train`, exactly 30 + 15 per skill, `manifest version 1`, split salt `luke-assessment-v1`, **10** recorded source fetches |
+| Validation | `bank.check()` returns **no problems**: every item passes `intake.validate_item`, every id is unique, and each skill holds its 30/15 |
+| Held-out answer kinds | option **105**, rubric **34**, literal **30**, number **30**, rules **30**, span **11** |
+| Instruction families | **19** IFEval rule families in the eval split, from `punctuation:no_comma` (7 items) and `length_constraints:number_sentences` (5) down to `detectable_format:multiple_sections` (1) |
+| Sources and licences | conversation ← google/IFEval (Apache-2.0) · creative_writing and reading ← databricks/databricks-dolly-15k (CC BY-SA 3.0), google/boolq, rajpurkar/squad · general_knowledge and science ← allenai/ai2_arc (CC BY-SA 4.0) · grammar ← nyu-mll/blimp (CC BY 4.0) · mathematics ← openai/gsm8k (MIT) · programming ← cruxeval-org/cruxeval (MIT) |
+| Per-file digests (SHA-256, first 16 hex) | conversation `9513d83002961cc9` · creative_writing `d9ef26bfc7c84bd7` · general_knowledge `1b6d5fae0654a230` · grammar `4369722be734294c` · mathematics `eb5def67e3d50b37` · programming `a4bee97c574e2a17` · reading `3927d96d633fa4b5` · science `f98db4fb924ce447` |
+
+### What the scorers cost, and the two defects they found
+
+Timed on this machine with 200 repeats over six real items per kind, each answer
+marked through the same `scoring.mark` the runner calls:
+
+| Kind | µs per answer | Answered with its expectation | Answered wrong |
+| --- | --- | --- | --- |
+| option | 1.07 | 1.0 ×6 | 0.0 ×6 |
+| number | 1.05 | 1.0 ×6 | 0.0 ×6 |
+| span | 3.27 | 1.0 ×6 | 0.0 ×6 |
+| literal | 8.32 | 1.0 ×6 | 0.0 ×6 |
+| rules | 1.97 | 0.0–1.0, per the rules the answer actually obeyed | 0.0–1.0, never a free pass |
+| rubric | 0.32 | `None` ×6 | `None` ×6 |
+
+Scoring is 1–8 µs per answer against a generation that takes seconds, so the
+mark is not what a run waits on, and a rubric is never filled in by the code.
+
+Two real defects came out of the pilot, both of which would have understated a
+skill in the run below, and both fixed before any score was documented:
+
+- A literal whose expectation the bank stores as its own text (`"[15, 15]"`,
+  `"'No such key!'"`) and an answer that wraps its value in backticks or a fence
+  scored **0.0** even when it was right. `scoring.py` now reads the expectation
+  out of its own text (`_target_literal`), looks for inline code as well as a
+  fence (`INLINE`), and falls back to a whitespace- and case-folded comparison
+  when only one side parses as a literal (`_spoken`, `_described`). Kept by
+  `test_a_literal_the_bank_writes_as_text_is_still_matched` and
+  `test_a_literal_string_keeps_its_quotes_on_both_sides`.
+- `language:response_language` is deliberately **not ported**: deciding an
+  answer's language honestly needs a detector this machine does not have.
+  `instruction_rules.check_rules` returns `None` for any rule it cannot check,
+  so the **2** eval items carrying that rule read `unassessed` — never failed,
+  and never counted as a pass.
+
+### What one item costs: the pilot
+
+12 held-out items taken in turn across the eight skills, generated once each by
+the runner's own call path — `conditions.messages`, greedy decoding
+(`temperature 0.0`, `max_new_tokens 220`), the installed Luke 0.0.1 — measured on
+a quiet machine on 2026-10-29, then marked by the same `scoring.mark` a run uses:
+
+| What | Measured |
+| --- | --- |
+| Model load in a fresh process | **10.97 s** before the first token of the first item |
+| Per-item generation | p50 **1,543 ms**, p95 **59,245 ms**, mean 13,147 ms, min **177 ms**, max **70,178 ms** |
+| Length of what came back | mean **67.4** new tokens; **1** of 12 ran out of the 220-token budget (`stop_reason = max_new_tokens`), the other 11 ended at `eos` |
+| Decoding speed | **5.13** new tokens per second, counted over the whole pilot rather than per item |
+| Retrieval read (assisted mode only) | p50 **2.6 ms**, p95 **10.3 ms** — but the first read of the process is **1,633 ms** because it opens the embedding session, and **0 hits** on all 12 items (see the store row below: the passage collection is empty in this workspace today) |
+| Extrapolation to the whole held-out split | the pilot's mean predicted **3,155 s** for 240 items; the real run took **2,205 s**, so a 12-item pilot overstates a full run by about 43 % and is a sizing guide, not a promise |
+
+The spread is the point: a 2-token grammar answer costs 177 ms and a story that
+fills the budget costs 59 s, so a run's wall time is set by what the model
+decides to say, not by the number of items.
+
+### The unaided run of the whole held-out bank
+
+Run 2, the complete 240-item eval split, `mode = unaided`, greedy decoding
+(`temperature 0.0`, `max_new_tokens 220`), on the installed checkpoint:
+`Luke 0.0.1`, artifact `Qwen/Qwen2.5-0.5B-Instruct@7ae5576…#fdf756fa7fcbe740`,
+tokenizer `Qwen2.5-0.5B-Instruct@7ae5576:tokenizer.json:c0382117ea329cdf`,
+bank v1.
+
+| What | Measured |
+| --- | --- |
+| Items answered | **240 of 240**, status `done`, **no empty response** stored |
+| Wall time | **2,205 s** (36.8 min) |
+| Per-item generation latency | p50 **1,659 ms**, p95 **13,808 ms**, mean 9,098 ms, min 322 ms, max **282,281 ms** — the tail is an item that filled the 220-token budget |
+| Scored / unassessed | **204 scored**, **36 unassessed**: 34 rubric answers waiting for a trainer, 2 items whose only uncheckable rule is `language:response_language` |
+| Mean score of what is scored | **0.4158**; **82** of 204 outcomes reached the 0.8 pass mark |
+
+| Skill | Scored | Mean | Passed | Waiting | Confidence | Stage |
+| --- | --- | --- | --- | --- | --- | --- |
+| grammar | 30 | 0.5667 | 17 | 0 | high | none cleared |
+| science | 30 | 0.5333 | 16 | 0 | high | none cleared |
+| general_knowledge | 30 | 0.5000 | 15 | 0 | high | none cleared |
+| reading | 26 | 0.4231 | 11 | 4 | high | none cleared |
+| conversation | 28 | 0.3869 | 8 | 0 | high | none cleared |
+| mathematics | 30 | 0.3000 | 9 | 0 | high | none cleared |
+| programming | 30 | 0.2000 | 6 | 0 | high | none cleared |
+| creative_writing | 0 | not measured yet | 0 | 30 | none | nothing scored |
+
+What the shape of that table says, in the engine's own terms: seven skills have a
+real number measured from 30 held-out items each, so all seven read `high`
+confidence; none of them cleared stage 1, which needs a stage mean at or above
+0.8 over at least three items, so every card says `stage: none` and the honest
+`next_step` (practise the topic that failed). Creative writing is `unassessed`
+with a null score rather than 0.0 because its 30 rubric answers need a trainer
+and the checkpoint does not judge its own stories. `delta` is empty for every
+skill: the only earlier unaided run is run 1, which the machine interrupted at
+30 of 240 items, and a partial run is not a previous measurement.
+
+Run 1 is also the reason the tables keep their history honestly. Docker Desktop
+exited mid-run, Postgres refused connections, and the worker died with it;
+`runner.recover()` marked that run `failed`, kept its **30** stored grammar
+results (0.5667, the same figure run 2 measured for those items — greedy
+decoding repeated them exactly), and left them out of every profile comparison.
+
+### How much of this is memory
+
+The base checkpoint's pretraining corpus cannot be audited on this machine, so
+contamination is measured on the items instead: the same item, with the task
+framing and the options removed, and the answer looked for as its own word in
+what comes back.
+
+| What | Measured |
+| --- | --- |
+| Probes | **12** held-out items, spread across the skills, each with an answer long enough to survive inside prose (`MIN_RECALL_ANSWER_CHARS = 5`) and no longer shown in the prompt; **17** further items were left out for failing that test |
+| Answers named from memory | **2 of 12 = 0.1667** — and both were one-word options (`direction`, `mountain ranges`) that a plausible sentence can contain by accident |
+| What the other 10 did | answered around the question without naming its option, restated the reasoning, or (the two programming items) explained the code instead of printing its literal |
+| Mechanical ban | no `eval` item can reach training material at all: `integrity.is_held_out` drops it in `language/writing.py`, `language/corpus.py` and `language/training_materials.py`, and `tests/test_assessment_integrity.py` plus `tests/test_assessment_loader.py` assert that no held-out id or prompt reaches a loader or the tokenizer corpus |
+
+So the low skills are not a memorisation failure and the scores are not a
+memorisation success: with 17 % of probes naming their answer, the honest reading
+is that these numbers measure what the checkpoint does with a task, not what it
+remembers of a benchmark.
+
+### The same questions through the chat path, in both modes
+
+Measured 2026-10-29 on a quiet machine over HTTP against `uvicorn app.main:app`
+with a bearer token, workspace 0: the 12 first approved-answer questions asked
+four times each (48 requests) and the 6 inbox questions asked twice each (12
+requests), the whole set run once with `"retrieval": true` and once with
+`"retrieval": false`. The first request of each set is reported apart because it
+opens the embedding session.
+
+| What | Retrieval on | Retrieval off (`unaided`) |
+| --- | --- | --- |
+| A question an approved answer owns (48) | first **1,858.8 ms**; then p50 **39.9 ms**, p95 **67.4 ms**, mean 42.7 ms | first **3,578.1 ms**; then p50 **1,625.4 ms**, p95 **7,200.5 ms**, mean 2,676.1 ms |
+| A question from the inbox (12) | p50 **204.4 ms**, p95 **39,836.8 ms** | p50 **4,651.6 ms**, p95 **11,228.1 ms** |
+| What answered it | `retrieved/faq`, `retrieved/lesson_cards`, `generated/generated` | `generated/generated` only |
+
+This is the mode switch doing its job and costing what it costs: the same twelve
+questions that answer in 40 ms from stored material take 1.6 s when the model has
+to say them itself — a 41× median difference, and every unaided answer is labelled
+`generated`. The 39.8 s p95 on the retrieval side is a single inbox ask that
+matched nothing and ran out to the full generation budget; its median is 204 ms.
+None of the 24 inbox asks wrote to the trainer's inbox: `pending_questions` held
+**21** rows before the run and **21** after, with no row's `last_seen_at` later
+than 2026-10-27.
+
+### How long it starts and what it takes up
+
+| What | Measured |
+| --- | --- |
+| `import app.main` | **4.96 s**, **5.26 s**, **5.88 s**, **6.19 s** (four runs) |
+| `uvicorn app.main:app` to the first `200` on `/health` | **6.61 s**, **4.73 s**, **7.56 s** (three starts) |
+| Whole database `assistance` | **10,026,007 B** (9,791 kB; Phase 5 recorded 9,959 kB) |
+| `assessment_results` (new this phase) | **245,760 B · 270 rows** — 240 from run 2 and 30 from the interrupted run 1 |
+| `assessment_runs` (new this phase) | **32,768 B · 2 rows** |
+| `faqs` / `pending_questions` / `feedback` | 65,536 · 24 rows / 73,728 · 21 / 73,728 · 35 |
+| `website_pages` / `documents` | 212,992 · 14 rows / 212,992 · **0** rows |
+| `.chroma` | **248,100,948 B** — 4 collections: `docs` **0**, `faq` 24, `intents` 16, `web` 24 vectors |
+| `.models` | 999,601,601 B — the pinned Luke 0.0.1 checkpoint and its tokenizer, unchanged |
+| `.language_model` | **277,092,805 B** — the word model and its state, including **1,033** learned lesson cards |
+| `uploads` | **0 B** |
+| `app/data/assessment` | **431,978 B** — the nine bank files, the only files this phase added |
+
+A full run is a row and 120 result rows per skill-run; 270 answer rows — 240 of
+them with their text — cost 246 kB, which is why a run can be kept forever
+instead of pruned. `documents` still occupies 212,992 B while holding no rows
+because nothing was vacuumed after its contents left; the database total is
+smaller than Phase 5's in spite of the two new tables for the same reason.
+
+### What the workspace holds today, and what that does to these numbers
+
+Between the Phase 5 row above and this one the workspace's passage store emptied:
+`documents` went from 387 rows to **0**, the `docs` collection from 387 vectors to
+**0**, and `uploads` from 4 PDFs (14,895,633 B) to **0 B**. Nothing in the
+assessment engine deletes stored material — the only ways passages leave are the
+per-file `DELETE /documents/{filename}` route and the index-rebuild script, and
+neither was run for Phase 6.
+
+What follows for anyone reading these two phases together:
+
+- The Phase 5 retrieval and answer-speed rows stay true of the workspace they
+  were measured in; they are not reproducible here today.
+- Today, assisted mode reads its evidence from the **24** approved answers and
+  the **1,033** lesson cards and reads **0** passages, so the pilot's retrieval
+  row above shows 0 hits on every item.
+- The assessment figures are unaffected either way: the run that produced them was
+  `unaided`, which by design reads no stored material at all.
+
+## The adapter compatibility run (measured 2026-10-29)
+
+Phase 7 has not been built. This is the install check the plan asks for before it
+is: can `peft` train and serve a LoRA adapter on the checkpoint Luke 0.0.1 is
+installed, inside the pinned environment, without disturbing it? One scratch
+script, run against the real artifact folder
+`.models/foundation/Qwen2.5-0.5B-Instruct/7ae557604adf67be50417f59c2c2f167def9a775`
+with `local_files_only`, nothing written to the workspace, and the saved adapter
+going to a temporary directory outside it which was removed once the numbers were
+read. Not the app's request path, so none of the chat or assessment rows above are
+reproduced here.
+
+| What | Measured |
+| --- | --- |
+| Environment after the install | `torch 2.14.1`, `transformers 5.20.2`, `peft 0.21.2`, `accelerate 1.15.0`, `psutil 7.2.2`; the freeze diff shows exactly those three additions and no pin moved |
+| Backend gate with `peft` present | `make quality` green — **783** tests pass, structure check and format check unchanged |
+| Serving load, the path the app uses | MPS, float16, **0.45–0.94 s** to load the base |
+| LoRA, CPU float32 | `r = 4` over `q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj`: **2,199,552** trainable of **496,232,320** = **0.4433 %** |
+| Two real optimiser steps | losses **2.8239** then **1.7427**; **0.32 s** and **0.26 s** per step (forward, backward, AdamW update) |
+| Saved adapter | **8,848,215 B** in three files: `adapter_model.safetensors`, `adapter_config.json`, `README.md` |
+| Reload and serve the adapter | `PeftModel.from_pretrained` on top of the float16/MPS base: **0.36 s** to attach, then a greedy 24-token answer |
+| LoRA backward on MPS in float16 | **works** — one step, loss **2.8225**, no CPU fallback needed for this model and this `r` |
+| Memory of the whole script | peak resident set **4,679,991,296 B** (≈ 4.4 GiB), which covers four loaded copies of the base |
+
+Two findings worth more than the numbers:
+
+- **The module names changed.** The first attempt targeted `c_attn` and `c_proj`,
+  the fused QKV and projection names Qwen2 used to have, and `peft` refused:
+  `NoMatchingPeftModuleError: Target modules {'c_attn', 'c_proj'} not found in
+  the base model`. Under `transformers 5.20.2` the checkpoint's layers expose
+  `q_proj, k_proj, v_proj, o_proj` inside `self_attn` plus
+  `gate_proj, up_proj, down_proj` inside `mlp`. Any Phase 7 training code must
+  take the names from the model it loaded, not from a recipe.
+- **Generation speed through this script is not a number to quote.** The same
+  base-model serve in the same script measured **13.41** tokens/s on one run and
+  **42.86** tokens/s on another, and the adapter-attached serve measured **10.04**
+  tokens/s in the run where the base measured **42.86**. That spread is the MPS
+  kernels warming up inside a fresh process, not a property of the adapter, so the
+  honest statement is that adapter overhead versus base is **not measured yet** —
+  it needs re-measuring through the app's own runtime, which keeps one model warm.
+
+What Phase 7 still has not answered, and cannot from this run: whether an adapter
+beats the retrieval-only baseline on the Phase 6 held-out bank. That comparison is
+the shipping gate for any adapter, and it is **not measured yet**.
 
 ## Keeping this file honest
 

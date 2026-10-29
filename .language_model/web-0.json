@@ -1,0 +1,11 @@
+{
+  "enabled": true,
+  "provider": "searxng",
+  "endpoint": "https://www.geeksforgeeks.org/reactjs/react-interview-questions",
+  "allowlist": [
+    "www.geeksforgeeks.org"
+  ],
+  "ttl_hours": 168,
+  "min_score": 0.45,
+  "results": 3
+}

@@ -80,6 +80,14 @@ def _is_worth(words: list[str], unknown: set[str], use_unknown_rule: bool) -> bo
     return unknown_words / len(words) <= MAX_UNKNOWN_SHARE
 
 
+def score(text: str) -> float:
+    """How much a passage reads as prose, from 0 to 1: the pairs it does not repeat."""
+    words = [token for token in tokenize(text) if token[:1].isalpha()]
+    if len(words) < 2:
+        return 0.0
+    return round(1.0 - repetition(words), 4)
+
+
 def keep(sentences: Sequence[str]) -> list[str]:
     """The sentences that are worth learning from, in the order they came."""
     rows = _rows(sentences)

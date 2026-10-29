@@ -30,6 +30,32 @@ class Batch:
     scored: torch.Tensor
 
 
+def held_groups(
+    groups: dict[str, list[Example]],
+    settings: TrainingSettings,
+) -> list[str]:
+    """The groups that make up the held-out side, in the order they were drawn.
+
+    The tokenizer corpus uses this too, so no sentence the model is measured
+    on can reach the tokenizer's training material.
+    """
+    names = sorted(groups)
+    if len(names) < settings.min_validation_groups:
+        return []
+    total = sum(len(rows) for rows in groups.values())
+    wanted = max(1, round(total * settings.validation_share))
+    generator = torch.Generator().manual_seed(settings.seed)
+    order = [names[int(position)] for position in torch.randperm(len(names), generator=generator)]
+    chosen: list[str] = []
+    held = 0
+    for name in order:
+        if held >= wanted:
+            break
+        chosen.append(name)
+        held += len(groups[name])
+    return chosen
+
+
 def group_split(
     examples: list[Example],
     settings: TrainingSettings,
@@ -43,22 +69,12 @@ def group_split(
     groups: dict[str, list[Example]] = defaultdict(list)
     for example in examples:
         groups[example.group].append(example)
-    names = sorted(groups)
-    if len(names) < settings.min_validation_groups:
-        return list(examples), []
-    wanted = max(1, round(len(examples) * settings.validation_share))
-    generator = torch.Generator().manual_seed(settings.seed)
-    order = [names[int(position)] for position in torch.randperm(len(names), generator=generator)]
-    held: list[Example] = []
-    chosen: set[str] = set()
-    for name in order:
-        if len(held) >= wanted:
-            break
-        held.extend(groups[name])
-        chosen.add(name)
+    chosen = held_groups(groups, settings)
+    held = [example for name in chosen for example in groups[name]]
     if len(held) < settings.min_validation or len(held) >= len(examples):
         return list(examples), []
-    train = [example for example in examples if example.group not in chosen]
+    kept = set(chosen)
+    train = [example for example in examples if example.group not in kept]
     return train, held
 
 

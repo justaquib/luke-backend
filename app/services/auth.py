@@ -14,6 +14,12 @@ from sqlalchemy.orm import Session
 
 from app.config import settings
 from app.core.security import create_access_token, require_admin
+from app.core.workspace import (
+    CANONICAL_WORKSPACE,
+    WORKSPACE_NAME,
+    WORKSPACE_SLUG,
+    current_workspace,
+)
 from app.db.database import Invite, Tenant, User
 from app.schemas import (
     AcceptInviteRequest,
@@ -85,7 +91,7 @@ def google_login(req: GoogleAuthRequest, db: Session) -> TokenResponse:
         user.name = name
         user.picture = picture
         if invite is not None and not user.tenant_id:
-            user.tenant_id = invite.tenant_id
+            user.tenant_id = current_workspace()
             user.role = invite.role
             invite.used_at = _now()
     else:
@@ -95,34 +101,32 @@ def google_login(req: GoogleAuthRequest, db: Session) -> TokenResponse:
     return _token_for(user)
 
 
+def _workspace_tenant(db: Session) -> Tenant:
+    """The one workspace row, created the first time somebody signs in."""
+    tenant = db.get(Tenant, CANONICAL_WORKSPACE)
+    if tenant is None:
+        tenant = Tenant(id=CANONICAL_WORKSPACE, name=WORKSPACE_NAME, slug=WORKSPACE_SLUG)
+        db.add(tenant)
+        db.flush()
+    return tenant
+
+
 def _create_google_user(
     db: Session,
     identity: tuple[str, str, str | None, str | None],
     invite: Invite | None,
 ) -> User:
     google_id, email, name, picture = identity
+    user = User(
+        google_id=google_id,
+        email=email,
+        name=name,
+        picture=picture,
+        tenant_id=_workspace_tenant(db).id,
+        role=invite.role if invite is not None else "superadmin",
+    )
     if invite is not None:
-        user = User(
-            google_id=google_id,
-            email=email,
-            name=name,
-            picture=picture,
-            tenant_id=invite.tenant_id,
-            role=invite.role,
-        )
         invite.used_at = _now()
-    else:
-        tenant = Tenant(name=name or email, slug=email.partition("@")[0])
-        db.add(tenant)
-        db.flush()
-        user = User(
-            google_id=google_id,
-            email=email,
-            name=name,
-            picture=picture,
-            tenant_id=tenant.id,
-            role="superadmin",
-        )
     db.add(user)
     return user
 
@@ -167,7 +171,7 @@ def accept_invite(req: AcceptInviteRequest, invite_token: str, db: Session) -> T
         user.name = name
         user.picture = picture
         if not user.tenant_id:
-            user.tenant_id = invite.tenant_id
+            user.tenant_id = current_workspace()
             user.role = invite.role
     else:
         user = User(
@@ -175,7 +179,7 @@ def accept_invite(req: AcceptInviteRequest, invite_token: str, db: Session) -> T
             email=email,
             name=name,
             picture=picture,
-            tenant_id=invite.tenant_id,
+            tenant_id=_workspace_tenant(db).id,
             role=invite.role,
         )
         db.add(user)
@@ -212,10 +216,3 @@ def list_invites(user: User, db: Session) -> list[Invite]:
         .scalars()
         .all()
     )
-
-
-def list_tenants(user: User, db: Session) -> list[Tenant]:
-    """List every tenant for the system administrator."""
-    if not user.is_systemadmin:
-        raise HTTPException(403, "Only system admin can list tenants")
-    return list(db.execute(select(Tenant).order_by(Tenant.created_at.desc())).scalars().all())

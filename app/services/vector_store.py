@@ -2,119 +2,74 @@
 
 from __future__ import annotations
 
-import json
 import logging
-import os
-from dataclasses import dataclass
 from typing import Any
 
 import chromadb
-from chromadb.config import Settings as ChromaSettings
 
 from app.config import settings
-from app.services.retrieval import rerank_hits, terms
+from app.services import corpus_cache
+from app.services.chroma import (
+    get_collection,
+    get_faq_collection,
+    get_intents_collection,
+    open_collection,
+    tenant_metadata,
+    where,
+)
+from app.services.rerank import rerank
+from app.services.retrieval import fuse_rankings, terms
 
 logger = logging.getLogger(__name__)
-_CLIENTS: list[chromadb.PersistentClient] = []
 
 
-@dataclass(frozen=True)
-class ChunkNotes:
-    """The per-chunk facts stored beside the text: pages and PDF fields."""
-
-    page_numbers: list[int] | None = None
-    pdf_fields: list[dict[str, str]] | None = None
-
-
-def get_client() -> chromadb.PersistentClient:
-    """Return the process-wide persistent Chroma client."""
-    if not _CLIENTS:
-        os.makedirs(settings.chroma_persist_dir, exist_ok=True)
-        _CLIENTS.append(
-            chromadb.PersistentClient(
-                path=settings.chroma_persist_dir,
-                settings=ChromaSettings(anonymized_telemetry=False),
-            )
-        )
-    return _CLIENTS[0]
+def collection_space(collection_name: str | None = None) -> str:
+    """The distance space a collection was built with; Chroma defaults to l2."""
+    name = collection_name or settings.chroma_collection
+    collection = open_collection(name)
+    return str((collection.metadata or {}).get("hnsw:space", "l2"))
 
 
-def get_collection() -> chromadb.Collection:
-    return get_client().get_or_create_collection(name=settings.chroma_collection)
-
-
-def get_faq_collection() -> chromadb.Collection:
-    return get_client().get_or_create_collection(name=settings.chroma_faq_collection)
-
-
-def get_intents_collection() -> chromadb.Collection:
-    return get_client().get_or_create_collection(name=settings.chroma_intents_collection)
-
-
-def _tenant_metadata(tenant_id: int | None) -> dict[str, Any]:
-    return {} if tenant_id is None else {"tenant_id": str(tenant_id)}
-
-
-def add_chunks(
-    source: str,
-    chunks: list[str],
-    ids: list[str],
-    tenant_id: int | None = None,
-    notes: ChunkNotes | None = None,
-) -> int:
-    """Store document chunks with source, tenant, page, and field metadata."""
-    notes = notes or ChunkNotes()
-    page_numbers = notes.page_numbers
-    pdf_fields = notes.pdf_fields
-    metadatas = [
-        {
-            "source": source,
-            **_tenant_metadata(tenant_id),
-            **(
-                {"page_number": page_numbers[index]}
-                if page_numbers is not None and index < len(page_numbers)
-                else {}
-            ),
-            **(
-                {"pdf_fields": json.dumps(pdf_fields[index])}
-                if pdf_fields is not None and index < len(pdf_fields)
-                else {}
-            ),
+def _semantic_hits(result: dict) -> dict[str, dict]:
+    """The vector search hits of one query, keyed by their stable id."""
+    ids = (result.get("ids") or [[]])[0]
+    documents = (result.get("documents") or [[]])[0]
+    metadatas = (result.get("metadatas") or [[]])[0]
+    distances = (result.get("distances") or [[]])[0]
+    return {
+        identifier: {
+            "text": documents[index],
+            "metadata": metadatas[index] if index < len(metadatas) else {},
+            "distance": distances[index] if index < len(distances) else None,
         }
-        for index in range(len(chunks))
-    ]
-    get_collection().add(documents=chunks, ids=ids, metadatas=metadatas)
-    return len(chunks)
-
-
-def _where(conditions: dict[str, Any], tenant_id: int | None) -> dict[str, Any] | None:
-    combined = {**conditions, **_tenant_metadata(tenant_id)}
-    if not combined:
-        return None
-    if len(combined) == 1:
-        return combined
-    return {"$and": [{key: value} for key, value in combined.items()]}
+        for index, identifier in enumerate(ids)
+    }
 
 
 def query(question: str, n_results: int = 4, tenant_id: int | None = None) -> list[dict]:
-    """Search document chunks and rerank semantic candidates by question terms."""
+    """Search chunks by meaning and by words, then fuse both rankings."""
     collection = get_collection()
     if collection.count() == 0:
         return []
-    fetch = max(n_results * 2, 2)
-    result = collection.query(query_texts=[question], n_results=fetch, where=_where({}, tenant_id))
-    documents = result.get("documents") or [[]]
-    metadatas = result.get("metadatas") or [[]]
-    distances = result.get("distances") or [[]]
-    hits = [
-        {
-            "text": documents[0][index],
-            "metadata": metadatas[0][index] if metadatas and index < len(metadatas[0]) else {},
-            "distance": distances[0][index] if distances and index < len(distances[0]) else None,
+    fetch = max(n_results * 4, 8)
+    result = collection.query(query_texts=[question], n_results=fetch, where=where({}, tenant_id))
+    semantic = _semantic_hits(result)
+    corpus = corpus_cache.corpus(collection, tenant_id)
+    by_id = {
+        identifier: {
+            "text": document,
+            "metadata": corpus.metadatas[index] if index < len(corpus.metadatas) else {},
+            "distance": None,
         }
-        for index in range(len(documents[0]))
-    ]
-    return rerank_hits(question, hits)[:n_results]
+        for index, (identifier, document) in enumerate(
+            zip(corpus.ids, corpus.documents, strict=False)
+        )
+    }
+    by_id.update(semantic)
+    lexical = [corpus.ids[index] for index in corpus.index.ranking(question)]
+    fused = fuse_rankings([list(semantic), lexical])
+    candidates = [by_id[identifier] for identifier in fused[: max(n_results * 5, 20)]]
+    return rerank(question, candidates, n_results)
 
 
 def collection_size() -> int:
@@ -137,7 +92,7 @@ def upsert_faq(
                 "answer": answer,
                 "faq_id": faq_id,
                 "status": status,
-                **_tenant_metadata(tenant_id),
+                **tenant_metadata(tenant_id),
             }
         ],
     )
@@ -159,13 +114,13 @@ def delete_faq(faq_id: int) -> None:
     _delete(get_faq_collection(), [str(faq_id)])
 
 
-def delete_chunks_by_source(source: str) -> None:
-    """Remove every chunk that came from one document."""
+def delete_chunks_by_source(source: str, tenant_id: int | None = None) -> None:
+    """Remove every chunk that came from one document in one workspace."""
     collection = get_collection()
     if collection.count() == 0:
         return
     try:
-        collection.delete(where={"source": source})
+        collection.delete(where=where({"source": source}, tenant_id))
     except chromadb.errors.ChromaError as error:
         logger.warning("Could not delete the chunks of %s: %s", source, error)
 
@@ -231,7 +186,7 @@ def search_faq(question: str, n_results: int = 1, tenant_id: int | None = None) 
     result = collection.query(
         query_texts=[question],
         n_results=n_results,
-        where=_where({"status": "approved"}, tenant_id),
+        where=where({"status": "approved"}, tenant_id),
     )
     return _faq_hits(result, include_status=False)
 
@@ -242,7 +197,7 @@ def search_faq_loose(question: str, n_results: int = 5, tenant_id: int | None = 
     if collection.count() == 0:
         return []
     result = collection.query(
-        query_texts=[question], n_results=n_results, where=_where({}, tenant_id)
+        query_texts=[question], n_results=n_results, where=where({}, tenant_id)
     )
     return _faq_hits(result, include_status=True)
 
@@ -254,8 +209,8 @@ def search_faq_in(
     collection = get_faq_collection()
     if collection.count() == 0 or not faq_ids:
         return []
-    where = _where({"faq_id": {"$in": [int(faq_id) for faq_id in faq_ids]}}, tenant_id)
-    result = collection.query(query_texts=[question], n_results=n_results, where=where)
+    condition = where({"faq_id": {"$in": [int(faq_id) for faq_id in faq_ids]}}, tenant_id)
+    result = collection.query(query_texts=[question], n_results=n_results, where=condition)
     return _faq_hits(result, include_status=True)
 
 
@@ -266,15 +221,10 @@ def search_pending(
     tenant_id: int | None = None,
 ) -> list[dict]:
     """Search pending questions and keep only the supplied candidates."""
-    collection = get_intents_collection()
-    if collection.count() == 0 or not candidates:
+    if not candidates or get_intents_collection().count() == 0:
         return []
-    result = collection.query(
-        query_texts=[question],
-        n_results=n_results,
-        where=_where({"kind": "pending"}, tenant_id),
-    )
-    return [hit for hit in _pending_hits(result) if hit["question"] in candidates]
+    matches = search_pending_all(question, n_results, tenant_id)
+    return [hit for hit in matches if hit["question"] in candidates]
 
 
 def _pending_hits(result: dict) -> list[dict]:
@@ -301,7 +251,7 @@ def search_pending_all(
     result = collection.query(
         query_texts=[question],
         n_results=n_results,
-        where=_where({"kind": "pending"}, tenant_id),
+        where=where({"kind": "pending"}, tenant_id),
     )
     return _pending_hits(result)
 
@@ -311,7 +261,7 @@ def index_pending(pending_id: int, question: str, tenant_id: int | None = None) 
     get_intents_collection().upsert(
         ids=[f"pending-{pending_id}"],
         documents=[question],
-        metadatas=[{"kind": "pending", "pending_id": pending_id, **_tenant_metadata(tenant_id)}],
+        metadatas=[{"kind": "pending", "pending_id": pending_id, **tenant_metadata(tenant_id)}],
     )
 
 
@@ -331,7 +281,7 @@ def upsert_intent(
         "kind": "intent",
         "name": name,
         "response_template": response_template,
-        **_tenant_metadata(tenant_id),
+        **tenant_metadata(tenant_id),
     }
     if faq_id is not None:
         metadata["faq_id"] = faq_id
@@ -352,7 +302,7 @@ def search_intents(question: str, n_results: int = 1, tenant_id: int | None = No
     result = collection.query(
         query_texts=[question],
         n_results=n_results,
-        where=_where({"kind": "intent"}, tenant_id),
+        where=where({"kind": "intent"}, tenant_id),
     )
     documents = (result.get("documents") or [[]])[0]
     metadatas = (result.get("metadatas") or [[]])[0]

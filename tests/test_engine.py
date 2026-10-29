@@ -10,6 +10,7 @@ from typing import Any
 
 import pytest
 
+from app.config import settings
 from app.services.neural import checkpoint, store
 from app.services.neural import engine as engine_module
 from app.services.neural.engine import TrainingJob, engine_for
@@ -47,6 +48,14 @@ def brain(monkeypatch, tmp_path):
     """Keep every model this test writes in a folder of its own."""
     monkeypatch.setattr(store, "brain_dir", lambda: tmp_path)
     return tmp_path
+
+
+@pytest.fixture(autouse=True)
+def _empty_engine_cache():
+    """Hold each test to its own engines, as a fresh process would."""
+    engine_module._CACHE.clear()
+    yield
+    engine_module._CACHE.clear()
 
 
 def _job(config, training=SMALL_TRAINING) -> TrainingJob:
@@ -138,12 +147,27 @@ def test_only_the_model_that_is_asked_for_is_built(brain):
     assert memory["words_loaded"] is True
 
 
-def test_only_one_engine_keeps_its_models(brain):
+def test_an_engine_stays_while_its_model_fits_the_memory_cap(brain):
     first = engine_for(9109)
     engine_for(9110)
 
-    assert engine_module.loaded_engines() == engine_module.MAX_ENGINES
-    assert engine_for(9109) is not first
+    assert engine_for(9109) is first
+    assert engine_module.loaded_engines() == 2
+
+
+def test_the_oldest_engine_is_dropped_when_the_cap_is_crossed(brain, monkeypatch):
+    older = store.words_path(9112)
+    older.parent.mkdir(parents=True, exist_ok=True)
+    older.write_bytes(b"x" * 10)
+    engine_for(9112)
+    monkeypatch.setattr(settings, "weights_cache_bytes", 5)
+
+    newer = store.words_path(9113)
+    newer.write_bytes(b"x" * 10)
+    engine_for(9113)
+
+    assert engine_module.loaded_engines() == 1
+    assert engine_module._CACHE.find(9112, store.stamp(9112)) is None
 
 
 def test_a_checkpoint_is_mapped_instead_of_read_into_memory(brain, monkeypatch):

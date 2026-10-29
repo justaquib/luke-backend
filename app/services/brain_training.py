@@ -130,12 +130,15 @@ def _train_words(
     """Train the neural word model on everything the learner knows."""
     from app.services import neural
     from app.services.language import runtime as runtime_service
+    from app.services.language.training_materials import MAX_SENTENCES
 
+    # The cap applies to the union the model actually reads, so the material
+    # from the learner file and the instruction answers cannot grow past it.
     corpus = [
         *training_sentences,
         *runtime_service.learning_examples(tenant_id),
         *(response for _, response in materials.instructions),
-    ]
+    ][:MAX_SENTENCES]
     job = neural.TrainingJob(
         corpus={"sentences": len(corpus), "instructions": len(materials.instructions)},
         config=config,

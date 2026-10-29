@@ -6,11 +6,14 @@ teacher to answer or predict. The weights never leave this package's care.
 
 from __future__ import annotations
 
+import logging
 import threading
 from collections.abc import Sequence
 from typing import Any
 
 from app.services.huggingface import catalog, serving, store, tuning
+
+logger = logging.getLogger(__name__)
 
 
 class BaseModelError(Exception):
@@ -158,7 +161,9 @@ def _run(
             report,
         )
         _finish(tenant_id, started, result)
-    except Exception as error:  # the run reports any failure to the trainer
+    except Exception as error:  # noqa: BLE001 -- the teacher training run boundary
+        # The run reports any failure to the trainer.
+        logger.warning("the %s run failed: %s", model_id, error)
         _fail(tenant_id, model_id, started, error)
     finally:
         with _LOCK:

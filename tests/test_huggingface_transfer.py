@@ -18,6 +18,7 @@ from sqlalchemy import create_engine, select
 from sqlalchemy.orm import Session, sessionmaker
 
 from app.core.security import get_bearer_user
+from app.core.workspace import CANONICAL_WORKSPACE
 from app.db import database
 from app.db.database import Faq, User, get_session
 from app.routers import huggingface as huggingface_router
@@ -247,11 +248,15 @@ def test_each_run_waits_for_the_other(monkeypatch, sessions, vectors, brain: Pat
 
 def test_routes_plan_start_and_undo_a_transfer(monkeypatch, sessions, vectors, brain: Path) -> None:
     _prepare(monkeypatch)
-    folder = _teacher()
+    folder = _teacher(CANONICAL_WORKSPACE)
     app = FastAPI()
     app.include_router(huggingface_router.router)
     app.dependency_overrides[get_bearer_user] = lambda: User(
-        id=1, email="trainer@example.com", name="Trainer", is_systemadmin=False, tenant_id=TENANT
+        id=1,
+        email="trainer@example.com",
+        name="Trainer",
+        is_systemadmin=False,
+        tenant_id=CANONICAL_WORKSPACE,
     )
 
     def _session() -> Iterator[Session]:
@@ -271,7 +276,7 @@ def test_routes_plan_start_and_undo_a_transfer(monkeypatch, sessions, vectors, b
         assert started.status_code == 200
         assert started.json()["running"] is True
 
-        _wait()
+        _wait(CANONICAL_WORKSPACE)
         report = client.get("/language-model/huggingface/transfer").json()
         assert report["running"] is False
         assert report["last"]["kept"] == 3

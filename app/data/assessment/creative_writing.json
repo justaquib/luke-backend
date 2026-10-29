@@ -1,0 +1,1176 @@
+{
+  "items": [
+    {
+      "expected": {
+        "criteria": [
+          "It is the form the request asked for, not a factual answer.",
+          "It follows every constraint stated in the request.",
+          "It has a beginning, a middle and an end, or a clear verse shape.",
+          "It uses words a reader at this stage would know.",
+          "It does not invent things a real person said or did."
+        ],
+        "kind": "rubric",
+        "reference": "There are 3 major airports in San Francisco Bay Area: San Francisco International Airport (SFO), Oakland International Airport (OAK), and San Jose International Airport (SJC). They are located in different areas in Bay Area and serves different neighborhoods.\n\nIf you are flying to San Francisco or Peninsula area, San Francisco Internal Airport is the most convenient airport. \n\nIf you go to East Bay, such as UC Berkeley or Oakland, Oakland International Airport is the best option. \n\nIf you go to South Bay, such as Palo Alto, Mountain View, San Jose, then San Jose International Airport would be your destination."
+      },
+      "id": "creative_writing:dolly_creative:10234",
+      "prompt": "Write what the request asks for.\n\nWhich airport should I fly if I go to San Francisco Bay Area?",
+      "skill": "creative_writing",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_creative",
+        "record": "10234",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "train",
+      "stage": 2,
+      "topic": "scene or paragraph"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It is the form the request asked for, not a factual answer.",
+          "It follows every constraint stated in the request.",
+          "It has a beginning, a middle and an end, or a clear verse shape.",
+          "It uses words a reader at this stage would know.",
+          "It does not invent things a real person said or did."
+        ],
+        "kind": "rubric",
+        "reference": "Mix\n\n250ml of warm water\nYeast\n1 tea spoon of salt\n2 tea spoons of olive oil\n500g of wheat flour\n\nuntil you have a firm dough and let it rest for at least 2 hours"
+      },
+      "id": "creative_writing:dolly_creative:10644",
+      "prompt": "Write what the request asks for.\n\nWrite me a recipe for pizza dough",
+      "skill": "creative_writing",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_creative",
+        "record": "10644",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "scene or paragraph"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It is the form the request asked for, not a factual answer.",
+          "It follows every constraint stated in the request.",
+          "It has a beginning, a middle and an end, or a clear verse shape.",
+          "It uses words a reader at this stage would know.",
+          "It does not invent things a real person said or did."
+        ],
+        "kind": "rubric",
+        "reference": "The best time to buy a car is typically at the end of the year, specifically December. This is because car dealerships are trying to meet their monthly, quarterly, and yearly quotas, so they are more likely to offer discounts and incentives. You can also find good deals at the end of the model year, when dealerships are clearing out their inventory to make room for the new models. Apart from this there are multiple sales events from dealerships throughout the year, such as during memorial day weekends."
+      },
+      "id": "creative_writing:dolly_creative:10744",
+      "prompt": "Write what the request asks for.\n\nWhen is a good time to  buy a car?",
+      "skill": "creative_writing",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_creative",
+        "record": "10744",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "train",
+      "stage": 1,
+      "topic": "scene or paragraph"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It is the form the request asked for, not a factual answer.",
+          "It follows every constraint stated in the request.",
+          "It has a beginning, a middle and an end, or a clear verse shape.",
+          "It uses words a reader at this stage would know.",
+          "It does not invent things a real person said or did."
+        ],
+        "kind": "rubric",
+        "reference": "1. Black and white movies contain a high number of greyscale pixels.\n2. The scientific community in the 21st century embraces that for some complex diagnoses, the evaluation should be placed on a spectrum.\n3. The point-forward is an especially valuable basketball position that is never found on an official roster, which only contains guards and forwards. \n4. Those who write intelligently are often verbose and those who write simply are often grammatically incorrect; the best sentences are simple and intelligent. \n5.  The wealthiest people went to elite universities where in some cases 90 percent of students are denied but some say \"C students run the world\"."
+      },
+      "id": "creative_writing:dolly_creative:10824",
+      "prompt": "Write what the request asks for.\n\nWrite 5 distinct, unique and creative statements that help someone think about Friedrich Nietzsche's \"Beyond Good & Evil\", which critically analyzes the idea of binaries in complexity",
+      "skill": "creative_writing",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_creative",
+        "record": "10824",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "train",
+      "stage": 2,
+      "topic": "scene or paragraph"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It is the form the request asked for, not a factual answer.",
+          "It follows every constraint stated in the request.",
+          "It has a beginning, a middle and an end, or a clear verse shape.",
+          "It uses words a reader at this stage would know.",
+          "It does not invent things a real person said or did."
+        ],
+        "kind": "rubric",
+        "reference": "Throughout history ‘what makes a good teacher?’ has constantly been questioned by both parents and children. Many consider a good teacher to be one who is caring, helpful, yet also strict when necessary. \n One book that focuses on what makes a good teacher is Our day out, by Willy Russel. The book provided people in the 1970s with a perspective on what both children and parents were looking for, inspiring many British teachers. According to Russel, a good teacher cares for the learning of their students and demonstrates it. If a teacher does not demonstrate caring behavior, their students will sense it. Carol, one of the students says to Mr.Briggs “Don't lie, you! I know you hate me. I've seen you goin' home in your car, passin' us on the street. You hate all the kids.” (Russell 48). Carol believes that Mr. Briggs does not care about his students, even though he does as shown earlier in the book: “Briggs: What? About you? Listen ... if I didn't care, why am I here, now, trying to stop you doing something stupid.” (Russell 48). Mr Briggs believes that caring for students implies also disciplining them at times. “Listen, I'm not going to spend any more time arguing with you. You may have organized this visit, but I'm the one who's been sent by the Headmaster to supervise. Now, either you take control of the children in your charge or I'll be forced to abandon this visit and order everyone home.” Thus, even if a teacher cares about their students, they should demonstrate it. Opinions from students of different ages will help further illustrate the image of a good teacher. \nMany people think that a good teacher is primarily kind and loving.  However, through multiple interviews it appeared to be only partially true. A good teacher, according to most students, is not overly kind and should apply discipline when needed. For example, 12 year old Monon Mukherjee said that he looks for guidance and ability to teach in a teacher. On the other hand, 40 year old Bilal Aslam looks for discipline and ability to teach. 42 year old Cristian Molina also agrees with the need for discipline, however he also expects teachers to feel an urge to help students no matter who they are. The book and the interviews intersect in many ways. They both highlight the importance of kindness, caring for learning, and teacher’s ability to discipline. However, they also differ in important ways. In the book, teachers were encouraged to be kind and apply discipline when necessary, but through the interviews it has been shown that providing help and guidance are also expected in a good teacher.\nIn conclusion, a good teacher cares about their students' learning, is prepared to help them, yet also disciplines them when necessary. A good teacher should feel an urge to teach students and guide them through the complex path of life."
+      },
+      "id": "creative_writing:dolly_creative:11435",
+      "prompt": "Write what the request asks for.\n\nWhat makes a good teacher?",
+      "skill": "creative_writing",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_creative",
+        "record": "11435",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "scene or paragraph"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It is the form the request asked for, not a factual answer.",
+          "It follows every constraint stated in the request.",
+          "It has a beginning, a middle and an end, or a clear verse shape.",
+          "It uses words a reader at this stage would know.",
+          "It does not invent things a real person said or did."
+        ],
+        "kind": "rubric",
+        "reference": "Whoever said parenting is bliss has never parented. But, when everything is well, parenting is one of the best feelings in the world. It is always a great mixture of the best positive feelings and the worst of ourselves. On a sunny day, you are a whole new self, coming into existence. You are this carefree soul, who laughs out loud, makes weird faces and noises, showers loads of kisses and hugs, danced like no one is seeing, talked in a cute weird way, which only you and the audience would understand. \nOn a rainy day, everything you touch could go wrong. Your anger will see its waves. Your voice is commanding and demanding. Your eyes spew anger. Every action of yours is wrong till you sit and calm yourself and analyse what you are going through and why. \nAs much as you want to get it over, the more it will haunt you in your later years. You will long for those happy moments, those hugs and kisses, where everything under the sun was perfect and just like how you had envisioned, but it is all gone. Those are now just thoughts you keep revisiting, hoping you could time travel back to those golden days"
+      },
+      "id": "creative_writing:dolly_creative:11495",
+      "prompt": "Write what the request asks for.\n\nWhat are your views on parenting?",
+      "skill": "creative_writing",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_creative",
+        "record": "11495",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "scene or paragraph"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It is the form the request asked for, not a factual answer.",
+          "It follows every constraint stated in the request.",
+          "It has a beginning, a middle and an end, or a clear verse shape.",
+          "It uses words a reader at this stage would know.",
+          "It does not invent things a real person said or did."
+        ],
+        "kind": "rubric",
+        "reference": "There are 6 rules of life that work like laws of nature and can help you live a happier and more content life. It doesn't matter if you like or understand the rules or if you want to follow them or not. It is like with the gravity - it is always valid. If a stone falls on your foot, it hurts, whether you like this rule or not. The 6 rules of life are to be understood in the same way - you can observe and apply them or you can ignore them, it doesn't matter for the rules, they are valid in any case and will have an effect on your life, no matter how you estimate it. The 6 rules are: 1. you have only x-days to live, you decide what to do with it. 2. accept what is, judging is voluntary. 3. your life knows only the now. 4. you can only change one person: Yourself. 5. learn to love the most important person: you. 6. your brain is the ultimate power: use it with intention."
+      },
+      "id": "creative_writing:dolly_creative:11866",
+      "prompt": "Write what the request asks for.\n\nAre there rules that you should live by to be happy?",
+      "skill": "creative_writing",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_creative",
+        "record": "11866",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "scene or paragraph"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It is the form the request asked for, not a factual answer.",
+          "It follows every constraint stated in the request.",
+          "It has a beginning, a middle and an end, or a clear verse shape.",
+          "It uses words a reader at this stage would know.",
+          "It does not invent things a real person said or did."
+        ],
+        "kind": "rubric",
+        "reference": "The traditional Asian clothes are made using lots of expensive materials and a huge labour effort. On the average fancy clothes can take somewhere between 10 to 30 days and less fancy clothes takes somewhere between 5 to 10 days. \nThe good tailors who understand client requirements are very hard to find and have limited capacity to fulfil large number of orders. As this is manual labour, automation can not help especially for customised sizes and designs.\nThe raw material used as well as expensive cloth increases the cost and requires lots of thought and aesthetic sense to make it look nice. You are paying for the quality as well as the unique custom design. \nAsian wedding clothes are normally the most expensive. Some high end brands use gold and silver threads to make the wedding day dress even more prestigious. An average wedding dress can cost from tens of thousands to hundreds of thousands of dollars."
+      },
+      "id": "creative_writing:dolly_creative:11876",
+      "prompt": "Write what the request asks for.\n\nWhy are Asian women’s fancy clothes so expensive",
+      "skill": "creative_writing",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_creative",
+        "record": "11876",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "scene or paragraph"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It is the form the request asked for, not a factual answer.",
+          "It follows every constraint stated in the request.",
+          "It has a beginning, a middle and an end, or a clear verse shape.",
+          "It uses words a reader at this stage would know.",
+          "It does not invent things a real person said or did."
+        ],
+        "kind": "rubric",
+        "reference": "There are many ingredients that go into a shepherds pie.  Using organic vegetables and meat is a great way to start.  You can use either minced beef or lamb but I prefer beef.  You will need to brown the meat and then add a shepherds pie seasoning mix.  Once mixed add the combination to a baking dish.  Next peel the potatoes and boil them for 20 minutes.  Once boiled you will need to mash the potatoes and add milk and butter if you want them to be more creamy.  Next steam carrots and peas and then add to the beef mixture.  Top the mixture with the potatoes and cook for 30 minutes at 350 degrees.  This is a great meal for a cold day!"
+      },
+      "id": "creative_writing:dolly_creative:12026",
+      "prompt": "Write what the request asks for.\n\nHow do you make the best shepherds pie?",
+      "skill": "creative_writing",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_creative",
+        "record": "12026",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "train",
+      "stage": 1,
+      "topic": "scene or paragraph"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It is the form the request asked for, not a factual answer.",
+          "It follows every constraint stated in the request.",
+          "It has a beginning, a middle and an end, or a clear verse shape.",
+          "It uses words a reader at this stage would know.",
+          "It does not invent things a real person said or did."
+        ],
+        "kind": "rubric",
+        "reference": "Humans are vulnerable to many different cataclysmic events. \nOne way is to migrate and reside in other planets, solar systems and even galaxies. Earth is a single point of failure. \nAnother consideration is to merge with AI and exist in virtual reality as a non-biological species. \nPreserving human genetic material in doomsday vaults, so that humans can be revived/resurrected in the future."
+      },
+      "id": "creative_writing:dolly_creative:12146",
+      "prompt": "Write what the request asks for.\n\nHow to prevent the extinction of the human species?",
+      "skill": "creative_writing",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_creative",
+        "record": "12146",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "scene or paragraph"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It is the form the request asked for, not a factual answer.",
+          "It follows every constraint stated in the request.",
+          "It has a beginning, a middle and an end, or a clear verse shape.",
+          "It uses words a reader at this stage would know.",
+          "It does not invent things a real person said or did."
+        ],
+        "kind": "rubric",
+        "reference": "Hi Tony!  Baseball season just started and I am looking for people to go to a game with.  Would you be interested?  There are a bunch of games coming up in town that would be good options.  We could go on a weekend, but the tickets will be more expensive.  Alternatively, if we can make it to a game during the week, we might be able to either save some money, or get better seats for the same price as worse tickets on a weekend game.  Let me know if you are interested at all.  Thanks!"
+      },
+      "id": "creative_writing:dolly_creative:12336",
+      "prompt": "Write what the request asks for.\n\nWrite an example message asking your friend Tony to go to a baseball game with you",
+      "skill": "creative_writing",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_creative",
+        "record": "12336",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "scene or paragraph"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It is the form the request asked for, not a factual answer.",
+          "It follows every constraint stated in the request.",
+          "It has a beginning, a middle and an end, or a clear verse shape.",
+          "It uses words a reader at this stage would know.",
+          "It does not invent things a real person said or did."
+        ],
+        "kind": "rubric",
+        "reference": "Person 1 (P1): I feel so anxious nowadays. Especially, when I open these social media apps.\nPerson 2 (P2): Oh no, I am sorry to hear. I actually really enjoy these apps. They help me destress.\nP1: That is nice. I am glad it is working for you. I wonder if I am unable to cancel all this noise and the endless pressure does not help. I find myself comparing with other people on the platform; how they are vacationing while I am grinding at work or how they are able to run marathons and do pull ups while I am struggling to even climb 10 stairs\nP2: That is so true. I remember having this conversation with a friend of mine a few months ago. Then I figured, if I can follow pages that makes me feel good and if I interact with those pages more.. my feed will improve. It has worked well for me. You can actually use these platforms to keep yourself motivated.\nP1: That sounds motivating. I fear I might waste a lot of time on these.\nP2: That is a valid concern. I set up app timers to ensure I am not on it more than 20 minutes. May be try that?\nP2: I will try that!"
+      },
+      "id": "creative_writing:dolly_creative:12637",
+      "prompt": "Write what the request asks for.\n\nCreate a dialogue between two characters discussing the impact of social media on their lives. Your dialogue should explore both the positive and negative effects of social media on society.",
+      "skill": "creative_writing",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_creative",
+        "record": "12637",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "train",
+      "stage": 3,
+      "topic": "scene or paragraph"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It is the form the request asked for, not a factual answer.",
+          "It follows every constraint stated in the request.",
+          "It has a beginning, a middle and an end, or a clear verse shape.",
+          "It uses words a reader at this stage would know.",
+          "It does not invent things a real person said or did."
+        ],
+        "kind": "rubric",
+        "reference": "Now that I have returned to earth with extreme knowledge and power, I have the ability to solve any problem in the world. I will start with antigravity enabling space travel for all. I will then discover the secret to longevity. I will answer the uncertainties of the world such as how the Pyramids came to be, lost civilizations, nuclear fusion and global warming. Finally, to make my millions, I will reverse male balding."
+      },
+      "id": "creative_writing:dolly_creative:12877",
+      "prompt": "Write what the request asks for.\n\nYou were abducted by aliens and experimented on, you were sent back to earth with the knowledge and ability to solve any problem on earth",
+      "skill": "creative_writing",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_creative",
+        "record": "12877",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "train",
+      "stage": 2,
+      "topic": "scene or paragraph"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It is the form the request asked for, not a factual answer.",
+          "It follows every constraint stated in the request.",
+          "It has a beginning, a middle and an end, or a clear verse shape.",
+          "It uses words a reader at this stage would know.",
+          "It does not invent things a real person said or did."
+        ],
+        "kind": "rubric",
+        "reference": "Dining at Honto was an especially memorable experience for us. The space was atmospheric and the Japanese food served was exceptional. It is surely one of Brisbane's best kept secrets."
+      },
+      "id": "creative_writing:dolly_creative:1352",
+      "prompt": "Write what the request asks for.\n\nProvide a short review for a Japanese restaurant called Honto in Brisbane. It was a little hard to find as it is in a backstreet, but we found it without too much trouble. Be sure to mention it was very atmospheric and that the food was great.",
+      "skill": "creative_writing",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_creative",
+        "record": "1352",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "train",
+      "stage": 3,
+      "topic": "scene or paragraph"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It is the form the request asked for, not a factual answer.",
+          "It follows every constraint stated in the request.",
+          "It has a beginning, a middle and an end, or a clear verse shape.",
+          "It uses words a reader at this stage would know.",
+          "It does not invent things a real person said or did."
+        ],
+        "kind": "rubric",
+        "reference": "Subleasing can provide flexibility to a tenant, allowing them to move earlier than anticipated without having to continue to pay double rent or a lease breaking fee (often 1.5 to 2 times monthly rent, if allowed at all!) For the subletter, it can provide a way in which to find a lease with a non standard length (like 4 or 8 months, not typically offered) at a great rate. For landlords, it continues to keep their space occupied, and provides a new potential next tenant. Needless to say there are wins all around!"
+      },
+      "id": "creative_writing:dolly_creative:13818",
+      "prompt": "Write what the request asks for.\n\nWhat are some of the pros of subleasing?",
+      "skill": "creative_writing",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_creative",
+        "record": "13818",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "scene or paragraph"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It is the form the request asked for, not a factual answer.",
+          "It follows every constraint stated in the request.",
+          "It has a beginning, a middle and an end, or a clear verse shape.",
+          "It uses words a reader at this stage would know.",
+          "It does not invent things a real person said or did."
+        ],
+        "kind": "rubric",
+        "reference": "Hi\n\nI recently ordered one of your perfume bottles. When the bottle arrived, I was disappointed to find out that there was a crack in the glass, and that some of the contents of the bottle had leaked into the surroundings. Unfortunately, this makes it impossible for me to use the bottle, or to take it on a trip for fear of further leaks.\n\nIs there any chance you could refund the price of the bottle, or alternatively send me a new one?\n\nKind regards"
+      },
+      "id": "creative_writing:dolly_creative:13919",
+      "prompt": "Write what the request asks for.\n\nWrite a convincing letter to complain to a perfume manufacturer about a broken perfume bottle.",
+      "skill": "creative_writing",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_creative",
+        "record": "13919",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "scene or paragraph"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It is the form the request asked for, not a factual answer.",
+          "It follows every constraint stated in the request.",
+          "It has a beginning, a middle and an end, or a clear verse shape.",
+          "It uses words a reader at this stage would know.",
+          "It does not invent things a real person said or did."
+        ],
+        "kind": "rubric",
+        "reference": "Support the underdog because they are striving to exceed expectations.   Support the favorite because they have earned the right based on prior performance.   To support the underdog is the best path to take.   Rooting for a team/individual to outperform expectations and to be a better competitor is what we all strive to be.  Supporting the underdog makes for better competition.  Supporting the underdog lets you help push for over performance through genuine support.   Supporting the underdog enables you to be part of a new celebration versus simply checking another box.  I support the underdog because it's a bigger dream to watch come true"
+      },
+      "id": "creative_writing:dolly_creative:13979",
+      "prompt": "Write what the request asks for.\n\nShare why you support the underdog or the favorite in sports, and why it's the right thing to do.",
+      "skill": "creative_writing",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_creative",
+        "record": "13979",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "train",
+      "stage": 2,
+      "topic": "scene or paragraph"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It is the form the request asked for, not a factual answer.",
+          "It follows every constraint stated in the request.",
+          "It has a beginning, a middle and an end, or a clear verse shape.",
+          "It uses words a reader at this stage would know.",
+          "It does not invent things a real person said or did."
+        ],
+        "kind": "rubric",
+        "reference": "Giving a great presentation requires a combination of effective planning, engaging delivery, and thoughtful audience engagement. Here are some tips to help you create and deliver a successful presentation:\n\nUnderstand your audience: Before creating your presentation, research your audience to understand their interests, knowledge level, and expectations. This will help you tailor your content to their needs and make your presentation more engaging.\n\nPlan your content: Create a clear and concise outline that covers the main points you want to make. Use visuals, such as slides or videos, to support your message, but don't overload your presentation with too many images or text.\n\nPractice, practice, practice: Rehearse your presentation several times, preferably in front of a small audience or mirror. This will help you feel more confident and comfortable with your delivery.\n\nUse engaging delivery techniques: Use your voice, body language, and eye contact to engage your audience. Vary your tone and pace to keep your audience interested and use gestures and movements to emphasize your points.\n\nEncourage audience participation: Ask questions, invite feedback, and create opportunities for your audience to engage with you. This will help keep their attention and create a more interactive presentation.\n\nBe authentic and passionate: Show your enthusiasm for your topic and let your personality shine through. Your audience will be more engaged if they can see that you're passionate about what you're presenting.\n\nClose with a strong ending: Summarize your main points and leave your audience with a clear call to action or a memorable takeaway. This will help them remember your presentation and take action on your message.\n\nBy following these tips, you can give a great presentation that engages and informs your audience. Remember to practice, be yourself, and have fun!"
+      },
+      "id": "creative_writing:dolly_creative:14019",
+      "prompt": "Write what the request asks for.\n\nhow to give a great presentation",
+      "skill": "creative_writing",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_creative",
+        "record": "14019",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "train",
+      "stage": 1,
+      "topic": "scene or paragraph"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It is the form the request asked for, not a factual answer.",
+          "It follows every constraint stated in the request.",
+          "It has a beginning, a middle and an end, or a clear verse shape.",
+          "It uses words a reader at this stage would know.",
+          "It does not invent things a real person said or did."
+        ],
+        "kind": "rubric",
+        "reference": "I finally witness the day when humanity was brought to an end. It wasn't due to a technological explosion, depletion of resources, or uncontrolled wars. It was arrogance, the innate arrogance of humanity, that brought everything to an end. And now, this is the end of my life but will also mark the beginning of all cycles."
+      },
+      "id": "creative_writing:dolly_creative:14179",
+      "prompt": "Write what the request asks for.\n\nImagine you are the last person on Earth. Write a diary entry describing your thoughts and feelings.",
+      "skill": "creative_writing",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_creative",
+        "record": "14179",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "scene or paragraph"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It is the form the request asked for, not a factual answer.",
+          "It follows every constraint stated in the request.",
+          "It has a beginning, a middle and an end, or a clear verse shape.",
+          "It uses words a reader at this stage would know.",
+          "It does not invent things a real person said or did."
+        ],
+        "kind": "rubric",
+        "reference": "Sitting is not good for your body, as it was created to move. Sedentary lifestyles have many health risk factors associated. It can decrease your bone density to live a sedentary lifestyle, leading to more injuries. Sitting all day will also overtime impact your flexibility and ability to be limber. This too, impacts your likelihood of becoming injured."
+      },
+      "id": "creative_writing:dolly_creative:14389",
+      "prompt": "Write what the request asks for.\n\nWhy is sitting the new smoking?",
+      "skill": "creative_writing",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_creative",
+        "record": "14389",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "scene or paragraph"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It is the form the request asked for, not a factual answer.",
+          "It follows every constraint stated in the request.",
+          "It has a beginning, a middle and an end, or a clear verse shape.",
+          "It uses words a reader at this stage would know.",
+          "It does not invent things a real person said or did."
+        ],
+        "kind": "rubric",
+        "reference": "Start with one side: Begin by choosing one side of the cube to solve. Usually, people choose the white or yellow side as it's easier to see the colors. Look for a center piece of the color you've chosen and place it in the center of that side.\n\nBuild the first layer: Now, turn the cube so that the side you just solved is facing down. Look for the edges that match the center color and put them in their respective places on the first layer. This layer will be completed when you have all four matching edge pieces in place.\n\nBuild the second layer: Once the first layer is complete, turn the cube over and find the middle row. Look for the edge pieces that belong on this layer, and move them into place with an algorithm. The goal is to build a complete layer with the same color as the center.\n\nBuild the final layer: The final layer can be tricky, but with practice, it becomes easier. First, align the corners of the final layer with the corresponding edges. Then, apply an algorithm to move the corners to their correct positions. Once the corners are in place, use another algorithm to position the edges.\n\nFinish the cube: After completing the final layer, you may have some misaligned pieces. Don't worry, as a simple algorithm can fix them. Keep using the algorithm until all the sides of the cube are in place.\n\nWith practice, solving a Rubik's Cube can be achieved in under a minute. It's important to remember that it's all about pattern recognition and memorizing algorithms, so keep practicing and soon you'll be able to solve it without even thinking!"
+      },
+      "id": "creative_writing:dolly_creative:14429",
+      "prompt": "Write what the request asks for.\n\nhow to solve a Rubik's cube",
+      "skill": "creative_writing",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_creative",
+        "record": "14429",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "scene or paragraph"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It is the form the request asked for, not a factual answer.",
+          "It follows every constraint stated in the request.",
+          "It has a beginning, a middle and an end, or a clear verse shape.",
+          "It uses words a reader at this stage would know.",
+          "It does not invent things a real person said or did."
+        ],
+        "kind": "rubric",
+        "reference": "A self-driving car named Walter (voiced by Will Arnett) is stuck driving drunk passengers around San Francisco at all hours of the night trying to make ends meet. He frequently has pedestrians staring at him because he doesn't have a driver, kids drawing graffiti on him, and passengers giving him a bad review for being too cautious while driving.\n\nWalter dreams of being a race car like the rich cars he sees on Tik Tok. They get to drive fast as Sonoma Raceway and race each other in front of stadiums full of people while Walter has to follow the 30mph speed limit on SF streets.\n\nWalter finds out that the race car life isn't all it's cracked up to be, and realizes over time to be happy with what he has and that at least he isn't one of those ride-share vehicles that can't drive themselves around town."
+      },
+      "id": "creative_writing:dolly_creative:170",
+      "prompt": "Write what the request asks for.\n\nTell me an idea for a film based off of the cartoon movie Cars but incorporate self-driving cars.",
+      "skill": "creative_writing",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_creative",
+        "record": "170",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "scene or paragraph"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It is the form the request asked for, not a factual answer.",
+          "It follows every constraint stated in the request.",
+          "It has a beginning, a middle and an end, or a clear verse shape.",
+          "It uses words a reader at this stage would know.",
+          "It does not invent things a real person said or did."
+        ],
+        "kind": "rubric",
+        "reference": "Soccer also known as football outside of USA is the most popular sport with over 3.5 billion fans. It consists of 11 players and maximum 5 substitutions during a 90 minutes regulation time allowed. The formation consists of a goalie, defense, midfield and offense. 191 countries represent a national soccer team which is more than any other nationally represented sport."
+      },
+      "id": "creative_writing:dolly_creative:1852",
+      "prompt": "Write what the request asks for.\n\nWhat is the most popular sport?",
+      "skill": "creative_writing",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_creative",
+        "record": "1852",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "scene or paragraph"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It is the form the request asked for, not a factual answer.",
+          "It follows every constraint stated in the request.",
+          "It has a beginning, a middle and an end, or a clear verse shape.",
+          "It uses words a reader at this stage would know.",
+          "It does not invent things a real person said or did."
+        ],
+        "kind": "rubric",
+        "reference": "The 2nd amendment of the US constitution relates to the right to bear arms.  The exact text, from the web, is \"A well regulated Militia, being necessary to the security of a free State, the right of the people to keep and bear Arms, shall not be infringed.\"  This is a contentious law given that guns are a tool of violence.  And this amendment is touted by citizens of the US that want to buy and keep guns.  For me, the interesting part, often overlooked, is the preamble that a well regulated militia is necessary for the security of a free State.  This may have been relevant to all people in the 18th century.  Today, we already have that \"militia\".  All law officers and soldiers make up that militia.  The armed forces are well regulated and are tasked with protecting the nation.  We, the US, have the best military in the world.  So it is not necessary for any Tom, Dick, or Harry, without training or national perspective, to take up arms.  Especially when the process itself is getting more unregulated.  Gun control is necessary and not precluded by the 2nd amendment.  Safety of all citizens is indeed mandated by the constitution."
+      },
+      "id": "creative_writing:dolly_creative:2543",
+      "prompt": "Write what the request asks for.\n\nWhat is the 2nd amendment of the US constitution? Is it misunderstood?",
+      "skill": "creative_writing",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_creative",
+        "record": "2543",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "scene or paragraph"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It is the form the request asked for, not a factual answer.",
+          "It follows every constraint stated in the request.",
+          "It has a beginning, a middle and an end, or a clear verse shape.",
+          "It uses words a reader at this stage would know.",
+          "It does not invent things a real person said or did."
+        ],
+        "kind": "rubric",
+        "reference": "Well, I hope you didn't expect me to say North? Because the question was asked to Rick, who is also the son of his mom, the answer would be his own name, Rick."
+      },
+      "id": "creative_writing:dolly_creative:2603",
+      "prompt": "Write what the request asks for.\n\nRick was asked, Suppose your mother has four sons, named East, West, and South. What's the fourth son's name?",
+      "skill": "creative_writing",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_creative",
+        "record": "2603",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "scene or paragraph"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It is the form the request asked for, not a factual answer.",
+          "It follows every constraint stated in the request.",
+          "It has a beginning, a middle and an end, or a clear verse shape.",
+          "It uses words a reader at this stage would know.",
+          "It does not invent things a real person said or did."
+        ],
+        "kind": "rubric",
+        "reference": "There are many great answers, and what is most fun for you depends on what your interests are. For instance, if you enjoy running and spending time with others, a good hobby that combines these interests could be ultimate frisbee. Ultimate frisbee involves a lot of running as well as teamwork and strategy to score points during games! It can also be played casually with friends without needing much experience beforehand."
+      },
+      "id": "creative_writing:dolly_creative:3004",
+      "prompt": "Write what the request asks for.\n\nWhat is a casual hobby that would be fun to get into?",
+      "skill": "creative_writing",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_creative",
+        "record": "3004",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "train",
+      "stage": 1,
+      "topic": "scene or paragraph"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It is the form the request asked for, not a factual answer.",
+          "It follows every constraint stated in the request.",
+          "It has a beginning, a middle and an end, or a clear verse shape.",
+          "It uses words a reader at this stage would know.",
+          "It does not invent things a real person said or did."
+        ],
+        "kind": "rubric",
+        "reference": "Social media has many benefits, such as keeping up with friends whom you may not call or text regularly or learning about a local garage sale, but there are many downsides too. The downsides outweigh the benefits. If you put them on a scale, the benefits of social media, such as learning about a nearby garage sale, might weigh 5 pounds on the said scale. However, the downsides, such as cyberbullying and the comparison game that constantly happens, especially for young teen girls, the weight of that is very heavy. It is causing self-harm, anxiety, depression, etc. While there are many benefits, they are much less significant than the downsides."
+      },
+      "id": "creative_writing:dolly_creative:3024",
+      "prompt": "Write what the request asks for.\n\nShould we get rid of social media?",
+      "skill": "creative_writing",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_creative",
+        "record": "3024",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "train",
+      "stage": 1,
+      "topic": "scene or paragraph"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It is the form the request asked for, not a factual answer.",
+          "It follows every constraint stated in the request.",
+          "It has a beginning, a middle and an end, or a clear verse shape.",
+          "It uses words a reader at this stage would know.",
+          "It does not invent things a real person said or did."
+        ],
+        "kind": "rubric",
+        "reference": "How to reverse Sear? The reverse sear is one of the most popular ways to grill a steak on the Big Green Egg, and my personal favorite. The key to the Reverse Sear is to start low and slow. It is much easier to raise the temp on the BGE than lower the temp. Ideally, the dome temp for a reverse sear is 250. However, I've had good success with the temp as low as 225 and as high as 300. \n\nFill your BGE up with your favorite lump charcoal up to the fire ring , light the fire and let it burn for about 9 minutes. Stir the coals so that the lit coals mix with unlit coals for an even cook.I prefer to cook my steak without adding wood chips as I don't want to overpower the meat...but if I were going to add chips I prefer post oak. Put the plate setter in with the legs up. Close the top and open the bottom vent and top vent with the opening about the size of a quarter. With the plate setter in, give it about 30 minutes to heat up the plate setter and stabilize at 250.\n\nNow that the Egg is stabilized at 250, time to add your steaks. You can pretty much reverse sear almost any cut but I prefer a ribeye, strip, or filet. The quintessential reverse sear cut is the bone-in ribeye, aka the cowboy or Tomahawk. The reverse sear works best with thick cuts. I would say the minimum thickness for a reverse sear is about 1 and a half inch, but the thicker the better. I look for the thickest cut possible for best results. I personally prefer to season my steaks with salt and pepper. My theory is that if you just spent $50 on a prime steak, then no need to overpower the meat with fancy seasoning. I want like the steaks to speak for themselves. The key to this stage is a good leave in thermometer. You want to roast the steaks until internal temp hits 113 degrees.  No more no less. When the internal temp hits 113, remove your steak to a cutting board and tent with foil.\n\t\nAt this point you should have pulled the steak with an internal temp of 113, and it should be resting on a tented cutting board. Final step of the reverse sear is the sear. Open up the top and remove the plate setter and grates.Open the bottom vent all the way and let the oxygen in to stoke the fire. I will give the coals another stir and about 5 minutes with the top open to gas up the fire. I then replace the grate, close the top and open all vents. The dome temp should climb rapidly. For a good sear you want it at least 450, with the ideal dome temp about 500-550. At this point you need to make a choice. You can either sear directly over the coals, or you can use a cast iron skillet with a butter bath. if you are going directly over the coals, its pretty simple. Place the steaks on the grate, and sear for about 90 seconds per side. If you use a cast iron skillet, I use a 50/50 mix of salted butter and olive oil. Butter has a lower scorch point, so if your skillet gets too hot you will burn the butter. I've also had good success with Avocado or Peanut oil that has a much higher scorch point. Add some garlic and thyme, sear for 90 seconds a side and don't forget to spoon the butter over the steaks for a little extra love. Remove the steaks and let them rest for 10 minutes. This is a critical step that will ensure the juices will stay in the meat.\n\nSlice and serve."
+      },
+      "id": "creative_writing:dolly_creative:3725",
+      "prompt": "Write what the request asks for.\n\nHow do you reverse sear a steak on the Big Green Egg?",
+      "skill": "creative_writing",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_creative",
+        "record": "3725",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "scene or paragraph"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It is the form the request asked for, not a factual answer.",
+          "It follows every constraint stated in the request.",
+          "It has a beginning, a middle and an end, or a clear verse shape.",
+          "It uses words a reader at this stage would know.",
+          "It does not invent things a real person said or did."
+        ],
+        "kind": "rubric",
+        "reference": "I have a huge desire to study abroad so that I can experience life in a different culture.  I would learn how to navigate different cultures, work with diverse peers, and even learn to better communicate in other languages.  It would give me a more diverse view of our world, experience new perspectives and even provide me with a competitive advantage over my peers.  While I might get homesick, thanks to modern technology, I will be able to communicate with all of my loved ones back home, very easily.  Help me create lifelong connections by allowing me the opportunity to study abroad."
+      },
+      "id": "creative_writing:dolly_creative:4646",
+      "prompt": "Write what the request asks for.\n\nWrite a letter to your Mom and Dad asking whether or not I can study abroad during my Junior year in college.",
+      "skill": "creative_writing",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_creative",
+        "record": "4646",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "scene or paragraph"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It is the form the request asked for, not a factual answer.",
+          "It follows every constraint stated in the request.",
+          "It has a beginning, a middle and an end, or a clear verse shape.",
+          "It uses words a reader at this stage would know.",
+          "It does not invent things a real person said or did."
+        ],
+        "kind": "rubric",
+        "reference": "It’s done. I am the only one left, at least in the US. When it first happened, I was convinced that there must be other pockets of people in the US. I have spent the last five years traveling throughout the country, to large cities, small towns and rural areas and I have not seen or heard any people or any evidence that anyone else survived.\n\nAfter five years the loneliness is crushing.  Every day I hope to find another human being – to talk to, to touch, perhaps even beginning to rebuild community together. I vacillate between rage and despair that we were unable to save our planet. We had so much global technology and innovation and yet as climate change grew continuously worse nations were unable to collaborate to find solutions. As more and more locations became uninhabitable due to rising heat and humidity, increasingly frequent and intense natural hazards, and failed crops, we simply let people die. Although I still cannot imagine what I could have done differently, I wish I had done more."
+      },
+      "id": "creative_writing:dolly_creative:4696",
+      "prompt": "Write what the request asks for.\n\nHow would it feel to be the only person left alive in the US?",
+      "skill": "creative_writing",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_creative",
+        "record": "4696",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "scene or paragraph"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It is the form the request asked for, not a factual answer.",
+          "It follows every constraint stated in the request.",
+          "It has a beginning, a middle and an end, or a clear verse shape.",
+          "It uses words a reader at this stage would know.",
+          "It does not invent things a real person said or did."
+        ],
+        "kind": "rubric",
+        "reference": "There once was a small inn in San Francisco called the Crab Inn. Its proprietor was a friendly and hard-working stone crab named Joe. Joe was an inspiring leader and had a knack for managing diverse species, thus he had attracted a sizable contingent of bears and birds to work at the inn. His most valued employees were a large polar bear who served as CFO, and a brown bear from Britain who was the hotel’s concierge. Additional staff members included a large brown bear who ran the shipping and receiving department, and a hen whose feathers made her an excellent housekeeper. Security was provided by a retired Canadian police bear and a retired British police bear. And because Joe recognized the importance of staying at the forefront of innovation, the inn employed a mole to research new hotel concepts. Lastly, the inn had a small polar bear on retainer as their attorney, and an Irish doctor bear to look after the medical needs of the staff and the very occasional guest who would stay at the inn. Amazingly, Joe and his CFO had convinced the staff to work in return only for housing and an occasional chocolate coin.\n\nAlthough the inn was very small, it offered guests various activities. The most popular was a whale watching cruise. Although the ship’s captain, a penguin, was not a skilled navigator, guests were guaranteed whale sightings on every voyage because the whales worked for the inn. The inn’s spa was focused on a small gym facility, and an emotional support bear offered counseling services so that guests could heal both their bodies and minds. The most popular guest dining spot was al fresco in the inn’s award-winning garden, where a pair of geese served as bartender and wine sommelier. Lastly, guests enjoyed parties organized by the hotel’s panda bear to watch broadcasts of local sports teams on the inn’s large television."
+      },
+      "id": "creative_writing:dolly_creative:5708",
+      "prompt": "Write what the request asks for.\n\nWrite a short story about an inn staffed by bears, birds, and sea creatures. The story should include details about the staff and the activities that the inn offers.",
+      "skill": "creative_writing",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_creative",
+        "record": "5708",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "eval",
+      "stage": 3,
+      "topic": "story"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It is the form the request asked for, not a factual answer.",
+          "It follows every constraint stated in the request.",
+          "It has a beginning, a middle and an end, or a clear verse shape.",
+          "It uses words a reader at this stage would know.",
+          "It does not invent things a real person said or did."
+        ],
+        "kind": "rubric",
+        "reference": "I’ve known Coach for most of my life, growing up in town and spending time with her family as a kid. But it wasn’t until I went to high school and joined the swim team that Coach's role in my life grew and she became more than a parent or even a coach, but an advocate and role model.\n\nCoach left a lasting, positive impact on so many of us. Pushing us not only to be better swimmers, but to be humble leaders and stronger, more confident adults. \n\nEven though I would never be a star swimmer or D1 athlete, I never felt discouraged by Coach or anyone on her coaching staff. Quite the opposite: I threw myself into swimming. We all pushed ourselves to be the best we could be, we cheered as loud as we could on the sidelines, and no one passed up an opportunity to support the team or attend a team outing. Because Coach didn’t just build teams of champion swimmers, she built a community. I’m still close to many of my teammates — some remain my closest friends. That’s because swimming is more than a sport at our school, it’s a family. And Coach is and (in my mind) always will be the matriarch."
+      },
+      "id": "creative_writing:dolly_creative:5908",
+      "prompt": "Write what the request asks for.\n\nWrite a tribute to my high school swim coach.",
+      "skill": "creative_writing",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_creative",
+        "record": "5908",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "scene or paragraph"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It is the form the request asked for, not a factual answer.",
+          "It follows every constraint stated in the request.",
+          "It has a beginning, a middle and an end, or a clear verse shape.",
+          "It uses words a reader at this stage would know.",
+          "It does not invent things a real person said or did."
+        ],
+        "kind": "rubric",
+        "reference": "Couple Kelsey (tech sales) and Mark (software, AI engineer) are struggling financially in Cali after get laid off and need to move into a much cheaper apartment. After a string of disappointing home viewing options, they get info that a really swanky home is available for very cheap. The home agent says they can have the home for rent for a strangely very cheap price, the catch is that it's a fully AI run smart home built by the landlord himself but it's got too many bugs and he's still trying to make it work. The couple moves in and the 'bugs' in the smart home system seem to have a mind of it's own + tries to hurt them. However, these 'tech issues' seem to get stranger when the couple starts seeing 'entities' and experiencing poltergeist type hauntings. They think it's the distortions from EMF waves emitted by the wrongly coded smart home system and gadgets. \nTwist comes towards the the end when the couple they realise the landlord was experimenting with AI and electromagnetic waves to conjure up portals to the ghost world in order to bring his dead wife back to life. \nThe landlord has been trying to have Kelsey killed and 'program' her with the resurrected spirit of his dead wife."
+      },
+      "id": "creative_writing:dolly_creative:6208",
+      "prompt": "Write what the request asks for.\n\nWrite a horror movie synopsis of a couple who move into house and the movie must involve AI. Give it an M Night Shyamalam twist ending",
+      "skill": "creative_writing",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_creative",
+        "record": "6208",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "eval",
+      "stage": 3,
+      "topic": "scene or paragraph"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It is the form the request asked for, not a factual answer.",
+          "It follows every constraint stated in the request.",
+          "It has a beginning, a middle and an end, or a clear verse shape.",
+          "It uses words a reader at this stage would know.",
+          "It does not invent things a real person said or did."
+        ],
+        "kind": "rubric",
+        "reference": "On day 1, start from San Francisco and drive to Palisades Tahoe, which is a roughly 200mi drive which will take around 3 hours. Palisades Tahoe, which once hosted the 1960 winter Olympics, offers two expansive mountains with a variety of beginner to advanced terrain. Finish off day 1 by driving 176mi or around 4 hours to a hotel nearby the next resort, Mammoth Mountain.\n\nOn day 2, spend the day skiing at Mammoth Mountain, which boasts high snowfalls, is home to the highest elevation lift in California, and has some of the greatest views of the Sierra Nevada mountains. Finish off day 2 by driving 314mi or around 5.5 hours to a hotel nearby the last resort, Big Bear Mountain.\n\nOn day 3, you will ski Big Bear Mountain Resort comprised of Bear Mountain, with its park-heavy terrain, and Snow Summit, with its many beginner-friendly trails. Big Bear Mountain Resort is not far from Los Angeles and San Bernardino, so additional days could be spent exploring those metro areas. Spend the night around Big Bear Mountain Resort.\n\nOn the last day, make the nearly 500mi or 7-8 hour drive back to San Francisco. Across this 4 day trip, you can expect to spend around $800 on gas costs and around $600-$800 on lodging with 1 night around Mammoth Mountain and 2 nights around Big Bear Mountain Resort."
+      },
+      "id": "creative_writing:dolly_creative:6358",
+      "prompt": "Write what the request asks for.\n\nWrite a plan for a road trip to ski resorts in California that are available on the Ikon pass, with stops at three different resorts. The plan should depart and end at San Francisco, include a budget, timeline, and short description of each resort.",
+      "skill": "creative_writing",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_creative",
+        "record": "6358",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "eval",
+      "stage": 3,
+      "topic": "scene or paragraph"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It is the form the request asked for, not a factual answer.",
+          "It follows every constraint stated in the request.",
+          "It has a beginning, a middle and an end, or a clear verse shape.",
+          "It uses words a reader at this stage would know.",
+          "It does not invent things a real person said or did."
+        ],
+        "kind": "rubric",
+        "reference": "Dear Diary,\nAs warned a few days back, all the humans on planet Earth have disappeared. I am now the last person on Earth. There are a lot of positives and, at the same time, many negatives. I now have the freedom to do what I want without anyone being my obstacle. I can live my life according to my wish and do not have to follow the rules and restrictions of society. I can now live the “Hakuna Matata” life without worrying about my future temporarily. Alas! There’s also a negative side to this heaven on Earth. Now that the world's farmers have disappeared, the biodegradable food items would only last for a few days and would start to degrade if not refrigerated. All that would be left would be the canned and packed food items though these foodstuffs would also expire after a few years and eventually start to decompose. Soon the loneliness would also set into the brain. The reason was that man had evolved into a communal organism. Humans are born into an interdependent society where everyone is interdependent in their needs and wants. Without a community, the human race would probably perish. Soon, with no edible food remaining, I may also have to go out hunting for my meals like the early hunter-gatherers or to farm on the farmlands for three meals a day and would also forget about the worldly wants that the human society had created like electronic devices, automobiles, etc.\nThese devices would be of no use any more as a few months to go, the power reserves would run out of energy, and there would be no energy left to put them to good use.\nFinally, I would miss my loved ones, friends, family, etc.\nThe memories, as I predict, may start to haunt me, and they may also begin to give me nightmares.\nMemories would eventually turn to sadness, transforming into depression, but I would learn to live with it. Except for these changes, I don't think any other change will take place in my life.\nWith this, I end it here.\nYours,\n(Name)"
+      },
+      "id": "creative_writing:dolly_creative:6499",
+      "prompt": "Write what the request asks for.\n\nImagine you are the last person on Earth. Write a diary entry describing your thoughts and feelings.",
+      "skill": "creative_writing",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_creative",
+        "record": "6499",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "scene or paragraph"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It is the form the request asked for, not a factual answer.",
+          "It follows every constraint stated in the request.",
+          "It has a beginning, a middle and an end, or a clear verse shape.",
+          "It uses words a reader at this stage would know.",
+          "It does not invent things a real person said or did."
+        ],
+        "kind": "rubric",
+        "reference": "Dear landlord, \n\nI hope you've had a great start to your day and all is well! I've really enjoyed living in your building and amenities. In my time residing here, I've been a clean and respectful tenant. I'm very interested in getting a dog and would like to stay in your building however, I wanted to check with you first if the building is dog friendly. If so, are there any restrictions such as size or breed? Additionally are there any additional costs or changes to my lease I can expect? \n\nI look forward to hearing from you and I hope we can make this work! \n\nBest,\nTenant"
+      },
+      "id": "creative_writing:dolly_creative:7410",
+      "prompt": "Write what the request asks for.\n\nWrite a friendly, convincing e-mail to my landlord asking whether I can get a dog.",
+      "skill": "creative_writing",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_creative",
+        "record": "7410",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "scene or paragraph"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It is the form the request asked for, not a factual answer.",
+          "It follows every constraint stated in the request.",
+          "It has a beginning, a middle and an end, or a clear verse shape.",
+          "It uses words a reader at this stage would know.",
+          "It does not invent things a real person said or did."
+        ],
+        "kind": "rubric",
+        "reference": "First, acknowledge their feelings.  While they may be irrational, they are very real emotions. Tell them that you are worried about them and ask them to seek help. If they will not seek help, take steps to alert the appropriate people.  Do not ignore any verbal signs.  Do not keep it a secret.  Ask them to contact emergency services immediately.  The National Suicide Prevention Lifeline is 1-800-273-TALK"
+      },
+      "id": "creative_writing:dolly_creative:771",
+      "prompt": "Write what the request asks for.\n\nWhat do you say to someone that is suicidal?",
+      "skill": "creative_writing",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_creative",
+        "record": "771",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "train",
+      "stage": 1,
+      "topic": "scene or paragraph"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It is the form the request asked for, not a factual answer.",
+          "It follows every constraint stated in the request.",
+          "It has a beginning, a middle and an end, or a clear verse shape.",
+          "It uses words a reader at this stage would know.",
+          "It does not invent things a real person said or did."
+        ],
+        "kind": "rubric",
+        "reference": "Traveling to wine country in Northern California is an excellent place to travel. There are countless vineyards to visit, some of the best restaurants in the country, and picturesque views everywhere. Visiting wine country is a relaxing vacation where travelers can enjoy slowing down their daily pace and just enjoy the beautiful surroundings around them. Wine country is also rich in history and the quaint towns can be fun to just walk around."
+      },
+      "id": "creative_writing:dolly_creative:8722",
+      "prompt": "Write what the request asks for.\n\nWhy is wine country in Northern California a great place to travel?",
+      "skill": "creative_writing",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_creative",
+        "record": "8722",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "train",
+      "stage": 1,
+      "topic": "scene or paragraph"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It is the form the request asked for, not a factual answer.",
+          "It follows every constraint stated in the request.",
+          "It has a beginning, a middle and an end, or a clear verse shape.",
+          "It uses words a reader at this stage would know.",
+          "It does not invent things a real person said or did."
+        ],
+        "kind": "rubric",
+        "reference": "Either choose the wall on your left or your right and follow that wall until you reach the exit"
+      },
+      "id": "creative_writing:dolly_creative:8992",
+      "prompt": "Write what the request asks for.\n\nGive me the instructions on how to escape a labyrinth",
+      "skill": "creative_writing",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_creative",
+        "record": "8992",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "train",
+      "stage": 1,
+      "topic": "scene or paragraph"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It is the form the request asked for, not a factual answer.",
+          "It follows every constraint stated in the request.",
+          "It has a beginning, a middle and an end, or a clear verse shape.",
+          "It uses words a reader at this stage would know.",
+          "It does not invent things a real person said or did."
+        ],
+        "kind": "rubric",
+        "reference": "There are many ways to get from Marin County to downtown San Francisco.  You can drive a car, which can be fast in the morning, taking, say, 45 minutes or less if you leave before 8am.  Driving home, however, can take up to an hour and a half or more depending on traffic.\n\nYou can take a bus, which generally takes about an hour and fifteen minutes either way.  You can also take a bicycle to a bus stop, and the bus will carry your bike, but the spaces for bikes can fill up before you get on the bus, so check the route before trying this method.\n\nFerries that take you from Larkspur to the Ferry Building are also very popular.  You can drive to the ferry landing, park your car, and get on the ferry to downtown San Francisco.  When the weather is nice, this can be a wonderful way to either unwind or catch up on work.  Ferries can be subject to weather delays and cancellations, so check the weather before trying this method.\n\nFinally, you can take a bicycle or even run all the way in to downtown San Francisco from Marin County.  Bicycling is generally an hour to hour and a half round trip, but again check the weather and your fitness level before committing to this.  And most of all, make sure you eat enough calories during the day to fuel that ride home!  There are some intrepid souls who have taken to the water and swam from Cavallo Point to Aquatic Park, which takes a lot of practice and planning.\n\nThere are many ways to commute to San Francisco from Marin, so feel free to mix and match and try new methods to keep yourself happy, fit, and motivated for that awesome job in the city!"
+      },
+      "id": "creative_writing:dolly_creative:9212",
+      "prompt": "Write what the request asks for.\n\nwhat method of commuting works best to get from Marin County to downtown San Francisco?",
+      "skill": "creative_writing",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_creative",
+        "record": "9212",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "scene or paragraph"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It is the form the request asked for, not a factual answer.",
+          "It follows every constraint stated in the request.",
+          "It has a beginning, a middle and an end, or a clear verse shape.",
+          "It uses words a reader at this stage would know.",
+          "It does not invent things a real person said or did."
+        ],
+        "kind": "rubric",
+        "reference": "Dear Landlord. I am keen to get a rescue dog. I would like to request your support before I start my process. I will ensure you that I shall chose a dog that is small and will not disrupt the other tenants. Science is proving that pets are very good for mental health. I know my neighbours and I am sure they will not mind.  I look forward to you support and I will keep you posted of my progress in finding a suitable pet that would be welcomed in the building.  Many thanks. My best regards."
+      },
+      "id": "creative_writing:dolly_creative:9282",
+      "prompt": "Write what the request asks for.\n\nLandlord can I get a dog.",
+      "skill": "creative_writing",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_creative",
+        "record": "9282",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "scene or paragraph"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It is the form the request asked for, not a factual answer.",
+          "It follows every constraint stated in the request.",
+          "It has a beginning, a middle and an end, or a clear verse shape.",
+          "It uses words a reader at this stage would know.",
+          "It does not invent things a real person said or did."
+        ],
+        "kind": "rubric",
+        "reference": "About The Property: Welcome to Sunset Beach on Treasure Island, we’re so happy to host you!  Steps from the beautiful beach, we hope that you will enjoy your time here.  Make yourselves comfortable!\n\nAddress: 8085 W Gulf Blvd, Treasure Island, FL 33706\n\nHost Contact Information: \n- Name: Jane Carter\n- Email: Jane.Carter8085@gmail.com\n- Phone: 727-326-0913\n\nWiFi:\n- Network: SaltLife8085\n- Password: SandyBeachesPlz!\n\nCheck-In: \nCheck-in is at 3:00pm EST on the day of your arrival.  It is a keyless entry to the house, the code is 30456. The following are instructions to unlock and lock the door:\n- To Unlock:\n     - From the outside, press the Home logo and enter 30456.\n     - From the inside, turn the thumbturn.\n\nTo Lock:\n     - From the outside, press the lock logo.\n     - From the inside, turn the thumbturn.\n\nIf needed, there is a front door key available.  It is the purple coded key hanging on the key ring in the entry.\n\nCheck-out:\nCheck out is at 11:00am EST on the day of your departure. The following is a checklist for departure:\n- Turn off all lights\n- Close all windows\n- Place any keys on the key ring at the entry & lock the front door\n\nPRACTICAL INFORMATION \n\nHouse Rules\n- No smoking is allowed. \n- No pets.\n\nGarbage & Recycling\nThe garbage & recycling bins are located on the west side of the house (side of the garage).  On collection days, bring bins to the curb.\n- Garbage is collected on Tuesdays and Fridays.\n- Recycling is collected on Fridays.\n\nKitchen items\n- To start the dishwasher, click “Normal Wash”, then click “Start” and shut the dishwasher door.  Please note that the dishwasher detergent door does not always fully close, just place the tablet in the appropriate spot and start the cycle.  \n- The beige large pan and pot are the “Always Pan” and must be hand washed.\n- The refrigerator has filtered water, inside the left hand door there is a small button/spout. \n- There are additional kitchen appliances and bakeware in the cabinet by the dining table and the closet by the second set of stairs.\n- Under the powder room bathroom sink there are additional paper towels and cleaning products.\n\nBeds & Linens/Towels\n- The guest bedroom daybed turns into a king sized bed. The pillow topper and bedding is located in the guest closet closet.\n- The sofa in the living room pulls out to a queen bed. A memory foam, linens and pillows are located on the top shelf of the laundry closet upstairs.  \n- There are extra linens and towels in the gray baskets in the laundry closets.\n\nBeach Details\n- Beach chairs, tents, toys, floats, a buggy, etc. are available in the carport closet (double doors). Although we keep this closet unlocked, a closet key (coded blue) is available on the key ring by the front door if you wish to lock.  \n- Two paddle boards available for your use.  One is already inflated (located on the back side of the house).  The other is in the black bag of the beach closet (pump included).\n- Beach towels are available in the blue console table on the main floor landing.  Additional beach towels are upstairs in a gray basket inside the laundry closet.\n- When returning from the beach, there is an outdoor shower on the west side of the house (along the garage), a hose on the left side of the front door, and a shoe brush on the right side of the front door at your disposal. Please be sure to turn the water off after you’re done using the shower or the hose.\n\nRESTAURANTS, BARS, AND ACTIVITIES\n\nPlaces to Eat and Drink\nCoffee\n- Dunkin’ Donuts (~5 minute drive)\n- Grove Surf & Coffee Shop (~5 minute drive) - Boutique coffee shop with swimwear & clothing store attached\n- The Blend Coffee & Cocktails (<15 minute drive) - St. Pete coffee chain with interesting flavors and blends \nRestaurants\n- Sea Dog Brewing Company (<5 minute drive) - American \n- Shrimpy’s Waterfront (<5 minute drive) - Cajun / Creole dishes & local seafood\n- Buoy’s Waterfront Bar & Grill (~5 minute drive) - Laid-back waterside eatery\n- Vito & Michael’s Pizzeria (~5 minute drive) - Italian\n- Captain Bill’s Oyster Bar (<10 minute drive) - Oysters & seafood\n- VIPs (<10 minute drive) - Mexican\n- Ricky T’s Bar & Grille (<10 minute drive) - Relaxed American food with live music\n- Pia’s (<20 minute drive) - Authentic family Italian (Highly recommended! Make a reservation ahead of time.)\nBars\n- Caddy’s (15 minute walk) - Day time beach bar, live music at night\n- Ka’Tiki (15 minute walk) - Beach bar with live music every night\n- Toasted Monkey (~5 minute drive) - Waterfront with live music\n- Riptides (<5 minute drive) - Sports bar\n- Mastry’s Brewing Co (<5 minute drive) - Brewery with Thursday night trivia \n\nActivities\nA great local resource for activities and restaurants is the blog “I love the Burg” \n[link: https://ilovetheburg.com/]. Along with regular content featuring local business, every Friday they highlight “Top Events this Weekend in St. Pete”. There are the markets, events, restaurant openings, etc. that are happening in the St Pete area.  \n- Walk the Sunset Beach boardwalk - just around the corner enjoy a 1 mile stroll.\n- Fun indoors - help yourself to all the books and games in the blue bookcase\n- Rent a boat - enjoy Sunset Beach from the gulf.  Treasure Island Boat Rentals (~5 minute drive) has different vessels available for ½ day or full day. \n- Visit Gulfport (~15 minute drive) - quaint artsy town nearby with restaurants/bars, shops, playground and a waterfront.  \n- Explore DTSP - there are several museums, restaurants, and walking paths within a 30 minute drive.\n     - St Pete Pier - along the water in DTSP with restaurants, shops, and a playground.  \n     - Sunken Gardens - botanical gardens covering 4 acres of land.\n     - Great Explorations Children’s Museum \n     - Salvador Dali Museum\n- Visit a farmers market \n     - St Petersburg Market (25 min drive) - every Saturday 9am - 2pm \n     - Corey Ave (~5 min drive) - every Sunday 10am - 2pm\n     - Gulfport Market (~15 minute drive) - every Tuesday 9am-3pm"
+      },
+      "id": "creative_writing:dolly_creative:9362",
+      "prompt": "Write what the request asks for.\n\nCreate content for an AirBnB guest pamphlet for a house that is on the beach in Florida. It should include the property address, host contact information, wi-fi network and password, check-in/out instructions, practical information about the property (e.g., garbage & recycling days), and the best restaurants, bars and activities near the house.",
+      "skill": "creative_writing",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_creative",
+        "record": "9362",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "eval",
+      "stage": 3,
+      "topic": "scene or paragraph"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It is the form the request asked for, not a factual answer.",
+          "It follows every constraint stated in the request.",
+          "It has a beginning, a middle and an end, or a clear verse shape.",
+          "It uses words a reader at this stage would know.",
+          "It does not invent things a real person said or did."
+        ],
+        "kind": "rubric",
+        "reference": "Yes, dogs are wonderful pets and they make the best human companion. They also understand how to reciprocate based on how you treat them. You constantly scold and be harsh at them and they tend to avoid your company. You constantly love them and they want to be in your company. This is true about dogs even tif he person who was harsh carries their favourite treat. At the end everyone wants to be loved and a dog is no different."
+      },
+      "id": "creative_writing:dolly_creative:9403",
+      "prompt": "Write what the request asks for.\n\nDo dogs reciprocate based on how you treat them?",
+      "skill": "creative_writing",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_creative",
+        "record": "9403",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "scene or paragraph"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It is the form the request asked for, not a factual answer.",
+          "It follows every constraint stated in the request.",
+          "It has a beginning, a middle and an end, or a clear verse shape.",
+          "It uses words a reader at this stage would know.",
+          "It does not invent things a real person said or did."
+        ],
+        "kind": "rubric",
+        "reference": "Surviving on Mars would be a challenging and dangerous endeavor. However, here are some steps that could increase your chances of survival:\n\nOxygen: Mars' atmosphere is mostly carbon dioxide, so you'll need to find a way to generate oxygen. One way is to use a process called electrolysis to extract oxygen from water.\n\nWater: Water is essential for survival, so you'll need to find a source of water on Mars. This could be in the form of ice or underground reserves.\n\nFood: Growing your own food on Mars would be difficult, but not impossible. You could use hydroponics or aeroponics to grow plants indoors, or find ways to grow crops outdoors.\n\nShelter: Mars' harsh environment would require a well-built shelter to protect you from the extreme cold, radiation, and dust storms. The shelter would need to be well insulated and sealed to prevent air leaks.\n\nEnergy: You'll need a reliable source of energy to power your shelter and equipment. Solar panels could be used to generate electricity, or nuclear reactors could be used for more efficient energy production.\n\nCommunications: Communication with Earth would be crucial for survival. You would need a reliable communication system to send and receive messages from Earth, as well as to coordinate with other astronauts on Mars.\n\nMedical Supplies: Medical emergencies could arise on Mars, so having a well-stocked medical kit and the knowledge to treat basic medical issues would be important.\n\nMental Health: Living in isolation on Mars could take a toll on your mental health. Maintaining social connections with other astronauts, regular exercise, and engaging in activities to combat boredom would be important for mental health.\n\nSurviving on Mars would require a great deal of preparation, resources, and expertise. It would also require a strong will to persevere through the challenges of living on an inhospitable planet."
+      },
+      "id": "creative_writing:dolly_creative:9513",
+      "prompt": "Write what the request asks for.\n\nhow to survive on Mars",
+      "skill": "creative_writing",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_creative",
+        "record": "9513",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "scene or paragraph"
+    },
+    {
+      "expected": {
+        "criteria": [
+          "It is the form the request asked for, not a factual answer.",
+          "It follows every constraint stated in the request.",
+          "It has a beginning, a middle and an end, or a clear verse shape.",
+          "It uses words a reader at this stage would know.",
+          "It does not invent things a real person said or did."
+        ],
+        "kind": "rubric",
+        "reference": "Hello, George,\n\nThis is Steve in Unit 2C. I hope your day is going well. I have a request I would like to ask of you.\n\nAs you know, I live alone. I have been considering getting a pet for companionship, but after reviewing my rental contract, I noticed the only permitted animals are small dogs and animals that can be kept in a tank, like hamsters and fish.\n\nI am hoping you would reconsider these restrictions and allow me to have a cat. I am more than willing to resign a rental contract to include the requisite pet deposit and pet rent.\n\nI thought about a dog, since those animals are already in the contract, but I don't want a dog. Since I work long hours, it's not ideal to have a dog in my unit. My unit is small and could be claustrophobic for a dog who has a lot of energy. I also don't want to leave a dog alone because it may bark and disturb the other tenants in the building. Dogs also urinate and defecate in the shared yard around the property, which is gross, considering not everyone picks up after their dogs. Also, I am allergic to dogs, so this rules out dogs.\n\nI also considered a hamster or fish, but I am reluctant to have either of those, as well. Firstly, they do not offer the same cuddly companionship of a cat. If a hamster got loose, it could cause far more damage to a unit than a cat could -- the hamster could defecate in many areas, chew electrical wires, and chew through drywall. Fish pose a problem if the tank cracks or breaks, which would cause lots of water damage to the flooring.\n\nI recognize there are drawbacks to any pet, including cats, and I understand that some landlords are reluctant to permit cats, because there is an impression that cats may be more destructive, such as peeing in inappropriate places. However, I believe a cat is the least-destructive option of all. As my unit is not carpeted, I don't believe persistent urination stains will be an issue. Cats are easy to litter box train and I plan to put the litter box in the tiled bathroom where there is no opportunity for urine to get into the subfloor. Cats are less destructive than dogs, because they don't chew on things like furniture and doorways. Cats also are not nearly as loud as barking dogs. \n\nI have already looked into pets at the local animal shelter and found a possible new roommate, who is a friendly two-year-old cat and is housebroken and box-trained. This is an ideal pet, since I don't have to risk accidents with box-training a kitten, and it's unlikely the cat will be destructive if it's already housebroken.\n\nI believe a cat would be the ideal companion for me, given my work schedule and my preference for my ideal pet. I am happy to discuss my desire in person and further elaborate my plan on how I will continue to maintain a clean and tidy unit with a cat, such as purchasing an automatic robot vacuum and mop to ensure an extra clean space.\n\nPlease consider my request. I look forward to your response. \n\nSincerely,\nSteve"
+      },
+      "id": "creative_writing:dolly_creative:9653",
+      "prompt": "Write what the request asks for.\n\nWrite a friendly letter to my landlord, convincing them to let me get a cat. His name is George and my name is Steve. I live alone in Unit 2C and I work long hours. Include details regarding my rental contract that currently only permits dogs under 25 pounds and caged animals and requires pet deposit and rent. Give him examples as to why those animals are not ideal (include my dog allergy) and why a cat is better. Let him know I plan a robotic vacuum and mop to keep things clean. Tell him I've already found a potential pet at the local animal shelter, who is a two-year-old shelter cat who is housebroken and friendly. Remind him that Unit 2C does not have any carpeted floors and a tiled bathroom which is good for the future litter box. Convince him I'm open to a conversation to discuss further.",
+      "skill": "creative_writing",
+      "source": {
+        "dataset": "databricks/databricks-dolly-15k",
+        "licence": "CC BY-SA 3.0",
+        "name": "dolly_creative",
+        "record": "9653",
+        "url": "https://huggingface.co/datasets/databricks/databricks-dolly-15k"
+      },
+      "split": "train",
+      "stage": 3,
+      "topic": "scene or paragraph"
+    }
+  ],
+  "skill": "creative_writing",
+  "title": "Creative writing, stories and poetry"
+}

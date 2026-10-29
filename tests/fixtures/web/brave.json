@@ -1,0 +1,19 @@
+{
+  "type": "search",
+  "web": {
+    "type": "search",
+    "results": [
+      {
+        "title": "What is a byte-level tokenizer?",
+        "url": "https://example.org/byte-tokenizer",
+        "description": "A byte-level tokenizer maps every byte to a symbol before merges.",
+        "language": "en"
+      },
+      {
+        "title": "An address that is not a page",
+        "url": "ftp://example.org/file.txt",
+        "description": "This result is not readable and must be dropped."
+      }
+    ]
+  }
+}

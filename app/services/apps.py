@@ -104,7 +104,8 @@ def weather_for(
                 "longitude": results[0]["longitude"],
                 "current": "temperature_2m,wind_speed_10m,relative_humidity_2m,weather_code",
             }
-        except Exception:
+        except Exception as error:  # noqa: BLE001 -- the weather place lookup boundary
+            logger.warning("the weather place lookup failed: %s", error)
             return None
 
     try:
@@ -112,7 +113,8 @@ def weather_for(
             res = client.get("https://api.open-meteo.com/v1/forecast", params=params)
             res.raise_for_status()
             data = res.json()
-    except Exception:
+    except Exception as error:  # noqa: BLE001 -- the weather forecast provider boundary
+        logger.warning("the weather forecast provider failed: %s", error)
         return None
     cur = data.get("current") or {}
     code = cur.get("weather_code")
@@ -301,7 +303,7 @@ def wiki_summary(question: str, timeout: float = 6.0) -> dict | None:
         with httpx.Client(
             timeout=timeout,
             follow_redirects=True,
-            headers={"User-Agent": "AssistanceBot/0.1 (https://example.local)"},
+            headers={"User-Agent": "LukeLabBot/0.1 (https://example.local)"},
         ) as client:
             response = client.get(f"https://en.wikipedia.org/api/rest_v1/page/summary/{title}")
             if response.status_code == 404:

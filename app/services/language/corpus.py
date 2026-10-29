@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from app.services.assessment.integrity import is_held_out
 from app.services.language import runtime
 from app.services.language.curriculum import FOUNDATION_LESSON_CARDS
 from app.services.language.grammar import _repair_sentences
@@ -30,7 +31,7 @@ def training_corpus(tenant_id: int | None) -> list[str]:
         raw.append((lesson.get("text") or "").strip())
     for lesson in FOUNDATION_LESSON_CARDS:
         raw.append((lesson.get("answer") or "").strip())
-    raw = [text for text in raw if text]
+    raw = [text for text in raw if text and not is_held_out(text)]
     sentences: list[str] = []
     seen: set[str] = set()
     for cleaned in _repair_sentences(raw):

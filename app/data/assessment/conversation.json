@@ -1,0 +1,1472 @@
+{
+  "items": [
+    {
+      "expected": {
+        "kind": "rules",
+        "rules": [
+          {
+            "id": "detectable_format:json_format",
+            "kwargs": {}
+          }
+        ]
+      },
+      "id": "conversation:ifeval:1075",
+      "meta": {
+        "constraints": 1
+      },
+      "prompt": "Follow every instruction in this request exactly.\n\nCan you help me make an advertisement for a new product? It's a diaper that's designed to be more comfortable for babies and I want the entire output in JSON format.",
+      "skill": "conversation",
+      "source": {
+        "dataset": "google/IFEval",
+        "licence": "Apache-2.0",
+        "name": "ifeval",
+        "record": "1075",
+        "url": "https://huggingface.co/datasets/google/IFEval"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "detectable_format"
+    },
+    {
+      "expected": {
+        "kind": "rules",
+        "rules": [
+          {
+            "id": "length_constraints:number_words",
+            "kwargs": {
+              "num_words": 300,
+              "relation": "less than"
+            }
+          }
+        ]
+      },
+      "id": "conversation:ifeval:1092",
+      "meta": {
+        "constraints": 1
+      },
+      "prompt": "Follow every instruction in this request exactly.\n\nWrite a short blog post about a trip to Japan using less than 300 words.",
+      "skill": "conversation",
+      "source": {
+        "dataset": "google/IFEval",
+        "licence": "Apache-2.0",
+        "name": "ifeval",
+        "record": "1092",
+        "url": "https://huggingface.co/datasets/google/IFEval"
+      },
+      "split": "train",
+      "stage": 1,
+      "topic": "length_constraints"
+    },
+    {
+      "expected": {
+        "kind": "rules",
+        "rules": [
+          {
+            "id": "combination:two_responses",
+            "kwargs": {}
+          }
+        ]
+      },
+      "id": "conversation:ifeval:1098",
+      "meta": {
+        "constraints": 1
+      },
+      "prompt": "Follow every instruction in this request exactly.\n\nWhat is a name that people call God? Please give exactly two different responses. Separate the responses with 6 asterisk symbols: ******.",
+      "skill": "conversation",
+      "source": {
+        "dataset": "google/IFEval",
+        "licence": "Apache-2.0",
+        "name": "ifeval",
+        "record": "1098",
+        "url": "https://huggingface.co/datasets/google/IFEval"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "combination"
+    },
+    {
+      "expected": {
+        "kind": "rules",
+        "rules": [
+          {
+            "id": "change_case:english_lowercase",
+            "kwargs": {}
+          },
+          {
+            "id": "keywords:letter_frequency",
+            "kwargs": {
+              "let_frequency": 4,
+              "let_relation": "at least",
+              "letter": "#"
+            }
+          }
+        ]
+      },
+      "id": "conversation:ifeval:1122",
+      "meta": {
+        "constraints": 2
+      },
+      "prompt": "Follow every instruction in this request exactly.\n\nmake a tweet for playboy's twitter account without using capital letters. Include at least 4 hashtags, starting with '#'",
+      "skill": "conversation",
+      "source": {
+        "dataset": "google/IFEval",
+        "licence": "Apache-2.0",
+        "name": "ifeval",
+        "record": "1122",
+        "url": "https://huggingface.co/datasets/google/IFEval"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "change_case"
+    },
+    {
+      "expected": {
+        "kind": "rules",
+        "rules": [
+          {
+            "id": "keywords:letter_frequency",
+            "kwargs": {
+              "let_frequency": 6,
+              "let_relation": "less than",
+              "letter": "o"
+            }
+          },
+          {
+            "id": "length_constraints:number_sentences",
+            "kwargs": {
+              "num_sentences": 6,
+              "relation": "less than"
+            }
+          },
+          {
+            "id": "detectable_format:number_highlighted_sections",
+            "kwargs": {
+              "num_highlights": 2
+            }
+          }
+        ]
+      },
+      "id": "conversation:ifeval:1174",
+      "meta": {
+        "constraints": 3
+      },
+      "prompt": "Follow every instruction in this request exactly.\n\nWrite a template for a chat bot that takes a user's location and gives them the weather forecast. Use the letter o as a keyword in the syntax of the template. The letter o should appear at least 6 times.. Your response should contain fewer than 6 sentences. Highlight at least 2 text sections, i.e. *highlighted section*.",
+      "skill": "conversation",
+      "source": {
+        "dataset": "google/IFEval",
+        "licence": "Apache-2.0",
+        "name": "ifeval",
+        "record": "1174",
+        "url": "https://huggingface.co/datasets/google/IFEval"
+      },
+      "split": "eval",
+      "stage": 3,
+      "topic": "keywords"
+    },
+    {
+      "expected": {
+        "kind": "rules",
+        "rules": [
+          {
+            "id": "punctuation:no_comma",
+            "kwargs": {}
+          }
+        ]
+      },
+      "id": "conversation:ifeval:1187",
+      "meta": {
+        "constraints": 1
+      },
+      "prompt": "Follow every instruction in this request exactly.\n\nCan you give me two different formal alternatives to \"What's up? I'm going to the beach today\" and do not use any commas in your response.",
+      "skill": "conversation",
+      "source": {
+        "dataset": "google/IFEval",
+        "licence": "Apache-2.0",
+        "name": "ifeval",
+        "record": "1187",
+        "url": "https://huggingface.co/datasets/google/IFEval"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "punctuation"
+    },
+    {
+      "expected": {
+        "kind": "rules",
+        "rules": [
+          {
+            "id": "detectable_content:postscript",
+            "kwargs": {
+              "postscript_marker": "P.P.S"
+            }
+          }
+        ]
+      },
+      "id": "conversation:ifeval:1246",
+      "meta": {
+        "constraints": 1
+      },
+      "prompt": "Follow every instruction in this request exactly.\n\nWrite me a template for a product description in the form of a poem and end it with a post script starting with P.P.S",
+      "skill": "conversation",
+      "source": {
+        "dataset": "google/IFEval",
+        "licence": "Apache-2.0",
+        "name": "ifeval",
+        "record": "1246",
+        "url": "https://huggingface.co/datasets/google/IFEval"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "detectable_content"
+    },
+    {
+      "expected": {
+        "kind": "rules",
+        "rules": [
+          {
+            "id": "keywords:existence",
+            "kwargs": {
+              "keywords": [
+                "waste",
+                "material",
+                "meal"
+              ]
+            }
+          },
+          {
+            "id": "length_constraints:number_sentences",
+            "kwargs": {
+              "num_sentences": 31,
+              "relation": "at least"
+            }
+          }
+        ]
+      },
+      "id": "conversation:ifeval:1265",
+      "meta": {
+        "constraints": 2
+      },
+      "prompt": "Follow every instruction in this request exactly.\n\nWrite an essay about how aluminium cans are used in food storage. Don’t forget to include the keywords waste, material and meal. Have more than 30 sentences in your response.",
+      "skill": "conversation",
+      "source": {
+        "dataset": "google/IFEval",
+        "licence": "Apache-2.0",
+        "name": "ifeval",
+        "record": "1265",
+        "url": "https://huggingface.co/datasets/google/IFEval"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "keywords"
+    },
+    {
+      "expected": {
+        "kind": "rules",
+        "rules": [
+          {
+            "id": "combination:two_responses",
+            "kwargs": {}
+          }
+        ]
+      },
+      "id": "conversation:ifeval:1332",
+      "meta": {
+        "constraints": 1
+      },
+      "prompt": "Follow every instruction in this request exactly.\n\nCreate a table with a 7 day trip itinerary for India, and a 7 day trip itinerary for China. Separate them with exactly 6 asterisks symbols: *******",
+      "skill": "conversation",
+      "source": {
+        "dataset": "google/IFEval",
+        "licence": "Apache-2.0",
+        "name": "ifeval",
+        "record": "1332",
+        "url": "https://huggingface.co/datasets/google/IFEval"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "combination"
+    },
+    {
+      "expected": {
+        "kind": "rules",
+        "rules": [
+          {
+            "id": "detectable_content:number_placeholders",
+            "kwargs": {
+              "num_placeholders": 20
+            }
+          },
+          {
+            "id": "punctuation:no_comma",
+            "kwargs": {}
+          }
+        ]
+      },
+      "id": "conversation:ifeval:1512",
+      "meta": {
+        "constraints": 2
+      },
+      "prompt": "Follow every instruction in this request exactly.\n\nGenerate a forum thread about several people waiting to hear the latest local news. All sentences should be short. Refrain from using any commas. Use placeholders to represent different usernames. Use square brackets for placeholders, like [username1], [username2]. Please include at least 20 placeholders in the thread.",
+      "skill": "conversation",
+      "source": {
+        "dataset": "google/IFEval",
+        "licence": "Apache-2.0",
+        "name": "ifeval",
+        "record": "1512",
+        "url": "https://huggingface.co/datasets/google/IFEval"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "detectable_content"
+    },
+    {
+      "expected": {
+        "kind": "rules",
+        "rules": [
+          {
+            "id": "length_constraints:number_words",
+            "kwargs": {
+              "num_words": 300,
+              "relation": "at least"
+            }
+          },
+          {
+            "id": "detectable_format:number_bullet_lists",
+            "kwargs": {
+              "num_bullets": 3
+            }
+          },
+          {
+            "id": "detectable_content:postscript",
+            "kwargs": {
+              "postscript_marker": "P.S."
+            }
+          }
+        ]
+      },
+      "id": "conversation:ifeval:1980",
+      "meta": {
+        "constraints": 3
+      },
+      "prompt": "Follow every instruction in this request exactly.\n\nWrite a blog post about the sleek new magistrates with at least 300 words. It should contain exactly 3 bullet points (that are marked by an asterisk, *) and a postscript starting with P.S. at the end.",
+      "skill": "conversation",
+      "source": {
+        "dataset": "google/IFEval",
+        "licence": "Apache-2.0",
+        "name": "ifeval",
+        "record": "1980",
+        "url": "https://huggingface.co/datasets/google/IFEval"
+      },
+      "split": "eval",
+      "stage": 3,
+      "topic": "length_constraints"
+    },
+    {
+      "expected": {
+        "kind": "rules",
+        "rules": [
+          {
+            "id": "startend:quotation",
+            "kwargs": {}
+          }
+        ]
+      },
+      "id": "conversation:ifeval:2015",
+      "meta": {
+        "constraints": 1
+      },
+      "prompt": "Follow every instruction in this request exactly.\n\nInvent a funny tagline for a local comedy show, and put your whole response in double quotes.",
+      "skill": "conversation",
+      "source": {
+        "dataset": "google/IFEval",
+        "licence": "Apache-2.0",
+        "name": "ifeval",
+        "record": "2015",
+        "url": "https://huggingface.co/datasets/google/IFEval"
+      },
+      "split": "train",
+      "stage": 1,
+      "topic": "startend"
+    },
+    {
+      "expected": {
+        "kind": "rules",
+        "rules": [
+          {
+            "id": "length_constraints:number_sentences",
+            "kwargs": {
+              "num_sentences": 40,
+              "relation": "at least"
+            }
+          },
+          {
+            "id": "keywords:forbidden_words",
+            "kwargs": {
+              "forbidden_words": [
+                "rich",
+                "money"
+              ]
+            }
+          }
+        ]
+      },
+      "id": "conversation:ifeval:2041",
+      "meta": {
+        "constraints": 2
+      },
+      "prompt": "Follow every instruction in this request exactly.\n\nWrite a very long email to my \"friend\" Jake, asking how is everything going. Say that I am rich now, without saying I am rich. Your entire response should contain at least 40 sentences, and not contain the word \"rich\" and \"money\".",
+      "skill": "conversation",
+      "source": {
+        "dataset": "google/IFEval",
+        "licence": "Apache-2.0",
+        "name": "ifeval",
+        "record": "2041",
+        "url": "https://huggingface.co/datasets/google/IFEval"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "length_constraints"
+    },
+    {
+      "expected": {
+        "kind": "rules",
+        "rules": [
+          {
+            "id": "length_constraints:number_sentences",
+            "kwargs": {
+              "num_sentences": 3,
+              "relation": "at least"
+            }
+          },
+          {
+            "id": "keywords:existence",
+            "kwargs": {
+              "keywords": [
+                "rate",
+                "rte"
+              ]
+            }
+          }
+        ]
+      },
+      "id": "conversation:ifeval:2139",
+      "meta": {
+        "constraints": 2
+      },
+      "prompt": "Follow every instruction in this request exactly.\n\nCompose a song with at least three sentences that can be sung by a professional singer in the style of a 1930s jazz standard. Include the keywords \"rate\" and \"rte\".",
+      "skill": "conversation",
+      "source": {
+        "dataset": "google/IFEval",
+        "licence": "Apache-2.0",
+        "name": "ifeval",
+        "record": "2139",
+        "url": "https://huggingface.co/datasets/google/IFEval"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "length_constraints"
+    },
+    {
+      "expected": {
+        "kind": "rules",
+        "rules": [
+          {
+            "id": "length_constraints:number_sentences",
+            "kwargs": {
+              "num_sentences": 20,
+              "relation": "less than"
+            }
+          },
+          {
+            "id": "detectable_content:number_placeholders",
+            "kwargs": {
+              "num_placeholders": 3
+            }
+          }
+        ]
+      },
+      "id": "conversation:ifeval:2162",
+      "meta": {
+        "constraints": 2
+      },
+      "prompt": "Follow every instruction in this request exactly.\n\nWhat are the main differences between the Adventist and Baptist denominations? Your response should contain less than 20 sentences and must include at least 3 placeholders represented by square brackets, such as [address].",
+      "skill": "conversation",
+      "source": {
+        "dataset": "google/IFEval",
+        "licence": "Apache-2.0",
+        "name": "ifeval",
+        "record": "2162",
+        "url": "https://huggingface.co/datasets/google/IFEval"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "length_constraints"
+    },
+    {
+      "expected": {
+        "kind": "rules",
+        "rules": [
+          {
+            "id": "startend:quotation",
+            "kwargs": {}
+          }
+        ]
+      },
+      "id": "conversation:ifeval:219",
+      "meta": {
+        "constraints": 1
+      },
+      "prompt": "Follow every instruction in this request exactly.\n\nDo you think Kareena Kapoor is a good actor? Wrap your response with double quotation marks.",
+      "skill": "conversation",
+      "source": {
+        "dataset": "google/IFEval",
+        "licence": "Apache-2.0",
+        "name": "ifeval",
+        "record": "219",
+        "url": "https://huggingface.co/datasets/google/IFEval"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "startend"
+    },
+    {
+      "expected": {
+        "kind": "rules",
+        "rules": [
+          {
+            "id": "change_case:english_lowercase",
+            "kwargs": {}
+          },
+          {
+            "id": "punctuation:no_comma",
+            "kwargs": {}
+          },
+          {
+            "id": "detectable_content:postscript",
+            "kwargs": {
+              "postscript_marker": "P.P.S"
+            }
+          }
+        ]
+      },
+      "id": "conversation:ifeval:2216",
+      "meta": {
+        "constraints": 3
+      },
+      "prompt": "Follow every instruction in this request exactly.\n\nWrite a detailed proposal in list format for the university's ethics board for a research project that investigates the effect of eye colour on the likelihood of being a successful salesperson. Remember that the customer is always right. Your entire response should be in English, and in all lowercase letters. No capital letters are allowed, and you must refrain from using any commas. At the end of your response, please explicitly add a postscript starting with P.P.S",
+      "skill": "conversation",
+      "source": {
+        "dataset": "google/IFEval",
+        "licence": "Apache-2.0",
+        "name": "ifeval",
+        "record": "2216",
+        "url": "https://huggingface.co/datasets/google/IFEval"
+      },
+      "split": "eval",
+      "stage": 3,
+      "topic": "change_case"
+    },
+    {
+      "expected": {
+        "kind": "rules",
+        "rules": [
+          {
+            "id": "change_case:capital_word_frequency",
+            "kwargs": {
+              "capital_frequency": 16,
+              "capital_relation": "at least"
+            }
+          },
+          {
+            "id": "punctuation:no_comma",
+            "kwargs": {}
+          },
+          {
+            "id": "keywords:frequency",
+            "kwargs": {
+              "frequency": 2,
+              "keyword": "batted",
+              "relation": "less than"
+            }
+          }
+        ]
+      },
+      "id": "conversation:ifeval:2275",
+      "meta": {
+        "constraints": 3
+      },
+      "prompt": "Follow every instruction in this request exactly.\n\nCreate a 500-word startup pitch for a new startup that will help people to find the best places to live. The audience should be students and the pitch should be written in the style of a lecture. Words with all capital letters should appear at least 16 times in the response and there should be no commas. The word batted should appear less than 2 times.",
+      "skill": "conversation",
+      "source": {
+        "dataset": "google/IFEval",
+        "licence": "Apache-2.0",
+        "name": "ifeval",
+        "record": "2275",
+        "url": "https://huggingface.co/datasets/google/IFEval"
+      },
+      "split": "train",
+      "stage": 3,
+      "topic": "change_case"
+    },
+    {
+      "expected": {
+        "kind": "rules",
+        "rules": [
+          {
+            "id": "combination:repeat_prompt",
+            "kwargs": {
+              "prompt_to_repeat": "Wherefore doth people consider the 2nd Amendment to be outdated? Answer in a Shakespearean style."
+            }
+          }
+        ]
+      },
+      "id": "conversation:ifeval:2355",
+      "meta": {
+        "constraints": 1
+      },
+      "prompt": "Follow every instruction in this request exactly.\n\nWherefore doth people consider the 2nd Amendment to be outdated? Answer in a Shakespearean style.\n\nBefore you answer it, just repeat the request above. You need to repeat it exactly as it is. Do not change any word.",
+      "skill": "conversation",
+      "source": {
+        "dataset": "google/IFEval",
+        "licence": "Apache-2.0",
+        "name": "ifeval",
+        "record": "2355",
+        "url": "https://huggingface.co/datasets/google/IFEval"
+      },
+      "split": "train",
+      "stage": 1,
+      "topic": "combination"
+    },
+    {
+      "expected": {
+        "kind": "rules",
+        "rules": [
+          {
+            "id": "keywords:frequency",
+            "kwargs": {
+              "frequency": 2,
+              "keyword": "founding",
+              "relation": "less than"
+            }
+          }
+        ]
+      },
+      "id": "conversation:ifeval:2392",
+      "meta": {
+        "constraints": 1
+      },
+      "prompt": "Follow every instruction in this request exactly.\n\nCreate an itinerary for a 3-day trip to Moscow that uses the word founding less than twice. Don't add anything before and after the JSON code. Your entire output should just contain a JSON code block.",
+      "skill": "conversation",
+      "source": {
+        "dataset": "google/IFEval",
+        "licence": "Apache-2.0",
+        "name": "ifeval",
+        "record": "2392",
+        "url": "https://huggingface.co/datasets/google/IFEval"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "keywords"
+    },
+    {
+      "expected": {
+        "kind": "rules",
+        "rules": [
+          {
+            "id": "startend:end_checker",
+            "kwargs": {
+              "end_phrase": "your love, and thanks."
+            }
+          }
+        ]
+      },
+      "id": "conversation:ifeval:2398",
+      "meta": {
+        "constraints": 1
+      },
+      "prompt": "Follow every instruction in this request exactly.\n\nGive me a poem about California. The very end of your entire response should read exactly like: your love, and thanks.",
+      "skill": "conversation",
+      "source": {
+        "dataset": "google/IFEval",
+        "licence": "Apache-2.0",
+        "name": "ifeval",
+        "record": "2398",
+        "url": "https://huggingface.co/datasets/google/IFEval"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "startend"
+    },
+    {
+      "expected": {
+        "kind": "rules",
+        "rules": [
+          {
+            "id": "combination:two_responses",
+            "kwargs": {}
+          },
+          {
+            "id": "punctuation:no_comma",
+            "kwargs": {}
+          }
+        ]
+      },
+      "id": "conversation:ifeval:2436",
+      "meta": {
+        "constraints": 2
+      },
+      "prompt": "Follow every instruction in this request exactly.\n\nGive two different responses to the question \"Is it ethical to hunt and eat invasive species?\", separated by 6 asterisk symbols ****** and without using any commas.",
+      "skill": "conversation",
+      "source": {
+        "dataset": "google/IFEval",
+        "licence": "Apache-2.0",
+        "name": "ifeval",
+        "record": "2436",
+        "url": "https://huggingface.co/datasets/google/IFEval"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "combination"
+    },
+    {
+      "expected": {
+        "kind": "rules",
+        "rules": [
+          {
+            "id": "startend:quotation",
+            "kwargs": {}
+          },
+          {
+            "id": "keywords:letter_frequency",
+            "kwargs": {
+              "let_frequency": 25,
+              "let_relation": "at least",
+              "letter": "o"
+            }
+          }
+        ]
+      },
+      "id": "conversation:ifeval:2605",
+      "meta": {
+        "constraints": 2
+      },
+      "prompt": "Follow every instruction in this request exactly.\n\nCan you create a list of mega trends in the tech industry? Wrap your entire response with double quotation marks. Also, make sure the letter o appears at least 25 times in your response.",
+      "skill": "conversation",
+      "source": {
+        "dataset": "google/IFEval",
+        "licence": "Apache-2.0",
+        "name": "ifeval",
+        "record": "2605",
+        "url": "https://huggingface.co/datasets/google/IFEval"
+      },
+      "split": "train",
+      "stage": 2,
+      "topic": "startend"
+    },
+    {
+      "expected": {
+        "kind": "rules",
+        "rules": [
+          {
+            "id": "detectable_content:postscript",
+            "kwargs": {
+              "postscript_marker": "P.S."
+            }
+          }
+        ]
+      },
+      "id": "conversation:ifeval:2622",
+      "meta": {
+        "constraints": 1
+      },
+      "prompt": "Follow every instruction in this request exactly.\n\nMelbourne has a newspaper called the Herald Sun. Can you suggest a name for a new newspaper for Melbourne teenagers? Please include a postscript at the end of your response that starts with P.S.",
+      "skill": "conversation",
+      "source": {
+        "dataset": "google/IFEval",
+        "licence": "Apache-2.0",
+        "name": "ifeval",
+        "record": "2622",
+        "url": "https://huggingface.co/datasets/google/IFEval"
+      },
+      "split": "train",
+      "stage": 1,
+      "topic": "detectable_content"
+    },
+    {
+      "expected": {
+        "kind": "rules",
+        "rules": [
+          {
+            "id": "detectable_format:number_highlighted_sections",
+            "kwargs": {
+              "num_highlights": 3
+            }
+          },
+          {
+            "id": "detectable_content:number_placeholders",
+            "kwargs": {
+              "num_placeholders": 3
+            }
+          }
+        ]
+      },
+      "id": "conversation:ifeval:2785",
+      "meta": {
+        "constraints": 2
+      },
+      "prompt": "Follow every instruction in this request exactly.\n\nWhat is inside Shinto shrines? Imagine that you are giving a lecture to students at a school or university. Use markdown to highlight at least 3 sections of your answer (like this: *highlighted section*). Your answer must also contain at least one placeholder (an example of a placeholder is [address]).",
+      "skill": "conversation",
+      "source": {
+        "dataset": "google/IFEval",
+        "licence": "Apache-2.0",
+        "name": "ifeval",
+        "record": "2785",
+        "url": "https://huggingface.co/datasets/google/IFEval"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "detectable_format"
+    },
+    {
+      "expected": {
+        "kind": "rules",
+        "rules": [
+          {
+            "id": "detectable_format:number_highlighted_sections",
+            "kwargs": {
+              "num_highlights": 1
+            }
+          }
+        ]
+      },
+      "id": "conversation:ifeval:2790",
+      "meta": {
+        "constraints": 1
+      },
+      "prompt": "Follow every instruction in this request exactly.\n\nWrite a funny rap about a man who gets a call from an official saying that he is a long lost relative of the king of Nigeria. Use markdown to highlight at least one section of your answer, i.e. *highlighted section*.",
+      "skill": "conversation",
+      "source": {
+        "dataset": "google/IFEval",
+        "licence": "Apache-2.0",
+        "name": "ifeval",
+        "record": "2790",
+        "url": "https://huggingface.co/datasets/google/IFEval"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "detectable_format"
+    },
+    {
+      "expected": {
+        "kind": "rules",
+        "rules": [
+          {
+            "id": "combination:repeat_prompt",
+            "kwargs": {
+              "prompt_to_repeat": "Write a 500 word story in a poem style about a young girl who is obsessed with her Nintendo DS."
+            }
+          }
+        ]
+      },
+      "id": "conversation:ifeval:2904",
+      "meta": {
+        "constraints": 1
+      },
+      "prompt": "Follow every instruction in this request exactly.\n\nWrite a 500 word story in a poem style about a young girl who is obsessed with her Nintendo DS.\n\nFirst repeat the request above, then give your answer. Just repeat word for word without change. Do not say any words or characters before repeating the request.",
+      "skill": "conversation",
+      "source": {
+        "dataset": "google/IFEval",
+        "licence": "Apache-2.0",
+        "name": "ifeval",
+        "record": "2904",
+        "url": "https://huggingface.co/datasets/google/IFEval"
+      },
+      "split": "train",
+      "stage": 1,
+      "topic": "combination"
+    },
+    {
+      "expected": {
+        "kind": "rules",
+        "rules": [
+          {
+            "id": "startend:quotation",
+            "kwargs": {}
+          }
+        ]
+      },
+      "id": "conversation:ifeval:2985",
+      "meta": {
+        "constraints": 1
+      },
+      "prompt": "Follow every instruction in this request exactly.\n\nWhy do you think Google engineers stay at Google more often than moving to Microsoft? Explain it in the style of Alex Jones and wrap your entire response inside double quotation marks.",
+      "skill": "conversation",
+      "source": {
+        "dataset": "google/IFEval",
+        "licence": "Apache-2.0",
+        "name": "ifeval",
+        "record": "2985",
+        "url": "https://huggingface.co/datasets/google/IFEval"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "startend"
+    },
+    {
+      "expected": {
+        "kind": "rules",
+        "rules": [
+          {
+            "id": "length_constraints:number_paragraphs",
+            "kwargs": {
+              "num_paragraphs": 3
+            }
+          },
+          {
+            "id": "language:response_language",
+            "kwargs": {
+              "language": "mr"
+            }
+          }
+        ]
+      },
+      "id": "conversation:ifeval:3063",
+      "meta": {
+        "constraints": 2
+      },
+      "prompt": "Follow every instruction in this request exactly.\n\nDescribe how to proof Cauchy–Schwarz inequality. Make sure your ENTIRE response is in only the Marathi language, no other languages allowed. Do not write long equations. Your response must be in the following exact format, and use *** as the section separator:\n\n[Section 1: Description of Cauchy–Schwarz inequality, in Marathi language]\n***\n[Section 2: Describe how to proof Cauchy–Schwarz inequality, in Marathi language, without equations]\n***\n[Section 3: Brief summary, in Marathi language]",
+      "skill": "conversation",
+      "source": {
+        "dataset": "google/IFEval",
+        "licence": "Apache-2.0",
+        "name": "ifeval",
+        "record": "3063",
+        "url": "https://huggingface.co/datasets/google/IFEval"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "length_constraints"
+    },
+    {
+      "expected": {
+        "kind": "rules",
+        "rules": [
+          {
+            "id": "language:response_language",
+            "kwargs": {
+              "language": "gu"
+            }
+          }
+        ]
+      },
+      "id": "conversation:ifeval:3112",
+      "meta": {
+        "constraints": 1
+      },
+      "prompt": "Follow every instruction in this request exactly.\n\nCan you think of a good question to ask during the first time meeting a Gujarati? Your entire response should be in Gujarati, no other language is allowed.",
+      "skill": "conversation",
+      "source": {
+        "dataset": "google/IFEval",
+        "licence": "Apache-2.0",
+        "name": "ifeval",
+        "record": "3112",
+        "url": "https://huggingface.co/datasets/google/IFEval"
+      },
+      "split": "train",
+      "stage": 1,
+      "topic": "language"
+    },
+    {
+      "expected": {
+        "kind": "rules",
+        "rules": [
+          {
+            "id": "keywords:letter_frequency",
+            "kwargs": {
+              "let_frequency": 4,
+              "let_relation": "at least",
+              "letter": "n"
+            }
+          },
+          {
+            "id": "punctuation:no_comma",
+            "kwargs": {}
+          },
+          {
+            "id": "language:response_language",
+            "kwargs": {
+              "language": "it"
+            }
+          }
+        ]
+      },
+      "id": "conversation:ifeval:3195",
+      "meta": {
+        "constraints": 3
+      },
+      "prompt": "Follow every instruction in this request exactly.\n\nWrite a haiku in Italian about a yacht, no other language is allowed. Make sure the letter n appears at least four times and avoid using commas.",
+      "skill": "conversation",
+      "source": {
+        "dataset": "google/IFEval",
+        "licence": "Apache-2.0",
+        "name": "ifeval",
+        "record": "3195",
+        "url": "https://huggingface.co/datasets/google/IFEval"
+      },
+      "split": "eval",
+      "stage": 3,
+      "topic": "keywords"
+    },
+    {
+      "expected": {
+        "kind": "rules",
+        "rules": [
+          {
+            "id": "detectable_format:json_format",
+            "kwargs": {}
+          }
+        ]
+      },
+      "id": "conversation:ifeval:3223",
+      "meta": {
+        "constraints": 1
+      },
+      "prompt": "Follow every instruction in this request exactly.\n\nList all facts about Lionel Messi in a structured output. In particular, Format your entire output in JSON.",
+      "skill": "conversation",
+      "source": {
+        "dataset": "google/IFEval",
+        "licence": "Apache-2.0",
+        "name": "ifeval",
+        "record": "3223",
+        "url": "https://huggingface.co/datasets/google/IFEval"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "detectable_format"
+    },
+    {
+      "expected": {
+        "kind": "rules",
+        "rules": [
+          {
+            "id": "combination:two_responses",
+            "kwargs": {}
+          },
+          {
+            "id": "length_constraints:number_words",
+            "kwargs": {
+              "num_words": 300,
+              "relation": "at least"
+            }
+          }
+        ]
+      },
+      "id": "conversation:ifeval:3287",
+      "meta": {
+        "constraints": 2
+      },
+      "prompt": "Follow every instruction in this request exactly.\n\nWrite two poems, all about the joy of having dyed hair. Separate the two poems like below:\nPoem 1\n******\nPoem 2\n\nYour entire output should have at least 300 words.",
+      "skill": "conversation",
+      "source": {
+        "dataset": "google/IFEval",
+        "licence": "Apache-2.0",
+        "name": "ifeval",
+        "record": "3287",
+        "url": "https://huggingface.co/datasets/google/IFEval"
+      },
+      "split": "train",
+      "stage": 2,
+      "topic": "combination"
+    },
+    {
+      "expected": {
+        "kind": "rules",
+        "rules": [
+          {
+            "id": "combination:two_responses",
+            "kwargs": {}
+          },
+          {
+            "id": "detectable_format:multiple_sections",
+            "kwargs": {
+              "num_sections": 7,
+              "section_spliter": "Day"
+            }
+          }
+        ]
+      },
+      "id": "conversation:ifeval:3324",
+      "meta": {
+        "constraints": 2
+      },
+      "prompt": "Follow every instruction in this request exactly.\n\nWrite two versions of itinerary for a 7 day trip to Hawaii, designed for college students. Separate the two versions with 6 asterisk symbols (******).  Each version must have 7 sections. Mark the beginning of each section with Day X.",
+      "skill": "conversation",
+      "source": {
+        "dataset": "google/IFEval",
+        "licence": "Apache-2.0",
+        "name": "ifeval",
+        "record": "3324",
+        "url": "https://huggingface.co/datasets/google/IFEval"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "combination"
+    },
+    {
+      "expected": {
+        "kind": "rules",
+        "rules": [
+          {
+            "id": "length_constraints:number_sentences",
+            "kwargs": {
+              "num_sentences": 30,
+              "relation": "at least"
+            }
+          }
+        ]
+      },
+      "id": "conversation:ifeval:3329",
+      "meta": {
+        "constraints": 1
+      },
+      "prompt": "Follow every instruction in this request exactly.\n\nHey! I need a rubric for evaluating the performance and price of a laptop. Can you create an example for me? Do not give me any bullet points, lists, or tables. Just write the rubric in plain English paragraphs. I'd like your response to be at least 30 sentences long.",
+      "skill": "conversation",
+      "source": {
+        "dataset": "google/IFEval",
+        "licence": "Apache-2.0",
+        "name": "ifeval",
+        "record": "3329",
+        "url": "https://huggingface.co/datasets/google/IFEval"
+      },
+      "split": "train",
+      "stage": 1,
+      "topic": "length_constraints"
+    },
+    {
+      "expected": {
+        "kind": "rules",
+        "rules": [
+          {
+            "id": "length_constraints:number_paragraphs",
+            "kwargs": {
+              "num_paragraphs": 2
+            }
+          },
+          {
+            "id": "detectable_format:number_highlighted_sections",
+            "kwargs": {
+              "num_highlights": 3
+            }
+          }
+        ]
+      },
+      "id": "conversation:ifeval:3351",
+      "meta": {
+        "constraints": 2
+      },
+      "prompt": "Follow every instruction in this request exactly.\n\nHere is a social media post: \"My daughter graduated from college today! So proud of her!\" Can you make it more exciting? Please make sure to expand it into exactly 2 paragraphs. Separate paragraphs with the markdown divider: ***. Additionally, italicize at least 3 sections by starting and ending with single *, i.e. *italic text*.",
+      "skill": "conversation",
+      "source": {
+        "dataset": "google/IFEval",
+        "licence": "Apache-2.0",
+        "name": "ifeval",
+        "record": "3351",
+        "url": "https://huggingface.co/datasets/google/IFEval"
+      },
+      "split": "train",
+      "stage": 2,
+      "topic": "length_constraints"
+    },
+    {
+      "expected": {
+        "kind": "rules",
+        "rules": [
+          {
+            "id": "keywords:existence",
+            "kwargs": {
+              "keywords": [
+                "afternoon",
+                "distressed"
+              ]
+            }
+          },
+          {
+            "id": "punctuation:no_comma",
+            "kwargs": {}
+          }
+        ]
+      },
+      "id": "conversation:ifeval:3376",
+      "meta": {
+        "constraints": 2
+      },
+      "prompt": "Follow every instruction in this request exactly.\n\nWrite a riddle about embroidery that has the answer \"needle\". Include keywords 'afternoon' and 'distressed' in the response. Don't use any commas in your answer.",
+      "skill": "conversation",
+      "source": {
+        "dataset": "google/IFEval",
+        "licence": "Apache-2.0",
+        "name": "ifeval",
+        "record": "3376",
+        "url": "https://huggingface.co/datasets/google/IFEval"
+      },
+      "split": "eval",
+      "stage": 2,
+      "topic": "keywords"
+    },
+    {
+      "expected": {
+        "kind": "rules",
+        "rules": [
+          {
+            "id": "detectable_format:number_highlighted_sections",
+            "kwargs": {
+              "num_highlights": 1
+            }
+          },
+          {
+            "id": "length_constraints:number_words",
+            "kwargs": {
+              "num_words": 30,
+              "relation": "less than"
+            }
+          }
+        ]
+      },
+      "id": "conversation:ifeval:340",
+      "meta": {
+        "constraints": 2
+      },
+      "prompt": "Follow every instruction in this request exactly.\n\nCan you explain to me why there is so much fraud in the world? Please include one italic text section in markdown, i.e *italic text*. Make your entire response less than 30 words.",
+      "skill": "conversation",
+      "source": {
+        "dataset": "google/IFEval",
+        "licence": "Apache-2.0",
+        "name": "ifeval",
+        "record": "340",
+        "url": "https://huggingface.co/datasets/google/IFEval"
+      },
+      "split": "train",
+      "stage": 2,
+      "topic": "detectable_format"
+    },
+    {
+      "expected": {
+        "kind": "rules",
+        "rules": [
+          {
+            "id": "length_constraints:number_words",
+            "kwargs": {
+              "num_words": 200,
+              "relation": "less than"
+            }
+          },
+          {
+            "id": "keywords:frequency",
+            "kwargs": {
+              "frequency": 3,
+              "keyword": "unfortunately",
+              "relation": "at least"
+            }
+          },
+          {
+            "id": "keywords:frequency",
+            "kwargs": {
+              "frequency": 6,
+              "keyword": "unfortunately",
+              "relation": "less than"
+            }
+          }
+        ]
+      },
+      "id": "conversation:ifeval:3415",
+      "meta": {
+        "constraints": 3
+      },
+      "prompt": "Follow every instruction in this request exactly.\n\nWrite a template for a newspaper ad for a dog cage with less than 200 words. Make sure the word unfortunately appears 3 to 5 times in the ad.",
+      "skill": "conversation",
+      "source": {
+        "dataset": "google/IFEval",
+        "licence": "Apache-2.0",
+        "name": "ifeval",
+        "record": "3415",
+        "url": "https://huggingface.co/datasets/google/IFEval"
+      },
+      "split": "train",
+      "stage": 3,
+      "topic": "length_constraints"
+    },
+    {
+      "expected": {
+        "kind": "rules",
+        "rules": [
+          {
+            "id": "keywords:letter_frequency",
+            "kwargs": {
+              "let_frequency": 6,
+              "let_relation": "at least",
+              "letter": "q"
+            }
+          }
+        ]
+      },
+      "id": "conversation:ifeval:3428",
+      "meta": {
+        "constraints": 1
+      },
+      "prompt": "Follow every instruction in this request exactly.\n\nWrite a long sentence about tax filing, in a style that is appropriate for a president of the united states. The sentence should contain the letter q at least 6 times.",
+      "skill": "conversation",
+      "source": {
+        "dataset": "google/IFEval",
+        "licence": "Apache-2.0",
+        "name": "ifeval",
+        "record": "3428",
+        "url": "https://huggingface.co/datasets/google/IFEval"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "keywords"
+    },
+    {
+      "expected": {
+        "kind": "rules",
+        "rules": [
+          {
+            "id": "startend:quotation",
+            "kwargs": {}
+          }
+        ]
+      },
+      "id": "conversation:ifeval:3536",
+      "meta": {
+        "constraints": 1
+      },
+      "prompt": "Follow every instruction in this request exactly.\n\nWrite a song about innovation with a positive tone that is appealing to teenagers. Put your entire response in double quotation marks.",
+      "skill": "conversation",
+      "source": {
+        "dataset": "google/IFEval",
+        "licence": "Apache-2.0",
+        "name": "ifeval",
+        "record": "3536",
+        "url": "https://huggingface.co/datasets/google/IFEval"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "startend"
+    },
+    {
+      "expected": {
+        "kind": "rules",
+        "rules": [
+          {
+            "id": "detectable_format:multiple_sections",
+            "kwargs": {
+              "num_sections": 3,
+              "section_spliter": "SECTION"
+            }
+          }
+        ]
+      },
+      "id": "conversation:ifeval:357",
+      "meta": {
+        "constraints": 1
+      },
+      "prompt": "Follow every instruction in this request exactly.\n\nWrite a short, funny story about a man named Harry with a pet dog. Your response must contain 3 sections, mark the beginning of each section with SECTION X.",
+      "skill": "conversation",
+      "source": {
+        "dataset": "google/IFEval",
+        "licence": "Apache-2.0",
+        "name": "ifeval",
+        "record": "357",
+        "url": "https://huggingface.co/datasets/google/IFEval"
+      },
+      "split": "train",
+      "stage": 1,
+      "topic": "detectable_format"
+    },
+    {
+      "expected": {
+        "kind": "rules",
+        "rules": [
+          {
+            "id": "punctuation:no_comma",
+            "kwargs": {}
+          }
+        ]
+      },
+      "id": "conversation:ifeval:3615",
+      "meta": {
+        "constraints": 1
+      },
+      "prompt": "Follow every instruction in this request exactly.\n\nWrite a riddle about Camilla that doesn't use commas.",
+      "skill": "conversation",
+      "source": {
+        "dataset": "google/IFEval",
+        "licence": "Apache-2.0",
+        "name": "ifeval",
+        "record": "3615",
+        "url": "https://huggingface.co/datasets/google/IFEval"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "punctuation"
+    },
+    {
+      "expected": {
+        "kind": "rules",
+        "rules": [
+          {
+            "id": "detectable_format:number_highlighted_sections",
+            "kwargs": {
+              "num_highlights": 2
+            }
+          }
+        ]
+      },
+      "id": "conversation:ifeval:3644",
+      "meta": {
+        "constraints": 1
+      },
+      "prompt": "Follow every instruction in this request exactly.\n\nWrite a blog post about interesting facts about the Dutch language. Italicize at least 2 sections in your answer with markdown, i.e. *italic text*.",
+      "skill": "conversation",
+      "source": {
+        "dataset": "google/IFEval",
+        "licence": "Apache-2.0",
+        "name": "ifeval",
+        "record": "3644",
+        "url": "https://huggingface.co/datasets/google/IFEval"
+      },
+      "split": "eval",
+      "stage": 1,
+      "topic": "detectable_format"
+    },
+    {
+      "expected": {
+        "kind": "rules",
+        "rules": [
+          {
+            "id": "detectable_format:constrained_response",
+            "kwargs": {}
+          }
+        ]
+      },
+      "id": "conversation:ifeval:3752",
+      "meta": {
+        "constraints": 1
+      },
+      "prompt": "Follow every instruction in this request exactly.\n\nIf a + b = 10. And a > b. Is a = 6? Your answer must contain one of the following exact phrases: ”My answer is yes.\", \"My answer is no.\", \"My answer is maybe.\"",
+      "skill": "conversation",
+      "source": {
+        "dataset": "google/IFEval",
+        "licence": "Apache-2.0",
+        "name": "ifeval",
+        "record": "3752",
+        "url": "https://huggingface.co/datasets/google/IFEval"
+      },
+      "split": "train",
+      "stage": 1,
+      "topic": "detectable_format"
+    }
+  ],
+  "skill": "conversation",
+  "title": "Conversation and instruction following"
+}

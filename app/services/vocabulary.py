@@ -35,14 +35,26 @@ class Vocabulary:
     an old mapping would silently mean different words in the new model.
     """
 
-    def __init__(self, owner: str, tokens: Iterable[str], retired: bool = False) -> None:
+    def __init__(
+        self,
+        owner: str,
+        tokens: Iterable[str],
+        retired: bool = False,
+        tokenizer: object | None = None,
+    ) -> None:
         self.owner = owner
         self.tokens = tuple(str(token) for token in tokens)
         self.retired = retired
+        self.tokenizer = tokenizer
         self._index = {token: position for position, token in enumerate(self.tokens)}
 
     def __len__(self) -> int:
         return len(self.tokens)
+
+    @property
+    def kind(self) -> str:
+        """The tokenizer's kind, when the live mapping is a real tokenizer."""
+        return str(getattr(self.tokenizer, "kind", "word"))
 
     @property
     def index(self) -> dict[str, int]:
@@ -65,12 +77,16 @@ class Vocabulary:
         """Turn text into ids.
 
         A retired vocabulary refuses to do this: ids from an old mapping would
-        be read as different words by the model that answers.
+        be read as different words by the model that answers. A live
+        tokenizer encodes in its own way, so a BPE checkpoint is read as
+        pieces and never re-tokenised as words.
         """
         if self.retired:
             raise VocabularyError(
                 f"the '{self.owner}' vocabulary is retired and must not produce ids"
             )
+        if self.tokenizer is not None:
+            return list(self.tokenizer.encode(text))
         from app.services.neural.tokens import tokenize
 
         unknown = self._index.get("<unk>")
@@ -80,6 +96,8 @@ class Vocabulary:
         ]
 
     def decode(self, ids: Iterable[int]) -> str:
+        if self.tokenizer is not None:
+            return str(self.tokenizer.decode(ids))
         return " ".join(token for token in (self.token_of(int(i)) for i in ids) if token)
 
 
@@ -89,7 +107,8 @@ def canonical(tenant_id: int | None = None) -> Vocabulary:
 
     task = engine_for(tenant_id).word_task
     tokens = tuple(task.vocabulary) if task is not None else ()
-    return Vocabulary(CANONICAL_OWNER, tokens)
+    tokenizer = getattr(task, "tokenizer", None) if task is not None else None
+    return Vocabulary(CANONICAL_OWNER, tokens, tokenizer=tokenizer)
 
 
 def retired(name: str) -> Vocabulary:
@@ -199,14 +218,33 @@ def _boundary_problems() -> list[str]:
     return problems
 
 
+def _tokenizer_problems(vocab: Vocabulary) -> list[str]:
+    """The live tokenizer's marks must sit inside the live vocabulary."""
+    tokenizer = vocab.tokenizer
+    if tokenizer is None:
+        return []
+    problems: list[str] = []
+    for name, token_id in dict(getattr(tokenizer, "special_ids", {})).items():
+        if not 0 <= int(token_id) < len(vocab):
+            problems.append(
+                f"the live tokenizer's mark {name} has id {token_id}, outside {len(vocab)}"
+            )
+    if str(getattr(tokenizer, "kind", "")) not in {"word", "bpe"}:
+        problems.append(f"the live tokenizer has an unknown kind '{tokenizer.kind}'")
+    return problems
+
+
 def assert_single_vocabulary(tenant_id: int | None = None) -> dict:
     """Check that only the word model's mapping can reach the model.
 
     This runs at startup, so a mistake stops the app instead of quietly
-    answering with the wrong words.
+    answering with the wrong words. The live tokenizer is checked too: its
+    special ids must sit inside its own vocabulary, and a kind this app does
+    not know is refused.
     """
     vocab = canonical(tenant_id)
     problems = _identity_problems(vocab)
+    problems += _tokenizer_problems(vocab)
     problems += _retired_problems(vocab)
 
     # The answering model must be able to read its own ids.
@@ -227,6 +265,7 @@ def assert_single_vocabulary(tenant_id: int | None = None) -> dict:
         )
     return {
         "owner": vocab.owner,
+        "kind": vocab.kind,
         "size": len(vocab),
         "trained": len(vocab) > 0,
         "retired": retired_names(),

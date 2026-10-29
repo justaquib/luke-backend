@@ -2,7 +2,10 @@
 
 from __future__ import annotations
 
+import logging
 from typing import Any
+
+logger = logging.getLogger(__name__)
 
 
 def knowledge_graph(tenant_id: int | None, subject: str = "", limit: int = 90) -> dict[str, Any]:
@@ -14,7 +17,8 @@ def knowledge_graph(tenant_id: int | None, subject: str = "", limit: int = 90) -
 
     try:
         cards = language_logic.all_lesson_cards(tenant_id)
-    except Exception:
+    except Exception as error:  # noqa: BLE001 -- the taught lesson-card boundary
+        logger.debug("the knowledge graph found no lesson cards: %s", error)
         cards = []
 
     wanted = (subject or "").strip().lower()

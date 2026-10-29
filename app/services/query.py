@@ -4,11 +4,11 @@ from __future__ import annotations
 
 from collections.abc import Callable
 
-from fastapi import HTTPException
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from app.config import settings
+from app.core.workspace import current_workspace
 from app.db.database import Faq, User
 from app.schemas import (
     QueryRequest,
@@ -42,16 +42,9 @@ def _default_response(
     )
 
 
-def tenant_for_chat(user: User) -> int | None:
-    """The tenant the chat answers from; the system administrator has none."""
-    if user.is_systemadmin:
-        # The system administrator has no tenant of their own: they look after
-        # every tenant, so the assistant answers them from all of it, and from
-        # the lessons they taught themselves.
-        return None
-    if not user.tenant_id:
-        raise HTTPException(403, "User is not assigned to a tenant")
-    return user.tenant_id
+def tenant_for_chat(user: User) -> int:
+    """The workspace the chat answers from."""
+    return current_workspace()
 
 
 def answer_question(
