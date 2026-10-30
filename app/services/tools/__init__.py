@@ -10,10 +10,10 @@ require explicit user confirmation before they execute.
 """
 
 from app.services.tools.errors import (
-    ToolExecutionFailed,
-    ToolNotFound,
-    ToolPermissionDenied,
-    ToolRequiresConfirmation,
+    ToolExecutionFailedError,
+    ToolNotFoundError,
+    ToolPermissionDeniedError,
+    ToolRequiresConfirmationError,
 )
 from app.services.tools.executor import execute
 from app.services.tools.permissions import can_use, set_permission
@@ -22,11 +22,11 @@ from app.services.tools.results import ToolResult
 
 __all__ = [
     "Tool",
-    "ToolExecutionFailed",
-    "ToolNotFound",
-    "ToolPermissionDenied",
+    "ToolExecutionFailedError",
+    "ToolNotFoundError",
+    "ToolPermissionDeniedError",
     "ToolRegistry",
-    "ToolRequiresConfirmation",
+    "ToolRequiresConfirmationError",
     "ToolResult",
     "can_use",
     "execute",

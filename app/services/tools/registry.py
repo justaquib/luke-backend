@@ -10,7 +10,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any
 
-from app.services.tools.errors import ToolNotFound
+from app.services.tools.errors import ToolNotFoundError
 
 
 @dataclass(frozen=True)
@@ -46,7 +46,7 @@ class ToolRegistry:
     def get(self, name: str) -> Tool:
         """Look up a tool by name."""
         if name not in self._tools:
-            raise ToolNotFound(f"Unknown tool: {name}")
+            raise ToolNotFoundError(f"Unknown tool: {name}")
         return self._tools[name]
 
     def list(self) -> list[Tool]:

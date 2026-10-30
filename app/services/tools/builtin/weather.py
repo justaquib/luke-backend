@@ -13,9 +13,11 @@ from app.services.tools.registry import Tool, register
 
 
 def get_weather(
-    question: str, lat: float | None = None, lon: float | None = None
+    question: str | None = None, lat: float | None = None, lon: float | None = None
 ) -> dict[str, Any]:
     """Fetch the current weather for the given location."""
+    if question is None:
+        question = "weather"
     result = apps.weather_for(question, lat=lat, lon=lon)
     if not result:
         raise ValueError("No weather data found for the given location.")
@@ -31,7 +33,10 @@ register(
             "properties": {
                 "question": {
                     "type": "string",
-                    "description": "The weather question (e.g., 'weather in Paris').",
+                    "description": (
+                        "The weather question (e.g., 'weather in Paris'). "
+                        "Defaults to 'weather' if not provided."
+                    ),
                 },
                 "lat": {
                     "type": "number",
@@ -42,7 +47,7 @@ register(
                     "description": "Longitude (optional; extracted from question if not provided).",
                 },
             },
-            "required": ["question"],
+            "required": [],
         },
         requires_confirmation=False,
         handler=get_weather,

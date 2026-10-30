@@ -3,17 +3,17 @@
 from __future__ import annotations
 
 
-class ToolNotFound(LookupError):
+class ToolNotFoundError(LookupError):
     """The requested tool is not registered."""
 
 
-class ToolPermissionDenied(PermissionError):
+class ToolPermissionDeniedError(PermissionError):
     """The tenant does not have permission to use this tool."""
 
 
-class ToolRequiresConfirmation(RuntimeError):
+class ToolRequiresConfirmationError(RuntimeError):
     """The tool needs explicit user confirmation before it runs."""
 
 
-class ToolExecutionFailed(RuntimeError):
+class ToolExecutionFailedError(RuntimeError):
     """The tool handler raised an exception."""

@@ -10,7 +10,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Protocol
 
-from app.services.voice.errors import VoiceModuleUnavailable
+from app.services.voice.errors import VoiceModuleUnavailableError
 
 
 @dataclass(frozen=True)
@@ -58,19 +58,30 @@ class VoiceModule:
 
 _REGISTRY: dict[str, tuple[type[TtsEngine], type[SttEngine]]] = {}
 _ACTIVE: str | None = None
+_STATE: dict[str, str | None] = {"active": None}
 
 
-def register_module(
-    name: str,
-    tts_module: str,
-    stt_module: str,
-    description: str,
-    tts_cls: type[TtsEngine],
-    stt_cls: type[SttEngine],
-) -> None:
+@dataclass(frozen=True)
+class ModuleRegistration:
+    """Parameters for registering a voice module."""
+
+    name: str
+    tts_module: str
+    stt_module: str
+    description: str
+    tts_cls: type[TtsEngine]
+    stt_cls: type[SttEngine]
+
+
+def register_module(registration: ModuleRegistration) -> None:
     """Add a module to the registry. Called once at import time per module."""
-    _REGISTRY[name] = (tts_cls, stt_cls)
-    _ensure_entry(name, tts_module, stt_module, description)
+    _REGISTRY[registration.name] = (registration.tts_cls, registration.stt_cls)
+    _ensure_entry(
+        registration.name,
+        registration.tts_module,
+        registration.stt_module,
+        registration.description,
+    )
 
 
 def list_modules() -> list[VoiceModuleEntry]:
@@ -93,19 +104,18 @@ _ENTRIES: dict[str, VoiceModuleEntry] = {}
 
 def set_active_module(name: str) -> None:
     """Choose which registered module serves requests."""
-    global _ACTIVE
     if name not in _REGISTRY:
-        raise VoiceModuleUnavailable(f"Unknown voice module: {name}")
-    _ACTIVE = name
+        raise VoiceModuleUnavailableError(f"Unknown voice module: {name}")
+    _STATE["active"] = name
 
 
 def active_module() -> VoiceModule:
     """The module the tenant has chosen, built and ready to call."""
-    name = _ACTIVE or _default_name()
+    name = _STATE["active"] or _default_name()
     if name is None:
-        raise VoiceModuleUnavailable("No voice module is registered.")
+        raise VoiceModuleUnavailableError("No voice module is registered.")
     if name not in _REGISTRY:
-        raise VoiceModuleUnavailable(f"Voice module not installed: {name}")
+        raise VoiceModuleUnavailableError(f"Voice module not installed: {name}")
     tts_cls, stt_cls = _REGISTRY[name]
     entry = _ENTRIES[name]
     return VoiceModule(entry=entry, tts=tts_cls(), stt=stt_cls())

@@ -11,6 +11,7 @@ from fastapi import APIRouter, Depends, HTTPException, UploadFile
 from fastapi.responses import Response
 
 from app.core.security import get_bearer_user, tenant_id_of
+from app.db.database import User
 from app.schemas.voice import (
     SetModuleRequest,
     SttResponse,
@@ -21,9 +22,9 @@ from app.schemas.voice import (
 )
 from app.services import voice_settings
 from app.services.voice import (
-    VoiceModuleUnavailable,
-    VoiceSynthesisFailed,
-    VoiceTranscriptionFailed,
+    VoiceModuleUnavailableError,
+    VoiceSynthesisFailedError,
+    VoiceTranscriptionFailedError,
     active_module,
     list_modules,
     set_active_module,
@@ -34,7 +35,7 @@ router = APIRouter(prefix="/voice", tags=["voice"])
 
 @router.get("/status", response_model=VoiceStatusOut)
 def voice_status(
-    user=Depends(get_bearer_user),
+    user: User = Depends(get_bearer_user),
 ) -> VoiceStatusOut:
     """What the settings page shows: the active module, its voices, and any error."""
     tenant_id = tenant_id_of(user)
@@ -54,7 +55,7 @@ def voice_status(
             modules=[VoiceModuleEntryOut.model_validate(m) for m in modules],
             error=None,
         )
-    except VoiceModuleUnavailable as error:
+    except VoiceModuleUnavailableError as error:
         return VoiceStatusOut(
             available=False,
             active_module=active_name,
@@ -69,7 +70,7 @@ def voice_status(
 @router.post("/tts")
 def voice_tts(
     body: TtsRequest,
-    user=Depends(get_bearer_user),
+    user: User = Depends(get_bearer_user),
 ) -> Response:
     """Synthesize text into audio and stream it back as a WAV file."""
     tenant_id = tenant_id_of(user)
@@ -77,9 +78,9 @@ def voice_tts(
     try:
         module = active_module()
         wav_bytes = module.tts.synthesize(body.text, body.voice)
-    except VoiceModuleUnavailable as error:
+    except VoiceModuleUnavailableError as error:
         raise HTTPException(503, str(error)) from error
-    except VoiceSynthesisFailed as error:
+    except VoiceSynthesisFailedError as error:
         raise HTTPException(400, str(error)) from error
     return Response(
         content=wav_bytes,
@@ -91,7 +92,7 @@ def voice_tts(
 @router.post("/stt", response_model=SttResponse)
 async def voice_stt(
     audio: UploadFile,
-    user=Depends(get_bearer_user),
+    user: User = Depends(get_bearer_user),
 ) -> SttResponse:
     """Transcribe uploaded audio and return the text."""
     tenant_id = tenant_id_of(user)
@@ -101,16 +102,16 @@ async def voice_stt(
     try:
         module = active_module()
         text = module.stt.transcribe(audio_bytes, mime)
-    except VoiceModuleUnavailable as error:
+    except VoiceModuleUnavailableError as error:
         raise HTTPException(503, str(error)) from error
-    except VoiceTranscriptionFailed as error:
+    except VoiceTranscriptionFailedError as error:
         raise HTTPException(400, str(error)) from error
     return SttResponse(text=text)
 
 
 @router.get("/modules", response_model=list[VoiceModuleEntryOut])
 def voice_modules(
-    user=Depends(get_bearer_user),
+    user: User = Depends(get_bearer_user),
 ) -> list[VoiceModuleEntryOut]:
     """Every registered voice module the tenant can switch to."""
     return [VoiceModuleEntryOut.model_validate(m) for m in list_modules()]
@@ -119,13 +120,13 @@ def voice_modules(
 @router.put("/module", response_model=VoiceStatusOut)
 def voice_set_module(
     body: SetModuleRequest,
-    user=Depends(get_bearer_user),
+    user: User = Depends(get_bearer_user),
 ) -> VoiceStatusOut:
     """Switch the active voice module for this tenant."""
     tenant_id = tenant_id_of(user)
     try:
         set_active_module(body.name)
         voice_settings.set_active_module_name(tenant_id, body.name)
-    except VoiceModuleUnavailable as error:
+    except VoiceModuleUnavailableError as error:
         raise HTTPException(400, str(error)) from error
     return voice_status(user)

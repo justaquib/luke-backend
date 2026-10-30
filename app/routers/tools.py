@@ -22,9 +22,9 @@ from app.schemas.tools import (
 )
 from app.services import tool_settings
 from app.services.tools import (
-    ToolExecutionFailed,
-    ToolNotFound,
-    ToolPermissionDenied,
+    ToolExecutionFailedError,
+    ToolNotFoundError,
+    ToolPermissionDeniedError,
     can_use,
     execute,
     list_tools,
@@ -46,7 +46,7 @@ def _require_admin(user: User = Depends(get_bearer_user)) -> User:
 
 @router.get("", response_model=list[ToolOut])
 def tools_list(
-    user=Depends(get_bearer_user),
+    user: User = Depends(get_bearer_user),
 ) -> list[ToolOut]:
     """Every registered tool the tenant has permission to see."""
     tenant_id = tenant_id_of(user)
@@ -60,7 +60,7 @@ def tools_list(
 @router.post("/execute", response_model=ToolExecuteResponse)
 def tools_execute(
     body: ToolExecuteRequest,
-    user=Depends(get_bearer_user),
+    user: User = Depends(get_bearer_user),
 ) -> ToolExecuteResponse:
     """Run a tool with the given parameters.
 
@@ -71,11 +71,11 @@ def tools_execute(
     tenant_id = tenant_id_of(user)
     try:
         result = execute(body.tool, body.params, tenant_id, confirmed=body.confirmed)
-    except ToolNotFound as error:
+    except ToolNotFoundError as error:
         raise HTTPException(404, str(error)) from error
-    except ToolPermissionDenied as error:
+    except ToolPermissionDeniedError as error:
         raise HTTPException(403, str(error)) from error
-    except ToolExecutionFailed as error:
+    except ToolExecutionFailedError as error:
         raise HTTPException(400, str(error)) from error
     if result.requires_confirmation:
         return ToolExecuteResponse(
@@ -96,17 +96,14 @@ def tools_execute(
 
 @router.get("/permissions", response_model=list[ToolPermissionOut])
 def tools_permissions(
-    user=Depends(get_bearer_user),
+    user: User = Depends(get_bearer_user),
 ) -> list[ToolPermissionOut]:
     """Every tool permission for this tenant."""
     from app.services.tools.permissions import all_permissions
 
     tenant_id = tenant_id_of(user)
     permissions = all_permissions(tenant_id)
-    return [
-        ToolPermissionOut(tool=tool, enabled=enabled)
-        for tool, enabled in permissions.items()
-    ]
+    return [ToolPermissionOut(tool=tool, enabled=enabled) for tool, enabled in permissions.items()]
 
 
 @router.put("/permissions", response_model=list[ToolPermissionOut])
@@ -118,14 +115,14 @@ def tools_set_permission(
     tenant_id = tenant_id_of(user)
     try:
         set_permission(body.tool, body.enabled, tenant_id)
-    except ToolNotFound as error:
+    except ToolNotFoundError as error:
         raise HTTPException(404, str(error)) from error
     return tools_permissions(user)
 
 
 @router.get("/apps", response_model=list[AppOut])
 def tools_apps(
-    user=Depends(get_bearer_user),
+    user: User = Depends(get_bearer_user),
 ) -> list[AppOut]:
     """Every installed application on the OS."""
     return [AppOut.model_validate(app) for app in list_installed_apps()]
@@ -133,7 +130,7 @@ def tools_apps(
 
 @router.get("/apps/allowlist", response_model=list[str])
 def tools_app_allowlist(
-    user=Depends(get_bearer_user),
+    user: User = Depends(get_bearer_user),
 ) -> list[str]:
     """The apps the tenant has allowed Luke to launch."""
     tenant_id = tenant_id_of(user)

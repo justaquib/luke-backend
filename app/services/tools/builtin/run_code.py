@@ -33,12 +33,13 @@ def run_code(language: str, code: str) -> dict[str, Any]:
             script.write_text(code, encoding="utf-8")
             script.chmod(0o755)
             cmd = ["/bin/zsh", str(script)]
-        result = subprocess.run(
+        result = subprocess.run(  # noqa: S603
             cmd,
             capture_output=True,
             text=True,
             timeout=_TIMEOUT_SECONDS,
             cwd=tmpdir,
+            check=False,
         )
         return {
             "stdout": result.stdout,

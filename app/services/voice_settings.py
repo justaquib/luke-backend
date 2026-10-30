@@ -7,12 +7,13 @@ takes effect immediately without a restart.
 
 from __future__ import annotations
 
+import contextlib
 import json
 from pathlib import Path
 from typing import Any
 
 from app.services import brain_paths
-from app.services.voice import VoiceModuleUnavailable, set_active_module
+from app.services.voice import VoiceModuleUnavailableError, set_active_module
 
 
 def settings_path(tenant_id: int | None) -> Path:
@@ -55,7 +56,5 @@ def ensure_module_for(tenant_id: int | None) -> None:
     """
     name = active_module_name(tenant_id)
     if name is not None:
-        try:
+        with contextlib.suppress(VoiceModuleUnavailableError):
             set_active_module(name)
-        except VoiceModuleUnavailable:
-            pass

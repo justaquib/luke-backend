@@ -7,7 +7,7 @@ Luke already ships.
 
 The engine is lazy: the model is downloaded and loaded on the first call to
 ``synthesize``, so the backend starts even when the checkpoint is not yet on
-disk. A failed load raises ``VoiceModuleUnavailable`` with a message the
+disk. A failed load raises ``VoiceModuleUnavailableError`` with a message the
 settings page can show.
 """
 
@@ -17,7 +17,7 @@ import io
 import wave
 from dataclasses import dataclass
 
-from app.services.voice.errors import VoiceModuleUnavailable, VoiceSynthesisFailed
+from app.services.voice.errors import VoiceModuleUnavailableError, VoiceSynthesisFailedError
 from app.services.voice.models import VoiceInfo
 
 _DEFAULT_MODEL = "facebook/mms-tts-eng"
@@ -61,14 +61,14 @@ class MeloTtsEngine:
         the download.
         """
         if not text.strip():
-            raise VoiceSynthesisFailed("Cannot synthesize empty text.")
+            raise VoiceSynthesisFailedError("Cannot synthesize empty text.")
         engine = self._ensure_loaded()
         try:
             result = engine.pipeline(text)
         except Exception as error:
             self._load_error = None
             self._loaded = None
-            raise VoiceSynthesisFailed(f"TTS inference failed: {error}") from error
+            raise VoiceSynthesisFailedError(f"TTS inference failed: {error}") from error
         audio_array = self._extract_audio(result)
         return self._to_wav(audio_array, engine.sample_rate)
 
@@ -76,7 +76,7 @@ class MeloTtsEngine:
         if self._loaded is not None:
             return self._loaded
         if self._load_error is not None:
-            raise VoiceModuleUnavailable(self._load_error)
+            raise VoiceModuleUnavailableError(self._load_error)
         try:
             from transformers import pipeline  # type: ignore[import-untyped]
 
@@ -84,7 +84,7 @@ class MeloTtsEngine:
             sample_rate = int(getattr(pipe, "sampling_rate", _SAMPLE_RATE))
         except Exception as error:
             self._load_error = f"Voice module {self._model} is not available: {error}"
-            raise VoiceModuleUnavailable(self._load_error) from error
+            raise VoiceModuleUnavailableError(self._load_error) from error
         self._loaded = _LoadedEngine(pipeline=pipe, sample_rate=sample_rate)
         return self._loaded
 
@@ -103,18 +103,18 @@ class MeloTtsEngine:
                         continue
         if hasattr(result, "audio"):
             return MeloTtsEngine._extract_audio({"audio": result.audio})
-        raise VoiceSynthesisFailed("TTS pipeline returned no audio.")
+        raise VoiceSynthesisFailedError("TTS pipeline returned no audio.")
 
     @staticmethod
     def _to_wav(samples: list[float], sample_rate: int) -> bytes:
         """Encode float samples as a 16-bit PCM WAV buffer."""
-        import numpy as np
+        import torch
 
         buffer = io.BytesIO()
         with wave.open(buffer, "wb") as wav:
             wav.setnchannels(1)
             wav.setsampwidth(2)
             wav.setframerate(sample_rate)
-            array = np.clip(np.array(samples, dtype=np.float32), -1.0, 1.0)
-            wav.writeframes((array * 32767).astype(np.int16).tobytes())
+            tensor = torch.tensor(samples, dtype=torch.float32).clamp(-1.0, 1.0)
+            wav.writeframes((tensor * 32767).to(torch.int16).numpy().tobytes())
         return buffer.getvalue()

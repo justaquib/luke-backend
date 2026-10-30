@@ -6,11 +6,12 @@ different HuggingFace stack later without touching the routes.
 """
 
 from app.services.voice.errors import (
-    VoiceModuleUnavailable,
-    VoiceSynthesisFailed,
-    VoiceTranscriptionFailed,
+    VoiceModuleUnavailableError,
+    VoiceSynthesisFailedError,
+    VoiceTranscriptionFailedError,
 )
 from app.services.voice.models import (
+    ModuleRegistration,
     VoiceInfo,
     VoiceModule,
     VoiceModuleEntry,
@@ -23,21 +24,24 @@ from app.services.voice.stt import WhisperSttEngine
 from app.services.voice.tts import MeloTtsEngine
 
 register_module(
-    name="melo-whisper",
-    tts_module="facebook/mms-tts-eng",
-    stt_module="openai/whisper-tiny",
-    description="Minimal English TTS (MeloTTS/MMS) + English STT (Whisper tiny).",
-    tts_cls=MeloTtsEngine,
-    stt_cls=WhisperSttEngine,
+    ModuleRegistration(
+        name="melo-whisper",
+        tts_module="facebook/mms-tts-eng",
+        stt_module="openai/whisper-tiny",
+        description="Minimal English TTS (MeloTTS/MMS) + English STT (Whisper tiny).",
+        tts_cls=MeloTtsEngine,
+        stt_cls=WhisperSttEngine,
+    )
 )
 
 __all__ = [
+    "ModuleRegistration",
     "VoiceInfo",
     "VoiceModule",
     "VoiceModuleEntry",
-    "VoiceModuleUnavailable",
-    "VoiceSynthesisFailed",
-    "VoiceTranscriptionFailed",
+    "VoiceModuleUnavailableError",
+    "VoiceSynthesisFailedError",
+    "VoiceTranscriptionFailedError",
     "active_module",
     "list_modules",
     "register_module",

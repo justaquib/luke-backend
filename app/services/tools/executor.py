@@ -11,9 +11,9 @@ from __future__ import annotations
 from typing import Any
 
 from app.services.tools.errors import (
-    ToolExecutionFailed,
-    ToolPermissionDenied,
-    ToolRequiresConfirmation,
+    ToolExecutionFailedError,
+    ToolPermissionDeniedError,
+    ToolRequiresConfirmationError,
 )
 from app.services.tools.permissions import can_use
 from app.services.tools.registry import get_tool
@@ -34,7 +34,7 @@ def execute(
     running the handler.
     """
     if not can_use(tool_name, tenant_id):
-        raise ToolPermissionDenied(f"Tool not permitted: {tool_name}")
+        raise ToolPermissionDeniedError(f"Tool not permitted: {tool_name}")
     tool = get_tool(tool_name)
     if tool.requires_confirmation and not confirmed:
         return ToolResult(
@@ -45,8 +45,8 @@ def execute(
         )
     try:
         output = tool.handler(**params)
-    except ToolRequiresConfirmation:
+    except ToolRequiresConfirmationError:
         raise
     except Exception as error:
-        raise ToolExecutionFailed(f"Tool {tool_name} failed: {error}") from error
+        raise ToolExecutionFailedError(f"Tool {tool_name} failed: {error}") from error
     return ToolResult(output=output)

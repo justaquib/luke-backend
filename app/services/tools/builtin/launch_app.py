@@ -23,21 +23,23 @@ def launch_app(app_name: str, tenant_id: int | None = None) -> dict[str, Any]:
         raise PermissionError(f"App not in allowlist: {app_name}")
     system = platform.system()
     if system == "Darwin":
-        result = subprocess.run(
-            ["open", "-a", app_name],
+        result = subprocess.run(  # noqa: S603
+            ["open", "-a", app_name],  # noqa: S607
             capture_output=True,
             text=True,
             timeout=5,
+            check=False,
         )
         if result.returncode != 0:
             raise RuntimeError(f"Failed to launch {app_name}: {result.stderr}")
         return {"launched": True, "app": app_name, "platform": system}
     if system == "Linux":
-        result = subprocess.run(
-            ["xdg-open", app_name],
+        result = subprocess.run(  # noqa: S603
+            ["xdg-open", app_name],  # noqa: S607
             capture_output=True,
             text=True,
             timeout=5,
+            check=False,
         )
         if result.returncode != 0:
             raise RuntimeError(f"Failed to launch {app_name}: {result.stderr}")

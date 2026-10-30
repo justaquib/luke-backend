@@ -15,7 +15,7 @@ import io
 import tempfile
 from dataclasses import dataclass
 
-from app.services.voice.errors import VoiceModuleUnavailable, VoiceTranscriptionFailed
+from app.services.voice.errors import VoiceModuleUnavailableError, VoiceTranscriptionFailedError
 
 _DEFAULT_MODEL = "tiny"
 
@@ -41,7 +41,7 @@ class WhisperSttEngine:
         right suffix so the loader picks the correct decoder.
         """
         if not audio_bytes:
-            raise VoiceTranscriptionFailed("No audio was sent.")
+            raise VoiceTranscriptionFailedError("No audio was sent.")
         engine = self._ensure_loaded()
         suffix = _suffix_for(mime)
         with tempfile.NamedTemporaryFile(suffix=suffix, delete=True) as tmp:
@@ -52,24 +52,26 @@ class WhisperSttEngine:
             except Exception as error:
                 self._load_error = None
                 self._loaded = None
-                raise VoiceTranscriptionFailed(f"Whisper transcription failed: {error}") from error
+                raise VoiceTranscriptionFailedError(
+                    f"Whisper transcription failed: {error}"
+                ) from error
         text = str(result.get("text", "")).strip()
         if not text:
-            raise VoiceTranscriptionFailed("Whisper returned no text.")
+            raise VoiceTranscriptionFailedError("Whisper returned no text.")
         return text
 
     def _ensure_loaded(self) -> _LoadedEngine:
         if self._loaded is not None:
             return self._loaded
         if self._load_error is not None:
-            raise VoiceModuleUnavailable(self._load_error)
+            raise VoiceModuleUnavailableError(self._load_error)
         try:
             import whisper  # type: ignore[import-untyped]
 
             model = whisper.load_model(self._model, device="cpu")
         except Exception as error:
             self._load_error = f"Whisper model {self._model} is not available: {error}"
-            raise VoiceModuleUnavailable(self._load_error) from error
+            raise VoiceModuleUnavailableError(self._load_error) from error
         self._loaded = _LoadedEngine(model=model)
         return self._loaded
 
