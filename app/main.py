@@ -32,6 +32,8 @@ from app.routers import (
     language_model,
     parenting,
     system,
+    tools,
+    voice,
     web,
 )
 from app.routers import (
@@ -79,6 +81,8 @@ def create_app() -> FastAPI:
         huggingface.router,
         language_brain.router,
         parenting.router,
+        tools.router,
+        voice.router,
         web.router,
     ):
         application.include_router(router)

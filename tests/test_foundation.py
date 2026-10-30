@@ -125,14 +125,14 @@ def test_the_messages_carry_the_recent_turns_and_the_numbered_evidence() -> None
     history = [
         {"role": "user", "content": "What is rain?"},
         {"role": "assistant", "content": "Rain is water falling from clouds."},
-        {"role": "tool", "content": "ignored"},
+        {"role": "tool", "content": "Tool result: weather data retrieved"},
     ]
     evidence = [prompt.Evidence(1, "document", "weather.pdf", "Rain is liquid water.")]
 
     messages = prompt.build_messages("system", history, "  Where does it come from?  ", evidence)
 
     assert messages[0] == {"role": "system", "content": "system"}
-    assert [item["role"] for item in messages[1:]] == ["user", "assistant", "user"]
+    assert [item["role"] for item in messages[1:]] == ["user", "assistant", "tool", "user"]
     assert messages[-1]["content"].startswith("Evidence:\n[1] (document: weather.pdf)")
     assert messages[-1]["content"].endswith("Question: Where does it come from?")
 

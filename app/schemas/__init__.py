@@ -67,6 +67,27 @@ from app.schemas.query import (
 from app.schemas.query import (
     QueryResponse as QueryResponse,
 )
+from app.schemas.tools import (
+    AppAllowlistBody as AppAllowlistBody,
+)
+from app.schemas.tools import (
+    AppOut as AppOut,
+)
+from app.schemas.tools import (
+    ToolExecuteRequest as ToolExecuteRequest,
+)
+from app.schemas.tools import (
+    ToolExecuteResponse as ToolExecuteResponse,
+)
+from app.schemas.tools import (
+    ToolOut as ToolOut,
+)
+from app.schemas.tools import (
+    ToolPermissionOut as ToolPermissionOut,
+)
+from app.schemas.tools import (
+    ToolPermissionsBody as ToolPermissionsBody,
+)
 from app.schemas.understanding import (
     ConnectionOut as ConnectionOut,
 )
@@ -75,6 +96,24 @@ from app.schemas.understanding import (
 )
 from app.schemas.understanding import (
     WordReadingOut as WordReadingOut,
+)
+from app.schemas.voice import (
+    SetModuleRequest as SetModuleRequest,
+)
+from app.schemas.voice import (
+    SttResponse as SttResponse,
+)
+from app.schemas.voice import (
+    TtsRequest as TtsRequest,
+)
+from app.schemas.voice import (
+    VoiceInfoOut as VoiceInfoOut,
+)
+from app.schemas.voice import (
+    VoiceModuleEntryOut as VoiceModuleEntryOut,
+)
+from app.schemas.voice import (
+    VoiceStatusOut as VoiceStatusOut,
 )
 from app.schemas.web import (
     WebSettingsBody as WebSettingsBody,

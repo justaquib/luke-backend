@@ -97,7 +97,7 @@ def build_messages(
     for turn in history[-MAX_HISTORY_TURNS * 2 :]:
         role = str(turn.get("role") or "").strip()
         content = str(turn.get("content") or "").strip()
-        if role in {"user", "assistant"} and content:
+        if role in {"user", "assistant", "tool"} and content:
             messages.append({"role": role, "content": content})
     asked = question.strip()
     if evidence:
