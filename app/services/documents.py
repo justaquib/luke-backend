@@ -172,17 +172,39 @@ def uploaded_file(user: User, filename: str, db: Session) -> Path:
 
 def create_feedback(user: User, req: FeedbackCreate, db: Session) -> Feedback:
     """Store feedback left in the one workspace."""
+    from app.services import vector_store
+    from app.services.pending_questions import record_pending
+    from app.services.query import _find_matching_faq
+
+    tenant_id = _workspace(user)
     feedback = Feedback(
         message_id=req.message_id,
         question=req.question,
         answer=req.answer,
         source=req.source,
         rating=req.rating,
-        tenant_id=_workspace(user),
+        tenant_id=tenant_id,
     )
     db.add(feedback)
     db.commit()
     db.refresh(feedback)
+
+    if req.source in ("faq", "trained"):
+        faq = _find_matching_faq(db, tenant_id, req.question, req.answer)
+        if faq is not None:
+            confidence_step = settings.confidence_step
+            if req.rating == "like":
+                faq.confidence = min(1.0, faq.confidence + confidence_step)
+            elif req.rating == "dislike":
+                faq.confidence = max(
+                    settings.base_answer_confidence, faq.confidence - confidence_step
+                )
+                note = "User disliked this answer. Review and correct."
+                record_pending(db, req.question, tenant_id, note)
+            db.commit()
+            db.refresh(faq)
+            vector_store.upsert_faq(faq.id, faq.question, faq.answer, faq.status, tenant_id)
+
     return feedback
 
 

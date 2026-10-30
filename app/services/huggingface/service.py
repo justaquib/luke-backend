@@ -311,3 +311,49 @@ def predict(tenant_id: int | None, folder: str, text: str, limit: int) -> dict[s
         return loaded.predict(text, limit)
     except (OSError, RuntimeError, ValueError):
         return None
+
+
+def search_models(query: str, limit: int = 10) -> list[dict[str, Any]]:
+    """Search HuggingFace for models matching the query."""
+    try:
+        from huggingface_hub import HfApi
+
+        api = HfApi()
+        models = api.list_models(search=query, limit=limit)
+        return [
+            {
+                "model_id": model.modelId,
+                "name": model.modelId.split("/")[-1],
+                "parameters": getattr(model, "parameters", None) or "Unknown",
+                "downloads": getattr(model, "downloads", 0),
+            }
+            for model in models
+        ]
+    except Exception as error:
+        logger.warning("HuggingFace search failed: %s", error)
+        raise BaseModelError(f"Could not search HuggingFace: {error}") from error
+
+
+def download_teacher(tenant_id: int | None, model_id: str) -> dict[str, Any]:
+    """Download a teacher model from HuggingFace and register it."""
+    if running(tenant_id):
+        raise BaseModelBusyError("A base model is training; the machine is busy.")
+    try:
+        from huggingface_hub import snapshot_download
+
+        folder_name = store.teacher_folder(model_id)
+        folder = store.teacher_path(tenant_id, folder_name)
+        folder.mkdir(parents=True, exist_ok=True)
+        snapshot_download(repo_id=model_id, local_dir=folder, local_dir_use_symlinks=False)
+        metadata = {
+            "model_id": model_id,
+            "name": model_id.rsplit("/", maxsplit=1)[-1],
+            "folder": folder_name,
+            "downloaded": store.now(),
+        }
+        store.write_json(folder / "metadata.json", metadata)
+        logger.info("Downloaded teacher %s to %s", model_id, folder)
+        return {"folder": folder_name, "model_id": model_id, "name": metadata["name"]}
+    except Exception as error:
+        logger.warning("HuggingFace download failed: %s", error)
+        raise BaseModelError(f"Could not download model: {error}") from error

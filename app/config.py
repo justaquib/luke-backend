@@ -37,7 +37,7 @@ class Settings(BaseSettings):
     # merged or fine-tuned in place; `scripts/install_foundation.py` installs it.
     foundation_model_dir: str = "./.models/foundation"
     foundation_verify_weights: bool = True
-    foundation_max_new_tokens: int = 220
+    foundation_max_new_tokens: int = 180
     foundation_temperature: float = 0.7
     foundation_top_p: float = 0.9
     foundation_repetition_penalty: float = 1.1

@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "id": "2acb22e3ea42",
+      "category": "open",
+      "phrase": "Hi",
+      "reply": "Hi there, how can I help today?"
+    },
+    {
+      "id": "b379e4d0869d",
+      "category": "close",
+      "phrase": "Bye",
+      "reply": "It's been pleasure talking to you, see you again."
+    }
+  ]
+}

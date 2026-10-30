@@ -6,9 +6,9 @@ material a run trains on, and hand the work to the services that own it.
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Annotated, Any
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from sqlalchemy.orm import Session
 
 from app.core.security import get_bearer_user, tenant_id_of
@@ -16,7 +16,7 @@ from app.db.database import User, get_session
 from app.schemas import HuggingFaceTrainBody, PredictBody
 from app.schemas.models import TransferBody
 from app.services import model_choice
-from app.services.huggingface import service, transfer
+from app.services.huggingface import dataset_import, service, transfer
 from app.services.training import dataset as datasets
 
 router = APIRouter(prefix="/language-model", tags=["language-model"])
@@ -36,6 +36,28 @@ def huggingface_dataset(
     """The material a run would read, the split it is tagged with, and any leak."""
     prepared = datasets.prepared(tenant_id_of(user), db)
     return prepared.report() | {"leakage": list(datasets.leakage(prepared))}
+
+
+@router.post("/huggingface/dataset")
+async def upload_training_dataset(
+    file: Annotated[UploadFile, File()],
+    user: User = Depends(get_bearer_user),
+    db: Session = Depends(get_session),
+) -> dict[str, Any]:
+    """Upload a JSONL or CSV dataset of question-answer pairs for training."""
+    if not file.filename:
+        raise HTTPException(400, "No file provided.")
+    filename = file.filename.lower()
+    if not (filename.endswith(".jsonl") or filename.endswith(".csv")):
+        raise HTTPException(400, "File must be .jsonl or .csv format.")
+    try:
+        content = await file.read()
+        text = content.decode("utf-8")
+        return dataset_import.import_dataset(tenant_id_of(user), text, filename, db)
+    except UnicodeDecodeError as error:
+        raise HTTPException(400, "File must be UTF-8 encoded.") from error
+    except dataset_import.DatasetImportError as error:
+        raise HTTPException(400, str(error)) from error
 
 
 @router.post("/huggingface/train")
@@ -127,3 +149,35 @@ def predict_next_words(
     if result is None:
         raise HTTPException(409, "This model has no trained weights to predict with yet.")
     return result
+
+
+@router.get("/huggingface/search")
+def search_huggingface_models(
+    q: str,
+    limit: int = 10,
+    user: User = Depends(get_bearer_user),
+) -> list[dict[str, Any]]:
+    """Search HuggingFace for teacher models."""
+    if not q or len(q.strip()) < 2:
+        raise HTTPException(400, "Search query must be at least 2 characters.")
+    try:
+        return service.search_models(q.strip(), min(limit, 20))
+    except service.BaseModelError as error:
+        raise HTTPException(500, str(error)) from error
+
+
+@router.post("/huggingface/teacher/download")
+def download_huggingface_teacher(
+    body: dict[str, str],
+    user: User = Depends(get_bearer_user),
+) -> dict[str, Any]:
+    """Download a teacher model from HuggingFace."""
+    model_id = body.get("model_id")
+    if not model_id:
+        raise HTTPException(400, "model_id is required.")
+    try:
+        return service.download_teacher(tenant_id_of(user), model_id)
+    except service.BaseModelBusyError as error:
+        raise HTTPException(409, str(error)) from error
+    except service.BaseModelError as error:
+        raise HTTPException(500, str(error)) from error
