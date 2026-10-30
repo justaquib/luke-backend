@@ -20,10 +20,17 @@ Five reports, only the last of which reads a run row:
   wrote -- its wall time, the per-item latency percentiles, what each skill
   scored, and the rubric rows still waiting for a trainer.
 
+With ``--adapter`` the run is measured with that adapter attached to the
+checkpoint, and its provenance names the adapter by weight hash. That score is
+the candidate half of the promotion gate: it has to beat the baseline run.
+
 Run with:
     .venv/bin/python scripts/measure_assessment.py
     .venv/bin/python scripts/measure_assessment.py --items 12 --recall 12
     .venv/bin/python scripts/measure_assessment.py --run 2 --tenant 0
+    .venv/bin/python scripts/measure_assessment.py --mode assisted --tenant 0
+    .venv/bin/python scripts/measure_assessment.py --mode assisted --tenant 0 \
+        --adapter .scratch/measure-lora-1793338933
 """
 
 from __future__ import annotations
@@ -43,6 +50,11 @@ from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
+# A complete held-out run is long: the Phase 6 unaided run took 2,205 s for the
+# 240 items. The wait is generous and the script prints its progress while it goes.
+MAX_WAIT_SECONDS = 7200
+POLL_SECONDS = 15
+TERMINAL = frozenset({"done", "cancelled", "failed"})
 BANK_DIR = ROOT / "app" / "data" / "assessment"
 KINDS = ("option", "span", "number", "literal", "rules", "rubric")
 WRONG = {
@@ -72,6 +84,7 @@ def _modules() -> dict[str, Any]:
         "conditions": importlib.import_module("app.services.assessment.conditions"),
         "profiles": importlib.import_module("app.services.assessment.profiles"),
         "runner": importlib.import_module("app.services.assessment.runner"),
+        "runtime": importlib.import_module("app.services.foundation.runtime"),
         "scoring": importlib.import_module("app.services.assessment.scoring"),
         "skills": importlib.import_module("app.services.assessment.skills"),
     }
@@ -424,6 +437,35 @@ def _run_report(run_id: int, tenant: int | None) -> dict[str, Any]:
     }
 
 
+def _baseline_report(mode: str, tenant: int | None) -> dict[str, Any]:
+    """One complete held-out run in one mode, started here and read back when it ends.
+
+    This is how the retrieval-only baseline is taken: the same 240 items, the
+    same scorers, the model and evidence the app serves today. When an adapter
+    has already been attached, the same run measures the candidate that has to
+    beat that number before it is promoted.
+    """
+    runner = _modules()["runner"]
+    run_id = runner.create(tenant, mode)
+    started = time.perf_counter()
+    runner.submit(run_id)
+    state: dict[str, Any] = {}
+    while time.perf_counter() - started < MAX_WAIT_SECONDS:
+        state = runner.snapshot(run_id, tenant)
+        print(
+            f"run {run_id} {state['status']} {state['done']}/{state['total']}",
+            file=sys.stderr,
+            flush=True,
+        )
+        if state["status"] in TERMINAL:
+            break
+        time.sleep(POLL_SECONDS)
+    report = _run_report(run_id, tenant)
+    report["poll_seconds"] = round(time.perf_counter() - started, 1)
+    report["timed_out"] = state.get("status") not in TERMINAL
+    return report
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--items", type=int, default=0, help="held-out items to generate for")
@@ -433,9 +475,30 @@ def main() -> int:
     parser.add_argument("--repeats", type=int, default=200, help="scorer timing repeats")
     parser.add_argument("--run", type=int, default=0, help="a stored run to read back")
     parser.add_argument("--tenant", type=int, default=None)
+    parser.add_argument(
+        "--mode",
+        default="",
+        help="run the whole held-out bank in this mode (unaided or assisted) and report it",
+    )
+    parser.add_argument(
+        "--adapter",
+        default="",
+        help="an adapter folder to attach before the run; measured against the baseline",
+    )
     args = parser.parse_args()
+    if args.adapter and not args.mode:
+        parser.error("--adapter is measured by a run: pass --mode assisted with it")
 
     report: dict[str, Any] = {"bank": _bank_report(), "scorers": _scorer_report(args.repeats)}
+    if args.adapter:
+        runtime = _modules()["runtime"]
+        runtime.load(args.adapter)
+        report["adapter"] = {
+            "folder": str(Path(args.adapter).expanduser().resolve()),
+            "label": runtime.adapter(),
+        }
+    if args.mode:
+        report["baseline"] = _baseline_report(args.mode, args.tenant)
     if args.items:
         report["generation"] = _generation_report(args.items, args.tenant)
     if args.recall:

@@ -260,20 +260,41 @@ pairs, so the taught voice is the one that is learned.
 
 
 
-The **Base model** tab in the training room fine-tunes a small Hugging Face
-causal language model on this tenant's material. It was retired on 2026-10-25
-with the from-scratch answer writer and restored on 2026-10-26: the trainer
-asked for it back, and the chat now lets them answer with Luke or with any
-teacher saved on this machine.
+The **Base model** tab in the training room runs one named operation on this
+tenant's material at a time. The teacher fine-tune was retired on 2026-10-25
+with the from-scratch answer writer and restored on 2026-10-26; Phase 7 added
+the held-out split, the dataset report and the two further operations.
 
 - `GET /language-model/huggingface` reports the measured machine (device,
   `torch`, `transformers`), the offered base models, the saved teachers and the
   last run.
-- `POST /language-model/huggingface/train` starts one run in a background
-  thread (`model_id`, `steps`); a second run is refused with `409` while one is
-  going. The run records `download` and `tune` stages, the steps done, an ETA,
-  the loss it measured and the material it used, under
-  `hf-progress-<tenant>.json`; `last-run.json` keeps the finished report.
+- `GET /language-model/huggingface/dataset` builds the dataset a run would read
+  through `app/services/training/dataset.py` and reports its sources, examples,
+  split tags and per-task counts. The split is taken per **source unit** — two
+  sources that share a text word for word are one unit, so splitting one cannot
+  leave its twin on the other side — with salt `luke-training-v1` and a share of
+  0.2. `leakage` names any held-out source whose text also sits on the training
+  side; it is empty for a clean split.
+- `POST /language-model/huggingface/train` (`model_id`, `operation` of `sft`,
+  `lora` or `pretrain`, `steps` 1–2000 default 200) starts one run in a
+  background thread on the dataset the route just built. A second run is
+  refused with `409`, and a run whose split holds nothing out or leaks is
+  refused with `400` before any model is read into memory.
+- `sft` moves every weight and writes `model.safetensors` in the teacher folder.
+  `lora` wraps the linear layers the loaded model really has with a rank-8,
+  alpha-16, dropout-0.05 adapter and writes `adapter_model.safetensors` into
+  `<teacher>-lora`, which is never listed as a teacher. `pretrain` reads
+  passages only and is refused by name while `documents` holds no rows.
+- The run records the `load`, `tune` and `save` stages, the steps done, an ETA,
+  the loss it measured, the rows and sources it read, the trainable parameter
+  count and the material it used, under `hf-progress-<tenant>.json`;
+  `last-run.json` keeps the finished report, and a written run also gets
+  `training.json` in its folder.
+- An adapter is saved for measurement, never served. It is promoted only if it
+  beats the retrieval-only baseline on the Phase 6 held-out bank; the first
+  candidate scored **0.1021** against the **0.4158** baseline and was not
+  promoted, so the chat still answers with the teacher or Luke. The gate and
+  its per-skill results are in `docs/07-model-measurements.md`.
 - `DELETE /language-model/huggingface/teachers/{folder}` removes one teacher's
   weights after a confirmation. The last-run report and the answers it already
   wrote stay; a folder name outside the teacher folder is rejected.
@@ -286,6 +307,7 @@ Weights live beside the tenant's learner data, so the material and the teacher
 stay together:
 
 - `.language_model/huggingface/tenant-<id>/teacher-<model>/` per teacher,
+- `.language_model/huggingface/tenant-<id>/teacher-<model>-lora/` per adapter,
 - `last-run.json` in the tenant folder, `hf-progress-<tenant>.json` in the
   learner's folder.
 

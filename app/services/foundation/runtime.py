@@ -14,6 +14,7 @@ import threading
 import time
 from collections.abc import Iterator, Sequence
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any
 
 from app.config import settings
@@ -215,26 +216,53 @@ class _ModelCache:
     def __init__(self) -> None:
         self.lock = threading.Lock()
         self.model: FoundationModel | None = None
+        self.adapter_folder: str | None = None
+        self.adapter_label: str | None = None
 
-    def get(self) -> FoundationModel:
-        """Load on first use and return the same model afterwards."""
+    def get(self, adapter: str | Path | None = None) -> FoundationModel:
+        """Load on first use, and reload only when a different adapter is asked for.
+
+        A plain ``load()`` returns whatever this process already serves: the
+        adapter is dropped only when a caller names a different one, never as a
+        side effect of asking for the model again.
+        """
+        wanted = None if adapter is None else str(Path(adapter).expanduser().resolve())
         with self.lock:
-            if self.model is None:
-                self.model = _load_model()
+            if self.model is not None and (wanted is None or self.adapter_folder == wanted):
+                return self.model
+            self.model = None
+            self.adapter_folder = None
+            self.adapter_label = None
+            label = adapter_label(wanted) if wanted else None
+            self.model = _load_model(wanted)
+            self.adapter_folder = wanted
+            self.adapter_label = label
             return self.model
 
     def clear(self) -> None:
         """Forget the model without unloading torch's own copy."""
         with self.lock:
             self.model = None
+            self.adapter_folder = None
+            self.adapter_label = None
 
 
 _CACHE = _ModelCache()
 
 
-def load() -> FoundationModel:
-    """The one loaded model of this process, loaded on first use."""
-    return _CACHE.get()
+def load(adapter: str | Path | None = None) -> FoundationModel:
+    """The one loaded model of this process, loaded on first use.
+
+    An adapter is attached only when a caller names its folder; the pinned
+    checkpoint on disk is never modified, and a process that asks for no
+    adapter serves exactly what it served before.
+    """
+    return _CACHE.get(adapter)
+
+
+def adapter() -> str | None:
+    """The label of the adapter the loaded model carries, or none."""
+    return _CACHE.adapter_label
 
 
 def loaded() -> bool:
@@ -264,7 +292,7 @@ def memory_bytes() -> int:
     return value if sys.platform == "darwin" else value * 1024
 
 
-def _load_model() -> FoundationModel:
+def _load_model(adapter: str | Path | None = None) -> FoundationModel:
     """Read the verified checkpoint and put it on the best available device."""
     import torch
     from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -281,10 +309,53 @@ def _load_model() -> FoundationModel:
     except RuntimeError as error:
         logger.warning("The %s load failed (%s); falling back to the CPU.", device, error)
         device = "cpu"
-        model = AutoModelForCausalLM.from_pretrained(identity_for_load.folder, dtype=torch.float32)
+        dtype = torch.float32
+        model = AutoModelForCausalLM.from_pretrained(identity_for_load.folder, dtype=dtype)
         model.to(device)
     model.eval()
+    if adapter is not None:
+        model = _attach_adapter(model, Path(adapter), identity_for_load, dtype, device)
     return FoundationModel(model, tokenizer, identity_for_load, device)
+
+
+def adapter_label(folder: str | Path) -> str:
+    """Which adapter this folder holds, named by its weights' own hash."""
+    from app.services.foundation.identity import sha256_file
+
+    path = Path(folder)
+    config = path / "adapter_config.json"
+    weights = path / "adapter_model.safetensors"
+    if not config.is_file() or not weights.is_file():
+        raise FoundationError(
+            f"{path} is not an adapter folder: it holds no adapter_config.json "
+            "and adapter_model.safetensors."
+        )
+    return f"{path.name}#{sha256_file(weights)[:16]}"
+
+
+def _attach_adapter(
+    model: Any,
+    folder: Path,
+    identity_for_load: FoundationIdentity,
+    dtype: Any,
+    device: str,
+) -> Any:
+    """Put a saved adapter on the checkpoint it was trained against, or refuse it."""
+    import json
+
+    from peft import PeftModel
+
+    record = json.loads((folder / "adapter_config.json").read_text(encoding="utf-8"))
+    trained_on = str(record.get("base_model_name_or_path") or "")
+    if trained_on != identity_for_load.base_model:
+        raise FoundationError(
+            f"The adapter in {folder} was trained on {trained_on or 'an unnamed base'}, "
+            f"not on {identity_for_load.base_model}; it is not loaded."
+        )
+    wrapped = PeftModel.from_pretrained(model, str(folder))
+    wrapped.to(device=device, dtype=dtype)
+    wrapped.eval()
+    return wrapped
 
 
 def _trim_stop(text: str, stops: tuple[str, ...]) -> str:

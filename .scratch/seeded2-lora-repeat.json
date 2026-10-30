@@ -1,0 +1,56 @@
+{
+  "operation": "lora",
+  "kind": "adapter",
+  "model_id": "Qwen/Qwen2.5-0.5B-Instruct",
+  "name": "Qwen2.5 0.5B Instruct",
+  "folder": "/Users/justaquib/Documents/Ai/luke/assistance_back/.scratch/measure-lora-1793338955",
+  "stop": "steps",
+  "loss": 0.744,
+  "seconds": 11.5,
+  "device": "mps",
+  "rows": 1127,
+  "sources": 837,
+  "trainable": 4399104,
+  "parameters": 498431872,
+  "trainable_percent": 0.8826,
+  "target_modules": [
+    "down_proj",
+    "gate_proj",
+    "k_proj",
+    "o_proj",
+    "q_proj",
+    "up_proj",
+    "v_proj"
+  ],
+  "settings": {
+    "steps": 20,
+    "batch_size": 2,
+    "learning_rate": 0.0005,
+    "max_tokens": 512,
+    "seed": 0,
+    "rank": 8,
+    "alpha": 16,
+    "dropout": 0.05
+  },
+  "dataset": {
+    "salt": "luke-training-v1",
+    "share": 0.2,
+    "sources": 1062,
+    "examples": 1353,
+    "counts": {
+      "pretrain_train": 0,
+      "pretrain_held_out": 0,
+      "sft_train": 1127,
+      "sft_held_out": 226
+    },
+    "split_taken": true
+  },
+  "written": true,
+  "wall_seconds": 19.2,
+  "peak_memory_bytes": 1041891328,
+  "bytes": 17646523,
+  "machine": {
+    "platform": "darwin",
+    "python": "3.13.7"
+  }
+}

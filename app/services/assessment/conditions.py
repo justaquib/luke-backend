@@ -70,15 +70,23 @@ def generation_params() -> Any:
 
 
 def provenance() -> dict[str, Any]:
-    """The exact thing being measured, read from the installed checkpoint."""
+    """The exact thing being measured, read from the installed checkpoint.
+
+    When an adapter is loaded, its folder and weight hash are named in the
+    artifact string, so a score with an adapter can never be mistaken for one
+    of the base checkpoint.
+    """
+    from app.services.foundation import runtime
     from app.services.foundation.identity import load_identity
 
     identity = load_identity()
+    artifact = f"{identity.base_model}@{identity.revision}#{identity.weight_sha256[:16]}"
+    label = runtime.adapter()
+    if label:
+        artifact = f"{artifact}+adapter:{label}"
     return {
         "model_id": f"{identity.name} {identity.version}",
-        "model_artifact": (
-            f"{identity.base_model}@{identity.revision}#{identity.weight_sha256[:16]}"
-        ),
+        "model_artifact": artifact,
         "tokenizer_id": tokenizer_id(str(identity.folder)),
         "generation": json.dumps(asdict(generation_params())),
         "bank_version": bank_version(),

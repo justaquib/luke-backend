@@ -349,14 +349,46 @@ stream that repeats the job every half second until it reaches a terminal state;
 the last twenty jobs are listed by `GET /ingest/jobs`. The refreshed file cards
 follow the job with their chunk counts and view, download and remove actions.
 
-### 7. Teach the base model, then move its knowledge into Luke
+### 7. Fine-tune a base model, then move its knowledge into Luke
 
-The **Base model** tab fine-tunes a Hugging Face teacher on this tenant's
-material and keeps every teacher it saves on this machine. Below the run card
-and the saved teachers, **Move the teacher's knowledge into Luke** asks one
-teacher every new question and stores its grounded answers as trained answers,
-so they survive the removal of the weights.
+The **Base model** tab runs one named training operation at a time on this
+workspace's material and keeps every teacher it saves on this machine. It reads
+`GET /language-model/huggingface` for the measured machine, the offered base
+models, the saved teachers and the last run, and
+`GET /language-model/huggingface/dataset` for the material.
 
+- The machine chips show the device and the `torch` and `transformers`
+  versions the backend measured.
+- The dataset card says how many sources and examples the material holds and
+  how many are training and held out for the selected operation. The split is
+  taken per source, so a held-out source has no example on the training side.
+  The card names the states that stop a run: nothing held out yet, held-out
+  sources that also sit on the training side (listed by name), and no example
+  for this operation. A dataset that could not be read is named in the card and
+  in a toast, and the run button stays closed.
+- **Base model** picks one of the offered checkpoints, with its parameter count
+  and `saved` when a teacher for it exists, and shows the model's note.
+  **Operation** picks **Supervised fine-tune (all weights)**, **Adapter
+  (LoRA)** or **Continue pretraining**, and the note under it says what moves:
+  a fine-tune replaces the saved teacher, an adapter is saved beside the
+  teacher and promoted only if it beats the baseline, and continued pretraining
+  reads uploaded documents as passages and changes nothing until documents are
+  stored.
+- **Steps** (1–2000, default 200) is the only run setting. The run button is
+  disabled while a run is going, without a chosen model, or when the dataset
+  cannot be trained on; the hint under it says which of those it is.
+- The run card shows the operation, kind and teacher folder, the three stages
+  (load the model, train, save) with their state, a bar that reaches 100 only
+  when the run finished and the steps are done, the run line the backend
+  recorded (steps, ETA, loss, material), the error when a run failed, and, for
+  an adapter, the note that it is saved for measurement and not promoted: the
+  chat still answers with the teacher.
+- **Saved teachers** lists each teacher with its model, steps, loss, size and
+  date, and removes one's weights after a confirmation. The last run report
+  stays.
+- Below the run card and the saved teachers, **Move the teacher's knowledge
+  into Luke** asks one teacher every new question and stores its grounded
+  answers as trained answers, so they survive the removal of the weights.
 - The card picks a saved teacher and a question count (1–200, default 40) and
   says how many questions the material still offers, by source, with a sample
   list behind **Sample questions**.

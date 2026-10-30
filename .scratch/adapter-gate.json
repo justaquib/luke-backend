@@ -1,0 +1,712 @@
+{
+  "adapter": {
+    "folder": "/Users/justaquib/Documents/Ai/luke/assistance_back/.scratch/measure-lora-1793338933",
+    "label": "measure-lora-1793338933#771ea84edc1f4dea"
+  },
+  "bank": {
+    "bank_bytes": 431978,
+    "check": [],
+    "eval_items": 240,
+    "eval_kinds": {
+      "literal": 30,
+      "number": 30,
+      "option": 105,
+      "rubric": 34,
+      "rules": 30,
+      "span": 11
+    },
+    "eval_rules": {
+      "change_case:english_lowercase": 2,
+      "combination:two_responses": 4,
+      "detectable_content:number_placeholders": 3,
+      "detectable_content:postscript": 3,
+      "detectable_format:json_format": 2,
+      "detectable_format:multiple_sections": 1,
+      "detectable_format:number_bullet_lists": 1,
+      "detectable_format:number_highlighted_sections": 4,
+      "keywords:existence": 3,
+      "keywords:forbidden_words": 1,
+      "keywords:frequency": 1,
+      "keywords:letter_frequency": 4,
+      "language:response_language": 2,
+      "length_constraints:number_paragraphs": 1,
+      "length_constraints:number_sentences": 5,
+      "length_constraints:number_words": 1,
+      "punctuation:no_comma": 7,
+      "startend:end_checker": 1,
+      "startend:quotation": 3
+    },
+    "files": [
+      {
+        "bytes": 45881,
+        "datasets": [
+          "google/IFEval"
+        ],
+        "eval": 30,
+        "items": 45,
+        "kinds": {
+          "rules": 45
+        },
+        "licences": [
+          "Apache-2.0"
+        ],
+        "sha256_16": "9513d83002961cc9",
+        "skill": "conversation",
+        "stages": [
+          1,
+          2,
+          3
+        ],
+        "topics": 9,
+        "train": 15
+      },
+      {
+        "bytes": 94889,
+        "datasets": [
+          "databricks/databricks-dolly-15k"
+        ],
+        "eval": 30,
+        "items": 45,
+        "kinds": {
+          "rubric": 45
+        },
+        "licences": [
+          "CC BY-SA 3.0"
+        ],
+        "sha256_16": "d9ef26bfc7c84bd7",
+        "skill": "creative_writing",
+        "stages": [
+          1,
+          2,
+          3
+        ],
+        "topics": 2,
+        "train": 15
+      },
+      {
+        "bytes": 48657,
+        "datasets": [
+          "allenai/ai2_arc"
+        ],
+        "eval": 30,
+        "items": 45,
+        "kinds": {
+          "option": 45
+        },
+        "licences": [
+          "CC BY-SA 4.0"
+        ],
+        "sha256_16": "1b6d5fae0654a230",
+        "skill": "general_knowledge",
+        "stages": [
+          1,
+          2,
+          3
+        ],
+        "topics": 20,
+        "train": 15
+      },
+      {
+        "bytes": 39185,
+        "datasets": [
+          "nyu-mll/blimp"
+        ],
+        "eval": 30,
+        "items": 45,
+        "kinds": {
+          "option": 45
+        },
+        "licences": [
+          "CC BY 4.0"
+        ],
+        "sha256_16": "4369722be734294c",
+        "skill": "grammar",
+        "stages": [
+          1,
+          2,
+          3
+        ],
+        "topics": 9,
+        "train": 15
+      },
+      {
+        "bytes": 34371,
+        "datasets": [
+          "openai/gsm8k"
+        ],
+        "eval": 30,
+        "items": 45,
+        "kinds": {
+          "number": 45
+        },
+        "licences": [
+          "MIT"
+        ],
+        "sha256_16": "eb5def67e3d50b37",
+        "skill": "mathematics",
+        "stages": [
+          1,
+          2,
+          3
+        ],
+        "topics": 1,
+        "train": 15
+      },
+      {
+        "bytes": 34545,
+        "datasets": [
+          "cruxeval-org/cruxeval"
+        ],
+        "eval": 30,
+        "items": 45,
+        "kinds": {
+          "literal": 45
+        },
+        "licences": [
+          "MIT"
+        ],
+        "sha256_16": "a4bee97c574e2a17",
+        "skill": "programming",
+        "stages": [
+          1,
+          2,
+          3
+        ],
+        "topics": 4,
+        "train": 15
+      },
+      {
+        "bytes": 68725,
+        "datasets": [
+          "databricks/databricks-dolly-15k",
+          "google/boolq",
+          "rajpurkar/squad"
+        ],
+        "eval": 30,
+        "items": 45,
+        "kinds": {
+          "option": 21,
+          "rubric": 6,
+          "span": 18
+        },
+        "licences": [
+          "CC BY-SA 3.0",
+          "CC BY-SA 4.0"
+        ],
+        "sha256_16": "3927d96d633fa4b5",
+        "skill": "reading",
+        "stages": [
+          1,
+          2,
+          3
+        ],
+        "topics": 15,
+        "train": 15
+      },
+      {
+        "bytes": 53233,
+        "datasets": [
+          "allenai/ai2_arc"
+        ],
+        "eval": 30,
+        "items": 45,
+        "kinds": {
+          "option": 45
+        },
+        "licences": [
+          "CC BY-SA 4.0"
+        ],
+        "sha256_16": "f98db4fb924ce447",
+        "skill": "science",
+        "stages": [
+          1,
+          2,
+          3
+        ],
+        "topics": 24,
+        "train": 15
+      }
+    ],
+    "items": 360,
+    "manifest_bytes": 12492,
+    "salt": "luke-assessment-v1",
+    "sources": 10,
+    "version": 1
+  },
+  "baseline": {
+    "items": 240,
+    "latency_ms": {
+      "max": 8400.0,
+      "mean": 1873.3,
+      "min": 95.0,
+      "p50": 503.0,
+      "p95": 6499.0
+    },
+    "mode": "assisted",
+    "poll_seconds": 465.5,
+    "profiles": [
+      {
+        "confidence": "high",
+        "delta": 0.0,
+        "items_scored": 30,
+        "next_step": "Practise filler_gap_dependency at stage 1.",
+        "score": 0.5667,
+        "skill": "grammar",
+        "stage": null,
+        "status": "assessed",
+        "strengths": [
+          "anaphor_agreement"
+        ],
+        "title": "Language comprehension and grammar",
+        "untested": [],
+        "verdict": "benchmark not yet passed",
+        "waiting": 0,
+        "weaknesses": [
+          "filler_gap_dependency",
+          "quantifiers"
+        ]
+      },
+      {
+        "confidence": "high",
+        "delta": 0.0,
+        "items_scored": 28,
+        "next_step": "Practise change_case at stage 1.",
+        "score": 0.3869,
+        "skill": "conversation",
+        "stage": null,
+        "status": "assessed",
+        "strengths": [],
+        "title": "Conversation and instruction following",
+        "untested": [],
+        "verdict": "benchmark not yet passed",
+        "waiting": 0,
+        "weaknesses": [
+          "change_case",
+          "combination",
+          "detectable_content",
+          "keywords"
+        ]
+      },
+      {
+        "confidence": "high",
+        "delta": 0.0,
+        "items_scored": 26,
+        "next_step": "Practise are at stage 1.",
+        "score": 0.4231,
+        "skill": "reading",
+        "stage": null,
+        "status": "assessed",
+        "strengths": [
+          "do",
+          "how",
+          "what's",
+          "who"
+        ],
+        "title": "Reading comprehension and summarization",
+        "untested": [],
+        "verdict": "benchmark not yet passed",
+        "waiting": 4,
+        "weaknesses": [
+          "are",
+          "can",
+          "does",
+          "if",
+          "were",
+          "what",
+          "where",
+          "will"
+        ]
+      },
+      {
+        "confidence": "none",
+        "delta": null,
+        "items_scored": 0,
+        "next_step": "A trainer needs to review the waiting items before this skill can be scored.",
+        "score": null,
+        "skill": "creative_writing",
+        "stage": null,
+        "status": "unassessed",
+        "strengths": [],
+        "title": "Creative writing, stories and poetry",
+        "untested": [],
+        "verdict": "not measured yet",
+        "waiting": 30,
+        "weaknesses": []
+      },
+      {
+        "confidence": "high",
+        "delta": 0.0,
+        "items_scored": 30,
+        "next_step": "Practise word problem at stage 1.",
+        "score": 0.3,
+        "skill": "mathematics",
+        "stage": null,
+        "status": "assessed",
+        "strengths": [],
+        "title": "Mathematics and logical reasoning",
+        "untested": [],
+        "verdict": "benchmark not yet passed",
+        "waiting": 0,
+        "weaknesses": [
+          "word problem"
+        ]
+      },
+      {
+        "confidence": "high",
+        "delta": 0.0,
+        "items_scored": 30,
+        "next_step": "Practise branching at stage 1.",
+        "score": 0.2,
+        "skill": "programming",
+        "stage": null,
+        "status": "assessed",
+        "strengths": [],
+        "title": "Programming and debugging",
+        "untested": [],
+        "verdict": "benchmark not yet passed",
+        "waiting": 0,
+        "weaknesses": [
+          "branching",
+          "comprehension",
+          "iteration",
+          "sequence of statements"
+        ]
+      },
+      {
+        "confidence": "high",
+        "delta": 0.0,
+        "items_scored": 30,
+        "next_step": "Practise all at stage 1.",
+        "score": 0.5,
+        "skill": "general_knowledge",
+        "stage": null,
+        "status": "assessed",
+        "strengths": [
+          "a",
+          "fossils",
+          "imprints",
+          "recycling",
+          "some",
+          "through",
+          "using",
+          "where"
+        ],
+        "title": "General knowledge",
+        "untested": [],
+        "verdict": "benchmark not yet passed",
+        "waiting": 0,
+        "weaknesses": [
+          "all",
+          "biologists",
+          "chloroplasts",
+          "clara",
+          "during",
+          "in",
+          "which"
+        ]
+      },
+      {
+        "confidence": "high",
+        "delta": 0.0,
+        "items_scored": 30,
+        "next_step": "Practise desalination at stage 1.",
+        "score": 0.5333,
+        "skill": "science",
+        "stage": null,
+        "status": "assessed",
+        "strengths": [
+          "burning",
+          "clouds",
+          "devil",
+          "students",
+          "the",
+          "what"
+        ],
+        "title": "Scientific and technical understanding",
+        "untested": [],
+        "verdict": "benchmark not yet passed",
+        "waiting": 0,
+        "weaknesses": [
+          "desalination",
+          "earth's",
+          "researchers",
+          "snow",
+          "some",
+          "thunderstorms",
+          "two",
+          "when",
+          "where"
+        ]
+      }
+    ],
+    "provenance": {
+      "bank": {
+        "eval_items": 240,
+        "salt": "luke-assessment-v1",
+        "version": 1
+      },
+      "generation": {
+        "max_new_tokens": 220,
+        "repetition_penalty": 1.1,
+        "stop": [],
+        "temperature": 0.0,
+        "top_p": 0.9
+      },
+      "model_artifact": "Qwen/Qwen2.5-0.5B-Instruct@7ae557604adf67be50417f59c2c2f167def9a775#fdf756fa7fcbe740+adapter:measure-lora-1793338933#771ea84edc1f4dea",
+      "model_id": "Luke 0.0.1",
+      "tokenizer_id": "Qwen2.5-0.5B-Instruct@7ae5576:tokenizer.json:c0382117ea329cdf"
+    },
+    "run": 4,
+    "scoring": {
+      "empty_responses": 0,
+      "mean_score": 0.4158,
+      "methods": {
+        "literal": 30,
+        "number": 30,
+        "option": 105,
+        "rubric": 34,
+        "rules": 28,
+        "span": 11,
+        "unassessed": 2
+      },
+      "passed": 82,
+      "scored": 204,
+      "unassessed": 36,
+      "waiting_for_review": [
+        "creative_writing:dolly_creative:10644",
+        "creative_writing:dolly_creative:11435",
+        "creative_writing:dolly_creative:11495",
+        "creative_writing:dolly_creative:11866",
+        "creative_writing:dolly_creative:11876",
+        "creative_writing:dolly_creative:12146",
+        "creative_writing:dolly_creative:12336",
+        "creative_writing:dolly_creative:13818",
+        "creative_writing:dolly_creative:13919",
+        "creative_writing:dolly_creative:14179",
+        "creative_writing:dolly_creative:14389",
+        "creative_writing:dolly_creative:14429",
+        "creative_writing:dolly_creative:170",
+        "creative_writing:dolly_creative:1852",
+        "creative_writing:dolly_creative:2543",
+        "creative_writing:dolly_creative:2603",
+        "creative_writing:dolly_creative:3725",
+        "creative_writing:dolly_creative:4646",
+        "creative_writing:dolly_creative:4696",
+        "creative_writing:dolly_creative:5708",
+        "creative_writing:dolly_creative:5908",
+        "creative_writing:dolly_creative:6208",
+        "creative_writing:dolly_creative:6358",
+        "creative_writing:dolly_creative:6499",
+        "creative_writing:dolly_creative:7410",
+        "creative_writing:dolly_creative:9212",
+        "creative_writing:dolly_creative:9282",
+        "creative_writing:dolly_creative:9362",
+        "creative_writing:dolly_creative:9403",
+        "creative_writing:dolly_creative:9513",
+        "reading:dolly_summary:10804",
+        "reading:dolly_summary:12627",
+        "reading:dolly_summary:13127",
+        "reading:dolly_summary:1482"
+      ]
+    },
+    "skills": {
+      "conversation": {
+        "correct": 8,
+        "empty_responses": 0,
+        "items": 30,
+        "mean_score": 0.3869,
+        "passed": 8,
+        "scored": 28,
+        "unassessed": 2
+      },
+      "creative_writing": {
+        "correct": 0,
+        "empty_responses": 0,
+        "items": 30,
+        "mean_score": null,
+        "passed": 0,
+        "scored": 0,
+        "unassessed": 30
+      },
+      "general_knowledge": {
+        "correct": 15,
+        "empty_responses": 0,
+        "items": 30,
+        "mean_score": 0.5,
+        "passed": 15,
+        "scored": 30,
+        "unassessed": 0
+      },
+      "grammar": {
+        "correct": 17,
+        "empty_responses": 0,
+        "items": 30,
+        "mean_score": 0.5667,
+        "passed": 17,
+        "scored": 30,
+        "unassessed": 0
+      },
+      "mathematics": {
+        "correct": 9,
+        "empty_responses": 0,
+        "items": 30,
+        "mean_score": 0.3,
+        "passed": 9,
+        "scored": 30,
+        "unassessed": 0
+      },
+      "programming": {
+        "correct": 6,
+        "empty_responses": 0,
+        "items": 30,
+        "mean_score": 0.2,
+        "passed": 6,
+        "scored": 30,
+        "unassessed": 0
+      },
+      "reading": {
+        "correct": 11,
+        "empty_responses": 0,
+        "items": 30,
+        "mean_score": 0.4231,
+        "passed": 11,
+        "scored": 26,
+        "unassessed": 4
+      },
+      "science": {
+        "correct": 16,
+        "empty_responses": 0,
+        "items": 30,
+        "mean_score": 0.5333,
+        "passed": 16,
+        "scored": 30,
+        "unassessed": 0
+      }
+    },
+    "status": "done",
+    "timed_out": false,
+    "wall_seconds": 455.3
+  },
+  "scorers": {
+    "literal": {
+      "expected_answer_scores": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "items": 6,
+      "microseconds_per_answer": 15.36,
+      "wrong_answer_scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "number": {
+      "expected_answer_scores": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "items": 6,
+      "microseconds_per_answer": 1.99,
+      "wrong_answer_scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "option": {
+      "expected_answer_scores": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "items": 6,
+      "microseconds_per_answer": 2.04,
+      "wrong_answer_scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "rubric": {
+      "expected_answer_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "items": 6,
+      "microseconds_per_answer": 0.61,
+      "wrong_answer_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    "rules": {
+      "expected_answer_scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.6667,
+        1.0,
+        0.0
+      ],
+      "items": 6,
+      "microseconds_per_answer": 3.94,
+      "wrong_answer_scores": [
+        0.0,
+        0.0,
+        0.5,
+        0.6667,
+        1.0,
+        0.0
+      ]
+    },
+    "span": {
+      "expected_answer_scores": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "items": 6,
+      "microseconds_per_answer": 5.79,
+      "wrong_answer_scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    }
+  }
+}

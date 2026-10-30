@@ -1,0 +1,11 @@
+corpus: 1062 sources, 1353 examples, {"pretrain_train": 0, "pretrain_held_out": 0, "sft_train": 1127, "sft_held_out": 226}
+  load
+W1030 11:12:41.014000 2843 .venv/lib/python3.13/site-packages/torch/distributed/elastic/multiprocessing/redirects.py:35] NOTE: Redirects are currently not supported in MacOs.
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 6253.11it/s]
+  tune
+  tune loss 1.4728
+  tune loss 0.8196
+  tune loss 0.669
+  tune loss 0.744
+  save loss 0.744
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.

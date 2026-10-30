@@ -1258,8 +1258,212 @@ Two findings worth more than the numbers:
   it needs re-measuring through the app's own runtime, which keeps one model warm.
 
 What Phase 7 still has not answered, and cannot from this run: whether an adapter
-beats the retrieval-only baseline on the Phase 6 held-out bank. That comparison is
-the shipping gate for any adapter, and it is **not measured yet**.
+beats the baseline on the Phase 6 held-out bank. That comparison is the shipping
+gate for any adapter. Both halves are now measured — the baseline is the next
+section, the candidate is the gate section below — and the answer is no.
+
+## The baseline an adapter has to beat (measured 2026-10-30)
+
+Run 3, `scripts/measure_assessment.py --mode assisted --tenant 0`: the complete
+240-item held-out split through the path the app ships, retrieval allowed, no
+adapter, on the installed checkpoint. Nothing about the model, bank or decoding
+config was changed since run 2 — this is a re-measure, not a new setup.
+
+| What | Measured 2026-10-30 |
+| --- | --- |
+| Run | **3**, `mode = assisted`, **240 of 240** items answered, status `done`, no timeouts |
+| Checkpoint | `Luke 0.0.1` · `Qwen/Qwen2.5-0.5B-Instruct@7ae5576…#fdf756fa7fcbe740` · bank v1 · `temperature 0.0`, `max_new_tokens 220` |
+| Mean score of what is scored | **0.4158** over **204** items; **82** outcomes reached the 0.8 pass mark; **36** unassessed (34 rubric answers waiting for a trainer, 2 items whose only rule is `language:response_language`) |
+| Per-skill means | **all eight rows identical to run 2** — grammar 0.5667, science 0.5333, general_knowledge 0.5000, reading 0.4231, conversation 0.3869, mathematics 0.3000, programming 0.2000, creative_writing unassessed |
+| Responses | **240 of 240 byte-identical to the unaided run 2**, compared in the database item by item |
+| Evidence retrieved | **0 of 240** items were given any evidence at all |
+| Wall time | **459.2 s** (run 2: 2,205 s) |
+| Per-item generation latency | p50 **514 ms**, p95 **6,642 ms**, mean 1,876.8 ms, min 88 ms, max 7,219 ms (run 2: 1,659 / 13,808 / 9,098 / 322 / 282,281 ms) |
+
+Two findings, and the first one changes what the gate means:
+
+- **On this workspace the assisted run is not a different measurement.** Every
+  response is the one the unaided run wrote, because `_evidence()` returned
+  nothing for all 240 prompts: the `docs` collection holds **0** vectors, since
+  `documents` has **0** rows and `uploads` is **0 B** (the Phase 6 and dataset
+  sections above record the same emptiness). So the number an adapter must beat
+  today is **0.4158 over the 204 auto-scored items**, and it is a
+  retrieval-assisted baseline in name only — it measures the checkpoint alone.
+  The honest consequence for Phase 7: a promotion decided against this number
+  tests whether the model learned, which is what the gate asks, but it cannot
+  say anything about retrieval, and the true retrieval-assisted baseline stays
+  **not measured yet** until a real document set is uploaded.
+- **The scores repeat exactly; the timings do not repeat at all.** Same 240
+  items, same greedy config, same artifact: 240 identical strings and the same
+  mean, which is the determinism the runner claims for itself. The same run took
+  a fifth of the wall time of run 2 because this script loads the model once and
+  keeps it warm for all 240 items, while run 2 paid a **10.97 s** cold load and
+  a colder MPS. A score travels between runs; a timing belongs to the process
+  that measured it, and is recorded here as a property of run 3 only.
+
+## The Phase 7 dataset, measured on the workspace (2026-10-30)
+
+`scripts/measure_dataset.py --tenant 0` reads the corpus through
+`app/services/training/dataset.py` — the same reading the word model trains
+from (`training_materials.gather`), tagged with the split — and reports what the
+Phase 7 operations would actually be given.
+
+| What | Measured 2026-10-30 |
+| --- | --- |
+| Material read | **1,364** pieces, of which **14** give no example (1 words card, 13 written sentences) |
+| Sources | **1,062** — 837 tagged train, 225 held out |
+| Split units | **1,008** — **46** groups cover **100** sources that share an answer word for word |
+| Examples | **1,350** — `sft_train` 1,124, `sft_held_out` 226 |
+| Passage examples (continued pretraining) | **0** — `documents` holds **0** rows and `uploads` is **0 B** |
+| Leakage after grouping | **0** texts on both sides (it was **13** before) |
+| Split | salt `luke-training-v1`, share `0.2`, taken: yes |
+| Time to build | **2.4 s** for the whole workspace |
+
+Two findings:
+
+- **The corpus repeats itself, and a source split alone does not catch it.** The
+  first build reported 13 held-out sources whose exact answer text was also on
+  the training side — pairs of starter cards with the same answer ("Describe a
+  circle." and a neighbour card), and approved answers that restate a taught one
+  (`Who are you?`, `What are the rudiments?`). Training one copy and measuring
+  the other reads as ability and is memory, so the split unit is no longer the
+  source but the transitive group of sources sharing a text
+  (`dataset._units_of`): the 1,062 sources fall into 1,008 units, the largest
+  group holding five of them (the Twinkle poem as an approved answer, two
+  corrections and a taught lesson), and the leak count went **13 → 0**.
+  `leakage()` is kept as the check a run makes before it starts.
+- **There is nothing to continue-pretrain on yet.** Every example the workspace
+  can give is a question with an answer, because the passage store is empty
+  (Phase 6 recorded the same `documents` 387 → 0). The SFT side is measurable
+  today; the continued-pretraining side needs a real document set uploaded
+  first. The shipping gate has the same shape: the baseline half is the
+  **0.4158** recorded above, and the adapter half is now measured — **0.1021**,
+  which does not beat it, so the adapter is not promoted. Until documents exist
+  that comparison still says nothing about retrieval.
+
+The same command re-run alongside the adapter run below reported **1,353**
+examples (1,127 train, 226 held out) from the same **1,062** sources: three
+further training examples were recorded in the store after the first build, and
+neither the held-out side nor the leak count (**0**) moved.
+
+## The first adapter run (measured 2026-10-30)
+
+`scripts/measure_training.py --operation lora --tenant 0 --steps 20`, run twice
+in one session. The script reads the dataset above, refuses an empty or leaking
+held-out side, loads the installed base model, wraps the linear layers the
+loaded model really has, runs the shared loop, and writes the adapter through a
+staging folder. The figures are the second run; the first is compared at the
+end.
+
+| What | Measured 2026-10-30 |
+| --- | --- |
+| Operation | `lora` → kind `adapter`, `written: true`, `stop = steps`, device `mps` |
+| Base model | `Qwen/Qwen2.5-0.5B-Instruct` (installed checkpoint), `peft 0.21.2` |
+| Dataset | **1,062** sources, **1,353** examples — **1,127** training rows from **837** sources, **226** held out and untouched, leakage **0** |
+| Shape | **20** steps, batch **2**, lr **5e-4**, max **512** tokens, seed **0**, rank **8**, alpha **16**, dropout **0.05** |
+| Trainable | **4,399,104** of **498,431,872** parameters — **0.8826 %** |
+| Wrapped layers | `q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj` — read from the loaded model, not from the `c_attn`/`c_proj` recipe |
+| Loss | **1.4728 → 0.8196 → 0.6690 → 0.7440** at steps 5/10/15/20; mean of the last five **0.7440** |
+| Time | **11.5 s** inside the loop, **19.2 s** wall including load and write; peak RSS **1,041,891,328 B** |
+| Artifact | **17,646,523 B** — `adapter_model.safetensors` 17,640,136 B, plus `adapter_config.json` and README — written atomically; the tokenizer was not touched |
+
+Three findings:
+
+- **A run repeats only when the seed is set before the adapter exists, and
+  again for the loop.** The first two script runs, with no seed anywhere, ended
+  at **0.7405** and **0.7230**. Seeding only inside the loop — after the adapter
+  had already been wrapped — made the disagreement worse: **1.8595 vs 0.7052**,
+  because each process drew different LoRA matrices and trained different
+  starting adapters. Seeding at the start of the operation and again at the
+  start of the loop gave two runs whose four report lines agree to four
+  decimals and whose artifacts are the same **17,646,523 B**; only wall time and
+  peak RSS moved (19.1 vs 19.2 s; 1,050,542,080 vs 1,041,891,328 B).
+- **A falling loss is not a promotion.** The loss falls on the rows it trained
+  on; the gate is the **0.4158** baseline on the held-out Phase 6 bank, and this
+  adapter has not been put through it. That half of the comparison is **not
+  measured yet**, and 20 steps over 1,127 rows is less than one pass over the
+  corpus, not a converged teacher.
+- **The other two operations were not run against the real store.** Continued
+  pretraining is refused by name because the passage store holds **0** rows, and
+  a whole-weight SFT run would overwrite the served checkpoint artifact, so its
+  measurement waits for the promotion decision rather than being run for a
+  number. Both are exercised by tests on a small model.
+
+## The adapter gate (measured 2026-10-30)
+
+The candidate is the adapter from the section above —
+`measure-lora-1793338933#771ea84edc1f4dea`, rank 8, 20 steps, the same weights
+whose training loss fell to **0.7440**. It was attached to the installed
+checkpoint through `scripts/measure_assessment.py --mode assisted --tenant 0
+--adapter …`, which loads it through the app's own `runtime` and records its
+weight hash in the run provenance. Run 5 is the measurement.
+
+| What | Baseline (run 3) | Candidate (run 5) |
+| --- | --- | --- |
+| Checkpoint | base `fdf756fa7fcbe740` | base + `adapter:measure-lora-1793338933#771ea84edc1f4dea` |
+| Items answered | 240 of 240, `done` | 240 of 240, `done`, no timeouts |
+| Mean score of what is scored | **0.4158** over **204** | **0.1021** over **204** |
+| At the 0.8 pass mark | **82** | **17** |
+| Unassessed (rubric) | 36 | 36 |
+| Wall time | 459.2 s | 298.2 s |
+| Per-item latency | p50 514 / p95 6,642 ms | p50 695 / p95 3,845 ms |
+| Responses unlike the baseline | — | **238 of 240** |
+
+Per skill, scored items only:
+
+| Skill | Baseline | Candidate |
+| --- | --- | --- |
+| conversation | 0.3869 | **0.3155** |
+| general_knowledge | 0.5000 | **0.0333** |
+| grammar | 0.5667 | **0.2333** |
+| mathematics | 0.3000 | **0.1000** |
+| programming | 0.2000 | **0.0000** |
+| reading | 0.4231 | **0.0000** |
+| science | 0.5333 | **0.0333** |
+| creative_writing | unassessed | unassessed |
+
+**Decision: the adapter is not promoted.** It loses **0.3137** of mean score
+against the baseline and falls in every skill it was scored on. Nothing in the
+app serves it by default: `--adapter` is a measurement path, and promotion would
+be a separate, recorded change.
+
+Three findings:
+
+- **The failure is answer shape, not silence.** The adapter learned the lesson
+  style it was trained on. Where the base answered option items with `B`, the
+  adapter wrote "The correct sentence is B." — correct in substance, unscorable
+  as an option — and reading fell from **0.4231 to 0**. That is visible in the
+  238 responses that differ from the baseline; none were empty.
+- **The first gate attempt was invalid and was corrected.** Run 4 recorded the
+  adapter in its provenance but answered with the base: the model cache treated
+  the runner's plain `load()` as a request to reload without the adapter. Every
+  response was byte-identical to run 3, which is what exposed it. The cache now
+  keeps an explicitly attached adapter until a different one is named
+  (pinned by `tests/test_runtime_adapter.py`), run 4's artifact was corrected to
+  the base checkpoint it actually used and marked as superseded, and run 5 is
+  the measurement above.
+- **A falling training loss still is not a promotion.** The candidate's loss
+  fell on its own rows over 20 steps — less than one pass — while the bank it
+  was never trained on fell with it. The gate is the only number that decides.
+
+## Adapter serving cost and the scratch word model (2026-10-30)
+
+- **No adapter is served, so its warm overhead has no number.** The only
+  candidate failed the gate above, and nothing in the app loads it outside the
+  `--adapter` measurement path. If one is ever promoted, its overhead has to be
+  measured warm on identical prompts before it serves; that measurement does
+  not exist yet and is not claimed.
+- **The gate run's latency is not an overhead figure.** The candidate wrote
+  different text — 238 of 240 responses differed, and the adapter answered
+  option items with whole sentences where the base answered with a letter — so
+  p50 695 ms against p50 514 ms compares different generated lengths and work,
+  not the same work with and without the adapter.
+- **The scratch word model stays an educational opt-in.** Training uses the
+  word tokenizer by default; byte-level BPE has to be chosen explicitly, and a
+  BPE checkpoint is labelled scratch-trained. The scratch model predicts the
+  next word and the attention it measured — it never writes a chat answer,
+  which comes from the installed checkpoint, a chosen teacher, or a taught
+  answer.
 
 ## Keeping this file honest
 

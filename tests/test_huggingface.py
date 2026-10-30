@@ -11,16 +11,20 @@ import time
 from pathlib import Path
 
 import pytest
+import torch
 
 from app.schemas import QueryResponse
 from app.services import model_choice
-from app.services.huggingface import catalog, service, serving, store, text, tuning
+from app.services.huggingface import catalog, service, serving, store, text
 from app.services.huggingface.service import (
     BaseModelBusyError,
     BaseModelError,
     BaseModelMissingError,
 )
 from app.services.language import runtime
+from app.services.language.training_materials import LESSON
+from app.services.training import operations, splits
+from app.services.training.dataset import SFT, Dataset, Example
 
 MODEL = "HuggingFaceTB/SmolLM2-135M"
 
@@ -59,29 +63,61 @@ def _wait_for_end(tenant_id: int | None) -> None:
     assert not service.running(tenant_id)
 
 
+def _dataset() -> Dataset:
+    """Two taught sources, the second held out, so a run is allowed to start."""
+    return Dataset(
+        (
+            Example(SFT, "lesson:a", LESSON, "What is a drum?", "A drum is hit.", splits.TRAIN),
+            Example(
+                SFT,
+                "lesson:b",
+                LESSON,
+                "What is a flute?",
+                "A flute is blown.",
+                splits.HELD_OUT,
+            ),
+        ),
+        {"lesson:a": splits.TRAIN, "lesson:b": splits.HELD_OUT},
+    )
+
+
+def _fake_run(plan: operations.Plan, progress) -> dict:
+    """Stand in for the loop: report its stages, write what the operation writes."""
+    progress(0, "load", None)
+    progress(1, "tune", 2.0)
+    progress(1, "save", 2.0)
+    plan.folder.mkdir(parents=True, exist_ok=True)
+    weights = "model.safetensors"
+    if plan.kind == operations.ADAPTER:
+        weights = "adapter_model.safetensors"
+    (plan.folder / weights).write_bytes(b"weights")
+    return {
+        "operation": plan.operation,
+        "kind": plan.kind,
+        "model_id": plan.model_id,
+        "name": catalog.name_of(plan.model_id),
+        "folder": plan.folder.name,
+        "steps": 1,
+        "stop": "steps",
+        "loss": 2.0,
+        "seconds": 0.1,
+        "device": "cpu",
+        "rows": 2,
+        "sources": 2,
+        "trainable": 1,
+        "parameters": 1,
+        "trainable_percent": 100.0,
+        "target_modules": [],
+        "settings": {},
+        "dataset": {"sources": 2},
+        "written": True,
+    }
+
+
 def test_teacher_folder_stays_one_safe_path_part() -> None:
     folder = store.teacher_folder("HuggingFaceTB/SmolLM2-135M")
     assert folder == "teacher-HuggingFaceTB-SmolLM2-135M"
     assert "/" not in folder and "." not in folder
-
-
-def test_training_text_carries_the_taught_answer() -> None:
-    written = text.training_text("  What is a drum?  ", "A drum is hit with a stick.")
-    assert written == (
-        "Question: What is a drum?\n"
-        "Reference: A drum is hit with a stick.\n"
-        "Answer: A drum is hit with a stick."
-    )
-
-
-def test_training_texts_skip_empty_pairs_and_repeats() -> None:
-    pairs = [
-        ("What is a drum?", "A drum is hit with a stick."),
-        ("", "An answer without a question."),
-        ("What is a drum?", "A drum is hit with a stick."),
-        ("What is a flute?", "A flute is blown."),
-    ]
-    assert len(text.training_texts(pairs)) == 2
 
 
 def test_grounding_keeps_the_answer_then_the_passages() -> None:
@@ -89,11 +125,43 @@ def test_grounding_keeps_the_answer_then_the_passages() -> None:
     assert reference == "A drum is hit. It has a skin."
 
 
-def test_prompt_has_one_shape_with_and_without_material() -> None:
-    assert text.prompt("What is a drum?") == "Question: What is a drum?\nAnswer:"
-    assert text.prompt("What is a drum?", "A drum is hit.") == (
-        "Question: What is a drum?\nReference: A drum is hit.\nAnswer:"
-    )
+class _AskingTokenizer:
+    """A tokenizer whose own template is visible in the string it hands the model."""
+
+    chat_template = "{{ messages }}"
+    pad_token_id = 0
+    eos_token_id = 1
+
+    def __init__(self) -> None:
+        self.asked: list[str] = []
+
+    def apply_chat_template(self, messages, tokenize=False, add_generation_prompt=False):
+        return f"<|user|>{messages[0]['content']}<|assistant|>"
+
+    def __call__(self, text, return_tensors=None, truncation=False, max_length=None) -> dict:
+        self.asked.append(text)
+        return {"input_ids": torch.tensor([[1, 2, 3]])}
+
+    def decode(self, ids, skip_special_tokens=True):
+        return "A drum is hit."
+
+
+class _WritingModel(torch.nn.Module):
+    """A model that answers with one id after the three it was given."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.weight = torch.nn.Parameter(torch.zeros(1))
+
+    def generate(self, **kwargs: object) -> torch.Tensor:
+        return torch.tensor([[1, 2, 3, 4]])
+
+
+def test_a_teacher_is_asked_in_the_template_it_was_trained_in(tmp_path: Path) -> None:
+    tokenizer, model = _AskingTokenizer(), _WritingModel()
+    teacher = serving.Teacher(model, tokenizer, tmp_path)
+    assert teacher.generate("What is a drum?", "A drum is hit.") == "A drum is hit."
+    assert tokenizer.asked == ["<|user|>What is a drum?\nReference: A drum is hit.<|assistant|>"]
 
 
 def test_view_lists_trained_base_models(brain: Path, monkeypatch) -> None:
@@ -108,41 +176,57 @@ def test_view_lists_trained_base_models(brain: Path, monkeypatch) -> None:
 
 def test_start_records_the_run_when_it_finishes(brain: Path, monkeypatch) -> None:
     monkeypatch.setattr(service, "_machine", lambda: {"device": "cpu"})
-
-    def fake_tune(model_id, folder, pairs, steps, progress):
-        progress(0, "download", None)
-        progress(1, "tune", 2.0)
-        folder.mkdir(parents=True, exist_ok=True)
-        (folder / "model.safetensors").write_bytes(b"weights")
-        return {
-            "model_id": model_id,
-            "name": catalog.name_of(model_id),
-            "steps": steps,
-            "loss": 2.0,
-            "seconds": 0.1,
-            "examples": len(pairs),
-        }
-
-    monkeypatch.setattr(tuning, "tune", fake_tune)
-    state = service.start(1, MODEL, 2, [("What is a drum?", "A drum is hit.")])
+    monkeypatch.setattr(operations, "run", _fake_run)
+    state = service.start(1, MODEL, operations.SFT_OPERATION, 2, _dataset())
     assert state["running"] is True
     _wait_for_end(1)
     last = store.read_last_run(1)
-    assert last["steps"] == 2
+    assert last["operation"] == "sft"
+    assert last["kind"] == operations.FULL_WEIGHTS
+    assert last["steps"] == 1
+    assert last["steps_total"] == 2
     assert last["loss"] == 2.0
-    assert last["stages"] == {"download": "done", "tune": "done"}
+    assert last["stages"] == {"load": "done", "tune": "done", "save": "done"}
     assert store.teacher_path(1, store.teacher_folder(MODEL)).is_dir()
+
+
+def test_an_adapter_run_writes_its_own_folder(brain: Path, monkeypatch) -> None:
+    monkeypatch.setattr(service, "_machine", lambda: {"device": "cpu"})
+    monkeypatch.setattr(operations, "run", _fake_run)
+    service.start(1, MODEL, operations.LORA_OPERATION, 2, _dataset())
+    _wait_for_end(1)
+    last = store.read_last_run(1)
+    assert last["kind"] == operations.ADAPTER
+    adapter = store.teacher_path(1, f"{store.teacher_folder(MODEL)}-lora")
+    assert (adapter / "adapter_model.safetensors").is_file()
+    assert (adapter / "training.json").is_file()
+    assert not store.teacher_path(1, store.teacher_folder(MODEL)).exists()
+    assert store.list_teachers(1) == []
 
 
 def test_start_refuses_a_model_it_does_not_offer(brain: Path) -> None:
     with pytest.raises(BaseModelError):
-        service.start(1, "not/offered", 1, [("q", "a")])
+        service.start(1, "not/offered", operations.SFT_OPERATION, 1, _dataset())
+
+
+def test_start_refuses_an_operation_it_does_not_offer(brain: Path) -> None:
+    with pytest.raises(BaseModelError, match="not one of the operations"):
+        service.start(1, MODEL, "distill", 1, _dataset())
+
+
+def test_start_refuses_a_dataset_with_nothing_held_out(brain: Path) -> None:
+    single = Dataset(
+        (Example(SFT, "lesson:a", LESSON, "One?", "One answer.", splits.TRAIN),),
+        {"lesson:a": splits.TRAIN},
+    )
+    with pytest.raises(BaseModelError, match="held-out side is empty"):
+        service.start(1, MODEL, operations.SFT_OPERATION, 1, single)
 
 
 def test_start_refuses_a_second_run(brain: Path) -> None:
     service._RUNNING[1] = MODEL
     with pytest.raises(BaseModelBusyError):
-        service.start(1, MODEL, 1, [("q", "a")])
+        service.start(1, MODEL, operations.SFT_OPERATION, 1, _dataset())
 
 
 def test_failed_run_records_its_error(brain: Path, monkeypatch) -> None:
@@ -151,11 +235,12 @@ def test_failed_run_records_its_error(brain: Path, monkeypatch) -> None:
     def explode(*_args: object, **_kwargs: object) -> None:
         raise ValueError("the base model could not be read")
 
-    monkeypatch.setattr(tuning, "tune", explode)
-    service.start(1, MODEL, 1, [("q", "a")])
+    monkeypatch.setattr(operations, "run", explode)
+    service.start(1, MODEL, operations.SFT_OPERATION, 1, _dataset())
     _wait_for_end(1)
     last = store.read_last_run(1)
     assert last["stage"] == "failed"
+    assert last["stages"]["load"] == "failed"
     assert "could not be read" in last["error"]
 
 

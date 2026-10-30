@@ -1,19 +1,26 @@
 """The Hugging Face teacher service: what is trained, what is running, what serves.
 
 The routes read one view of the machine, start one run at a time, and ask a
-teacher to answer or predict. The weights never leave this package's care.
+teacher to answer or predict. Every run is one of the Phase 7 operations, given
+a dataset whose held-out side is checked before a weight moves; an adapter is
+written to its own folder so it can never be mistaken for a teacher.
 """
 
 from __future__ import annotations
 
 import logging
 import threading
-from collections.abc import Sequence
+from pathlib import Path
 from typing import Any
 
 from app.services.huggingface import catalog, serving, store, tuning
+from app.services.training import loop, operations
+from app.services.training.dataset import Dataset
 
 logger = logging.getLogger(__name__)
+
+# The stages a run passes through, in order, as the page reads them.
+STAGES = ("load", "tune", "save")
 
 
 class BaseModelError(Exception):
@@ -65,13 +72,22 @@ def view(tenant_id: int | None) -> dict[str, Any]:
     }
 
 
+def _folder_of(tenant_id: int | None, model_id: str, operation: str) -> Path:
+    """Where one operation writes, with an adapter kept out of the teacher's folder."""
+    name = store.teacher_folder(model_id)
+    if operation == operations.LORA_OPERATION:
+        name += "-lora"
+    return store.teacher_path(tenant_id, name)
+
+
 def start(
     tenant_id: int | None,
     model_id: str,
+    operation: str,
     steps: int,
-    pairs: Sequence[tuple[str, str]],
+    dataset: Dataset,
 ) -> dict[str, Any]:
-    """Fine-tune a base model in the background and return the run's state."""
+    """Carry out one named operation in the background and return the run's state."""
     from app.services.huggingface import transfer
 
     if not catalog.known(model_id):
@@ -80,15 +96,26 @@ def start(
         raise BaseModelBusyError(
             "A knowledge transfer is reading the machine; wait for it to finish."
         )
+    plan = operations.Plan(
+        operation,
+        model_id,
+        dataset,
+        _folder_of(tenant_id, model_id, operation),
+        loop.Settings(steps=steps),
+    )
+    try:
+        operations.review(plan)
+    except operations.TrainingError as error:
+        raise BaseModelError(str(error)) from error
     key = tenant_id or 0
     with _LOCK:
         if key in _RUNNING:
             raise BaseModelBusyError("A base model is already training on this machine.")
         _RUNNING[key] = model_id
-    _record(tenant_id, model_id, steps)
+    _record(tenant_id, plan)
     thread = threading.Thread(
         target=_run,
-        args=(tenant_id, model_id, steps, list(pairs)),
+        args=(tenant_id, plan),
         daemon=True,
         name=f"hf-teacher-{key}",
     )
@@ -96,18 +123,29 @@ def start(
     return view(tenant_id)
 
 
-def _record(tenant_id: int | None, model_id: str, steps: int) -> None:
+def _frame(plan: operations.Plan, started: float) -> dict[str, Any]:
+    """What every progress frame of this run says about which run it is."""
+    return {
+        "operation": plan.operation,
+        "kind": plan.kind,
+        "model_id": plan.model_id,
+        "name": catalog.name_of(plan.model_id),
+        "folder": plan.folder.name,
+        "started": started,
+    }
+
+
+def _record(tenant_id: int | None, plan: operations.Plan) -> None:
     """Write the run's first frame before the thread starts."""
     store.write_json(
         store.progress_path(tenant_id),
         {
-            "model_id": model_id,
-            "started": store.now(),
+            **_frame(plan, store.now()),
             "finished": None,
             "stage": "starting",
-            "stages": {"download": "waiting", "tune": "waiting"},
+            "stages": dict.fromkeys(STAGES, "waiting"),
             "steps_done": 0,
-            "steps_total": steps,
+            "steps_total": plan.settings.steps,
             "eta_seconds": None,
             "error": None,
             "loss": None,
@@ -116,35 +154,31 @@ def _record(tenant_id: int | None, model_id: str, steps: int) -> None:
     )
 
 
-def _run(
-    tenant_id: int | None,
-    model_id: str,
-    steps: int,
-    pairs: list[tuple[str, str]],
-) -> None:
-    """Train, save the weights, then record what the run measured."""
-    folder = store.teacher_folder(model_id)
+def _run(tenant_id: int | None, plan: operations.Plan) -> None:
+    """Train, save what the operation produces, then record what the run measured."""
     started = store.now()
-    stages = {"download": "waiting", "tune": "waiting"}
+    stages = dict.fromkeys(STAGES, "waiting")
 
     def report(step: int, stage: str, loss: float | None) -> None:
         if stage in stages:
             stages[stage] = "running"
-        if stage == "tune":
-            stages["download"] = "done"
+        if stage in ("tune", "save"):
+            stages["load"] = "done"
+        if stage == "save":
+            stages["tune"] = "done"
         elapsed = store.now() - started
         done = max(step, 0)
-        eta = round(elapsed / done * (steps - done), 1) if done and stage == "tune" else None
+        total = plan.settings.steps
+        eta = round(elapsed / done * (total - done), 1) if done and stage == "tune" else None
         store.write_json(
             store.progress_path(tenant_id),
             {
-                "model_id": model_id,
-                "started": started,
+                **_frame(plan, started),
                 "finished": None,
                 "stage": stage,
                 "stages": dict(stages),
                 "steps_done": done,
-                "steps_total": steps,
+                "steps_total": total,
                 "eta_seconds": eta,
                 "error": None,
                 "loss": loss,
@@ -153,57 +187,79 @@ def _run(
         )
 
     try:
-        result = tuning.tune(
-            model_id,
-            store.teacher_path(tenant_id, folder),
-            pairs,
-            steps,
-            report,
-        )
-        _finish(tenant_id, started, result)
+        result = operations.run(plan, report)
+        _finish(tenant_id, plan, started, result)
     except Exception as error:  # noqa: BLE001 -- the teacher training run boundary
         # The run reports any failure to the trainer.
-        logger.warning("the %s run failed: %s", model_id, error)
-        _fail(tenant_id, model_id, started, error)
+        logger.warning("the %s %s run failed: %s", plan.model_id, plan.operation, error)
+        _fail(tenant_id, plan, started, error, stages)
     finally:
         with _LOCK:
             _RUNNING.pop(tenant_id or 0, None)
 
 
-def _finish(tenant_id: int | None, started: float, result: dict[str, Any]) -> None:
+def _finish(
+    tenant_id: int | None,
+    plan: operations.Plan,
+    started: float,
+    result: dict[str, Any],
+) -> None:
+    """Record a run that reached its last step, and the weights it wrote."""
     finished = store.now()
+    written = bool(result.get("written"))
+    steps = result.get("steps")
     payload = {
+        **_frame(plan, started),
         **result,
-        "started": started,
         "finished": finished,
-        "stages": {"download": "done", "tune": "done"},
-        "steps_done": result.get("steps"),
-        "steps_total": result.get("steps"),
+        "stage": "done" if written else str(result.get("stop") or "stopped"),
+        "stages": (
+            dict.fromkeys(STAGES, "done")
+            if written
+            else {"load": "done", "tune": str(result.get("stop") or "stopped"), "save": "waiting"}
+        ),
+        "steps_done": steps,
+        "steps_total": plan.settings.steps,
         "eta_seconds": None,
         "error": None,
     }
     store.write_json(store.progress_path(tenant_id), payload)
     store.write_json(store.last_run_path(tenant_id), payload)
-    store.write_json(
-        store.teacher_path(tenant_id, store.teacher_folder(str(result["model_id"])))
-        / "training.json",
-        payload,
-    )
-    serving.forget()
+    if written:
+        store.write_json(plan.folder / "training.json", payload)
+    if plan.kind == operations.FULL_WEIGHTS:
+        serving.forget()
 
 
-def _fail(tenant_id: int | None, model_id: str, started: float, error: Exception) -> None:
+def _failure_stages(stages: dict[str, str]) -> dict[str, str]:
+    """The stages as they stood, with the one that was running marked failed."""
+    marked = dict(stages)
+    for key in STAGES:
+        if marked.get(key) != "done":
+            marked[key] = "failed"
+            break
+    return marked
+
+
+def _fail(
+    tenant_id: int | None,
+    plan: operations.Plan,
+    started: float,
+    error: Exception,
+    stages: dict[str, str],
+) -> None:
+    """Record a run that failed, keeping what it had measured by then."""
+    standing = store.read_progress(tenant_id)
     payload = {
-        "model_id": model_id,
-        "started": started,
+        **_frame(plan, started),
         "finished": store.now(),
         "stage": "failed",
-        "stages": {"download": "failed", "tune": "failed"},
-        "steps_done": 0,
-        "steps_total": 0,
+        "stages": _failure_stages(stages),
+        "steps_done": int(standing.get("steps_done") or 0),
+        "steps_total": plan.settings.steps,
         "eta_seconds": None,
         "error": str(error) or error.__class__.__name__,
-        "loss": None,
+        "loss": standing.get("loss"),
         "seconds": round(store.now() - started, 1),
     }
     store.write_json(store.progress_path(tenant_id), payload)

@@ -26,6 +26,7 @@ from app.services.huggingface import seeds as seed_service
 from app.services.huggingface import service, serving, store, transfer
 from app.services.huggingface.service import BaseModelBusyError
 from app.services.language import runtime, training_materials
+from app.services.training.dataset import Dataset
 
 MODEL = "HuggingFaceTB/SmolLM2-135M"
 TENANT = 7
@@ -237,7 +238,7 @@ def test_each_run_waits_for_the_other(monkeypatch, sessions, vectors, brain: Pat
     _prepare(monkeypatch)
     transfer._RUNNING.add(TENANT)
     with sessions() as db, pytest.raises(BaseModelBusyError):
-        service.start(TENANT, MODEL, 1, [("What is a drum?", "A drum is hit.")])
+        service.start(TENANT, MODEL, "sft", 1, Dataset())
     transfer._RUNNING.clear()
 
     monkeypatch.setattr(service, "running", lambda tenant_id: True)

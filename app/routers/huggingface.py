@@ -17,7 +17,7 @@ from app.schemas import HuggingFaceTrainBody, PredictBody
 from app.schemas.models import TransferBody
 from app.services import model_choice
 from app.services.huggingface import service, transfer
-from app.services.language import training_materials as materials_service
+from app.services.training import dataset as datasets
 
 router = APIRouter(prefix="/language-model", tags=["language-model"])
 
@@ -28,18 +28,27 @@ def huggingface_state(user: User = Depends(get_bearer_user)) -> dict[str, Any]:
     return service.view(tenant_id_of(user))
 
 
+@router.get("/huggingface/dataset")
+def huggingface_dataset(
+    user: User = Depends(get_bearer_user),
+    db: Session = Depends(get_session),
+) -> dict[str, Any]:
+    """The material a run would read, the split it is tagged with, and any leak."""
+    prepared = datasets.prepared(tenant_id_of(user), db)
+    return prepared.report() | {"leakage": list(datasets.leakage(prepared))}
+
+
 @router.post("/huggingface/train")
 def train_with_huggingface(
     body: HuggingFaceTrainBody,
     user: User = Depends(get_bearer_user),
     db: Session = Depends(get_session),
 ) -> dict[str, Any]:
-    """Fine-tune a base model on this tenant's material in the background."""
+    """Carry out one named training operation on this tenant's material."""
     tenant_id = tenant_id_of(user)
-    materials = materials_service.gather(tenant_id, db)
-    training = materials_service.training_set(materials, tenant_id)
+    prepared = datasets.prepared(tenant_id, db)
     try:
-        return service.start(tenant_id, body.model_id, body.steps, training.instructions)
+        return service.start(tenant_id, body.model_id, body.operation, body.steps, prepared)
     except service.BaseModelBusyError as error:
         raise HTTPException(409, str(error)) from error
     except service.BaseModelError as error:

@@ -1,0 +1,23 @@
+W1030 12:35:58.682000 7123 .venv/lib/python3.13/site-packages/torch/distributed/elastic/multiprocessing/redirects.py:35] NOTE: Redirects are currently not supported in MacOs.
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 3876.63it/s]
+run 5 running 0/240
+run 5 running 30/240
+run 5 running 35/240
+run 5 running 38/240
+run 5 running 44/240
+run 5 running 49/240
+run 5 running 51/240
+run 5 running 54/240
+run 5 running 75/240
+run 5 running 79/240
+run 5 running 96/240
+run 5 running 110/240
+run 5 running 116/240
+run 5 running 125/240
+run 5 running 133/240
+run 5 running 141/240
+run 5 running 152/240
+run 5 running 176/240
+run 5 running 196/240
+run 5 running 219/240
+run 5 done 240/240

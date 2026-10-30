@@ -2,15 +2,18 @@
 
 from __future__ import annotations
 
+from typing import Literal
+
 from pydantic import BaseModel, ConfigDict, Field
 
 
 class HuggingFaceTrainBody(BaseModel):
-    """A base model to fine-tune, and how many steps to fine-tune it for."""
+    """A base model to fine-tune, how, and how many steps to fine-tune it for."""
 
     model_config = ConfigDict(protected_namespaces=())
 
     model_id: str
+    operation: Literal["sft", "lora", "pretrain"] = "sft"
     steps: int = Field(default=200, ge=1, le=2000)
 
 

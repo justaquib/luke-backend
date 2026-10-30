@@ -36,10 +36,10 @@ class Teacher:
         """The answer the teacher writes, grounded on the reference it was given."""
         import torch
 
-        from app.services.huggingface.text import prompt
+        from app.services.training import formats
 
         encoded = self.tokenizer(
-            prompt(question, reference),
+            formats.ask_text(self.tokenizer, _ask(question, reference)),
             return_tensors="pt",
             truncation=True,
             max_length=1024,
@@ -81,6 +81,19 @@ class Teacher:
             "heads": int(getattr(self.model.config, "num_attention_heads", 0) or 0),
             "layers": int(getattr(self.model.config, "num_hidden_layers", 0) or 0),
         }
+
+
+def _ask(question: str, reference: str) -> str:
+    """The user turn: the question, and the material it may answer from.
+
+    A run trains a teacher on the question alone, so the reference is the same
+    addition at serving time that it was before; what changed is that the turn
+    around it is rendered by the tokenizer's own template, the one the run was
+    trained in.
+    """
+    question = " ".join(question.split())
+    material = " ".join(reference.split())
+    return f"{question}\nReference: {material}" if material else question
 
 
 def _clean_answer(text: str) -> str | None:
