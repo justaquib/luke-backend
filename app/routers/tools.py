@@ -37,11 +37,9 @@ router = APIRouter(prefix="/tools", tags=["tools"])
 
 def _require_admin(user: User = Depends(get_bearer_user)) -> User:
     """Check that the caller is an admin."""
-    if user.is_systemadmin:
-        raise HTTPException(403, "System admin cannot manage tool permissions")
-    if user.role not in ("superadmin", "admin"):
-        raise HTTPException(403, "Only admins can manage tool permissions")
-    return user
+    if user.is_systemadmin or user.role in ("superadmin", "admin"):
+        return user
+    raise HTTPException(403, "Only admins can manage tool permissions")
 
 
 @router.get("", response_model=list[ToolOut])
