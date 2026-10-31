@@ -13,6 +13,7 @@ from app.core.security import get_bearer_user, tenant_id_of
 from app.db.database import User
 from app.schemas.tools import (
     AppAllowlistBody,
+    AppAllowlistEntry,
     AppOut,
     ToolExecuteRequest,
     ToolExecuteResponse,
@@ -126,21 +127,24 @@ def tools_apps(
     return [AppOut.model_validate(app) for app in list_installed_apps()]
 
 
-@router.get("/apps/allowlist", response_model=list[str])
+@router.get("/apps/allowlist", response_model=list[AppAllowlistEntry])
 def tools_app_allowlist(
     user: User = Depends(get_bearer_user),
-) -> list[str]:
+) -> list[AppAllowlistEntry]:
     """The apps the tenant has allowed Luke to launch."""
     tenant_id = tenant_id_of(user)
-    return tool_settings.app_allowlist(tenant_id)
+    return [
+        AppAllowlistEntry.model_validate(entry) for entry in tool_settings.app_allowlist(tenant_id)
+    ]
 
 
-@router.put("/apps/allowlist", response_model=list[str])
+@router.put("/apps/allowlist", response_model=list[AppAllowlistEntry])
 def tools_set_app_allowlist(
     body: AppAllowlistBody,
     user: User = Depends(_require_admin),
-) -> list[str]:
+) -> list[AppAllowlistEntry]:
     """Set the app allowlist. Admin only."""
     tenant_id = tenant_id_of(user)
-    tool_settings.set_app_allowlist(body.apps, tenant_id)
+    entries = [entry.model_dump() for entry in body.apps]
+    tool_settings.set_app_allowlist(entries, tenant_id)
     return body.apps

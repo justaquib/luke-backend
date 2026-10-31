@@ -57,7 +57,15 @@ class AppOut(BaseModel):
     path: str
 
 
+class AppAllowlistEntry(BaseModel):
+    """An allowlisted app with optional short name and aliases."""
+
+    name: str
+    short_name: str = ""
+    aliases: list[str] = Field(default_factory=list)
+
+
 class AppAllowlistBody(BaseModel):
     """A request to set the app allowlist."""
 
-    apps: list[str] = Field(default_factory=list)
+    apps: list[AppAllowlistEntry] = Field(default_factory=list)

@@ -33,6 +33,7 @@ from app.schemas.parenting import (
 from app.schemas.query import CitationOut, QueryHit, QueryRequest, QueryResponse
 from app.schemas.tools import (
     AppAllowlistBody,
+    AppAllowlistEntry,
     AppOut,
     ToolExecuteRequest,
     ToolExecuteResponse,
@@ -59,6 +60,7 @@ __all__ = [
     "RULE_KINDS",
     "AcceptInviteRequest",
     "AppAllowlistBody",
+    "AppAllowlistEntry",
     "AppOut",
     "AssessmentBankOut",
     "AssessmentProfileOut",
