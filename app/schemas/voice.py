@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class VoiceInfoOut(BaseModel):
     """One voice a TTS engine can speak in."""
+
+    model_config = ConfigDict(from_attributes=True)
 
     id: str
     label: str
@@ -16,6 +18,8 @@ class VoiceInfoOut(BaseModel):
 
 class VoiceModuleEntryOut(BaseModel):
     """A registered voice module: its name and the engines it bundles."""
+
+    model_config = ConfigDict(from_attributes=True)
 
     name: str
     tts_module: str
